@@ -156,7 +156,7 @@ async function autenticazione(req, res, next) {
 
                     console.log('Dati utente:');
                     console.log(results[0]);
-                    res.render('profile', {
+                    res.send({
                         title: 'Profilo Utente',
                         profile: {
                             user: req.body.email,

@@ -5,13 +5,13 @@ import './App.css';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "" }
+        this.state = { apiResponse: [] }
     }
 
     callAPI() {
-        fetch("http://localhost:9000/test")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res}))
+        fetch("/test")
+            .then(res => res.json())
+            .then(res => this.setState({ apiResponse: res }))
             .catch(err => err);
     }
 
@@ -20,11 +20,10 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.state.apiResponse);
+
         return (
             <div className="App">
-                <header className="App-header">
-                </header>
-                <p>{this.state.apiResponse}</p>
             </div>
         );
     }
