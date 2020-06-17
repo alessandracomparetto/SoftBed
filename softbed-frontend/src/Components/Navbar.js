@@ -50,14 +50,13 @@ function Navbar() {
     return (
         <nav className ="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
             <a className="navbar-brand" href="/">softbed</a>
-
             { accessoEffettuato ? (
                 <UtenteCollegato />
             ) : (
-                <div>
+                <React.Fragment>
                     <NavbarToggler />
                     <NuovoUtente />
-                </div>
+                </React.Fragment>
             )}
         </nav>
     )
