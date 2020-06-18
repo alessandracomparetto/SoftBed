@@ -16,4 +16,9 @@ router.get('/registrati', function(req, res, next) {
   res.render('registration', { title: 'Registrazione' });
 });
 
+/* GET pagina di ricerca */
+router.get('/search', function(req, res, next) {
+  res.send(req.query);
+})
+
 module.exports = router;
