@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 function FormRicerca() {
-    /* TODO: BACKEND
-     * Gestione props nel caso di richiesta GET
-     */
-
-
-    /* TODO: BACKEND
+    /* TODO: BACKEND - OPZIONALE
      * Lista delle località (regioni, province e comuni) con almeno una struttura per suggerire
      * le opzioni disponibili mentre si digita la destinazione
      */
@@ -22,9 +18,10 @@ function FormRicerca() {
     // Il soggiorno deve durare almeno 1 giorno
     const primaDataPartenza = new Date(primaDataArrivo.getTime() + GIORNO);
 
-    // Si assume che la data massima inseribile sia il 31 Dicembre dell'anno successivo (un po' eccessiva)
-    const maxData = (dataAttuale.getFullYear() + 1) + "-12-31"
-
+    // La data di partenza non può superare un anno dalla data odierna
+    const maxData = (dataAttuale.getFullYear() + 1) + "-" +
+        (dataAttuale.getMonth() + 1).toString().padStart(2, "0") + "-" +
+        dataAttuale.getDate().toString().padStart(2, "0");
     const [minDataP, setMinDataP] = useState(convertiData(primaDataPartenza));
 
     // Converte la data da oggetto Date a stringa in formato "AAAA-MM-GG"
@@ -47,31 +44,55 @@ function FormRicerca() {
         setMinDataP(nuovaDataConvertita);
     }
 
+    // Gestione delle GET per la ricerca
+    const [valori, setValori] = useState({destinazione: "", arrivo: minDataA, partenza: minDataP, ospiti: 2});
+
+    function ricercaAPI() {
+        const currentURL = window.location.href;
+        const basePath = window.location.protocol + "//" + window.location.host + "/";
+
+        if (currentURL !== basePath) {
+            axios.get(currentURL)
+                .then(res => {
+                    setValori(res.data);
+                    console.log(res.data);
+                })
+        }
+    }
+
+    useEffect(() => {
+        ricercaAPI();
+    }, [])
+
     return (
-        <form className="form pt-3 pl-5 pr-5 d-flex justify-content-center">
-            <div className="form-row w-100 minw-15em maxw-xl">
+        <form className="form d-flex justify-content-center" action="search">
+            <div className="form-row p-3 m-3 w-100 minw-15em maxw-xl bg-warning rounded">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
-                    <input name="destinazione" id="destinazione" type="text" className="form-control form-font-size-1" placeholder="Inserisci la tua destinazione..." required/>
+                    <input name="destinazione" id="destinazione" type="text" className="form-control"
+                           placeholder="Inserisci la tua destinazione..." defaultValue={valori.destinazione} required/>
                 </div>
 
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
-                    <input name="arrivo" id="arrivo" type="date" className="form-control form-font-size-1" min={minDataA} max={maxData} defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
+                    <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
+                           defaultValue={valori.arrivo} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="partenza">Partenza</label>
-                    <input name="partenza" id="partenza" type="date" className="form-control form-font-size-1" min={minDataP} max={maxData} defaultValue={minDataP} required/>
+                    <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
+                           max={maxData} defaultValue={valori.partenza} required/>
                 </div>
 
                 <div className="col-12 col-md-2 col-lg-1 mb-3">
                     <label htmlFor="Ospiti">Ospiti</label>
-                    <input name="ospiti" id="ospiti" type="number" className="form-control form-font-size-1" min={1} max={99} defaultValue={2} required/>
+                    <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
+                           defaultValue={valori.ospiti} required/>
                 </div>
 
                 <div className="mt-auto col-md-2 col-lg-1 mb-3">
-                    <button id="cerca" type="submit" className="btn btn-primary btn-block form-font-size-1">Cerca</button>
+                    <button id="cerca" type="submit" className="btn btn-primary btn-block mt-3">Cerca</button>
                 </div>
             </div>
         </form>
