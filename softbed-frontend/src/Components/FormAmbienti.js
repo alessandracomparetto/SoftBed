@@ -1,11 +1,31 @@
 import React, {useState} from 'react';
 import ButtonForm from "./ButtonForm";
 
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
 
 
 function FormAmbienti() {
     /* TODO: PROPS
     *  Durante la modifica la pagina deve apparire compilata
+    *  TODO: centrare checkbox
+    *
     */
     const stringa = "Camera ";
     const [contatore, setContatore] = useState(1);
@@ -22,40 +42,34 @@ function FormAmbienti() {
         lista.appendChild(p);
     }
 
+
     return(
-    <div>
-        <form className="w50 mt-3">
-
-            <h6 className="mx-5 mt-3 border-bottom border-primary">Ambienti presenti</h6>
-            <div className="container pl-md-5">
-                <div className= "form-group d-flex">
-                    <div className="checkbox col-12 col-sm-6 text-center float-left ">
-                        <label className="mr-2 mt-2">Salotto</label>
-                        <input type="checkbox" name="salotto"/>
-                    </div>
-                    <div className="checkbox col-12 col-sm-6 text-center float-right">
-                        <label className="mr-2 mt-2">Terrazza</label>
-                        <input type="checkbox" name="terrazza"/>
-                    </div>
-
+        <form className="container col-12 col-md-8 needs-validation" noValidate>
+            <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
+            <div className="form-row-group text-center">
+                <div className="form-check-inline col-12 col-sm-5">
+                    <input type="checkbox" className="mr-1" name="salotto" id="salotto"/>
+                    <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
                 </div>
-                <div className= "form-group d-flex">
-                <div className="checkbox col-12 col-sm-6 text-center float-left ">
-                    <label className="mr-2 mt-2">Giardino</label>
-                    <input type="checkbox" name="giardino"/>
-
+                <div className="form-check-inline col-12 col-sm-5">
+                    <input type="checkbox" className="mr-1" name="terrazza" id="terrazza"/>
+                    <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
                 </div>
-                <div className="checkbox col-12 col-sm-6 text-center float-right">
-                    <label className="mr-2 mt-2">Piscina</label>
-                    <input type="checkbox" name="giardino"/>
+            </div>
+            <div className="form-row-group text-center">
+                <div className="form-check-inline col-12 col-sm-5">
+                    <input type="checkbox" className="mr-1" name="giardino" id="giardino"/>
+                    <label className="form-check-label" htmlFor="giardino">Giardino</label>
                 </div>
+                <div className="form-check-inline col-12 col-sm-5">
+                    <input type="checkbox" className="mr-1" name="piscina" id="piscina"/>
+                    <label className="form-check-label" htmlFor="piscina">Piscina</label>
                 </div>
             </div>
 
-
-            <h6 className="mx-5 mt-3 border-bottom border-primary">Camere presenti</h6>
+            <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
-                <div id="listaCamere" className="mb-3 col-10 col-sm-6 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
                     <p>
                         <br/>
                     </p>
@@ -63,50 +77,56 @@ function FormAmbienti() {
                 </div>
             </div>
 
-            <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
-                <label className="mb-0 p-0 my-auto col-7 col-sm-6">Numero letti matrimoniali</label>
-                <input name="nLettiMatrimoniali" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={99} defaultValue={0}
-                       required/>
+            <div className="form-group">
+                <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
+                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" required/>
+                <div className="invalid-feedback">
+                    1 - 10
+                </div>
             </div>
-            <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
-                <label className="mb-0 p-0 my-auto col-7 col-sm-6">Numero letti singoli</label>
-                <input name="nLettiSingoli" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={99} defaultValue={0} required/>
+            <div className="form-group">
+                <label htmlFor="nLettiSingoli">Numero letti singoli </label>
+                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" required/>
+                <div className="invalid-feedback">
+                    1 - 10
+                </div>
             </div>
-            <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
-                <label className="mb-0 p-0 my-auto col-7 col-sm-6 pr-1">Numero camere per questa tipologia</label>
-                <input name="numeroPerCamera" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto" min={0} max={99} required/>
+            <div className="form-group">
+                <label htmlFor="nCamere">Numero di camere per questa tipologia </label>
+                <input name="nCamere" id="nCamere" type="number" className="form-control" min="1" max="10" size="2" maxLength="2" required />
+                <div className="invalid-feedback">
+                    1 - 10
+                </div>
             </div>
-            <div className="col-10 d-flex justify-content-end">
+
+            <div className="d-flex justify-content-end">
                 <button className="btn btn-outline-primary" onClick={scriviCamera}>
                     Aggiungi camera
                 </button>
             </div>
 
-
-            <h6 className="mx-5 mt-3 border-bottom border-primary">Informazioni generali</h6>
-            <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
-                <label className="mb-0 p-0 my-auto col-7 col-sm-6">Numero bagni</label>
-                <input name="nBagni" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={3} defaultValue={0} required/>
+            <h6 className="mt-3 border-bottom border-primary">Informazioni generali</h6>
+            <div className="form-group">
+                <label htmlFor="nBagni">Numero bagni</label>
+                <input name="nBagni" type="number" className="form-control" min={0} max={5} required/>
             </div>
-            <div className="input-group mb-3 d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
-                <label className="mb-0 p-0 col-7 col-sm-6 my-auto">Prezzo struttura (a notte)</label>
-                <div className="input-group-prepend h-100 my-auto">
-                    <span className="input-group-text">€</span>
+            <div className="input-group">
+                <label htmlFor="prezzo">Prezzo struttura (a notte)</label>
+                <div className="input-group">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">€</span>
+                    </div>
+                    <input name="prezzo" type="number" className="form-control currency" min="0" step="0.01" max="10000" required/>
                 </div>
-                <input name="prezzoNotte" type="number" className="form-control my-auto currency" min="0" step="0.01" max="10000" required/>
+                <div className="invalid-feedback">
+                    Inserire il prezzo base a notte
+                </div>
             </div>
-            <React.Fragment>
-                <ButtonForm/>
-            </React.Fragment>
-            {/*<div className="btn-group ">
-                <button type="button" className="btn btn-outline-danger btn-lg">Indietro</button>
-                <button className="btn btn-primary " type="submit">Continua</button>
-                d-flex col-12 col-sm-10 mx-auto justify-content-between m-5
-                col-3 btn-block
-            </div>*/}
+
+            <ButtonForm/>
         </form>
 
-    </div>
+
 
     )
 }

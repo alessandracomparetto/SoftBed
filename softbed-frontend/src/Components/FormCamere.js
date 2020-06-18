@@ -1,64 +1,91 @@
 import React from "react";
-import ButtomForm from "./ButtomForm";
+import ButtonForm from "./ButtonForm";
 
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 
 function FormCamere(){
     return(
+        <form className="container col-12 col-md-8 needs-validation" noValidate>
+            <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
+            <div>
+                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+                    <p>
+                        <br/>
+                    </p>
 
-        <form className="container col-sm-10 col-md-6">
-            <h6 className="mx-5 mt-3">Camere presenti</h6>
-            <div className="form-group">
-                <select multiple className="form-control col-10 col-sm-6 mx-auto">
-                    <option>Camera 1</option>
-                    <option>Camera 2</option>
-                    <option>Camera 3</option>
-                    <option>Camera 4</option>
-                    <option>Camera 5</option>
+                </div>
+            </div>
+
+            <div className="form-group bootstrap-select-wrapper">
+                <label htmlFor="tipologiaCamera">Tipologia di camera</label>
+                <select className="form-control selectpicker" required>
+                    <option value="" disabled selected>Scegli una opzione</option>
+                    <option value="Singola">Singola</option>
+                    <option value="Doppia">Doppia</option>
+                    <option value="Tripla">Tripla</option>
+                    <option value="Quadrupla">Quadrupla</option>
                 </select>
             </div>
 
-            <div className="form-group was-validated">
-                <label htmlFor="tipologiaCamera">Tipologia di camera</label>
-                <select className="form-control" id="tipologiaCamera">
-                    <option>Singola</option>
-                    <option>Doppia</option>
-                    <option>Tripla</option>
-                    <option>Quadrupla</option>
-                </select>
-                <div className="was-validated">
-                    <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali </label>
-                    <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="1" max="10" size="2"
-                           maxLength="2" required/>
-                    <div className="invalid-feedback">
-                        1 - 10
-                    </div>
 
-                    <label htmlFor="nLettiSingoli">Numero letti singoli </label>
-                    <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="1" max="10" size="2"
-                           maxLength="2" required />
-                    <div className="invalid-feedback">
-                        1 - 10
-                    </div>
-                </div>
-
-                <label htmlFor="nCamere">Numero di camere per questa tipologia </label>
-                <input name="nCamere" id="nCamere" type="number" className="form-control" min="1" max="10" size="2"
-                       maxLength="2" required />
+            <div className="form-group">
+                <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
+                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" required/>
                 <div className="invalid-feedback">
                     1 - 10
                 </div>
-
-                <div className="">
-                    <label htmlFor="prezzo">Prezzo base a notte</label>
-                    <input name="prezzo" id="prezzo" type="text" placeholder="€€" className="form-control" size="32" maxLength="10" required/>
-                    <div className="invalid-feedback">
-                        Inserire il prezzo base a notte
-                    </div>
-                </div>
-
-                <button type="button" className="btn btn-secondary float-right">Aggiungi camera</button>
             </div>
-            <ButtomForm/>
+            <div className="form-group">
+                <label htmlFor="nLettiSingoli">Numero letti singoli </label>
+                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" required />
+                <div className="invalid-feedback">
+                    1 - 10
+                </div>
+            </div>
+            <div className="form-group">
+                <label htmlFor="nCamere">Numero di camere per questa tipologia </label>
+                <input name="nCamere" id="nCamere" type="number" className="form-control" min="1" max="10" size="2" maxLength="2" required />
+                <div className="invalid-feedback">
+                    1 - 10
+                </div>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="prezzo">Prezzo base a notte</label>
+                <div className="input-group">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">€</span>
+                    </div>
+                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="0" step="0.01" max="10000" required/>
+                </div>
+                <div className="invalid-feedback">
+                    Inserire il prezzo base a notte
+                </div>
+            </div>
+
+            <div className="d-flex justify-content-end">
+                <button className="btn btn-outline-primary">
+                    Aggiungi camera
+                </button>
+            </div>
+
+            <ButtonForm/>
 
         </form>
 
