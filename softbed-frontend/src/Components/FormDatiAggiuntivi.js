@@ -1,34 +1,50 @@
 import React from "react";
-
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 
 function FormDatiAggiuntivi(){
-    /* TODO: BACKEND
+    /* TODO: PROPS
      * Cognome email e password già compilati
      */
 
     return(
-        <form className="container pt-3 col-sm-10 col-md-6">
+        <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate>
             <h6 className="mt-3 text-uppercase ">Dati anagrafici</h6>
                 <div className="form-row">
                 <div className="form-group col-sm-12 col-md-6">
-                    <label htmlFor="Nome">Nome</label>
+                    <label htmlFor="name">Nome</label>
                     <input id="name" name="name" type="text" className="form-control" required/>
                 </div>
 
                 <div className="form-group col-sm-12 col-md-6">
-                    <label htmlFor="Nome">Cognome</label>
-                    <input id="name" name="name" type="text" className="form-control" required/>
+                    <label htmlFor="surname">Cognome</label>
+                    <input id="surname" name="surname" type="text" className="form-control" required/>
                 </div>
 
                 <div className="form-group col-sm-12 col-md-6">
                     <label htmlFor="birthdate">Data di Nascita</label>
-                    <input name="birthdate" id="birthdate" type="date" className="form-control"/>
+                    <input name="birthdate" id="birthdate" type="date" className="form-control" disabled/>
                 </div>
 
                 <div className="form-group col-sm-12 col-md-6">
                     <label htmlFor="pass">Codice fiscale</label>
                     <input name="cf" id="cf" type="text" className="form-control"
-                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$"  required/>
+                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" disabled/>
                     <div className="invalid-feedback">
                         Codice fiscale errato
                     </div>
@@ -39,7 +55,7 @@ function FormDatiAggiuntivi(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region">
+                    <select id="region" className="custom-select" name="region" disabled>
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -68,7 +84,7 @@ function FormDatiAggiuntivi(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select">
+                    <select id="state" name="state" className="custom-select" disabled>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -77,7 +93,7 @@ function FormDatiAggiuntivi(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="town" name="town" className="custom-select" >
+                    <select id="town" name="town" className="custom-select" disabled>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -147,6 +163,8 @@ function FormDatiAggiuntivi(){
                         </div>
                     </div>
                 </div>
+
+            <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3 float-right btn-lg w-200px">Conferma</button>
         </form>
 
     )

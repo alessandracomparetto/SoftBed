@@ -1,8 +1,26 @@
 import React from 'react';
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
 function Registration() {
     return(
 
-        <form className="container was-validated col-sm-8 mt-3" method="POST" action="/users/utenteregistrato">
+        <form className="container needs-validation col-sm-8 mt-3" method="POST" action="/users/utenteregistrato" noValidate>
 
             <div className="form-group">
                 <label htmlFor="name">Nome *</label>
@@ -13,8 +31,8 @@ function Registration() {
             </div>
 
             <div className="form-group">
-                <label htmlFor="name">Cognome *</label>
-                <input id="cognome" name="cognome" type="text" className="form-control" maxLength="40" required/>
+                <label htmlFor="surname">Cognome *</label>
+                <input id="surname" name="surname" type="text" className="form-control" maxLength="40" required/>
                 <div className="invalid-feedback">
                     Inserire cognome
                 </div>
@@ -22,8 +40,7 @@ function Registration() {
 
             <div className="form-group">
                 <label htmlFor="email">E-mail *</label>
-                <input name="email" id="email" type="email" className="form-control" size="32" maxLength="40"
-                       required/>
+                <input name="email" id="email" type="email" className="form-control" size="32" maxLength="40" required/>
                 <div className="invalid-feedback">
                     Inserire indirizzo e-mail
                 </div>
@@ -60,7 +77,6 @@ function Registration() {
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" type="radio" name="account" id="ospite" value="ospite" required/>
                         <label className="form-check-label" htmlFor="ospite">Ospite</label>
-
                     <div className="invalid-feedback ml-2">
                         Inserire il tipo di account
                     </div>
