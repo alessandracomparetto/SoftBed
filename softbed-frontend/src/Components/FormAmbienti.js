@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
+import ButtonForm from "./ButtonForm";
 
 
 
-function Ambienti() {
+function FormAmbienti() {
     /* TODO: PROPS
     *  Durante la modifica la pagina deve apparire compilata
     */
@@ -64,19 +65,16 @@ function Ambienti() {
 
             <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
                 <label className="mb-0 p-0 my-auto col-7 col-sm-6">Numero letti matrimoniali</label>
-                <input name="nLettiMatrimoniali" type="number"
-                       className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={99} defaultValue={0}
+                <input name="nLettiMatrimoniali" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={99} defaultValue={0}
                        required/>
             </div>
             <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
                 <label className="mb-0 p-0 my-auto col-7 col-sm-6">Numero letti singoli</label>
-                <input name="nLettiSingoli" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto "
-                       min={0} max={99} defaultValue={0} required/>
+                <input name="nLettiSingoli" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto " min={0} max={99} defaultValue={0} required/>
             </div>
             <div className="form-group d-flex col-10 col-sm-6 mx-auto justify-content-between p-0">
                 <label className="mb-0 p-0 my-auto col-7 col-sm-6 pr-1">Numero camere per questa tipologia</label>
-                <input name="numeroPerCamera" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto "
-                       min={0} max={99} defaultValue={0} required/>
+                <input name="numeroPerCamera" type="number" className="form-control col-3 col-sm-6 mx-auto my-auto" min={0} max={99} required/>
             </div>
             <div className="col-10 d-flex justify-content-end">
                 <button className="btn btn-outline-primary" onClick={scriviCamera}>
@@ -97,10 +95,15 @@ function Ambienti() {
                 </div>
                 <input name="prezzoNotte" type="number" className="form-control my-auto currency" min="0" step="0.01" max="10000" required/>
             </div>
-            <div className="d-flex col-12 col-sm-10 mx-auto justify-content-between m-5">
+            <React.Fragment>
+                <ButtonForm/>
+            </React.Fragment>
+            {/*<div className="btn-group ">
                 <button type="button" className="btn btn-outline-danger btn-lg">Indietro</button>
-                <button className="btn btn-primary col-3 btn-block" type="submit">Continua</button>
-            </div>
+                <button className="btn btn-primary " type="submit">Continua</button>
+                d-flex col-12 col-sm-10 mx-auto justify-content-between m-5
+                col-3 btn-block
+            </div>*/}
         </form>
 
     </div>
@@ -108,5 +111,5 @@ function Ambienti() {
     )
 }
 
-export default Ambienti;
+export default FormAmbienti;
 
