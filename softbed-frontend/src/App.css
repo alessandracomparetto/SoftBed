@@ -1,15 +1,14 @@
-.maxw-sm {
-  max-width: 540px;
-}
-
-.maxw-md {
-  max-width: 720px;
-}
-
 .maxw-lg {
   max-width: 960px;
 }
 
-.maxw-xl {
-  max-width: 1140px;
+.minw-6em {
+  min-width: 6em;
+}
+
+@media screen and (min-width: 992px) {
+
+  .maxw-lg-12em {
+    max-width: 12em;
+  }
 }

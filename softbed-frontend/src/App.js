@@ -8,9 +8,7 @@ function App() {
     return (
         <React.Fragment>
             <Navbar />
-            <div className="w100">
-                <FormRicerca />
-            </div>
+            <FormRicerca />
         </React.Fragment>
     )
 }
