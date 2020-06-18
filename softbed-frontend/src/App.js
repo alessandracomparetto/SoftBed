@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from "./Components/Navbar";
-import FormRicerca from "./Components/FormRicerca";
+import Login from "./Components/Login";
 
 function App() {
 
@@ -9,7 +9,7 @@ function App() {
         <React.Fragment>
             <Navbar />
             <div className="w100">
-                <FormRicerca />
+                <Login/>
             </div>
         </React.Fragment>
     )
