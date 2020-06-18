@@ -49,29 +49,29 @@ function FormRicerca() {
 
     return (
         <form className="form pt-3 pl-5 pr-5 d-flex justify-content-center">
-            <div className="form-row maxw-lg">
+            <div className="form-row w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
-                    <input name="destinazione" id="destinazione" type="text" className="form-control" placeholder="Inserisci la tua destinazione..." required/>
+                    <input name="destinazione" id="destinazione" type="text" className="form-control form-font-size-1" placeholder="Inserisci la tua destinazione..." required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-3 mb-3 maxw-lg-12em">
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
-                    <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData} defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
+                    <input name="arrivo" id="arrivo" type="date" className="form-control form-font-size-1" min={minDataA} max={maxData} defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-3 mb-3 maxw-lg-12em">
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="partenza">Partenza</label>
-                    <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP} max={maxData} defaultValue={minDataP} required/>
+                    <input name="partenza" id="partenza" type="date" className="form-control form-font-size-1" min={minDataP} max={maxData} defaultValue={minDataP} required/>
                 </div>
 
-                <div className="col-12 col-md-3 col-lg-1 mb-3 minw-6em">
+                <div className="col-12 col-md-2 col-lg-1 mb-3">
                     <label htmlFor="Ospiti">Ospiti</label>
-                    <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99} defaultValue={2} required/>
+                    <input name="ospiti" id="ospiti" type="number" className="form-control form-font-size-1" min={1} max={99} defaultValue={2} required/>
                 </div>
 
-                <div className="mt-auto col-md-3 col-lg-1 mb-3 minw-6em">
-                    <button id="cerca" type="submit" className="btn btn-primary btn-block">Cerca</button>
+                <div className="mt-auto col-md-2 col-lg-1 mb-3">
+                    <button id="cerca" type="submit" className="btn btn-primary btn-block form-font-size-1">Cerca</button>
                 </div>
             </div>
         </form>
