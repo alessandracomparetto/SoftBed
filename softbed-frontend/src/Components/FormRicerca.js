@@ -55,22 +55,22 @@ function FormRicerca() {
                     <input name="destinazione" id="destinazione" type="text" className="form-control" placeholder="Inserisci la tua destinazione..." required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-3 maxw-lg-12em">
                     <label htmlFor="arrivo">Arrivo</label>
                     <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData} defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-3 mb-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-3 maxw-lg-12em">
                     <label htmlFor="partenza">Partenza</label>
                     <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP} max={maxData} defaultValue={minDataP} required/>
                 </div>
 
-                <div className="col-12 col-md-3 col-lg-1 mb-3">
+                <div className="col-12 col-md-3 col-lg-1 mb-3 minw-6em">
                     <label htmlFor="Ospiti">Ospiti</label>
                     <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99} defaultValue={2} required/>
                 </div>
 
-                <div className="mt-auto col-md-3 col-lg-1 mb-3">
+                <div className="mt-auto col-md-3 col-lg-1 mb-3 minw-6em">
                     <button id="cerca" type="submit" className="btn btn-primary btn-block">Cerca</button>
                 </div>
             </div>

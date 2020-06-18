@@ -1,16 +1,14 @@
 import React from 'react';
 import './App.css';
 import Navbar from "./Components/Navbar";
-import Login from "./Components/Login";
+import FormRicerca from "./Components/FormRicerca";
 
 function App() {
 
     return (
         <React.Fragment>
             <Navbar />
-            <div className="w100">
-                <Login/>
-            </div>
+            <FormRicerca />
         </React.Fragment>
     )
 }
