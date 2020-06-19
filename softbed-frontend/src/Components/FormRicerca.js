@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 
 function FormRicerca() {
     /* TODO: BACKEND - OPZIONALE
@@ -40,9 +39,7 @@ function FormRicerca() {
     const aggiornaMinDataPartenza = (event) => {
         const dataInserita = new Date(event.target.value);
         const nuovaData = new Date(dataInserita.getTime() + GIORNO);
-        console.log(nuovaData);
         const nuovaDataConvertita = convertiData(nuovaData);
-        console.log(nuovaDataConvertita);
         setMinDataP(nuovaDataConvertita);
     }
 
@@ -54,11 +51,12 @@ function FormRicerca() {
         const basePath = window.location.protocol + "//" + window.location.host + "/";
 
         if (currentURL !== basePath) {
-            axios.get(currentURL)
+            fetch(currentURL)
+                .then(res => res.json())
                 .then(res => {
-                    setValori(res.data);
-                    console.log(res.data);
+                    setValori(res);
                 })
+                .catch(err => err);
         }
     }
 
