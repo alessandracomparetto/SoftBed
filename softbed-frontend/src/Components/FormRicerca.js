@@ -19,9 +19,11 @@ function FormRicerca() {
     const primaDataPartenza = new Date(primaDataArrivo.getTime() + GIORNO);
 
     // La data di partenza non può superare un anno dalla data odierna
-    const maxData = (dataAttuale.getFullYear() + 1) + "-" +
+    const maxData =
+        (dataAttuale.getFullYear() + 1) + "-" +
         (dataAttuale.getMonth() + 1).toString().padStart(2, "0") + "-" +
         dataAttuale.getDate().toString().padStart(2, "0");
+
     const [minDataP, setMinDataP] = useState(convertiData(primaDataPartenza));
 
     // Converte la data da oggetto Date a stringa in formato "AAAA-MM-GG"
@@ -65,8 +67,8 @@ function FormRicerca() {
     }, [])
 
     return (
-        <form className="form d-flex justify-content-center" action="search">
-            <div className="form-row p-3 m-3 w-100 minw-15em maxw-xl bg-warning rounded">
+        <form className="form d-flex justify-content-center bg-warning" action="search">
+            <div className="form-row px-3 py-2 m-3 w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
                     <input name="destinazione" id="destinazione" type="text" className="form-control"
@@ -96,7 +98,7 @@ function FormRicerca() {
                 </div>
             </div>
         </form>
-    )
+    );
 }
 
 export default FormRicerca
