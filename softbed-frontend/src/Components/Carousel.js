@@ -5,7 +5,7 @@ function CarouselItem(props) {
         <div className={"carousel-item " + props.stato}>
             <img className="d-block w-100" src={props.src} alt={props.titolo} />
             <div className="carousel-caption d-none d-lg-block">
-                <h1>{props.title}</h1>
+                <h1>{props.titolo}</h1>
             </div>
         </div>
     );
