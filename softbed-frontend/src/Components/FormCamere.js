@@ -2,7 +2,10 @@ import React from 'react';
 import ButtonForm from "./ButtonForm";
 
 /*TODO: qunando si clicca su continua bisogna vedere che la lista delle camere non sia vuota
-*  == controlla che il contatore sia diverso da 0 (c'è già un elemento nella lista)*/
+*  == controlla che il contatore sia diverso da 0 (c'è già un elemento nella lista)
+* TODO: controllare che non scriva -1 in nCamere. aggiungere il messaggio di errore
+* */
+
 
 function FormCamere(){
     const camera = "Camera ";
