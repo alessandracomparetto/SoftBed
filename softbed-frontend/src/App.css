@@ -1,9 +1,32 @@
+.h-240px {
+    height: 240px;
+}
+
+.annuncio-testo {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.annuncio-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
 .maxw-xl {
     max-width: 1140px;
 }
 
 .minw-15em {
     min-width: 15em;
+}
+
+.anteprima-struttra {
+    width: 270px;
+    height: 100%;
 }
 
 .w-200px {
