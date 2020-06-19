@@ -11,6 +11,11 @@ import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 
 function App() {
 
+    const [pagina, setPagina] = useState(1);
+
+    function aggiornaPagina() {
+        setPagina(pagina + 1);
+    }
 
 
     // TODO: da rimuovere, solo per test
@@ -45,13 +50,14 @@ function App() {
                                 return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} />
                             })
                         }
-                        <Paginazione />
+                        <Paginazione currentPage={pagina} />
+                        <button className="btn btn-block" onClick={aggiornaPagina}>Incrementa pagina</button>
                     </div>
                 </Route>
 
                 {/* Se il percorso non è stato trovato viene mostrata la pagina 4040 */}
                 <Route path="*">
-                    <PaginaNonTrovata />
+                    <PaginaNonTrovata/>
                     <FormRicerca />
                 </Route>
             </Switch>
