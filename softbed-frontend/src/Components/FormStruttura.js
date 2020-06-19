@@ -95,12 +95,11 @@ function FormStruttura(){
 
 
     return(
-        <div className="container">
-
-            <form className="container pt-3 col-sm-10 col-md-6 mt-3 needs-validation" noValidate>
-                <div className="progress">
-                    <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
-                </div>
+        <div className="container col-sm-10 col-md-6 mt-3 ">
+            <div className="progress">
+                <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
+            </div>
+            <form className="container pt-3 needs-validation" noValidate>
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
                     <input id="name" name="name" type="text" className="form-control" maxLength="60" required />
