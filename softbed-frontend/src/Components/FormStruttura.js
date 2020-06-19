@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ButtonForm from "./ButtonForm";
 import data from "../regioni_province_comuni.js";
+import $ from "jquery"
 
 (function() {
     'use strict';
@@ -14,7 +15,7 @@ import data from "../regioni_province_comuni.js";
                     event.preventDefault();
                     event.stopPropagation();
                 }
-                form.classList.add('was-validated');
+
             }, false);
         });
     }, false);
@@ -22,17 +23,28 @@ import data from "../regioni_province_comuni.js";
 
 function FormStruttura(){
     let province = null;
-    /* si potrebbe pensare di bloccare cap e numero civico fino a quando non ha inserito la via , da fare
-/*    function addressEventHandler(event) {
+    function addressEventHandler(event) {
         if (event.target.value != '') {
-            document.getElementById("addressnum").classList.add('disabled');
+            $('.form-row input').not('#address').removeAttr('disabled');
+            $('.form-row input').not('#address').attr('required', 'required');
+        } else {
+            $('.form-row input').not('#address').attr('disabled', 'disabled');
+            $('.form-row input').not('#address').removeAttr('required');
         }
-        else{
-            document.getElementById("addressnum").classList.remove('disabled');
-            document.getElementById("addressnum").value='';
+    }
+
+    function tabEventHandler(event){
+        if (event.keyCode == 9) { // pressione TAB
+            if ($(this).val() != '') {
+                $('.form-row input').not('#address').removeAttr('disabled');
+                $('.form-row input').not('#address').attr('required', 'required');
+            } else {
+                $('.form-row input').not('#address').attr('disabled', 'disabled');
+                $('.form-row input').not('#address').removeAttr('required');
+            }
         }
-    }*/
-    function regioniEventHandler(event){
+    }
+    function regioniEventHandle(event){
         // rimozione dei precedenti elementi del menu provinca e comune
         document.getElementById("state").innerHTML='<option value="" selected></option>';
         document.getElementById("town").innerHTML='<option value="" selected></option>';
@@ -69,107 +81,114 @@ function FormStruttura(){
             }
         }
    }
-  /* function verificaCap(event){
-        let cap=Integer.parseInt(event.target.value);
-        if(cap>10 || cap<98168){
-            document.getElementById("capFeedback").classList.remove("collapse");
-        }
-        else{
-            document.getElementById("capFeedback").classList.add("collapse");
-        }
-   }*/
+  function verificaCap(event){
+
+          let cap=parseInt(event.target.value);
+          console.log(cap);
+          if(cap>=10 && cap<=98168){
+              console.log("valid");
+          }
+          else{
+              console.log("invalid");
+          }
+   }
 
 
     return(
-    <form className="container  col-sm-8 mt-3 needs-validation" noValidate>
-        <p className="lead text-uppercase">Registra la tua struttura</p>
-        <div className="form-group">
-            <label htmlFor="name">Come si chiama la tua struttura?</label>
-            <input id="name" name="name" type="text" className="form-control" maxLength="60" required />
-            <div className="invalid-feedback">
-                Inserisci il nome della struttura
-            </div>
-        </div>
-        <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">Regione&nbsp;&nbsp;</span>
-            </div>
-            <select id="region" className="custom-select" name="region" onChange={regioniEventHandler} required>
-                <option value="" selected></option>
-                <option value="Abruzzo">Abruzzo</option>
-                <option value="Basilicata">Basilicata</option>
-                <option value="Calabria">Calabria</option>
-                <option value="Campania">Campania</option>
-                <option value="Emilia-Romagna">Emilia-Romagna</option>
-                <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
-                <option value="Lazio">Lazio</option>
-                <option value="Liguria">Liguria</option>
-                <option value="Lombardia">Lombardia</option>
-                <option value="Marche">Marche</option>
-                <option value="Molise">Molise</option>
-                <option value="Piemonte">Piemonte</option>
-                <option value="Puglia">Puglia</option>
-                <option value="Sardegna">Sardegna</option>
-                <option value="Sicilia">Sicilia</option>
-                <option value="Toscana">Toscana</option>
-                <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
-                <option value="Umbria">Umbria</option>
-                <option value="Valle d'Aosta">Valle d'Aosta</option>
-                <option value="Veneto">Veneto</option>
-            </select>
-            <div className="invalid-feedback">
-                Selezionare la regione
-            </div>
-        </div>
+        <div className="container">
 
-        <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">Provincia&nbsp;</span>
-            </div>
-            <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
-                <option value="" selected></option>
-            </select>
-            <div className="invalid-feedback">
-                Selezionare la provincia
-            </div>
-        </div>
+            <form className="container pt-3 col-sm-10 col-md-6 mt-3 needs-validation" noValidate>
+                <div className="progress">
+                    <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="name">Come si chiama la tua struttura?</label>
+                    <input id="name" name="name" type="text" className="form-control" maxLength="60" required />
+                    <div className="invalid-feedback">
+                        Inserisci il nome della struttura
+                    </div>
+                </div>
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Regione&nbsp;&nbsp;</span>
+                    </div>
+                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} required>
+                        <option value="" selected></option>
+                        <option value="Abruzzo">Abruzzo</option>
+                        <option value="Basilicata">Basilicata</option>
+                        <option value="Calabria">Calabria</option>
+                        <option value="Campania">Campania</option>
+                        <option value="Emilia-Romagna">Emilia-Romagna</option>
+                        <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
+                        <option value="Lazio">Lazio</option>
+                        <option value="Liguria">Liguria</option>
+                        <option value="Lombardia">Lombardia</option>
+                        <option value="Marche">Marche</option>
+                        <option value="Molise">Molise</option>
+                        <option value="Piemonte">Piemonte</option>
+                        <option value="Puglia">Puglia</option>
+                        <option value="Sardegna">Sardegna</option>
+                        <option value="Sicilia">Sicilia</option>
+                        <option value="Toscana">Toscana</option>
+                        <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
+                        <option value="Umbria">Umbria</option>
+                        <option value="Valle d'Aosta">Valle d'Aosta</option>
+                        <option value="Veneto">Veneto</option>
+                    </select>
+                    <div className="invalid-feedback">
+                        Selezionare la regione
+                    </div>
+                </div>
 
-        <div className="input-group mb-3">
-            <div className="input-group-prepend">
-                <span className="input-group-text">Comune&nbsp;&nbsp;</span>
-            </div>
-            <select id="town" name="town" className="custom-select" required>
-                <option value="" selected></option>
-            </select>
-            <div className="invalid-feedback">
-                Selezionare il comune
-            </div>
-        </div>
-        <div className="form-row">
-            <div className="col-12 col-sm-8 col-md-6 col-lg-6">
-                <label htmlFor="address">Via/Piazza</label>
-                <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
-                       maxLength="40" required/>
-            </div>
-            <div className="col-3">
-                <label htmlFor="addressnum">N.</label>
-                <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
-                       maxLength="4" required/>
-                <div className="invalid-feedback">
-                    1 - 9999
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Provincia&nbsp;</span>
+                    </div>
+                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
+                        <option value="" selected></option>
+                    </select>
+                    <div className="invalid-feedback">
+                        Selezionare la provincia
+                    </div>
                 </div>
-            </div>
-            <div className="col-3">
-                <label htmlFor="cap">CAP.</label>
-                <input name="cap" id="cap" type="tel" className="form-control" pattern="^\d{5}$" placeholder="#####"
-                       title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5" required/>
-                <div id="capFeedback" className="invalid-feedback collapse">
-                    00010 - 98168
+
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Comune&nbsp;&nbsp;</span>
+                    </div>
+                    <select id="town" name="town" className="custom-select" required>
+                        <option value="" selected></option>
+                    </select>
+                    <div className="invalid-feedback">
+                        Selezionare il comune
+                    </div>
                 </div>
-            </div>
-            <ButtonForm/>
+                <div className="form-row">
+                    <div className="col-12 col-sm-8 col-md-6 col-lg-6">
+                        <label htmlFor="address">Via/Piazza</label>
+                        <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
+                               maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
+                    </div>
+                    <div className="col-3">
+                        <label htmlFor="addressnum">N.</label>
+                        <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
+                               maxLength="4" disabled required/>
+                        <div className="invalid-feedback">
+                            1 - 9999
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <label htmlFor="cap">CAP.</label>
+                        <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
+                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5" onChange={verificaCap} disabled required/>
+                        <div className="invalid-feedback">
+                            00010 - 98168
+                        </div>
+                    </div>
+                    <ButtonForm/>
+                </div>
+            </form>
         </div>
-    </form>
         )
     }
     export default FormStruttura
