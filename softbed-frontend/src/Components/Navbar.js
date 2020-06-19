@@ -71,7 +71,7 @@ function Navbar(props) {
     const accessoEffettuato = true;
 
     return (
-        <nav className ="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+        <nav className ="navbar navbar-expand-sm bg-dark navbar-dark">
             <Link className="navbar-brand" to="/">softbed</Link>
 
             { accessoEffettuato ? (
