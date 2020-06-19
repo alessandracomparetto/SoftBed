@@ -1,4 +1,6 @@
 import React from "react";
+import data from "../regioni_province_comuni";
+import $ from "jquery";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -18,7 +20,66 @@ import React from "react";
 })();
 
 function FormDatiOspite(){
+    let province = null;
 
+    function regioniEventHandler(event){
+        // rimozione dei precedenti elementi del menu provinca e comune
+        document.getElementById("state").innerHTML='<option value="" selected></option>';
+        document.getElementById("town").innerHTML='<option value="" selected></option>';
+        if (event.target.value != '') {
+            for (let regione of data.regioni) {
+                if (regione.nome == event.target.value) {
+                    province = regione.province;
+                    break;
+                }
+            }
+            for (let provincia of province) {
+                let opt = document.createElement('option');
+                opt.value = provincia.code;
+                opt.innerText = provincia.nome;
+                document.getElementById("state").appendChild(opt);
+            }
+        }
+    }
+    function provinceEventHandler(event){
+        let comuni=null;
+        // rimozione dei precedenti elementi del menu Comune
+        document.getElementById("town").innerHTML='<option value="" selected></option>';
+        if (event.target.value != '') {
+            for (let provincia of province) {
+                if (provincia.code == event.target.value) {
+                    for (let comune of provincia.comuni) {
+                        let opt=document.createElement('option');
+                        opt.value=comune.code;
+                        opt.innerText = comune.nome;
+                        document.getElementById("town").appendChild(opt);
+                    }
+                    break; // non dobbiamo cercare oltre
+                }
+            }
+        }
+    }
+    function addressEventHandler(event) {
+        if (event.target.value != '') {
+            $('.form-row input').not('#address').removeAttr('disabled');
+            $('.form-row input').not('#address').attr('required', 'required');
+        } else {
+            $('.form-row input').not('#address').attr('disabled', 'disabled');
+            $('.form-row input').not('#address').removeAttr('required');
+        }
+    }
+
+    function tabEventHandler(event){
+        if (event.keyCode == 9) { // pressione TAB
+            if ($(this).val() != '') {
+                $('.form-row input').not('#address').removeAttr('disabled');
+                $('.form-row input').not('#address').attr('required', 'required');
+            } else {
+                $('.form-row input').not('#address').attr('disabled', 'disabled');
+                $('.form-row input').not('#address').removeAttr('required');
+            }
+        }
+    }
     return(
         <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate>
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>
@@ -63,7 +124,7 @@ function FormDatiOspite(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" required>
+                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandler} required>
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -92,7 +153,7 @@ function FormDatiOspite(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" required>
+                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -111,7 +172,7 @@ function FormDatiOspite(){
             <div className="form-row">
                 <div className="form-group col-sm-12 col-md-6">
                     <label htmlFor="address">Via/Piazza</label>
-                    <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" required/>
+                    <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
                 </div>
 
                 <div className="form-group col-sm-4 col-md-3">

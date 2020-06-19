@@ -1,5 +1,6 @@
 import React from 'react';
-(function() {
+import $ from "jquery";
+/*(function() {
     'use strict';
     window.addEventListener('load', function() {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -16,11 +17,24 @@ import React from 'react';
         });
     }, false);
 })();
-
+*/
 function Registration() {
+    /*
+    const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
+
+
+    $('#pass').on('input', function(ev) {
+
+        if (strongPass.test($(this).val()))
+            $(this).siblings('.valid-feedback').removeClass('text-warning').text('Password forte');
+        else
+            $(this).siblings('.valid-feedback').addClass('text-warning').text('Password media');
+    });
+*/
+
     return(
 
-        <form className="container needs-validation col-sm-8 mt-3" method="POST" action="/users/utenteregistrato" noValidate>
+        <form className="container was-validated col-sm-8 mt-3" method="POST" action="/users/utenteregistrato">
 
             <div className="form-group">
                 <label htmlFor="name">Nome *</label>
@@ -52,12 +66,13 @@ function Registration() {
                        title="Almeno 8 caratteri, una lettera maiuscola e un numero"
                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" required/>
                 <div className="invalid-feedback">
-                    Almeno 8 caratteri di cui uno maiusciolo e un numero
+                    Almeno 8 caratteri di cui uno maiuscolo e un numero
                 </div>
                 <div className="valid-feedback text-warning">
                     Password media
                 </div>
             </div>
+
 
             <div className="form-group">
                 <label htmlFor="birthdate">Data di Nascita *</label>
