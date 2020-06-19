@@ -1,11 +1,8 @@
-.h-240px {
-    height: 240px;
-}
-
 .annuncio-testo {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
+    /* Non compatibile con IE */
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
@@ -16,19 +13,31 @@
     bottom: 0;
 }
 
+.anteprima-struttra {
+    width: 270px;
+    height: 100%;
+    max-height: 240px;
+}
+
 .maxw-xl {
     max-width: 1140px;
+}
+
+.page-item {
+    width: 43px;
+    text-align: center;
 }
 
 .minw-15em {
     min-width: 15em;
 }
 
-.anteprima-struttra {
-    width: 270px;
-    height: 100%;
-}
-
 .w-200px {
     width: 200px
+}
+
+@media screen and (min-width: 576px) {
+    .h-sm-240px {
+        height: 240px;
+    }
 }
