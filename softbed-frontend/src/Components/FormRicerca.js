@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
+import $ from 'jquery';
 
 function FormRicerca() {
     /* TODO: BACKEND - OPZIONALE
@@ -23,8 +24,6 @@ function FormRicerca() {
         (dataAttuale.getMonth() + 1).toString().padStart(2, "0") + "-" +
         dataAttuale.getDate().toString().padStart(2, "0");
 
-    const [minDataP, setMinDataP] = useState(convertiData(primaDataPartenza));
-
     // Converte la data da oggetto Date a stringa in formato "AAAA-MM-GG"
     function convertiData (data) {
         const giorno = data.getDate().toString().padStart(2, "0");
@@ -35,6 +34,9 @@ function FormRicerca() {
         return anno + "-" + mese + "-" + giorno;
     }
 
+    // Stato: Data minima per la data di partenza
+    const [minDataP, setMinDataP] = useState(convertiData(primaDataPartenza));
+
     // Aggiorna il valore minimo per la data di partenza in base alla data di arrivo inserita
     const aggiornaMinDataPartenza = (event) => {
         const dataInserita = new Date(event.target.value);
@@ -43,10 +45,8 @@ function FormRicerca() {
         setMinDataP(nuovaDataConvertita);
     }
 
-    // Gestione delle GET per la ricerca
-    const [valori, setValori] = useState({destinazione: "", arrivo: minDataA, partenza: minDataP, ospiti: 2});
-
-    function ricercaAPI() {
+    // Gestione delle GET per la ricerca al caricamento della finestra
+    $(window).on('load', () => {
         const currentURL = window.location.href;
         const basePath = window.location.protocol + "//" + window.location.host + "/";
 
@@ -54,41 +54,47 @@ function FormRicerca() {
             fetch(currentURL)
                 .then(res => res.json())
                 .then(res => {
-                    setValori(res);
+                    if (res.destinazione)
+                        $('#destinazione').val(res.destinazione);
+
+                    if (res.arrivo)
+                        $('#arrivo').val(res.arrivo);
+
+                    if (res.partenza)
+                        $('#partenza').val(res.partenza);
+
+                    if (res.ospiti)
+                        $('#ospiti').val(res.ospiti);
                 })
                 .catch(err => err);
         }
-    }
-
-    useEffect(() => {
-        ricercaAPI();
-    }, [])
+    });
 
     return (
-        <form className="form d-flex justify-content-center bg-warning" action="search">
+        <form className="form d-flex justify-content-center bg-warning" action="/search" onSubmit={event => {}}>
             <div className="form-row px-3 py-2 m-3 w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
                     <input name="destinazione" id="destinazione" type="text" className="form-control"
-                           placeholder="Inserisci la tua destinazione..." defaultValue={valori.destinazione} required/>
+                           placeholder="Inserisci la tua destinazione..." required/>
                 </div>
 
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
                     <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
-                           defaultValue={valori.arrivo} onChange={aggiornaMinDataPartenza} required/>
+                           defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
                 <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="partenza">Partenza</label>
                     <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
-                           max={maxData} defaultValue={valori.partenza} required/>
+                           max={maxData} defaultValue={minDataP} required/>
                 </div>
 
                 <div className="col-12 col-md-2 col-lg-1 mb-3">
                     <label htmlFor="Ospiti">Ospiti</label>
                     <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
-                           defaultValue={valori.ospiti} required/>
+                           defaultValue={2} required/>
                 </div>
 
                 <div className="mt-auto col-md-2 col-lg-1 mb-3">
