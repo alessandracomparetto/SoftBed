@@ -1,10 +1,87 @@
 import React, { useState } from "react";
-import ButtomForm from "./ButtomForm";
+import ButtonForm from "./ButtonForm";
+import data from "../regioni_province_comuni.js";
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Get the forms we want to add validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 
 function FormStruttura(){
+    let province = null;
+    /* si potrebbe pensare di bloccare cap e numero civico fino a quando non ha inserito la via , da fare
+/*    function addressEventHandler(event) {
+        if (event.target.value != '') {
+            document.getElementById("addressnum").classList.add('disabled');
+        }
+        else{
+            document.getElementById("addressnum").classList.remove('disabled');
+            document.getElementById("addressnum").value='';
+        }
+    }*/
+    function regioniEventHandler(event){
+        // rimozione dei precedenti elementi del menu provinca e comune
+        document.getElementById("state").innerHTML='<option value="" selected></option>';
+        document.getElementById("town").innerHTML='<option value="" selected></option>';
+        if (event.target.value != '') {
+            for (let regione of data.regioni) {
+                if (regione.nome == event.target.value) {
+                    province = regione.province;
+                    break;
+                }
+            }
+            for (let provincia of province) {
+                let opt = document.createElement('option');
+                opt.value = provincia.code;
+                opt.innerText = provincia.nome;
+                document.getElementById("state").appendChild(opt);
+            }
+        }
+    }
+   function provinceEventHandler(event){
+       let comuni=null;
+       // rimozione dei precedenti elementi del menu Comune
+       document.getElementById("town").innerHTML='<option value="" selected></option>';
+        if (event.target.value != '') {
+            for (let provincia of province) {
+                if (provincia.code == event.target.value) {
+                    for (let comune of provincia.comuni) {
+                        let opt=document.createElement('option');
+                        opt.value=comune.code;
+                        opt.innerText = comune.nome;
+                        document.getElementById("town").appendChild(opt);
+                    }
+                    break; // non dobbiamo cercare oltre
+                }
+            }
+        }
+   }
+  /* function verificaCap(event){
+        let cap=Integer.parseInt(event.target.value);
+        if(cap>10 || cap<98168){
+            document.getElementById("capFeedback").classList.remove("collapse");
+        }
+        else{
+            document.getElementById("capFeedback").classList.add("collapse");
+        }
+   }*/
+
 
     return(
-    <form className="container was-validated col-sm-8 mt-3">
+    <form className="container  col-sm-8 mt-3 needs-validation" noValidate>
         <p className="lead text-uppercase">Registra la tua struttura</p>
         <div className="form-group">
             <label htmlFor="name">Come si chiama la tua struttura?</label>
@@ -13,12 +90,11 @@ function FormStruttura(){
                 Inserisci il nome della struttura
             </div>
         </div>
-        <p>Hai scritto {nomeStruttura}</p>
         <div className="input-group mb-3">
             <div className="input-group-prepend">
                 <span className="input-group-text">Regione&nbsp;&nbsp;</span>
             </div>
-            <select id="region" className="custom-select" name="region" required>
+            <select id="region" className="custom-select" name="region" onChange={regioniEventHandler} required>
                 <option value="" selected></option>
                 <option value="Abruzzo">Abruzzo</option>
                 <option value="Basilicata">Basilicata</option>
@@ -50,7 +126,7 @@ function FormStruttura(){
             <div className="input-group-prepend">
                 <span className="input-group-text">Provincia&nbsp;</span>
             </div>
-            <select id="state" name="state" className="custom-select" required>
+            <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
                 <option value="" selected></option>
             </select>
             <div className="invalid-feedback">
@@ -69,17 +145,16 @@ function FormStruttura(){
                 Selezionare il comune
             </div>
         </div>
-
         <div className="form-row">
             <div className="col-12 col-sm-8 col-md-6 col-lg-6">
                 <label htmlFor="address">Via/Piazza</label>
                 <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
-                       maxLength="40"/>
+                       maxLength="40" required/>
             </div>
             <div className="col-3">
                 <label htmlFor="addressnum">N.</label>
-                <input name="addressnum" id="addressnum" type="number" className="form-control" min="1" max="9999" size="4"
-                       maxLength="4" disabled/>
+                <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
+                       maxLength="4" required/>
                 <div className="invalid-feedback">
                     1 - 9999
                 </div>
@@ -87,12 +162,12 @@ function FormStruttura(){
             <div className="col-3">
                 <label htmlFor="cap">CAP.</label>
                 <input name="cap" id="cap" type="tel" className="form-control" pattern="^\d{5}$" placeholder="#####"
-                       title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5" disabled/>
-                <div className="invalid-feedback">
+                       title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5" required/>
+                <div id="capFeedback" className="invalid-feedback collapse">
                     00010 - 98168
                 </div>
             </div>
-            <ButtomForm/>
+            <ButtonForm/>
         </div>
     </form>
         )
