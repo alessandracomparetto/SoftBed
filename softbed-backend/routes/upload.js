@@ -1,30 +1,38 @@
 const express = require('express');
 var path = require('path');
-const fileUpload = require('express-fileupload');
+var multer = require('multer')
 
 const router = express.Router();
 
-router.use(fileUpload());
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname )
+    }
+});
+var upload = multer({ storage: storage }).array('file');
 
-/* La rotta /users è vietata */
+router.post('/',function(req, res) {
+
+    upload(req, res, function (err) {
+        if (err) {
+            return res.status(500).json(err);
+        }
+        return res.status(200).json(req.file);
+
+    });
+
+});
+
+// La rotta /users è vietata
 router.get('/', function(req, res, next) {
     next(createError(403));
 });
 
-// Upload Endpoint
-router.post('/', (req, res) => {
-    if (req.files === null) {
-        return res.status(400).json({ msg: 'No file uploaded' });
-    }
-    const file = req.files.file;
-    file.mv(`__dirname/../public/uploads/${file.name}`, err => {
-        if (err) {
-            console.log("Errore")
-            return res.status(500).send(err);
-        }
-        res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
-    });
-});
 module.exports = router;
+
+
 
 
