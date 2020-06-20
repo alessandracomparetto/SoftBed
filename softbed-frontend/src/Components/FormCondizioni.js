@@ -51,7 +51,11 @@ function FormCondizioni(){
             document.getElementById("oraFineCheckIn").value=e.target.value;
         }
     }
-    function verificaCheckBox(event e){
+    function verificaCheckBox(event){
+        event.preventDefault();
+        console.log(document.getElementById("pagamentoLoco").value);
+        console.log($("pagamentoLoco").checked);
+
 
     }
     return(
@@ -148,11 +152,11 @@ function FormCondizioni(){
                         <div className= "form-row-group d-flex justify-content-around">
                             <div className="form-check-inline ">
                                 <input type="checkbox" name="online"/>
-                                <label htmlFor="online" className="form-check-label pl-2"  required name="tipoPagamento" value="online" required>Pagamento online</label>
+                                <label htmlFor="online" className="form-check-label pl-2"  required name="pagamentoOnline" value="online" required>Pagamento online</label>
                             </div>
                             <div className="form-check-inline ">
                                 <input type="checkbox" name="loco"/>
-                                <label htmlFor="loco" className="form-check-label pl-2"  required name="tipoPagamento" value="loco" required >Pagamento in loco</label>
+                                <label htmlFor="loco" className="form-check-label pl-2"  required name="pagamentoLoco" value="loco" required >Pagamento in loco</label>
                             </div>
                         </div>
 
