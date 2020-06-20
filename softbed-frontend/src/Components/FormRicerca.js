@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import $ from 'jquery';
 
 function FormRicerca() {
@@ -45,30 +45,31 @@ function FormRicerca() {
         setMinDataP(nuovaDataConvertita);
     }
 
-    // Gestione delle GET per la ricerca al caricamento della finestra
-    $(window).on('load', () => {
-        const currentURL = window.location.href;
-        const basePath = window.location.protocol + "//" + window.location.host + "/";
+    // Gestione della GET
+    useEffect(() => {
+            const currentURL = window.location.href;
+            const basePath = window.location.protocol + "//" + window.location.host + "/";
 
-        if (currentURL !== basePath) {
-            fetch(currentURL)
-                .then(res => res.json())
-                .then(res => {
-                    if (res.destinazione)
-                        $('#destinazione').val(res.destinazione);
+            if (currentURL !== basePath) {
+                fetch(currentURL)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.destinazione)
+                            $('#destinazione').val(res.destinazione);
 
-                    if (res.arrivo)
-                        $('#arrivo').val(res.arrivo);
+                        if (res.arrivo)
+                            $('#arrivo').val(res.arrivo);
 
-                    if (res.partenza)
-                        $('#partenza').val(res.partenza);
+                        if (res.partenza)
+                            $('#partenza').val(res.partenza);
 
-                    if (res.ospiti)
-                        $('#ospiti').val(res.ospiti);
-                })
-                .catch(err => err);
-        }
-    });
+                        if (res.ospiti)
+                            $('#ospiti').val(res.ospiti);
+                    })
+                    .catch(err => err);
+            }
+
+    }, []);
 
     return (
         <form className="form d-flex justify-content-center bg-warning" action="/search" onSubmit={event => {}}>
