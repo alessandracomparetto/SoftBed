@@ -121,7 +121,7 @@ function FormCondizioni(){
                             </select>
                         </div>
                         <div className="form-check-inline pl-md-0 col-6 col-md-4">
-                            <label htmlFor="maxPrenotazione" className="mt-3 mr-3 mr-md-2 border-bottom border-primary" >Massima</label>
+                            <label htmlFor="maxPrenotazione" className="mt-3 mr-3 mr-md-2 border-bottom border-primary" >Massimo</label>
                             <select id="maxPrenotazione" className="custom-select" name="maxPrenotazione" >
                                 <option value="14">2 settimane</option>
                                 <option value="21">3 settimane</option>
