@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import FormRicerca from "./FormRicerca";
 import RisultatoRicerca from "./Schermata Risultati/RisultatoRicerca";
 import Paginazione from "./Schermata Risultati/Paginazione";
+import Mappa from "./Schermata Risultati/Mappa";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
@@ -36,13 +37,22 @@ function SchermataRisultati() {
         <React.Fragment>
             <FormRicerca />
             <div className="container">
-                {
-                    listaStrutture.map((struttura, indice) => {
-                        return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi}/>
-                    })
-                }
-                <Paginazione paginaAttuale={pagina} numPagine={20} setPagina={setPagina} />
-            </div>
+                <div className="row">
+                    <div className="col-8">
+                        {
+                            listaStrutture.map((struttura, indice) => {
+                                return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi}/>
+                            })
+                        }
+                        <Paginazione paginaAttuale={pagina} numPagine={20} setPagina={setPagina} />
+
+
+                    </div>
+                    <div className="col-4">
+                        <Mappa />
+                    </div>
+                </div>
+                </div>
         </React.Fragment>
     )
 }
