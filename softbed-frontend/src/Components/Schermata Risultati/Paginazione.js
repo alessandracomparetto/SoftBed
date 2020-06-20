@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
 
 function Paginazione(props) {
 
@@ -20,22 +19,22 @@ function Paginazione(props) {
                 {/* Vai alla pagina precedente */}
                 { props.paginaAttuale - 1 > 0 && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" aria-label="Previous" onClick={() => aggiornaPagina(-1)}>
+                        <a className="page-link" href="#" aria-label="Previous" onClick={() => aggiornaPagina(-1)}>
                             <span aria-hidden="true">&laquo;</span>
                             <span className="sr-only">Previous</span>
-                        </Link>
+                        </a>
                     </li>
                 )}
 
                 { props.paginaAttuale - 2 > 0 && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" onClick={() => aggiornaPagina(-2)}>{paginaAttuale - 2}</Link>
+                        <a className="page-link" href="#" onClick={() => aggiornaPagina(-2)}>{paginaAttuale - 2}</a>
                     </li>
                 )}
 
                 { props.paginaAttuale - 1 > 0 && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" onClick={() => aggiornaPagina(-1)}>{paginaAttuale - 1}</Link>
+                        <a className="page-link" href="#" onClick={() => aggiornaPagina(-1)}>{paginaAttuale - 1}</a>
                     </li>
                 )}
 
@@ -45,21 +44,21 @@ function Paginazione(props) {
 
                 { props.paginaAttuale + 1 <= props.numPagine && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" onClick={() => aggiornaPagina(+1)}>{paginaAttuale + 1}</Link>
+                        <a className="page-link" href="#" onClick={() => aggiornaPagina(+1)}>{paginaAttuale + 1}</a>
                     </li>
                 )}
                 { props.paginaAttuale + 2 <= props.numPagine && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" onClick={() => aggiornaPagina(+2)}>{paginaAttuale + 2}</Link>
+                        <a className="page-link" href="#" onClick={() => aggiornaPagina(+2)}>{paginaAttuale + 2}</a>
                     </li>
                 )}
 
                 { props.paginaAttuale + 1 <= props.numPagine && (
                     <li className="page-item">
-                        <Link className="page-link" to="#" aria-label="Next">
+                        <a className="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span className="sr-only">Next</span>
-                        </Link>
+                        </a>
                     </li>
                 )}
 

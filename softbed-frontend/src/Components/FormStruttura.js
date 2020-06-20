@@ -82,14 +82,16 @@ function FormStruttura(){
         }
    }
   function verificaCap(event){
-
-          let cap=parseInt(event.target.value);
-          console.log(cap);
+        let cap=parseInt(event.target.value);
           if(cap>=10 && cap<=98168){
-              console.log("valid");
+              document.getElementById("feedback").classList.add("collapse");
+              document.getElementById("cap").classList.remove("border-danger");
           }
           else{
-              console.log("invalid");
+              event.preventDefault();
+              document.getElementById("cap").classList.add("border-danger");
+              document.getElementById("feedback").classList.add("invalid");
+
           }
    }
 
@@ -99,7 +101,7 @@ function FormStruttura(){
             <div className="progress">
                 <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
             </div>
-            <form className="container pt-3 needs-validation" noValidate>
+            <form className="container pt-3 needs-validation" noValidate onSubmit={verificaCap}>
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
                     <input id="name" name="name" type="text" className="form-control" maxLength="60" required />
@@ -163,12 +165,12 @@ function FormStruttura(){
                     </div>
                 </div>
                 <div className="form-row">
-                    <div className="col-12 col-sm-8 col-md-6 col-lg-6">
+                    <div className="col-12 col-lg-6">
                         <label htmlFor="address">Via/Piazza</label>
                         <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
                                maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
                     </div>
-                    <div className="col-3">
+                    <div className="col-5 col-md-4 col-lg-3">
                         <label htmlFor="addressnum">N.</label>
                         <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
                                maxLength="4" disabled required/>
@@ -176,14 +178,12 @@ function FormStruttura(){
                             1 - 9999
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-4 col-md-4 col-lg-3">
                         <label htmlFor="cap">CAP.</label>
                         <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
-                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5" onChange={verificaCap} disabled required/>
-                        <div className="invalid-feedback">
-                            00010 - 98168
-                        </div>
+                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  disabled required/>
                     </div>
+                    <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
                     <ButtonForm/>
                 </div>
             </form>
