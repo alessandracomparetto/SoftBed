@@ -81,13 +81,16 @@ function FormCondizioni(){
             <div className="progress">
                 <div className="progress-bar" style={{width: 80 + '%'}}>80%</div>
             </div>
-            <form className="mt-3" onSubmit={verificaCheckBox}>
+            <form className="mt-3 needs-validation" noValidate  onSubmit={verificaCheckBox}>
                 <div className="container border p-3">
-                    <h6 className="mt-3 border-bottom border-primary">Durata del soggiorno(giorni)</h6>
+                    <h6 className="mt-3 border-bottom border-primary">Durata del soggiorno</h6>
                     <div className=" text-center mb-3">
                         <div className="form-check-inline col-6 col-md-4">
                             <label htmlFor="minSoggiorno" className="mt-3 mr-4 pr-1 border-bottom border-primary"> Minima </label>
-                            <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control " min="1" max="15" size="2" maxLength="2"  defaultValue={2} onChange={verificaMinDurata}  />
+                            <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control" min="1" max="15" size="2" maxLength="2"  defaultValue={2} onChange={verificaMinDurata}  />
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">giorni</span>
+                            </div>
                             <div className="invalid-feedback">
                                 1 - 15
                             </div>
@@ -95,6 +98,9 @@ function FormCondizioni(){
                         <div className="form-check-inline col-6 col-md-4">
                             <label htmlFor="maxSoggiorno" className="mt-3 mr-3 border-bottom border-primary">Massima </label>
                             <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control" min="1" max="28" size="2" maxLength="2" defaultValue={7} onChange={verificaMaxDurata}  />
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">giorni</span>
+                            </div>
                             <div className="invalid-feedback">
                                 1 - 28
                             </div>
@@ -104,7 +110,7 @@ function FormCondizioni(){
                     <h6 className="mt-3 border-bottom border-primary">Anticipo di prenotazione</h6>
                     <div className=" text-center mb-3">
                         <div className="form-check-inline col-6 col-md-4">
-                            <label htmlFor="minPrenotazione" className="mt-3 mr-4 pr-1 border-bottom border-primary">Minima</label>
+                            <label htmlFor="minPrenotazione" className="mt-3 mr-4 pr-1 border-bottom border-primary">Minimo</label>
                             <select id="minPrenotazione" className="custom-select" name="minPrenotazione" >
                                 <option value="2">2 giorni</option>
                                 <option value="3" selected>3 giorni</option>
@@ -131,7 +137,7 @@ function FormCondizioni(){
                     <div className="d-flex justify-content-around mb-3">
                         <div className="md-form md-outline ">
                             <label htmlFor="oraInizioCheckIn" className="border-bottom border-primary " >Inizio ora check-in</label>
-                            <input type="time" id="oraInizioCheckIn" className="form-control col-9" placeholder="Select time" defaultValue="11:00" min="06:00" max="15:00" onChange={verificaInizioCheckIn}/>
+                            <input type="time" id="oraInizioCheckIn" className="form-control " placeholder="Select time" defaultValue="11:00" min="06:00" max="15:00" onChange={verificaInizioCheckIn}/>
                         </div>
                         <div className="invalid-feedback">
                             06:00-15:00
@@ -139,7 +145,7 @@ function FormCondizioni(){
 
                         <div className="md-form md-outline">
                             <label htmlFor="oraFineCheckIn" className="border-bottom border-primary">Fine ora check-in</label>
-                            <input type="time" id="oraFineCheckIn" className="form-control col-9" defaultValue="19:00" min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn}/>
+                            <input type="time" id="oraFineCheckIn" className="form-control " defaultValue="19:00" min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn}/>
                         </div>
                         <div className="invalid-feedback">
                             09:00-20:00
@@ -149,14 +155,14 @@ function FormCondizioni(){
                     <div className="d-flex justify-content-around mb-3 ">
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraInizioCheckOut" className="border-bottom border-primary">Inizio ora check-out</label>
-                            <input type="time" id="oraInizioCheckOut" className="form-control col-9" min="09:00" max="13:00"defaultValue="09:00" placeholder="Select time" onChange={verificaInizioCheckOut}/>
+                            <input type="time" id="oraInizioCheckOut" className="form-control" min="09:00" max="13:00"defaultValue="09:00" placeholder="Select time" onChange={verificaInizioCheckOut}/>
                         </div>
                         <div className="invalid-feedback">
                             09:00-13:00
                         </div>
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraFineCheckOut" className="border-bottom border-primary">Fine ora check-out</label>
-                            <input type="time" id="oraFineCheckOut" className="form-control col-9" min="10:00" max="18:00"defaultValue="11:00" placeholder="Select time" onChange={verificaFineCheckOut}/>
+                            <input type="time" id="oraFineCheckOut" className="form-control" min="10:00" max="18:00"defaultValue="11:00" placeholder="Select time" onChange={verificaFineCheckOut}/>
                         </div>
                         <div className="invalid-feedback">
                             10:00-18:00
@@ -247,28 +253,29 @@ function FormCondizioni(){
                             </div>
                         </div>
                     </div>
-                    <div className=" d-flex justify-content-center  form-row col-12 pt-3">
-                        <label htmlFor="nGiorniEsclusione " className="pr-3 pt-2">Esclusioni per soggiorni superiori a</label>
-                        <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2"
-                               maxLength="2" required style={{maxWidth: 80 + 'px'}}/>
+                    <div className="d-flex justify-content-center form-row col-12 pt-3">
+                        <label htmlFor="nGiorniEsclusione " className="pr-1 pr-lg-3 pt-2">Esclusione per soggiorni superiori a</label>
                         <div className="input-group-prepend">
                             <span className="input-group-text">giorni</span>
                         </div>
+                        <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2"
+                               maxLength="2" required style={{maxWidth: 80 + 'px'}}/>
+
                     </div>
                     <div className="container d-flex justify-content-around pt-2 pb-3">
                         <div className="form-row">
                             <div  className=" col-sm-12 col-md-5 pt-3">
                                 <div className="input-group ">
-                                    <label htmlFor="prezzoBambini" className="pr-3">Riduzione del</label>
+                                    <label htmlFor="prezzoBambini" className=" pr-1 pr-md-3">Riduzione del</label>
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">%</span>
                                     </div>
                                     <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
                                 </div>
                             </div>
-                            <div  className=" col-sm-12 col-md-7 pt-3" >
+                            <div  className=" col-sm-12 col-md-8 col-lg-7 pt-3" >
                                 <div className="input-group ">
-                                    <label htmlFor="nPersone" className="pr-1">per prenotazioni superiori a n° persone</label>
+                                    <label htmlFor="nPersone" className="pr-2">per prenotazioni superiori a n° persone</label>
                                     <input name="nPersone" id="nPersone" type="number" className="form-control currency  " min="1" step="1" max="100" required style={{maxWidth: 100 + 'px'}} />
                                 </div>
                             </div>
