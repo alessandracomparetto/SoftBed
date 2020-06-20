@@ -30,23 +30,26 @@ function FormTipologiaStruttura(){
             <form className="container needs-validation p-3" noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
-                    <div className="">
-                        <i className="fa fa-bed fa-5x " aria-hidden="true"></i>
-                        <div className="custom-control custom-radio ">
-                            <input type="radio" className="custom-control-input " id="B&B"
-                                   name="B&B"/>
-                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
+                    <div>
+                        <i className="fa fa-bed fa-5x pr-4" aria-hidden="true"></i><br></br>
+                        <div className="custom-control custom-radio custom-control-inline mt-2">
+                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"
+                                   required/>
+                                <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div>
-                        <i className="fa fa-home fa-5x " aria-hidden="true"></i>
-                        <div className="custom-control custom-radio">
-                            <input type="radio" className="custom-control-input" id="cv"
-                                   name="cv"/>
-                            <label className="custom-control-label " htmlFor="cv">Casa vacanze</label>
+                        <i className="fa fa-home fa-5x pl-4" aria-hidden="true"></i> <br></br>
+                        <div className="custom-control custom-radio custom-control-inline mt-2">
+                            <input type="radio" className="custom-control-input" id="cv" name="tipologia"
+                                   value="cv" required/>
+                                <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
+                                <div className="invalid-feedback ml-2">
+                                    Inserire la tipologia di struttura
+                                </div>
                         </div>
                     </div>
-                    </div>
+                </div>
                 <ButtonForm/>
             </form>
         </div>
