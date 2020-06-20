@@ -1,7 +1,23 @@
 import React from "react";
 import $ from "jquery";
 import ButtonForm from "./ButtonForm";
-
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Get the forms we want to add validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 function FormCondizioni(){
     function penaleCancellazioneHandler(event) {
         if (event.target.checked) {
@@ -37,7 +53,7 @@ function FormCondizioni(){
         }
     }
     function verificaFineCheckIn(e){
-        if((e.target.value)<document.getElementById("oraFineCheckIn").value){
+        if((e.target.value)<document.getElementById("oraInizioCheckIn").value){
             document.getElementById("oraInizioCheckIn").value=e.target.value;
         }
     }
@@ -47,16 +63,18 @@ function FormCondizioni(){
         }
     }
     function verificaFineCheckOut(e){
-        if((e.target.value)>document.getElementById("oraFineCheckOut").value){
-            document.getElementById("oraFineCheckIn").value=e.target.value;
+        if((e.target.value)>document.getElementById("oraInizioCheckOut").value){
+            document.getElementById("oraInizioCheckOut").value=e.target.value;
         }
     }
     function verificaCheckBox(event){
-        event.preventDefault();
-        console.log(document.getElementById("pagamentoLoco").value);
-        console.log($("pagamentoLoco").checked);
-
-
+        if(document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked){
+            document.getElementById("feedback").classList.add("collapse");
+        }
+        else{
+            document.getElementById("feedback").classList.remove("collapse");
+            event.preventDefault();
+        }
     }
     return(
         <div className="container col-sm-10 ">
@@ -88,7 +106,6 @@ function FormCondizioni(){
                         <div className="form-check-inline col-6 col-md-4">
                             <label htmlFor="minPrenotazione" className="mt-3 mr-4 pr-1 border-bottom border-primary">Minima</label>
                             <select id="minPrenotazione" className="custom-select" name="minPrenotazione" >
-                                <option value="1">1 giorni</option>
                                 <option value="2">2 giorni</option>
                                 <option value="3" selected>3 giorni</option>
                                 <option value="5">5 giorni</option>
@@ -146,19 +163,19 @@ function FormCondizioni(){
                         </div>
                     </div>
                 </div>
-                <div className="container">
-                    {/*TODO controllo che abbia scelto almeno unno delle due */}
+                <div className=" border container pt-3">
                     <h6 className="mt-3 border-bottom border-primary">Modalità di pagamento</h6>
                         <div className= "form-row-group d-flex justify-content-around">
                             <div className="form-check-inline ">
-                                <input type="checkbox" name="online"/>
-                                <label htmlFor="online" className="form-check-label pl-2"  required name="pagamentoOnline" value="online" required>Pagamento online</label>
+                                <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online"/>
+                                <label htmlFor="online" className="form-check-label pl-2" >Pagamento online</label>
                             </div>
                             <div className="form-check-inline ">
-                                <input type="checkbox" name="loco"/>
-                                <label htmlFor="loco" className="form-check-label pl-2"  required name="pagamentoLoco" value="loco" required >Pagamento in loco</label>
+                                <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" />
+                                <label htmlFor="loco" className="form-check-label pl-2" >Pagamento in loco</label>
                             </div>
                         </div>
+                    <p id="feedback" className=" text-danger collapse" >Selezionare almeno una delle due checkbox</p>
 
                     <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
                     <div className="form-check">
@@ -198,11 +215,11 @@ function FormCondizioni(){
                             </div>
 
                         </div>
-                        {/*TODO controllare che la massimo prenitazione sia minore della minima disdetta*/}
                     </div>
                 </div>
-                <h5  id="turismo">Si compilano i campi in base alle normative <br></br> dell'ufficio del Turismo in cui si trova la struttura </h5>
-                <div className="container d-flex  justify-content-around pt-4">
+                <div className="container border pt-3">
+                    <h5  id="turismo">Si compilano i campi in base alle normative <br></br> dell'ufficio del Turismo in cui si trova la struttura </h5>
+                    <div className="container d-flex  justify-content-around pt-4">
                         <div className="form-row">
                             <div  className=" col-sm-12 col-md-6 pt-3">
                                 <div className="input-group ">
@@ -229,7 +246,7 @@ function FormCondizioni(){
                                 </div>
                             </div>
                         </div>
-                </div>
+                    </div>
                     <div className=" d-flex justify-content-center  form-row col-12 pt-3">
                         <label htmlFor="nGiorniEsclusione " className="pr-3 pt-2">Esclusioni per soggiorni superiori a</label>
                         <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2"
@@ -238,21 +255,22 @@ function FormCondizioni(){
                             <span className="input-group-text">giorni</span>
                         </div>
                     </div>
-                <div className="container d-flex justify-content-around pt-2">
-                    <div className="form-row">
-                        <div  className=" col-sm-12 col-md-5 pt-3">
-                            <div className="input-group ">
-                                <label htmlFor="prezzoBambini" className="pr-3">Riduzione del</label>
-                                <div className="input-group-prepend">
-                                    <span className="input-group-text">%</span>
+                    <div className="container d-flex justify-content-around pt-2 pb-3">
+                        <div className="form-row">
+                            <div  className=" col-sm-12 col-md-5 pt-3">
+                                <div className="input-group ">
+                                    <label htmlFor="prezzoBambini" className="pr-3">Riduzione del</label>
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">%</span>
+                                    </div>
+                                    <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
                                 </div>
-                                <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
                             </div>
-                        </div>
-                        <div  className=" col-sm-12 col-md-7 pt-3" >
-                            <div className="input-group ">
-                                <label htmlFor="nPersone" className="pr-1">per prenotazioni superiori a n° persone</label>
-                                <input name="nPersone" id="nPersone" type="number" className="form-control currency  " min="1" step="1" max="100" required style={{maxWidth: 100 + 'px'}} />
+                            <div  className=" col-sm-12 col-md-7 pt-3" >
+                                <div className="input-group ">
+                                    <label htmlFor="nPersone" className="pr-1">per prenotazioni superiori a n° persone</label>
+                                    <input name="nPersone" id="nPersone" type="number" className="form-control currency  " min="1" step="1" max="100" required style={{maxWidth: 100 + 'px'}} />
+                                </div>
                             </div>
                         </div>
                     </div>
