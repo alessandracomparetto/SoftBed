@@ -6,7 +6,7 @@ const router = express.Router();
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public')
+        cb(null, 'public/uploads')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname )
@@ -26,10 +26,6 @@ router.post('/',function(req, res) {
 
 });
 
-// La rotta /users è vietata
-router.get('/', function(req, res, next) {
-    next(createError(403));
-});
 
 module.exports = router;
 
