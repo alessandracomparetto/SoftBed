@@ -5,9 +5,11 @@ import './App.css';
 import Navbar from "./Components/Navbar";
 import FormRicerca from "./Components/FormRicerca";
 import Carousel from "./Components/Carousel";
+import FormCondizioni from "./Components/FormCondizioni";
 import RisultatoRicerca from "./Components/RisultatoRicerca";
 import Paginazione from "./Components/Paginazione";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
+import FormDatiAggiuntivi from "./Components/FormDatiAggiuntivi";
 
 function App() {
 
@@ -38,7 +40,8 @@ function App() {
                     <FormRicerca />
                 </Route>
 
-                {/* Schermata dei risultati di ricerca */}
+                <FormCondizioni></FormCondizioni>
+               {/*  Schermata dei risultati di ricerca
                 <Route path="/search">
                     <FormRicerca />
                     <div className="container">
@@ -51,11 +54,11 @@ function App() {
                     </div>
                 </Route>
 
-                {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
+                 Se il percorso non è stato trovato viene mostrata la pagina di errore 404
                 <Route path="*">
                     <PaginaNonTrovata/>
                     <FormRicerca />
-                </Route>
+                </Route>*/}
             </Switch>
         </Router>
     )

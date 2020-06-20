@@ -31,6 +31,9 @@ body {
     width: 43px;
     text-align: center;
 }
+#turismo{
+    text-align: center;
+}
 
 .minw-15em {
     min-width: 15em;
