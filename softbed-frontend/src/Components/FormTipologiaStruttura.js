@@ -31,22 +31,22 @@ function FormTipologiaStruttura(){
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
                     <div className="">
-                        <i className="fa fa-bed fa-5x " aria-hidden="true"></i>
+                        <i className="fa fa-bed fa-5x " aria-hidden="true"/>
                         <div className="custom-control custom-radio ">
                             <input type="radio" className="custom-control-input " id="B&B"
-                                   name="B&B"/>
+                                   name="tipologia"/>
                             <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div>
-                        <i className="fa fa-home fa-5x " aria-hidden="true"></i>
+                        <i className="fa fa-home fa-5x " aria-hidden="true"/>
                         <div className="custom-control custom-radio">
                             <input type="radio" className="custom-control-input" id="cv"
-                                   name="cv"/>
+                                   name="tipologia"/>
                             <label className="custom-control-label " htmlFor="cv">Casa vacanze</label>
                         </div>
                     </div>
-                    </div>
+                </div>
                 <ButtonForm/>
             </form>
         </div>

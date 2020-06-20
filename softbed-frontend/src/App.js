@@ -14,10 +14,6 @@ function App() {
     // TODO: da rimuovere, forse
     const [pagina, setPagina] = useState(1);
 
-    function aggiornaPagina() {
-        setPagina(pagina + 1);
-    }
-
     // TODO: da rimuovere, solo per test
     const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
         " In sed interdum augue. Aliquam lacinia lectus pulvinar lacus feugiat commodo. Praesent suscipit quam a" +
@@ -25,7 +21,7 @@ function App() {
         " Sed commodo lacus nulla, non placerat libero gravida a. Orci varius natoque penatibus et magnis dis" +
         " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
 
-    const [listaStrutture, setStrutture] = useState([
+    const [listaStrutture] = useState([
         {id: "img_avatar2.png", nome: "Struttura 1", descrizione: descrizione},
         {id: "img_avatar3.png", nome: "Struttura 2", descrizione: descrizione},
         {id: "img_avatar2.png", nome: "Struttura 3", descrizione: descrizione}
@@ -36,6 +32,7 @@ function App() {
             <Navbar />
 
             <Switch>
+                {/* Schermata principale */}
                 <Route exact path="/">
                     <Carousel />
                     <FormRicerca />
