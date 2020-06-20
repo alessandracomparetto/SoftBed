@@ -1,36 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 
 import './App.css';
 import Navbar from "./Components/Navbar";
 import FormRicerca from "./Components/FormRicerca";
 import Carousel from "./Components/Carousel";
-import FormCondizioni from "./Components/FormCondizioni";
-import RisultatoRicerca from "./Components/RisultatoRicerca";
-import Paginazione from "./Components/Paginazione";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
-import FormDatiAggiuntivi from "./Components/FormDatiAggiuntivi";
+import SchermataRisultati from "./Components/SchermataRisultati";
 
 function App() {
 
-    // TODO: da rimuovere, forse
-    const [pagina, setPagina] = useState(1);
-
-    // TODO: da rimuovere, solo per test
-    const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
-        " In sed interdum augue. Aliquam lacinia lectus pulvinar lacus feugiat commodo. Praesent suscipit quam a" +
-        " ipsum luctus congue. Sed quis nibh mauris. Vivamus massa elit, rhoncus a velit non, suscipit elementum sem." +
-        " Sed commodo lacus nulla, non placerat libero gravida a. Orci varius natoque penatibus et magnis dis" +
-        " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
-
-    const [listaStrutture] = useState([
-        {id: "img_avatar2.png", nome: "Struttura 1", descrizione: descrizione},
-        {id: "img_avatar3.png", nome: "Struttura 2", descrizione: descrizione},
-        {id: "img_avatar2.png", nome: "Struttura 3", descrizione: descrizione}
-    ])
-
     return (
         <Router>
+            {/* La navbar è presente in ogni caso */}
             <Navbar />
 
             <Switch>
@@ -40,25 +22,14 @@ function App() {
                     <FormRicerca />
                 </Route>
 
-                <FormCondizioni></FormCondizioni>
-               {/*  Schermata dei risultati di ricerca
-                <Route path="/search">
-                    <FormRicerca />
-                    <div className="container">
-                        {
-                            listaStrutture.map((struttura, indice) => {
-                                return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} />
-                            })
-                        }
-                        <Paginazione paginaAttuale={pagina} numPagine={20} setPagina={setPagina} />
-                    </div>
-                </Route>
+                {/* Schermata dei risultati di ricerca */}
+                <Route path="/search" component={SchermataRisultati}/>
 
-                 Se il percorso non è stato trovato viene mostrata la pagina di errore 404
+                {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                 <Route path="*">
                     <PaginaNonTrovata/>
                     <FormRicerca />
-                </Route>*/}
+                </Route>
             </Switch>
         </Router>
     )

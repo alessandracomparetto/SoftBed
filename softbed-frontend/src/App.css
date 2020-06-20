@@ -2,7 +2,19 @@ body {
     background-color: #eee;
 }
 
-.annuncio-testo {
+.annuncio-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.annuncio-img {
+    width: 270px;
+    height: 100%;
+    max-height: 240px;
+}
+
+.annuncio-desc {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -11,20 +23,12 @@ body {
     -webkit-box-orient: vertical;
 }
 
-.annuncio-btn {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-}
-
-.anteprima-struttra {
-    width: 270px;
-    height: 100%;
-    max-height: 240px;
-}
-
 .maxw-xl {
     max-width: 1140px;
+}
+
+.minw-15em {
+    min-width: 15em;
 }
 
 .page-item {
@@ -33,10 +37,6 @@ body {
 }
 #turismo{
     text-align: center;
-}
-
-.minw-15em {
-    min-width: 15em;
 }
 
 .w-200px {
