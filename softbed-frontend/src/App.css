@@ -35,8 +35,13 @@ body {
     width: 43px;
     text-align: center;
 }
+
 #turismo{
     text-align: center;
+}
+
+.w-20px {
+    width: 20px;
 }
 
 .w-200px {
