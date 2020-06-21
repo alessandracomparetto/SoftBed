@@ -3,10 +3,12 @@ import FormRicerca from "./FormRicerca";
 import RisultatoRicerca from "./Schermata Risultati/RisultatoRicerca";
 import Paginazione from "./Schermata Risultati/Paginazione";
 import Mappa from "./Schermata Risultati/Mappa";
+import FormFiltri from "./Schermata Risultati/FormFiltri";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
     const [pagina, setPagina] = useState(1);
+    const [destinazione, setDestinazione] = useState("");
 
     // TODO: da rimuovere, solo per test
     const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
@@ -35,10 +37,16 @@ function SchermataRisultati() {
 
     return (
         <React.Fragment>
-            <FormRicerca />
+            <FormRicerca setDestinazione={setDestinazione}/>
             <div className="container">
                 <div className="row">
-                    <div className="col-8">
+                    <div className="d-none d-lg-block col-lg-4 h-100 p-3 card mt-3">
+                        <div style={{height: 250 + "px"}}>
+                            <Mappa destinazione={destinazione}/>
+                        </div>
+                        <FormFiltri servizi={[{nome: "Cucina per celiaci"}, {nome: "TV"}]}/>
+                    </div>
+                    <div className="col-12 col-lg-8">
                         {
                             listaStrutture.map((struttura, indice) => {
                                 return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi}/>
@@ -48,11 +56,8 @@ function SchermataRisultati() {
 
 
                     </div>
-                    <div className="col-4">
-                        <Mappa />
-                    </div>
                 </div>
-                </div>
+            </div>
         </React.Fragment>
     )
 }
