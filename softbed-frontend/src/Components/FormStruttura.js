@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ButtonForm from "./ButtonForm";
 import data from "../regioni_province_comuni.js";
 import $ from "jquery"
+import axios from "axios";
 
 (function() {
     'use strict';
@@ -21,7 +22,27 @@ import $ from "jquery"
     }, false);
 })();
 
-function FormStruttura(){
+function FormStruttura (props) {
+    function onSubmit(e){
+        e.preventDefault();
+        const indirizzo = {
+            via: document.getElementById("address").value,
+            numero: document.getElementById("addressnum").value,
+            cap: document.getElementById("cap").value ,
+        }
+        console.log(indirizzo);
+        try{
+            axios.post('/struttura', indirizzo);
+        }
+        catch(err){
+            if (err.response.status === 500) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
+        }
+
+    }
     let province = null;
     function addressEventHandler(event) {
         if (event.target.value != '') {
@@ -32,7 +53,6 @@ function FormStruttura(){
             $('.form-row input').not('#address').removeAttr('required');
         }
     }
-
     function tabEventHandler(event){
         if (event.keyCode == 9) { // pressione TAB
             if ($(this).val() != '') {
@@ -63,7 +83,7 @@ function FormStruttura(){
             }
         }
     }
-   function provinceEventHandler(event){
+    function provinceEventHandler(event){
        let comuni=null;
        // rimozione dei precedenti elementi del menu Comune
        document.getElementById("town").innerHTML='<option value="" selected></option>';
@@ -81,7 +101,7 @@ function FormStruttura(){
             }
         }
    }
-  function verificaCap(event){
+    function verificaCap(event){
         let cap=parseInt(event.target.value);
           if(cap>=10 && cap<=98168){
               document.getElementById("feedback").classList.add("collapse");
@@ -101,10 +121,10 @@ function FormStruttura(){
             <div className="progress">
                 <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
             </div>
-            <form className="container pt-3 needs-validation" noValidate onSubmit={verificaCap}>
+            <form className="container pt-3 needs-validation" noValidate onSubmit={onSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
-                    <input id="name" name="name" type="text" className="form-control" maxLength="60" required />
+                    <input id="name" name="name" type="text" className="form-control" maxLength="60"  />
                     <div className="invalid-feedback">
                         Inserisci il nome della struttura
                     </div>
@@ -113,7 +133,7 @@ function FormStruttura(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} required>
+                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} >
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -145,7 +165,7 @@ function FormStruttura(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
+                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} >
                         <option value="" selected></option>
                     </select>
                     <div className="invalid-feedback">
@@ -157,8 +177,8 @@ function FormStruttura(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="town" name="town" className="custom-select" required>
-                        <option value="" selected></option>
+                    <select id="town" name="town" className="custom-select">
+                        <option value=""  selected></option>
                     </select>
                     <div className="invalid-feedback">
                         Selezionare il comune
@@ -168,7 +188,7 @@ function FormStruttura(){
                     <div className="col-12 col-lg-6">
                         <label htmlFor="address">Via/Piazza</label>
                         <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
-                               maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
+                               maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler}  required/>
                     </div>
                     <div className="col-5 col-md-4 col-lg-3">
                         <label htmlFor="addressnum">N.</label>
@@ -188,6 +208,6 @@ function FormStruttura(){
                 </div>
             </form>
         </div>
-        )
+        );
     }
     export default FormStruttura
