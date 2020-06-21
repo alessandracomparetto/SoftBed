@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from "jquery";
-/*(function() {
+(function() {
     'use strict';
     window.addEventListener('load', function() {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -17,24 +17,24 @@ import $ from "jquery";
         });
     }, false);
 })();
-*/
+
 function Registration() {
-    /*
-    const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
 
-
-    $('#pass').on('input', function(ev) {
-
-        if (strongPass.test($(this).val()))
-            $(this).siblings('.valid-feedback').removeClass('text-warning').text('Password forte');
-        else
-            $(this).siblings('.valid-feedback').addClass('text-warning').text('Password media');
-    });
-*/
+    function verificaPass(event) {
+        const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
+            if (strongPass.test(event.target.value)) {
+               document.getElementById("mdPass").classList.remove('text-warning');
+               document.getElementById("mdPass").innerHTML="Password forte";
+            }
+            else{
+                document.getElementById("mdPass").classList.add('text-warning');
+                document.getElementById("mdPass").innerHTML="Password media";
+            }
+        }
 
     return(
 
-        <form className="container was-validated col-sm-8 mt-3" method="POST" action="/users/utenteregistrato">
+        <form className="container needs-validation col-sm-8 mt-3" noValidate method="POST" action="/users/utenteregistrato">
 
             <div className="form-group">
                 <label htmlFor="name">Nome *</label>
@@ -64,11 +64,11 @@ function Registration() {
                 <label htmlFor="pass">Password *</label>
                 <input name="pass" id="pass" type="password" className="form-control"
                        title="Almeno 8 caratteri, una lettera maiuscola e un numero"
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" required/>
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" onChange={verificaPass} required/>
                 <div className="invalid-feedback">
                     Almeno 8 caratteri di cui uno maiuscolo e un numero
                 </div>
-                <div className="valid-feedback text-warning">
+                <div id="mdPass" className="valid-feedback text-warning">
                     Password media
                 </div>
             </div>
