@@ -1,6 +1,7 @@
 import React from "react";
 import data from "../regioni_province_comuni.js";
 import $ from "jquery";
+import ButtonForm from "./ButtonForm";
 
 (function() {
     'use strict';
@@ -25,6 +26,7 @@ function FormDatiAggiuntivi(){
     /* TODO: PROPS
      * Cognome email e password già compilati
      */
+
     let province = null;
 
     function regioniEventHandler(event){
@@ -86,23 +88,34 @@ function FormDatiAggiuntivi(){
         }
     }
 
-        function verificaCap(event){
-            let cap=parseInt(event.target.value, 10);
-            console.log(cap);
-            if(cap>=10 && cap<=98168){
-                document.getElementById("cap").classList.add("was-validated");
-                document.getElementById("cap").classList.remove("invalid");
-                document.getElementById("cap").classList.remove("is-invalid");
-            }
-            else{
-                document.getElementById("cap").classList.remove("was-validated");
-                document.getElementById("cap").classList.add("invalid");
-                document.getElementById("cap").classList.add("is-invalid");
-            }
+    function verificaPass(event) {
+        const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
+        if (strongPass.test(event.target.value)) {
+            document.getElementById("mdPass").classList.remove('text-warning');
+            document.getElementById("mdPass").innerHTML="Password forte";
         }
+        else{
+            document.getElementById("mdPass").classList.add('text-warning');
+            document.getElementById("mdPass").innerHTML="Password media";
+        }
+    }
+
+    function verificaCap(event){
+        let cap=parseInt(event.target.value);
+        if(cap>=10 && cap<=98168){
+            document.getElementById("feedback").classList.add("collapse");
+            document.getElementById("cap").classList.remove("border-danger");
+        }
+        else{
+            event.preventDefault();
+            document.getElementById("cap").classList.add("border-danger");
+            document.getElementById("feedback").classList.add("invalid");
+
+        }
+    }
 
     return(
-        <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate>
+        <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate onSubmit={verificaCap}>
             <h6 className="mt-3 text-uppercase ">Dati anagrafici</h6>
                 <div className="form-row">
                 <div className="form-group col-sm-12 col-md-6">
@@ -195,13 +208,12 @@ function FormDatiAggiuntivi(){
                     </div>
 
                     <div className="form-group col-sm-8 col-md-3">
-                        <label htmlFor="cap">CAP</label>
-                        <input name="cap" id="cap" type="text" className="form-control" placeholder="#####"
-                               title="Inserire 5 cifre da 00100 a 98168" onSubmit={verificaCap} disabled/>
-                        <div className="invalid-feedback">
-                            00010 - 98168
-                        </div>
+                        <label htmlFor="cap">CAP.</label>
+                        <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
+                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  disabled required/>
                     </div>
+                    <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
+
 
                     <div className=" form-group col-sm-12 col-md-6">
                         <label htmlFor="city">Località</label>
@@ -233,11 +245,11 @@ function FormDatiAggiuntivi(){
                         <label htmlFor="pass">Password</label>
                         <input name="pass" id="pass" type="password" className="form-control"
                                title="Almeno 8 caratteri, una lettera maiuscola e un numero"
-                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" required/>
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onChange={verificaPass} required/>
                         <div className="invalid-feedback">
                             Almeno 8 caratteri di cui uno maiuscolo e un numero
                         </div>
-                        <div className="valid-feedback text-warning">
+                        <div id="mdPass" className="valid-feedback text-warning">
                             Password media
                         </div>
                     </div>

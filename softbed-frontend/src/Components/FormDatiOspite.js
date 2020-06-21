@@ -20,6 +20,20 @@ import $ from "jquery";
 })();
 
 function FormDatiOspite(){
+    function verificaCap(event){
+        let cap=parseInt(event.target.value);
+        if(cap>=10 && cap<=98168){
+            document.getElementById("feedback").classList.add("collapse");
+            document.getElementById("cap").classList.remove("border-danger");
+        }
+        else{
+            event.preventDefault();
+            document.getElementById("cap").classList.add("border-danger");
+            document.getElementById("feedback").classList.add("invalid");
+
+        }
+    }
+
     let province = null;
 
     function regioniEventHandler(event){
@@ -81,7 +95,7 @@ function FormDatiOspite(){
         }
     }
     return(
-        <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate>
+        <form className="container needs-validation pt-3 col-sm-10 col-md-6" noValidate onSubmit={verificaCap}>
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>
             <h6 className="mt-3 ">Inserisci i dati dell'ospite:</h6>
             <div className="form-row">
@@ -184,13 +198,12 @@ function FormDatiOspite(){
                 </div>
 
                 <div className="form-group col-sm-8 col-md-3">
-                    <label htmlFor="cap">CAP</label>
-                    <input name="cap" id="cap" type="tel" className="form-control" pattern="^\d{5}$" placeholder="#####"
-                           title="Inserire 5 cifre da 00100 a 98168" disabled required/>
-                    <div className="invalid-feedback">
-                        00010 - 98168
-                    </div>
+                    <label htmlFor="cap">CAP.</label>
+                    <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
+                           title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  disabled required/>
                 </div>
+                <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
+
 
                 <div className=" form-group col-sm-12">
                     <label htmlFor="city">Località</label>
