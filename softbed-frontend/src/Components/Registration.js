@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from "jquery";
+import axios from "axios";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -19,7 +20,27 @@ import $ from "jquery";
 })();
 
 function Registration() {
+    function onSubmit(e){
+        e.preventDefault();
+        const utente= {
+            nome: document.getElementById("name").value,
+            cognome: document.getElementById("surname").value,
+            email: document.getElementById("email").value ,
+            pass: document.getElementById("pass").value ,
+        }
+        console.log(utente);
+        try{
+            axios.post("/utente", utente);
+        }
+        catch(err){
+            if (err.response.status === 400) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
+        }
 
+    }
     function verificaPass(event) {
         const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
             if (strongPass.test(event.target.value)) {
@@ -34,7 +55,7 @@ function Registration() {
 
     return(
 
-        <form className="container needs-validation col-sm-8 mt-3" noValidate method="POST" action="/users/utenteregistrato">
+        <form className="container needs-validation col-sm-8 mt-3" noValidate onSubmit={onSubmit}>
 
             <div className="form-group">
                 <label htmlFor="name">Nome *</label>
@@ -100,7 +121,7 @@ function Registration() {
 
             <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3">Continua</button>
         </form>
-    )
+    );
 }
 
 export default Registration;
