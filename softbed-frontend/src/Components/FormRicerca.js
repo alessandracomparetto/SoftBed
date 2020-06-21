@@ -78,7 +78,7 @@ function FormRicerca(props) {
 
     return (
         <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" >
-            <div className="form-row px-3 py-2 m-3 w-100 minw-15em maxw-xl">
+            <div className="form-row px-2 px-sm-3 py-2 m-3 w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
                     <input name="destinazione" id="destinazione" type="text" className="form-control"
