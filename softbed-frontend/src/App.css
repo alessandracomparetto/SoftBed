@@ -23,6 +23,14 @@ body {
     -webkit-box-orient: vertical;
 }
 
+.img-cover {
+    object-fit: cover;
+}
+
+.margin-0 * {
+    margin: 0;
+}
+
 .maxw-xl {
     max-width: 1140px;
 }

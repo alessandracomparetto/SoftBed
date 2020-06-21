@@ -27,31 +27,31 @@ function SchermataStruttura(props) {
             </div>
 
             {/* Immagini */}
-            <div className="row padding-0">
+            <div className="row margin-0">
                 {/* Immagine principale */}
-                <div className="col-12 col-md-6">
-                    <figure className="figure overflow-hidden w-100" style={{height: 33 + "vw"}}>
-                        <img className="img h-100 m-auto d-block" src={"/uploads/" + props.struttura.id + ".jpg"} />
+                <div className="col-12 col-md-7 pr-md-0">
+                    <figure className="figure overflow-hidden w-100" style={{height: 38 + "vh"}}>
+                        <img className="img h-100 m-auto d-block img-cover img-fluid" src={"/uploads/" + props.struttura.id + "/1.jpg"} />
                     </figure>
                 </div>
                 {/* Altre immagini */}
-                <div className="col-12 col-md-6 row">
-                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-1" style={{height: 16 + "vw"}}>
-                        <img className="img h-100 m-auto d-block" src={"/uploads/" + props.struttura.id + ".jpg"} />
+                <div className="col-12 col-md-5">
+                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 19 + "vh"}}>
+                        <img className="img h-100 w-100 m-auto d-block img-cover img-fluid" src={"/uploads/" + props.struttura.id + "/2.jpg"} />
                     </figure>
-                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-1" style={{height: 16 + "vw"}}>
-                        <img className="img h-100 m-auto d-block" src={"/uploads/" + props.struttura.id + ".jpg"} />
+                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 19 + "vh"}}>
+                        <img className="img h-100 w-100 m-auto d-block img-cover img-fluid" src={"/uploads/" + props.struttura.id + "/3.jpg"} />
                     </figure>
-                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-1" style={{height: 16 + "vw"}}>
-                        <img className="img h-100 m-auto d-block" src={"/uploads/" + props.struttura.id + ".jpg"} />
+                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 19 + "vh"}}>
+                        <img className="img h-100 w-100 m-auto d-block img-cover img-fluid" src={"/uploads/" + props.struttura.id + "/4.jpg"} />
                     </figure>
-                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-1" style={{height: 16 + "vw"}}>
-                        <img className="img h-100 m-auto d-block" src={"/uploads/" + props.struttura.id + ".jpg"} />
+                    <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 19 + "vh"}}>
+                        <img className="img h-100 w-100 m-auto d-block img-cover img-fluid" src={"/uploads/" + props.struttura.id + "/5.jpg"} />
                     </figure>
                 </div>
             </div>
 
-            {/* Altro */}
+            {/* Informazioni sulla struttura */}
             <div>
 
             </div>
