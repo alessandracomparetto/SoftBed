@@ -32,10 +32,10 @@ function FormStruttura (props) {
         }
         console.log(indirizzo);
         try{
-            axios.post('/struttura', indirizzo);
+            axios.post("/struttura", indirizzo);
         }
         catch(err){
-            if (err.response.status === 500) {
+            if (err.response.status === 400) {
                 console.log('There was a problem with the server');
             } else {
                 console.log(err.response.data.msg);
