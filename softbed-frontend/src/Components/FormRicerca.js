@@ -85,13 +85,13 @@ function FormRicerca(props) {
                            placeholder="Inserisci la tua destinazione..." required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div className="col-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
                     <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
                            defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div className="col-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="partenza">Partenza</label>
                     <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
                            max={maxData} defaultValue={minDataP} required/>

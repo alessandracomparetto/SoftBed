@@ -18,7 +18,7 @@ function SchermataRisultati() {
         " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
 
     const [listaStrutture] = useState([
-        {id: "img_avatar2.png",
+        {id: "1",
             nome: "Struttura 1",
             descrizione: descrizione,
             servizi: [
@@ -31,8 +31,8 @@ function SchermataRisultati() {
             ]
         },
 
-        {id: "img_avatar3.png", nome: "Struttura 2", descrizione: descrizione, servizi: []},
-        {id: "img_avatar2.png", nome: "Struttura 3", descrizione: descrizione, servizi: []}
+        {id: "2", nome: "Struttura 2", descrizione: descrizione, servizi: []},
+        {id: "3", nome: "Struttura 3", descrizione: descrizione, servizi: []}
     ])
 
     return (

@@ -8,9 +8,9 @@ import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/SchermataRisultati";
 import CaricamentoFoto from "./Components/CaricamentoFoto";
+import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 
 function App() {
-
     return (
         <Router>
             {/* La navbar è presente in ogni caso */}
@@ -25,9 +25,16 @@ function App() {
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}
-                <Route path="/search" component={SchermataRisultati}/>
+                <Route path="/search">
+                    <SchermataRisultati/>
+                </Route>
 
-                {/* TODO: Non è possibile accedere alle risorse in backend, come le imamgini tramite URL */}
+                {/* Schermata della struttura */}
+                <Route path="/struttura/">
+                    <SchermataStruttura struttura={{nome: "Nome della struttura", id: "1", regione: "Sicilia", provincia: "Palermo", comune: "Trabia"}} />
+                </Route>
+
+                {/* TODO: Non è possibile accedere alle risorse in backend, come le immagini tramite URL */}
                 {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                 <Route path="*">
                     <PaginaNonTrovata/>
