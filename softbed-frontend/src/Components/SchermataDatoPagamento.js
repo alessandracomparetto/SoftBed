@@ -4,9 +4,19 @@ TODO:
 *Inserire pattern per la carta di credito
 */
 function SchermataDatoPagamento(){
-function scriviDato(){
+    function scriviDato(){
+        let listaDatiPagamento = document.getElementById("listaDatiPagamento");
+        let nome = document.getElementById("name");
+        let ncarta = document.getElementById("ncarta");
+        let cvv = document.getElementById("cvv");
+        let data = document.getElementById("data");
 
-}
+        let p = document.createElement("P");
+        let info = nome.value + "\t\t\t\t\t" + ncarta.value + "\t\t\t\t\t" + cvv.value +"\t\t\t\t\t" + data.value;
+        let stringa = document.createTextNode(info);
+        p.appendChild(stringa);
+        listaDatiPagamento.appendChild(p);
+    }
     const GIORNO = 86400000;
     const dataAttuale = new Date();
     //la data di scadenza deve essere maggiore o uguale al mese attuale
@@ -42,15 +52,31 @@ function scriviDato(){
     return(
         <form className="container pt-3 col-xs-10 col-md-10 needs-validation" noValidate>
             <h6 className="mt-3 border-bottom border-primary d-inline">Dati di pagamento presenti</h6>
-            <img className="img-responsive pull-right ml-3 mb-2 d-inline" src="http://i76.imgup.net/accepted_c22e0.png"/>
-            <div>
-                <div id="listaDatiPagamento" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+            <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
 
+
+            <div id="listaDatiPagamento" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+                <div className="container mb-3">
+                    <div className="row">
+                        <div className="lead mt-3 d-inline col-sm">
+                            Intestatario carta
+                        </div>
+                        <div className="lead mt-3 d-inline col-sm">
+                            Numero carta
+                        </div>
+                        <div className="lead mt-3 d-inline col-sm">
+                            CVV
+                        </div>
+                        <div className="lead mt-3 d-inline col-sm">
+                            Data di scadenza
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <p>
                         <br/>
                     </p>
                 </div>
-
             </div>
 
             <br/><br/><br/>
@@ -58,7 +84,7 @@ function scriviDato(){
         <h6 className="mt-3">Inserisci i dati della carta:</h6>
             <div className="form-row">
                 <div className="form-group col-sm-6 col-md-4 validazione">
-                    <label htmlFor="Nome">Intestatario carta</label>
+                    <label htmlFor="name">Intestatario carta</label>
                     <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+" placeholder="Nome e Cognome" required/>
                     <div className="invalid-feedback">
                         Inserire nome e cognome
@@ -90,7 +116,7 @@ function scriviDato(){
                 </div>
             </div>
 
-            <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3 float-right">Aggiungi carta</button>
+            <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3 float-right" onClick={scriviDato}>Aggiungi carta</button>
         </form>
     )
 }

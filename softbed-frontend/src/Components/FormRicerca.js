@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import $ from 'jquery';
 
-function FormRicerca() {
+function FormRicerca(props) {
     /* TODO: BACKEND - OPZIONALE
      * Lista delle località (regioni, province e comuni) con almeno una struttura per suggerire
      * le opzioni disponibili mentre si digita la destinazione
@@ -54,8 +54,13 @@ function FormRicerca() {
                 fetch(currentURL)
                     .then(res => res.json())
                     .then(res => {
-                        if (res.destinazione)
+                        if (res.destinazione) {
                             $('#destinazione').val(res.destinazione);
+
+                            if (props.setDestinazione) {
+                                props.setDestinazione(res.destinazione);
+                            }
+                        }
 
                         if (res.arrivo)
                             $('#arrivo').val(res.arrivo);
@@ -72,7 +77,7 @@ function FormRicerca() {
     }, []);
 
     return (
-        <form className="form d-flex justify-content-center bg-warning" action="/search" onSubmit={event => {}}>
+        <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" >
             <div className="form-row px-3 py-2 m-3 w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
