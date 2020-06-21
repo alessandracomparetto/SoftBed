@@ -38,7 +38,7 @@ function FormCaratteristicheC(){
             <h4>Caratteristiche Casa vacanze</h4>
             <form className="w50  mt-3 needs-validation" noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
-                <div className="form-row-group text-center">
+                <div className="form-row-group text-center offset-2">
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" value="true" name="connessione"/>
                         <label className="form-check-label">Connessione Wi-fi</label>
@@ -69,10 +69,10 @@ function FormCaratteristicheC(){
                 </div>
 
                 <h6 className="mt-3 border-bottom border-primary">Sugli ospiti</h6>
-                <div className="form-row-group text-center">
-                    <div className="form-check-inline col-12 col-md-5">
+                <div className="form-row-group text-center offset-2">
+                    <div className="form-check-inline col-12 col-md-5 text-left p-0">
                         <input type="checkbox" className="form-check-input" id="feste" name="feste" value="true"/>
-                        <label className="form-check-label" htmlFor="feste">Permesso per feste/eventi</label>
+                        <label className="form-check-label" htmlFor="feste" style={{minWidth : 290+'px'}}>Permesso per feste/eventi</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" id="animali" name="animali" value="true"/>
@@ -82,9 +82,9 @@ function FormCaratteristicheC(){
                         <input type="checkbox" className="form-check-input" id="permessoFumo" name="permessoFumo" value="true"/>
                         <label className="form-check-label" htmlFor="permessoFumo">Permesso di fumare</label>
                     </div>
-                    <div className="form-check-inline col-12 col-md-5 p-0">
+                    <div className="form-check-inline col-12 col-md-5 p-0 text-left">
                         <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value="true"/>
-                        <label className="form-check-label " htmlFor="bambini">Idoneità ad ospitare bambini</label>
+                        <label className="form-check-label " htmlFor="bambini" style={{minWidth : 290+'px'}}>Idoneità ad ospitare bambini</label>
                     </div>
                 </div>
 
