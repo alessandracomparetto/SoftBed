@@ -8,33 +8,13 @@ import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/SchermataRisultati";
 import CaricamentoFoto from "./Components/CaricamentoFoto";
+import Registration from "./Components/Registration";
+import FormStruttura from "./Components/FormStruttura";
 
 function App() {
 
     return (
-        <Router>
-            {/* La navbar è presente in ogni caso */}
-            <Navbar />
-
-            <Switch>
-                {/* Schermata principale */}
-                <Route exact path="/">
-                    <Carousel />
-                    <FormRicerca />
-                    <CaricamentoFoto />
-                </Route>
-
-                {/* Schermata dei risultati di ricerca */}
-                <Route path="/search" component={SchermataRisultati}/>
-
-                {/* TODO: Non è possibile accedere alle risorse in backend, come le imamgini tramite URL */}
-                {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
-                <Route path="*">
-                    <PaginaNonTrovata/>
-                    <FormRicerca />
-                </Route>
-            </Switch>
-        </Router>
+        <Registration/>
     )
 }
 
