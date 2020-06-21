@@ -32,7 +32,7 @@ function FormCaratteristicheC(){
     return(
 
         <div className="container">
-            <div className="progress">
+            <div className="progress mt-2">
                 <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
             </div>
             <h4>Caratteristiche Casa vacanze</h4>
@@ -55,7 +55,7 @@ function FormCaratteristicheC(){
                     </div>
                     <div className="form-check-inline col-12 col-md-5 ">
                         <input type="checkbox" className="form-check-input" id="aria" name="aria" value="true"/>
-                        <label className="form-check-label" htmlFor="aria"> Aria condizionata</label>
+                        <label className="form-check-label" htmlFor="aria">Aria condizionata</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5 ">
                         <input type="checkbox" className="form-check-input" id="tv" name="tv" value="true"/>
@@ -72,29 +72,26 @@ function FormCaratteristicheC(){
                 <div className="form-row-group text-center">
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" id="feste" name="feste" value="true"/>
-                        <label className="form-check-label" htmlFor="feste">
-                            Permesse per feste/eventi</label>
+                        <label className="form-check-label" htmlFor="feste">Permesso per feste/eventi</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" id="animali" name="animali" value="true"/>
                         <label className="form-check-label" htmlFor="animali">Animali ammessi</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5">
-                        <input type="checkbox" className="form-check-input" id="permessoFumo" name="permessoFumo"
-                               value="true"/>
+                        <input type="checkbox" className="form-check-input" id="permessoFumo" name="permessoFumo" value="true"/>
                         <label className="form-check-label" htmlFor="permessoFumo">Permesso di fumare</label>
                     </div>
-                    <div className="form-check-inline col-12 col-md-5">
-                        <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value="true"/>Idoneità
-                        ad ospitare bambini
-                        <label className="form-check-label" htmlFor="bambini"></label>
+                    <div className="form-check-inline col-12 col-md-5 p-0">
+                        <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value="true"/>
+                        <label className="form-check-label " htmlFor="bambini">Idoneità ad ospitare bambini</label>
                     </div>
                 </div>
 
                 <h6 className="mt-3 border-bottom border-primary">Descrizione</h6>
                 <div className="md-form amber-textarea active-amber-textarea">
                     <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength="200" placeholder="Write something here..." onChange={verificaLunghezza}></textarea>
-                    <p id="feedback" className="text-danger form-text text-muted collapse ">Massimo 200 caratteri</p>
+                    <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 200 caratteri</p>
                 </div>
 
                 <ButtonForm/>
