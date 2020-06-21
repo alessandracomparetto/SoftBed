@@ -74,6 +74,7 @@ function CaricamentoFoto(){
                 setFile([]);
                 setFilename(nomi);
             })
+
     };
 
     return (
