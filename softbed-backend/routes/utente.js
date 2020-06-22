@@ -13,10 +13,13 @@ router.get('/', function(req, res, next) {
 });
 
 /* Registrazione Utente */
-router.post('/', registrazione);
+router.post('/utenteRegistrato', registrazione);
 
-/* Login Utente
-router.post('/login', autenticazione);*/
+/* Login Utente */
+router.post('/login', autenticazione);
+
+/* Dato Pagamento utente
+router.post('/pagamenti', aggiuntaDatoPagamento);*/
 
 
 async function registrazione(req, res, next) {
@@ -27,10 +30,12 @@ async function registrazione(req, res, next) {
         await withTransaction(db, async() => {
             // inserimento utente
 
-            results = await db.query('INSERT INTO `utente` (nome, cognome) \
-        SELECT ? AS nome, ? AS cognome',[
+            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
+        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
                 req.body.nome,
-                req.body.cognome
+                req.body.cognome,
+                req.body.data_nascita,
+                req.body.gestore == 'gestore' ? '1' : '0',
             ])
                 .catch(err => {
                     throw err;
@@ -39,34 +44,12 @@ async function registrazione(req, res, next) {
             console.log('Inserimento tabella utente');
             console.log(results);
 
-/*
 
             // recupero dello user id
             let id_utente = results.insertId;
 
-            // inserimento indirizzo
-            results = await db.query('INSERT INTO `indirizzo` \
-        (id_utente, via, numero, cap, localita, telefono) VALUES ?', [
-                [
-                    [
-                        id_utente,
-                        req.body.address,
-                        req.body.addressnum,
-                        req.body.cap,
-                        req.body.city,
-                        req.body.tel
-                    ]
-                ]
-            ])
-                .catch(err => {
-                    throw err;
-                });
 
-            console.log('Inserimento tabella indirizzo');
-            console.log(results);
-*/
-
-/*            // generazione della password cifrata con SHA512
+            // generazione della password cifrata con SHA512
             results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
                 .catch(err => {
                     throw err;
@@ -77,7 +60,7 @@ async function registrazione(req, res, next) {
             console.log(results);
 
             results = await db.query('INSERT INTO `autenticazione` \
-        (id_utente, email, password) VALUES ?', [
+        (refUtente, email, password) VALUES ?', [
                 [
                     [
                         id_utente,
@@ -92,7 +75,6 @@ async function registrazione(req, res, next) {
 
             console.log(results);
             console.log(`Utente ${req.body.email} inserito!`);
-            res.render('landing', { title: 'Registrazione effettuata' });*/
 
         });
     } catch (err) {
@@ -102,7 +84,7 @@ async function registrazione(req, res, next) {
     }
 }
 
-/*
+
 
 // middleware di autenticazione
 async function autenticazione(req, res, next) {
@@ -137,7 +119,7 @@ async function autenticazione(req, res, next) {
                     console.log('Utente autenticato');
                     console.log(results);
                     // recupero dello user id
-                    let id_utente = results[0].id_utente;
+                    /*let id_utente = results[0].id_utente;
 
                     // recupero informazioni anagrafiche
                     results = await db.query('SELECT `utente`.nome, `utente`.genere,\
@@ -160,7 +142,7 @@ async function autenticazione(req, res, next) {
                             user: req.body.email,
                             data: results[0]
                         }
-                    });
+                    });*/
                 }
             }
         });
@@ -169,5 +151,69 @@ async function autenticazione(req, res, next) {
         next(createError(500));
     }
 }
-*/
+
+
+async function aggiuntaDatoPagamento(req, res, next) {
+    // istanziamo il middleware
+    const db = await makeDb(config);
+    let results = {};
+    try {
+        await withTransaction(db, async() => {
+            // inserimento dato
+
+            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
+        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
+                req.body.nome,
+                req.body.cognome,
+                req.body.data_nascita,
+                req.body.gestore == 'gestore' ? '1' : '0',
+            ])
+                .catch(err => {
+                    throw err;
+                });
+
+            console.log('Inserimento tabella utente');
+            console.log(results);
+
+
+            // recupero dello user id
+            let id_utente = results.insertId;
+
+
+            // generazione della password cifrata con SHA512
+            results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
+                .catch(err => {
+                    throw err;
+                });
+
+            let encpwd = results[0].encpwd;
+            console.log('Password cifrata');
+            console.log(results);
+
+            results = await db.query('INSERT INTO `autenticazione` \
+        (refUtente, email, password) VALUES ?', [
+                [
+                    [
+                        id_utente,
+                        req.body.email,
+                        encpwd
+                    ]
+                ]
+            ])
+                .catch(err => {
+                    throw err;
+                });
+
+            console.log(results);
+            console.log(`Utente ${req.body.email} inserito!`);
+
+        });
+    } catch (err) {
+        console.log(err);
+        next(createError(500));
+
+    }
+}
+
+
 module.exports = router;
