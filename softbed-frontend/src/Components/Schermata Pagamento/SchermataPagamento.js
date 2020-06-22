@@ -114,7 +114,7 @@ function SchermataPagamento() {
                 </div>
 
                 {/* Riepilogo richiesta */}
-                <div className="card col-12 col-lg-4 bg-warning py-3">
+                <div className="card col-12 col-lg-4 bg-dark text-light py-3 h-100">
                     <h3 className="card-title">Riepilogo richiesta</h3>
                     <div className="ml-2">
                         <div className="mb-3">
@@ -146,7 +146,7 @@ function SchermataPagamento() {
 
                     {/* Prezzo */}
                     <div className="text-right">
-                        <span className="display-4 d-inline-block border-top border-danger w-100">{richiesta.prezzo}€</span>
+                        <span className="display-4 d-inline-block border-top border-warning w-100">{richiesta.prezzo}€</span>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
@@ -51,40 +51,42 @@ function SchermataStruttura(props) {
 
             <div className="row m-0">
                 {/* Form dati di soggiorno */}
-                <div className="shadow mt-3 card bg-warning p-3 col-12 col-lg-6">
+                <div className="shadow mt-3 card bg-dark text-light p-3 col-12 col-lg-6">
                     <form id="formRichiestaPrenotazione">
-                        <h5>Calendario</h5>
+                        <div className="my-3">
+                            <h5>Calendario</h5>
 
-                        <div className="form-group row">
-                            <label className="col-sm-3 col-form-label" htmlFor="dataCheckIn">Check-in</label>
-                            <div className="col-sm-4">
-                                <input name="dataCheckIn" type="date" className="form-control" id="dataCheckIn"
-                                       aria-describedby="Data check-in" required/>
+                            <div className="form-group row">
+                                <label className="col-sm-3 col-form-label" htmlFor="dataCheckIn">Check-in</label>
+                                <div className="col-sm-4">
+                                    <input name="dataCheckIn" type="date" className="form-control" id="dataCheckIn"
+                                           aria-describedby="Data check-in" required/>
+                                </div>
+                                <label className="sr-only" htmlFor="orarioCheckIn">Orario</label>
+                                <div className="col-sm-4">
+                                    <input name="orarioCheckIn" type="time" className="form-control" id="orarioCheckIn"
+                                           defaultValue="11:00" min="06:00" max="15:00" required/>
+                                </div>
                             </div>
-                            <label className="sr-only" htmlFor="orarioCheckIn">Orario</label>
-                            <div className="col-sm-4">
-                                <input name="orarioCheckIn" type="time" className="form-control" id="orarioCheckIn"
-                                       defaultValue="11:00" min="06:00" max="15:00" required/>
-                            </div>
-                        </div>
 
-                        <div className="form-group row">
-                            <label className="col-sm-3 col-form-label" htmlFor="dataCheckOut">Check-out</label>
-                            <div className="col-sm-4">
-                                <input name="dataCheckIn" type="date" className="form-control" id="dataCheckOut"
-                                       aria-describedby="Data check-out" required/>
-                            </div>
-                            <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
-                            <div className="col-sm-4">
-                                <input name="orarioCheckOut" type="time" className="form-control" id="orarioCheckOut"
-                                       defaultValue="11:00" min="06:00" max="15:00" required/>
+                            <div className="form-group row">
+                                <label className="col-sm-3 col-form-label" htmlFor="dataCheckOut">Check-out</label>
+                                <div className="col-sm-4">
+                                    <input name="dataCheckIn" type="date" className="form-control" id="dataCheckOut"
+                                           aria-describedby="Data check-out" required/>
+                                </div>
+                                <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
+                                <div className="col-sm-4">
+                                    <input name="orarioCheckOut" type="time" className="form-control" id="orarioCheckOut"
+                                           defaultValue="11:00" min="06:00" max="15:00" required/>
+                                </div>
                             </div>
                         </div>
 
                         {
                             // props.struttura.tipologia && props.struttura.tipologia === "b&b" &&
                             (
-                                <Fragment>
+                                <div className="my-3">
                                     <h5>Seleziona camere</h5>
 
                                     <div className="form-group row">
@@ -104,7 +106,7 @@ function SchermataStruttura(props) {
                                                    defaultValue={1}/>
                                         </div>
                                     </div>
-                                </Fragment>
+                                </div>
                             )
                         }
 
@@ -140,7 +142,7 @@ function SchermataStruttura(props) {
                         </div>
 
                         <div className="text-right">
-                            <button type="submit" className="btn btn-primary">Richiedi prenotazione</button>
+                            <button type="submit" className="btn btn-warning">Richiedi prenotazione</button>
                         </div>
                     </form>
                 </div>
