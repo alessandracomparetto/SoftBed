@@ -3,8 +3,6 @@ import ButtonForm from "./ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 
-/*TODO: https://programmingwithmosh.com/javascript/react-file-upload-proper-server-side-nodejs-easy/*/
-
 function CaricamentoFoto(){
     const [file, setFile] = useState([]);
     const [numero, setNumero] = useState(0);
