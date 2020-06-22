@@ -2,19 +2,6 @@ import React from "react";
 
 function FormMetodoPagamento() {
 
-    function scriviDato(){
-        let listaDatiPagamento = document.getElementById("listaDatiPagamento");
-        let nome = document.getElementById("name");
-        let ncarta = document.getElementById("ncarta");
-        let cvv = document.getElementById("cvv");
-        let data = document.getElementById("data");
-
-        let p = document.createElement("P");
-        let info = nome.value + "\t\t\t\t\t" + ncarta.value + "\t\t\t\t\t" + cvv.value +"\t\t\t\t\t" + data.value;
-        let stringa = document.createTextNode(info);
-        p.appendChild(stringa);
-        listaDatiPagamento.appendChild(p);
-    }
     const GIORNO = 86400000;
     const dataAttuale = new Date();
     //la data di scadenza deve essere maggiore o uguale al mese attuale
@@ -85,7 +72,7 @@ function FormMetodoPagamento() {
             </div>
 
             <div className="text-right">
-                <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" onClick={scriviDato}>Aggiungi carta</button>
+                <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" >Aggiungi carta</button>
             </div>
         </form>
     )
