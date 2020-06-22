@@ -1,5 +1,5 @@
 body {
-    background-color: #eee;
+    background-color: #ffe;
 }
 
 .annuncio-btn {
@@ -10,8 +10,7 @@ body {
 
 .annuncio-img {
     width: 270px;
-    height: 100%;
-    max-height: 240px;
+    height: 250px;
 }
 
 .annuncio-desc {
@@ -21,6 +20,16 @@ body {
     /* Non compatibile con IE */
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
+}
+
+@media screen and (min-width: 768px) {
+    .annuncio-box-servizi {
+        min-height: 101px;
+    }
+}
+
+.form-group {
+    margin-bottom: 0.4rem;
 }
 
 .img-cover {
@@ -38,6 +47,11 @@ body {
 .page-item {
     width: 43px;
     text-align: center;
+}
+
+.text-90 {
+    font-size: 0.9rem;
+    line-height: 1.4rem;
 }
 
 #turismo{

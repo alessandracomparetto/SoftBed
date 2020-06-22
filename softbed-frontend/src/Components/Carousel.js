@@ -18,6 +18,7 @@ function Carousel() {
         <div id="carousel" className="carousel slide carousel-fade d-none d-sm-block" data-ride="carousel"
              data-pause="false" data-interval="4000">
             <div className="carousel-inner">
+                {/* TODO: Trovare delle immagini appropriate */}
                 <CarouselItem src="/images/chicago.jpg" titolo="Palermo" stato="active"/>
                 <CarouselItem src="/images/la.jpg" titolo="Roma" />
                 <CarouselItem src="/images/ny.jpg" titolo="Venezia" />

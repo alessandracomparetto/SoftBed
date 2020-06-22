@@ -40,8 +40,8 @@ function SchermataRisultati() {
             <FormRicerca setDestinazione={setDestinazione}/>
             <div className="container">
                 <div className="row">
-                    <div className="d-none d-lg-block col-lg-4 h-100 p-3 card mt-3">
-                        <div style={{height: 250 + "px"}}>
+                    <div className="shadow d-none d-lg-block col-lg-4 h-100 p-3 card mt-3">
+                        <div className="shadow-sm" style={{height: 250 + "px"}}>
                             <Mappa destinazione={destinazione}/>
                         </div>
                         <FormFiltri servizi={[{nome: "Cucina per celiaci"}, {nome: "TV"}]}/>
