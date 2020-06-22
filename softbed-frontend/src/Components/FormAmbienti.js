@@ -84,7 +84,7 @@ function FormAmbienti() {
     }
     //****************************************************RETURN
     return(
-        <form className="container col-12 col-md-8 ">
+        <form className="container col-12 col-md-8">
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
             <div className="form-row-group text-center">
                 <div className="form-check-inline col-12 col-sm-5">
@@ -144,7 +144,9 @@ function FormAmbienti() {
             <div className="form-group validazione">
                 <label htmlFor="nBagni">Numero bagni</label>
                 <input name="nBagni" type="number" className="form-control" min={1} max={10}  size="2" maxLength="2" required
-                       onChange={(event)=>{event.target.closest("div").classList.add("was-validated")}}/>
+                       onChange={(event)=>{
+                               event.preventDefault();
+                               event.target.closest("div").classList.add("was-validated") }}/>
                 <span className="invalid-feedback small text-danger">1 - 10</span>
             </div>
             <div className="input-group validazione">

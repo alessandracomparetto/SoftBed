@@ -149,7 +149,8 @@ function FormCamere(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="0" step="0.01" max="10000" required/>
+                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="1" step="0.01" max="10000" required/>
+                    <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
                 <small id="indicazionePrezzo" className="form-text text-muted collapse messaggio">Per registrare la camera devi aver inserito il prezzo base a notte</small>
             </div>
