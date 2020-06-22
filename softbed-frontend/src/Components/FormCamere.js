@@ -105,7 +105,7 @@ function FormCamere(){
         <form className="container col-12 col-md-8 needs-validation" noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
-                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
                     <p>
                         <br/>
                     </p>
@@ -149,7 +149,8 @@ function FormCamere(){
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="0" step="0.01" max="10000" required/>
+                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="1" step="0.01" max="10000" required/>
+                    <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
                 <small id="indicazionePrezzo" className="form-text text-muted collapse messaggio">Per registrare la camera devi aver inserito il prezzo base a notte</small>
             </div>

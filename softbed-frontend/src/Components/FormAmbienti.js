@@ -84,7 +84,7 @@ function FormAmbienti() {
     }
     //****************************************************RETURN
     return(
-        <form className="container col-12 col-md-8 ">
+        <form className="container col-12 col-md-8">
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
             <div className="form-row-group text-center">
                 <div className="form-check-inline col-12 col-sm-5">
@@ -109,7 +109,7 @@ function FormAmbienti() {
 
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
-                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
+                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
                     <p>
                         <br/>
                     </p>
@@ -144,8 +144,10 @@ function FormAmbienti() {
             <div className="form-group validazione">
                 <label htmlFor="nBagni">Numero bagni</label>
                 <input name="nBagni" type="number" className="form-control" min={1} max={10}  size="2" maxLength="2" required
-                       onChange={(event)=>{event.target.closest("div").classList.add("was-validated")
-                }}/>
+                       onChange={(event)=>{
+                               event.preventDefault();
+                               event.target.closest("div").classList.add("was-validated") }}/>
+                <span className="invalid-feedback small text-danger">1 - 10</span>
             </div>
             <div className="input-group validazione">
                 <label htmlFor="prezzo">Prezzo struttura (a notte)</label>
@@ -153,13 +155,11 @@ function FormAmbienti() {
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" type="number" className="form-control currency" min="0" step="0.01" max="10000" required
-                           onChange={(event)=>{event.target.closest("div").classList.add("was-validated")
-                    }}/>
+                    <input name="prezzo" type="number" className="form-control currency" min="1" step="0.01" max="10000" required
+                           onChange={(event)=>{event.target.closest("div").classList.add("was-validated")}}/>
+                    <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
-                <div className="invalid-feedback">
-                    Inserire il prezzo base a notte
-                </div>
+
             </div>
 
             <ButtonForm/>
