@@ -1,24 +1,9 @@
 import React, {Fragment, useState} from "react";
+import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
 import $ from "jquery";
 
-function Breadcrumb(props) {
-    return (
-        <nav aria-label="breadcrumb">
-            <ol className="d-flex pl-0 mb-0">
-                <i className="fas fa-map mr-2" style={{lineHeight: 24 + "px"}}/>
-            {
-                props.gerarchia.map((elemento) => {
-                    return (
-                        <li className="breadcrumb-item"><a href={"/search?destinazione=" + elemento}>{elemento}</a></li>
-                    )
-                })
-            }
-            </ol>
-        </nav>
-    )
-}
 
 function SchermataStruttura(props) {
 
@@ -36,9 +21,13 @@ function SchermataStruttura(props) {
     return (
         <div className="container px-3 mt-3 rounded">
             {/* Nome e località */}
-            <div className="mt-3 card bg-white p-3">
+            <div className="shadow mt-3 card bg-white p-3">
                 <h3>{props.struttura.nome}</h3>
-                <Breadcrumb gerarchia={[props.struttura.regione, props.struttura.provincia, props.struttura.comune]}/>
+                <Breadcrumb gerarchia={[
+                    {url: "/search?destinazione=" + props.struttura.regione, testo: props.struttura.regione},
+                    {url: "/search?destinazione=" + props.struttura.provincia, testo: props.struttura.provincia},
+                    {url: "/search?destinazione=" + props.struttura.comune, testo: props.struttura.comune}
+                ]} icona="map"/>
             </div>
 
             {/* Immagini */}
@@ -60,9 +49,9 @@ function SchermataStruttura(props) {
                 </div>
             </div>
 
-            <div className="col-12 row">
+            <div className="row m-0">
                 {/* Form dati di soggiorno */}
-                <div className="mt-3 card bg-warning p-3 col-12 col-lg-6">
+                <div className="shadow mt-3 card bg-warning p-3 col-12 col-lg-6">
                     <form id="formRichiestaPrenotazione">
                         <h5>Calendario</h5>
 
@@ -135,7 +124,7 @@ function SchermataStruttura(props) {
                                 <label className="col-sm-3 col-form-label" htmlFor="bambini">Bambini</label>
                                 <div className="col-sm-3">
                                     <input name="bambini" type="number" className="form-control" id="numeroSingole"
-                                           aria-describedby="Numero di bambini" min={0} max={numeroAdulti}
+                                           aria-describedby="Numero di bambini" min={0} max={100}
                                            defaultValue={0} required/>
                                 </div>
                             </div>
@@ -157,7 +146,7 @@ function SchermataStruttura(props) {
                 </div>
 
                 {/* Informazioni struttura */}
-                <div className="mt-3 card bg-white p-3 col-12 col-lg-6">
+                <div className="shadow mt-3 card bg-white p-3 col-12 col-lg-6">
                     <div>
                         <h6>Informazioni sulla struttura</h6>
                         <p>{props.struttura.descrizione}</p>
@@ -176,9 +165,9 @@ function SchermataStruttura(props) {
             </div>
 
             {/* Mappa */}
-            <div className="mt-3 card bg-white p-3">
+            <div className="shadow mt-3 card bg-white p-3">
                 <h6>Esplora la zona</h6>
-                <div className="w-100" style={{height: 250 + "px"}}>
+                <div className="shadow-sm w-100" style={{height: 250 + "px"}}>
                     <Mappa destinazione={props.struttura.comune}/>
                 </div>
             </div>
