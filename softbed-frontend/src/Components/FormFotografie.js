@@ -3,7 +3,7 @@ import ButtonForm from "./ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 
-function CaricamentoFoto(){
+function FormFotografie(){
     const [file, setFile] = useState([]);
     const [numero, setNumero] = useState(0);
     const [filename, setFilename] = useState([]);
@@ -106,4 +106,4 @@ function CaricamentoFoto(){
         </div>
     );
 }
-export default CaricamentoFoto;
+export default FormFotografie;
