@@ -50,12 +50,16 @@ function SchermataPagamento() {
 
         // Gestione della selezione sul metodo di pagamento online (vecchio o nuovo)
         metodoPagamentoOnline.on('change', () => {
-            if (nuovoMetodoPagamento[0])
-                setNuovoMetodo(nuovoMetodoPagamento[0].checked);
+            if (nuovoMetodoPagamento[0]) {
+                const stato = nuovoMetodoPagamento[0].checked;
+                setNuovoMetodo(stato);
+
+                if (stato) {
+
+                }
+            }
         })
     })
-
-    // TODO: Aggiungere controllo su selezione
 
     return (
         <div className="container mb-3">
@@ -71,7 +75,7 @@ function SchermataPagamento() {
                         <form>
                             { pagamentoOnLine && (
                                 <div className="radio">
-                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online"/>Pagamento online</label>
+                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
 
                                     { onLineAttivo && (
                                         <Fragment>
@@ -79,13 +83,13 @@ function SchermataPagamento() {
                                                 { metodiUtente.map((metodo, indice) => {
                                                     return (
                                                         <div key={indice} className="radio">
-                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice}/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
+                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
                                                         </div>
                                                     )
                                                 })}
                                                 <div>
                                                     <div className="radio">
-                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo"/>Aggiungi nuovo metodo di pagamento</label>
+                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo" required/>Aggiungi nuovo metodo di pagamento</label>
                                                     </div>
 
                                                     { nuovoMetodo && (
@@ -106,7 +110,7 @@ function SchermataPagamento() {
                             )}
 
                             <div className="text-right">
-                                <button className="btn btn-primary" type="submit">Effettua richiesta</button>
+                                <button className="btn btn-primary" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
                             </div>
                         </form>
                     </div>
