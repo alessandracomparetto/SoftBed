@@ -1,9 +1,9 @@
 import React, {useState} from "react"
-import FormRicerca from "./FormRicerca";
-import RisultatoRicerca from "./Schermata Risultati/RisultatoRicerca";
-import Paginazione from "./Schermata Risultati/Paginazione";
-import Mappa from "./Schermata Risultati/Mappa";
-import FormFiltri from "./Schermata Risultati/FormFiltri";
+import FormRicerca from "../FormRicerca";
+import RisultatoRicerca from "./RisultatoRicerca";
+import Paginazione from "./Paginazione";
+import Mappa from "./Mappa";
+import FormFiltri from "./FormFiltri/FormFiltri";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
@@ -44,7 +44,10 @@ function SchermataRisultati() {
                         <div className="shadow-sm" style={{height: 250 + "px"}}>
                             <Mappa destinazione={destinazione}/>
                         </div>
-                        <FormFiltri servizi={[{nome: "Cucina per celiaci"}, {nome: "TV"}]}/>
+                        <FormFiltri servizi={[
+                            {nome: "Cucina per celiaci", id: "cucinaPerCeliaci"},
+                            {nome: "TV", id: "tv"}
+                            ]}/>
                     </div>
                     <div className="col-12 col-lg-8">
                         {

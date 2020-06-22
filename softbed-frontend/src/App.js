@@ -6,9 +6,9 @@ import Navbar from "./Components/Navbar";
 import FormRicerca from "./Components/FormRicerca";
 import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
-import SchermataRisultati from "./Components/SchermataRisultati";
-import CaricamentoFoto from "./Components/CaricamentoFoto";
+import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
+import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
 
 function App() {
     return (
@@ -21,7 +21,7 @@ function App() {
                 <Route exact path="/">
                     <Carousel />
                     <FormRicerca />
-                    <CaricamentoFoto />
+                    <SchermataPagamento />
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}

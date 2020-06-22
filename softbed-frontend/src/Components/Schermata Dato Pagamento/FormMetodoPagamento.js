@@ -1,9 +1,7 @@
 import React from "react";
-/*
-TODO:
-*Inserire pattern per la carta di credito
-*/
-function SchermataDatoPagamento(){
+
+function FormMetodoPagamento() {
+
     function scriviDato(){
         let listaDatiPagamento = document.getElementById("listaDatiPagamento");
         let nome = document.getElementById("name");
@@ -49,39 +47,9 @@ function SchermataDatoPagamento(){
         }, false);
     })();
 
-    return(
-        <form className="container pt-3 col-xs-10 col-md-10 needs-validation" noValidate>
-            <h6 className="mt-3 border-bottom border-primary d-inline">Dati di pagamento presenti</h6>
-            <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
-
-
-            <div id="listaDatiPagamento" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
-                <div className="container mb-3">
-                    <div className="row">
-                        <div className="lead mt-3 d-inline col-sm">
-                            Intestatario carta
-                        </div>
-                        <div className="lead mt-3 d-inline col-sm">
-                            Numero carta
-                        </div>
-                        <div className="lead mt-3 d-inline col-sm">
-                            CVV
-                        </div>
-                        <div className="lead mt-3 d-inline col-sm">
-                            Data di scadenza
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <p>
-                        <br/>
-                    </p>
-                </div>
-            </div>
-
-            <br/><br/><br/>
-        <h6 className="lead mt-3 text-uppercase">Aggiungi un nuovo metodo di pagamento</h6>
-        <h6 className="mt-3">Inserisci i dati della carta:</h6>
+    return (
+        <form className="needs-validation" noValidate>
+            <h6 className="mt-3">Inserisci i dati della carta:</h6>
             <div className="form-row">
                 <div className="form-group col-sm-6 col-md-4 validazione">
                     <label htmlFor="name">Intestatario carta</label>
@@ -116,10 +84,11 @@ function SchermataDatoPagamento(){
                 </div>
             </div>
 
-            <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3 float-right" onClick={scriviDato}>Aggiungi carta</button>
+            <div className="text-right">
+                <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" onClick={scriviDato}>Aggiungi carta</button>
+            </div>
         </form>
     )
 }
 
-
-export default SchermataDatoPagamento;
+export default FormMetodoPagamento;

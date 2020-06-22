@@ -1,24 +1,9 @@
 import React, {Fragment, useState} from "react";
+import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
 import $ from "jquery";
 
-function Breadcrumb(props) {
-    return (
-        <nav aria-label="breadcrumb">
-            <ol className="d-flex pl-0 mb-0">
-                <i className="fas fa-map mr-2" style={{lineHeight: 24 + "px"}}/>
-            {
-                props.gerarchia.map((elemento) => {
-                    return (
-                        <li className="breadcrumb-item"><a href={"/search?destinazione=" + elemento}>{elemento}</a></li>
-                    )
-                })
-            }
-            </ol>
-        </nav>
-    )
-}
 
 function SchermataStruttura(props) {
 
@@ -38,7 +23,11 @@ function SchermataStruttura(props) {
             {/* Nome e località */}
             <div className="shadow mt-3 card bg-white p-3">
                 <h3>{props.struttura.nome}</h3>
-                <Breadcrumb gerarchia={[props.struttura.regione, props.struttura.provincia, props.struttura.comune]}/>
+                <Breadcrumb gerarchia={[
+                    {url: "/search?destinazione=" + props.struttura.regione, testo: props.struttura.regione},
+                    {url: "/search?destinazione=" + props.struttura.provincia, testo: props.struttura.provincia},
+                    {url: "/search?destinazione=" + props.struttura.comune, testo: props.struttura.comune}
+                ]} icona="map"/>
             </div>
 
             {/* Immagini */}
