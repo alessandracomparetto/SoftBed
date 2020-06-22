@@ -78,20 +78,20 @@ function FormRicerca(props) {
 
     return (
         <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" >
-            <div className="form-row px-3 py-2 m-3 w-100 minw-15em maxw-xl">
+            <div className="form-row px-2 px-sm-3 py-2 m-3 w-100 minw-15em maxw-xl">
                 <div className="col-12 col-lg-4 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
                     <input name="destinazione" id="destinazione" type="text" className="form-control"
                            placeholder="Inserisci la tua destinazione..." required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div className="col-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
                     <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
                            defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
                 </div>
 
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div className="col-6 col-md-4 col-lg-3 mb-3">
                     <label htmlFor="partenza">Partenza</label>
                     <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
                            max={maxData} defaultValue={minDataP} required/>

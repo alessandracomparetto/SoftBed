@@ -7,8 +7,6 @@ function valuetext(value) {
 }
 
 function SliderPrezzo(props) {
-    // TODO: Probabilmente bisognerà utilizzera uno stato
-    //  per la gestione degli aggiornamenti dei valori minimi e massimi
 
     const [value, setValue] = useState([props.minimo, props.massimo]);
 

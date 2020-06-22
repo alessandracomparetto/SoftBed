@@ -1,5 +1,5 @@
 import React from 'react';
-import SliderPrezzo from "./FormFiltri/SliderPrezzo";
+import SliderPrezzo from "./SliderPrezzo";
 
 function FormFiltri(props) {
     return (
@@ -19,8 +19,8 @@ function FormFiltri(props) {
                             props.servizi.map((servizio, indice) => {
                                 return (
                                     <div className="form-check mx-2" key={indice}>
-                                        <input className="form-check-input" name={servizio.nome} type="checkbox"/>
-                                        <label className="form-check-label" htmlFor={servizio.nome}>{servizio.nome}</label>
+                                        <input className="form-check-input" id={servizio.id} name={servizio.id} type="checkbox"/>
+                                        <label className="form-check-label" htmlFor={servizio.id}>{servizio.nome}</label>
                                     </div>
                                 );
                             })
