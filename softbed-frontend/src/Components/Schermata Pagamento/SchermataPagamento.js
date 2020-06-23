@@ -19,7 +19,7 @@ function SchermataPagamento() {
             {tipologia: "singola", numero: 1},
             {tipologia: "doppia", numero: 1}
         ],
-        persone: 2,
+        adulti: 2,
         bambini: 1,
         esenti: 1,
         prezzo: 42.00
@@ -62,7 +62,7 @@ function SchermataPagamento() {
     })
 
     return (
-        <div className="container mb-3">
+        <div className="container my-3">
             <div className="row">
                 {/* Selezione metodo di pagamento */}
                 <div className="col-12 col-lg-8 py-2">
@@ -121,6 +121,7 @@ function SchermataPagamento() {
                 <div className="card col-12 col-lg-4 bg-dark text-light py-3 h-100">
                     <h3 className="card-title">Riepilogo richiesta</h3>
                     <div className="ml-2">
+
                         <div className="mb-3">
                             <h5 className="mb-0">Struttura</h5>
                             <span className="text-90">{richiesta.struttura}</span>
@@ -146,6 +147,22 @@ function SchermataPagamento() {
                                 }
                             </div>
                         )}
+
+                        <div className="mb-3">
+                            <h5 className="mb-0">Persone</h5>
+                            <span className="text-90">{richiesta.adulti}x adulto</span>
+                            { richiesta.esenti && richiesta.esenti > 0 && (
+                                <span className="text-90">&nbsp;({richiesta.esenti} esent{richiesta.esenti == 1 ? "e" : "i"} da tasse)</span>
+                            )}
+
+                            { richiesta.bambini && richiesta.bambini > 0 && (
+                                <Fragment>
+                                    <br/>
+                                    <span className="text-90">{richiesta.bambini}x bambino</span>
+                                </Fragment>
+                            )}
+                        </div>
+
                     </div>
 
                     {/* Prezzo */}
