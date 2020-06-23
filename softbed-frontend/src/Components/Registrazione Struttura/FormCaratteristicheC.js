@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -36,7 +36,7 @@ function FormCaratteristicheC(){
                 <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
             </div>
             <h4>Caratteristiche Casa vacanze</h4>
-            <form className="w50  mt-3 needs-validation" noValidate>
+            <form className="w50  mt-3 needs-validation" action="caratteristicheC/condizioni" noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
                 <div className="form-row-group text-center offset-2">
                     <div className="form-check-inline col-12 col-md-5">

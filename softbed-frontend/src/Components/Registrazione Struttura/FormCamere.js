@@ -1,15 +1,17 @@
 import React from 'react';
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 
 /*TODO: qunando si clicca su continua bisogna vedere che la lista delle camere non sia vuota
 *  == controlla che il contatore sia diverso da 0 (c'è già un elemento nella lista)
 * TODO: controllare che non scriva -1 in nCamere. aggiungere il messaggio di errore
+*  TODO: VALIDAZIONE NON CORRETTA
 * */
 
 
 function FormCamere(){
     const camera = "Camera ";
     let contatore = 0;
+
 
     function scriviCamera() {
         let lista = document.getElementById("listaCamere");
@@ -102,7 +104,7 @@ function FormCamere(){
 
     //****************************************************RETURN
     return(
-        <form className="container col-12 col-md-8 needs-validation" noValidate>
+        <form className="container col-12 col-md-8 needs-validation" action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
                 <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>

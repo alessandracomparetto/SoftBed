@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ButtonForm from "./ButtonForm";
-import data from "../regioni_province_comuni.js";
+import ButtonForm from "../ButtonForm";
+import data from "../../regioni_province_comuni.js";
 import $ from "jquery"
 
 (function() {
@@ -15,34 +15,41 @@ import $ from "jquery"
                     event.preventDefault();
                     event.stopPropagation();
                 }
-
             }, false);
         });
     }, false);
 })();
 
+
 function FormTipologiaStruttura(){
+    const [URL, setURL] = useState("");
+
+    function verso(){
+        if(document.getElementById("cv").checked === true){
+            setURL("/registrazioneStruttura/ambienti");
+        }else{
+            setURL("/registrazioneStruttura/camere");
+        }
+    }
     return(
         <div className="container pt-3 col-sm-10 col-md-6">
             <div className="progress">
                 <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
             </div>
-            <form className="container needs-validation p-3" noValidate>
+            <form className="container needs-validation p-3" onChange={verso} action={URL} noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
                     <div>
                         <i className="fa fa-bed fa-5x pr-4" aria-hidden="true"></i><br></br>
                         <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"
-                                   required/>
-                                <label className="custom-control-label" htmlFor="B&B">B&B</label>
+                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"required/>
+                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div>
                         <i className="fa fa-home fa-5x pl-4" aria-hidden="true"></i> <br></br>
                         <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input" id="cv" name="tipologia"
-                                   value="cv" required/>
+                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" required/>
                                 <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
                                 <div className="invalid-feedback ml-2">
                                     Inserire la tipologia di struttura

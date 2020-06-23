@@ -1,6 +1,6 @@
 import React from "react";
 import $ from "jquery";
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -83,7 +83,7 @@ function FormCondizioni(){
             <div className="progress mt-2">
                 <div className="progress-bar" style={{width: 80 + '%'}}>80%</div>
             </div>
-            <form className="mt-3 needs-validation" noValidate  onSubmit={verificaCheckBox}>
+            <form className="mt-3 needs-validation" noValidate onSubmit={verificaCheckBox} action="condizioni/fotografie">
                 <div className="border p-3 text-center">
                     <h6 className="mt-3 border-bottom border-primary text-left">Durata del soggiorno</h6>
                     <div className="mb-3 form-check-inline mr-3">
