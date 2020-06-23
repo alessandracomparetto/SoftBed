@@ -63,60 +63,14 @@ function SchermataPagamento() {
 
     return (
         <div className="container my-3">
-            <div className="row">
-                {/* Selezione metodo di pagamento */}
-                <div className="col-12 col-lg-8 py-2">
-                    <Breadcrumb gerarchia={[
-                        {testo: "Richiesta di prenotazione", stato: "active"},
-                        {testo: "Pagamento", stato: "active"}
-                    ]} icona="bed"/>
-                    <h2>Seleziona il metodo di pagamento</h2>
-                    <div className="form">
-                        <form>
-                            { pagamentoOnLine && (
-                                <div className="radio">
-                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
+            <div className="py-2">
+                <Breadcrumb gerarchia={[
+                    {testo: "Richiesta di prenotazione", stato: "active"},
+                    {testo: "Pagamento", stato: "active"}
+                ]} icona="bed"/>
+            </div>
 
-                                    { onLineAttivo && (
-                                        <Fragment>
-                                            <div className="ml-3">
-                                                { metodiUtente.map((metodo, indice) => {
-                                                    return (
-                                                        <div key={indice} className="radio">
-                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
-                                                        </div>
-                                                    )
-                                                })}
-                                                <div>
-                                                    <div className="radio">
-                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo" required/>Aggiungi nuovo metodo di pagamento</label>
-                                                    </div>
-
-                                                    { nuovoMetodo && (
-                                                        <FormMetodoPagamento/>
-                                                    )}
-
-                                                </div>
-                                            </div>
-                                        </Fragment>
-                                    )}
-                                </div>
-                            )}
-
-                            { pagamentoInLoco && (
-                                <div className="radio">
-                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco"/>Pagamento in loco</label>
-                                </div>
-                            )}
-
-                            <div className="text-right">
-                                <button className="btn btn-primary" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-
+            <div className="d-lg-flex flex-row-reverse">
                 {/* Riepilogo richiesta */}
                 <div className="card col-12 col-lg-4 bg-dark text-light py-3 h-100">
                     <h3 className="card-title">Riepilogo richiesta</h3>
@@ -170,6 +124,56 @@ function SchermataPagamento() {
                         <span className="display-4 d-inline-block border-top border-warning w-100">{richiesta.prezzo}€</span>
                     </div>
                 </div>
+
+                {/* Selezione metodo di pagamento */}
+                <div className="col-12 col-lg-8 py-3 pt-lg-2">
+                    <h2>Seleziona il metodo di pagamento</h2>
+                    <div className="form">
+                        <form>
+                            { pagamentoOnLine && (
+                                <div className="radio">
+                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
+
+                                    { onLineAttivo && (
+                                        <Fragment>
+                                            <div className="ml-3">
+                                                { metodiUtente.map((metodo, indice) => {
+                                                    return (
+                                                        <div key={indice} className="radio">
+                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
+                                                        </div>
+                                                    )
+                                                })}
+                                                <div>
+                                                    <div className="radio">
+                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo" required/>Aggiungi nuovo metodo di pagamento</label>
+                                                    </div>
+
+                                                    { nuovoMetodo && (
+                                                        <FormMetodoPagamento/>
+                                                    )}
+
+                                                </div>
+                                            </div>
+                                        </Fragment>
+                                    )}
+                                </div>
+                            )}
+
+                            { pagamentoInLoco && (
+                                <div className="radio">
+                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco"/>Pagamento in loco</label>
+                                </div>
+                            )}
+
+                            <div className="text-right">
+                                <button className="btn btn-primary" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     )

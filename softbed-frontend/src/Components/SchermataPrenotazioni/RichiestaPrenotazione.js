@@ -6,7 +6,7 @@ function RichiestaPrenotazione(props) {
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
 
     return (
-        <li className={"text-center list-group-item list-group-item-warning text-dark border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
+        <li className={"rounded text-center list-group-item list-group-item-warning text-dark border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
             <div className="row">
                 <div className="col-12 col-sm-3 col-lg-4 h-100 my-auto">
                     <strong>Struttura</strong>
@@ -92,18 +92,18 @@ function RichiestaPrenotazione(props) {
                         </div>
                     </div>
 
-                    <div className="d-flex flex-nowrap">
+                    <div className="d-md-flex flex-md-nowrap">
 
-                        <div className="order-1 p-2">
-                            <button className="btn btn-primary">Visualizza struttura</button>
+                        <div className="order-1 p-2 col-12 col-md-3">
+                            <button className="btn btn-primary btn-block">Visualizza struttura</button>
                         </div>
 
-                        <div className="order-2 p-2">
-                            <button className="btn btn-primary">Contatta il gestore</button>
+                        <div className="order-2 p-2 col-12 col-md-3">
+                            <button className="btn btn-primary btn-block">Contatta il gestore</button>
                         </div>
 
-                        <div className="order-0 mr-auto p-2">
-                            <button className="btn btn-secondary">Annulla prenotazione</button>
+                        <div className="order-0 mr-md-auto p-2 col-12 col-md-3">
+                            <button className="btn btn-secondary btn-block">Annulla prenotazione</button>
                         </div>
                     </div>
                 </div>
