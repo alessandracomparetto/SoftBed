@@ -49,7 +49,7 @@ function UtenteAutenticato(props) {
                     {/* Dropdown menu | d-sm-flex (>=576px) */}
                     <li className="nav-item dropdown d-none d-sm-flex">
                         <Link className="nav-link dropdown-toggle" to="#" data-toggle="dropdown">
-                            <span className="mr-2">{props.utente}</span><i className="fas fa-user"/>
+                            <span className="mr-2">{props.utente.nome}</span><i className="fas fa-user"/>
                         </Link>
                         <div className="dropdown-menu dropdown-menu-right">
                             <Link className="dropdown-item" to="#">Modifica profilo</Link>
@@ -66,9 +66,9 @@ function UtenteAutenticato(props) {
 }
 
 
-function Navbar(props) {
-    // TODO: Da gestire con props (probabilmente)
+function Navbar() {
     const accessoEffettuato = true;
+    const utente = {nome: "SoftEngineers"}
 
     return (
         <nav className ="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -76,7 +76,7 @@ function Navbar(props) {
 
             { accessoEffettuato ? (
                 // TODO
-                <UtenteAutenticato utente="Prova Provoletta" />
+                <UtenteAutenticato utente={utente} />
             ) : (
                 <UtenteNonAutenticato />
             )}

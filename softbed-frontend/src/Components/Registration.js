@@ -22,15 +22,17 @@ import axios from "axios";
 function Registration() {
     function onSubmit(e){
         e.preventDefault();
-        const utente= {
+        const utenteRegistrato= {
             nome: document.getElementById("name").value,
             cognome: document.getElementById("surname").value,
+            data_nascita: document.getElementById("birthdate").value,
             email: document.getElementById("email").value ,
             pass: document.getElementById("pass").value ,
+            gestore: $( "input:checked" ).val(),
         }
-        console.log(utente);
+        console.log(utenteRegistrato);
         try{
-            axios.post("/utente", utente);
+            axios.post("/utente/utenteRegistrato", utenteRegistrato);
         }
         catch(err){
             if (err.response.status === 400) {
@@ -107,7 +109,7 @@ function Registration() {
                 <label htmlFor="account">Tipo di account *</label>
                 <br/>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="account" id="gestore" value="Gestore" required/>
+                    <input className="form-check-input" type="radio" name="account" id="gestore" value="gestore" required/>
                         <label className="form-check-label" htmlFor="gestore">Gestore</label>
                 </div>
                 <div className="form-check form-check-inline">

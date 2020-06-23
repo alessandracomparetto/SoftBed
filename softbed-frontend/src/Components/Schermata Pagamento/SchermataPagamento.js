@@ -19,7 +19,7 @@ function SchermataPagamento() {
             {tipologia: "singola", numero: 1},
             {tipologia: "doppia", numero: 1}
         ],
-        persone: 2,
+        adulti: 2,
         bambini: 1,
         esenti: 1,
         prezzo: 42.00
@@ -50,15 +50,19 @@ function SchermataPagamento() {
 
         // Gestione della selezione sul metodo di pagamento online (vecchio o nuovo)
         metodoPagamentoOnline.on('change', () => {
-            if (nuovoMetodoPagamento[0])
-                setNuovoMetodo(nuovoMetodoPagamento[0].checked);
+            if (nuovoMetodoPagamento[0]) {
+                const stato = nuovoMetodoPagamento[0].checked;
+                setNuovoMetodo(stato);
+
+                if (stato) {
+
+                }
+            }
         })
     })
 
-    // TODO: Aggiungere controllo su selezione
-
     return (
-        <div className="container mb-3">
+        <div className="container my-3">
             <div className="row">
                 {/* Selezione metodo di pagamento */}
                 <div className="col-12 col-lg-8 py-2">
@@ -71,7 +75,7 @@ function SchermataPagamento() {
                         <form>
                             { pagamentoOnLine && (
                                 <div className="radio">
-                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online"/>Pagamento online</label>
+                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
 
                                     { onLineAttivo && (
                                         <Fragment>
@@ -79,13 +83,13 @@ function SchermataPagamento() {
                                                 { metodiUtente.map((metodo, indice) => {
                                                     return (
                                                         <div key={indice} className="radio">
-                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice}/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
+                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
                                                         </div>
                                                     )
                                                 })}
                                                 <div>
                                                     <div className="radio">
-                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo"/>Aggiungi nuovo metodo di pagamento</label>
+                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo" required/>Aggiungi nuovo metodo di pagamento</label>
                                                     </div>
 
                                                     { nuovoMetodo && (
@@ -106,7 +110,7 @@ function SchermataPagamento() {
                             )}
 
                             <div className="text-right">
-                                <button className="btn btn-primary" type="submit">Effettua richiesta</button>
+                                <button className="btn btn-primary" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
                             </div>
                         </form>
                     </div>
@@ -114,9 +118,10 @@ function SchermataPagamento() {
                 </div>
 
                 {/* Riepilogo richiesta */}
-                <div className="card col-12 col-lg-4 bg-warning py-3">
+                <div className="card col-12 col-lg-4 bg-dark text-light py-3 h-100">
                     <h3 className="card-title">Riepilogo richiesta</h3>
                     <div className="ml-2">
+
                         <div className="mb-3">
                             <h5 className="mb-0">Struttura</h5>
                             <span className="text-90">{richiesta.struttura}</span>
@@ -142,11 +147,27 @@ function SchermataPagamento() {
                                 }
                             </div>
                         )}
+
+                        <div className="mb-3">
+                            <h5 className="mb-0">Persone</h5>
+                            <span className="text-90">{richiesta.adulti}x adulto</span>
+                            { richiesta.esenti && richiesta.esenti > 0 && (
+                                <span className="text-90">&nbsp;({richiesta.esenti} esent{richiesta.esenti == 1 ? "e" : "i"} da tasse)</span>
+                            )}
+
+                            { richiesta.bambini && richiesta.bambini > 0 && (
+                                <Fragment>
+                                    <br/>
+                                    <span className="text-90">{richiesta.bambini}x bambino</span>
+                                </Fragment>
+                            )}
+                        </div>
+
                     </div>
 
                     {/* Prezzo */}
                     <div className="text-right">
-                        <span className="display-4 d-inline-block border-top border-danger w-100">{richiesta.prezzo}€</span>
+                        <span className="display-4 d-inline-block border-top border-warning w-100">{richiesta.prezzo}€</span>
                     </div>
                 </div>
             </div>
