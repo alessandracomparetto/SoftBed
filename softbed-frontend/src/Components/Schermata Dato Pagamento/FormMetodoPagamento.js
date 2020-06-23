@@ -1,6 +1,6 @@
-import React from "react";
-
-function FormMetodoPagamento() {
+import React, {useState} from "react";
+import $ from "jquery";
+function FormMetodoPagamento(props) {
 
     const GIORNO = 86400000;
     const dataAttuale = new Date();
@@ -33,20 +33,35 @@ function FormMetodoPagamento() {
             });
         }, false);
     })();
+/*
+    const [dato, setDato] = useState( {nomeIntestatario:"", cognomeIntestatario:"", numeroCarta:"", cvv:"", dataScadenza:""});
 
+    function changeText(event, field){
+        this.setDato{[field]:event.target.value};
+    }
+*/
     return (
         <form className="needs-validation" noValidate>
-            <h6 className="mt-3">Inserisci i dati della carta:</h6>
+            <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
-                <div className="form-group col-sm-6 col-md-4 validazione">
-                    <label htmlFor="name">Intestatario carta</label>
-                    <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+" placeholder="Nome e Cognome" required/>
+                <div className="form-group col-12 col-md-6 col-lg-3 ">
+                    <label htmlFor="nome">Nome Intestatario</label>
+                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+"
+                           placeholder="Nome" required/>
                     <div className="invalid-feedback">
-                        Inserire nome e cognome
+                        Inserire nome
                     </div>
                 </div>
 
-                <div className="form-group col-sm-6 col-md-4">
+                <div className="form-group col-12 col-md-6 col-lg-3 ">
+                    <label htmlFor="cognome">Cognome Intestatario</label>
+                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+" placeholder="Cognome" required/>
+                    <div className="invalid-feedback">
+                        Inserire cognome
+                    </div>
+                </div>
+
+                <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="ncarta">Numero carta</label>
                     <input id="ncarta" name="ncarta" type="tel" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" required/>
                     <div className="invalid-feedback">
@@ -54,7 +69,7 @@ function FormMetodoPagamento() {
                     </div>
                 </div>
 
-                <div className="form-group col-sm-4 col-md-1">
+                <div className="form-group col-6 col-md-2 col-lg-1">
                     <label htmlFor="cvv">CVV</label>
                     <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" required/>
                     <div className="invalid-feedback">
@@ -62,18 +77,18 @@ function FormMetodoPagamento() {
                     </div>
                 </div>
 
-                <div className="form-group col-sm-8 col-md-3">
+                <div className="form-group col-6 col-md-4 col-lg-2">
                     <label htmlFor="data">Data di scadenza</label>
                     <input name="data" id="data" type="month" min={minData} className="form-control" required/>
                     <div className="invalid-feedback">
                         Inserire data di scadenza
                     </div>
                 </div>
+                <div className=" col-12 col-md-2 btn-group d-flex justify-content-around">
+                    <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" style={{width: 150 + 'px'}} onClick={() => props.aggiungiDatoPagamento(dato)}>Aggiungi carta</button>
+                </div>
             </div>
 
-            <div className="text-right">
-                <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" >Aggiungi carta</button>
-            </div>
         </form>
     )
 }
