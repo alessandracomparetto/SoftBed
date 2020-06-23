@@ -1,14 +1,27 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
 import $ from "jquery";
 import ImmaginiStruttura from "./ImmaginiStruttura";
+import { convertiData } from "../../Actions/gestioneDate";
 
 
 function SchermataStruttura(props) {
 
-    const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2)
+    const oggi = new Date();
+    const minDataA = convertiData(oggi, 2.5);
+    const maxData = convertiData(oggi, 0, 0, 1);
+
+    const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2);
+    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
+
+    // Aggiorna il valore minimo per la data di partenza in base alla data di arrivo inserita
+    const aggiornaMinDataPartenza = (event) => {
+        const dataInserita = new Date(event.target.value);
+        const nuovaDataConvertita = convertiData(dataInserita, 1);
+        setMinDataP(nuovaDataConvertita);
+    }
 
     $(document).ready(() => {
         const adulti = $('#adulti')
@@ -37,7 +50,7 @@ function SchermataStruttura(props) {
             <div className="d-lg-flex flex-lg-row-reverse">
                 {/* Form dati di soggiorno */}
                 <div className="shadow mt-3 card bg-dark text-light p-3 col-12 col-lg-6">
-                    <form id="formRichiestaPrenotazione">
+                    <form className="form" id="formRichiestaPrenotazione">
                         <div className="my-3">
                             <h5>Calendario</h5>
 
@@ -45,7 +58,8 @@ function SchermataStruttura(props) {
                                 <label className="col-sm-3 col-form-label" htmlFor="dataCheckIn">Check-in</label>
                                 <div className="col-sm-4">
                                     <input name="dataCheckIn" type="date" className="form-control" id="dataCheckIn"
-                                           aria-describedby="Data check-in" required/>
+                                           aria-describedby="Data check-in" min={minDataA} defaultValue={minDataA}
+                                           max={maxData} onChange={aggiornaMinDataPartenza} required/>
                                 </div>
                                 <label className="sr-only" htmlFor="orarioCheckIn">Orario</label>
                                 <div className="col-sm-4">
@@ -58,7 +72,8 @@ function SchermataStruttura(props) {
                                 <label className="col-sm-3 col-form-label" htmlFor="dataCheckOut">Check-out</label>
                                 <div className="col-sm-4">
                                     <input name="dataCheckIn" type="date" className="form-control" id="dataCheckOut"
-                                           aria-describedby="Data check-out" required/>
+                                           aria-describedby="Data check-out" min={minDataP} defaultValue={minDataP}
+                                           max={maxData} required/>
                                 </div>
                                 <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
                                 <div className="col-sm-4">

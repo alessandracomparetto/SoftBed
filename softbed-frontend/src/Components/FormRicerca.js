@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import $ from 'jquery';
+import { convertiData } from "../Actions/gestioneDate";
 
 function FormRicerca(props) {
     /* TODO: BACKEND - OPZIONALE
@@ -7,41 +8,19 @@ function FormRicerca(props) {
      * le opzioni disponibili mentre si digita la destinazione
      */
 
-    const GIORNO = 86400000;
-    const dataAttuale = new Date();
-
-    // Il gestore deve avere almeno 48 ore per confermare o rifiutare la richiesta per cui la prima data disponibile
-    // sarà 2 giorni dopo la data in cui viene effettuata la ricerca (3 se dopo le 12:00)
-    const primaDataArrivo = new Date(dataAttuale.getTime() + 2.5 * GIORNO);
-    const minDataA = convertiData(primaDataArrivo);
-
-    // Il soggiorno deve durare almeno 1 giorno
-    const primaDataPartenza = new Date(primaDataArrivo.getTime() + GIORNO);
-
-    // La data di partenza non può superare un anno dalla data odierna
-    const maxData =
-        (dataAttuale.getFullYear() + 1) + "-" +
-        (dataAttuale.getMonth() + 1).toString().padStart(2, "0") + "-" +
-        dataAttuale.getDate().toString().padStart(2, "0");
-
-    // Converte la data da oggetto Date a stringa in formato "AAAA-MM-GG"
-    function convertiData (data) {
-        const giorno = data.getDate().toString().padStart(2, "0");
-        // +1 poiché getMonth() restituisce valori da 0 (Gennaio) a 11 (Dicembre).
-        const mese = (data.getMonth() + 1).toString().padStart(2, "0");
-        const anno = data.getFullYear();
-
-        return anno + "-" + mese + "-" + giorno;
-    }
+    const oggi = new Date();
+    const minDataA = convertiData(oggi, 2.5);
+    const maxData = convertiData(oggi, 0, 0, 1);
 
     // Stato: Data minima per la data di partenza
-    const [minDataP, setMinDataP] = useState(convertiData(primaDataPartenza));
+    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
 
     // Aggiorna il valore minimo per la data di partenza in base alla data di arrivo inserita
     const aggiornaMinDataPartenza = (event) => {
+        console.log(event);
         const dataInserita = new Date(event.target.value);
-        const nuovaData = new Date(dataInserita.getTime() + GIORNO);
-        const nuovaDataConvertita = convertiData(nuovaData);
+        const nuovaDataConvertita = convertiData(dataInserita, 1);
+        console.log(nuovaDataConvertita);
         setMinDataP(nuovaDataConvertita);
     }
 
@@ -57,9 +36,8 @@ function FormRicerca(props) {
                         if (res.destinazione) {
                             $('#destinazione').val(res.destinazione);
 
-                            if (props.setDestinazione) {
+                            if (props.setDestinazione)
                                 props.setDestinazione(res.destinazione);
-                            }
                         }
 
                         if (res.arrivo)
