@@ -40,7 +40,7 @@ function FormCondizioni(){
     function verificaMinDurata(e){
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
         if((e.target.value)>document.getElementById("maxSoggiorno").value){
-        document.getElementById("maxSoggiorno").value=e.target.value;
+            document.getElementById("maxSoggiorno").value=e.target.value;
         }
     }
     function verificaMaxDurata(e){
@@ -152,13 +152,13 @@ function FormCondizioni(){
                     <div className="d-flex justify-content-around mb-3 ">
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraInizioCheckOut" className="border-bottom border-primary">Inizio ora check-out</label>
-                            <input type="time" id="oraInizioCheckOut" className="form-control" min="09:00" max="13:00"defaultValue="09:00" placeholder="Select time" onChange={verificaInizioCheckOut}/>
+                            <input type="time" id="oraInizioCheckOut" className="form-control" min="09:00" max="13:00" defaultValue="09:00" placeholder="Select time" onChange={verificaInizioCheckOut}/>
                             <div className="invalid-feedback">09:00-13:00</div>
                         </div>
 
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraFineCheckOut" className="border-bottom border-primary">Fine ora check-out</label>
-                            <input type="time" id="oraFineCheckOut" className="form-control" min="10:00" max="18:00"defaultValue="11:00" placeholder="Select time" onChange={verificaFineCheckOut}/>
+                            <input type="time" id="oraFineCheckOut" className="form-control" min="10:00" max="18:00" defaultValue="11:00" placeholder="Select time" onChange={verificaFineCheckOut}/>
                             <div className="invalid-feedback">10:00-18:00</div>
                         </div>
 
@@ -166,16 +166,16 @@ function FormCondizioni(){
                 </div>
                 <div className="border p-3">
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
-                        <div className= "form-row-group d-flex justify-content-around">
-                            <div className="form-check-inline ">
-                                <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online"/>
-                                <label htmlFor="online" className="form-check-label pl-2" >Pagamento online</label>
-                            </div>
-                            <div className="form-check-inline ">
-                                <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" />
-                                <label htmlFor="loco" className="form-check-label pl-2" >Pagamento in loco</label>
-                            </div>
+                    <div className= "form-row-group d-flex justify-content-around">
+                        <div className="form-check-inline ">
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online"/>
+                            <label htmlFor="online" className="form-check-label pl-2" >Pagamento online</label>
                         </div>
+                        <div className="form-check-inline ">
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" />
+                            <label htmlFor="loco" className="form-check-label pl-2" >Pagamento in loco</label>
+                        </div>
+                    </div>
                     <p id="feedback" className=" text-danger collapse small" >Selezionare almeno una delle due checkbox</p>
                     <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
                     <div className="form-check">
@@ -250,11 +250,11 @@ function FormCondizioni(){
                         <div className="form-row">
                             <div  className=" col-sm-12 col-md-5 pt-3">
                                 <div className="input-group ">
-                                    <label htmlFor="prezzoBambini" className=" pr-1 pr-md-3">Riduzione del</label>
+                                    <label htmlFor="percentualeCondizioni" className=" pr-1 pr-md-3">Riduzione del</label>
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">%</span>
                                     </div>
-                                    <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
+                                    <input name="percentualeCondizioni" id="percentualeCondizioni" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
                                 </div>
                             </div>
 
@@ -271,4 +271,4 @@ function FormCondizioni(){
             </form>
         </div>
     )}
-    export default FormCondizioni;
+export default FormCondizioni;
