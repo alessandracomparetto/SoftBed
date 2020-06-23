@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import CalcoloGuadagno from "./CalcoloGuadagno"
+import $ from 'jquery';
+
 function SchermataStrutture(){
     const [listaStrutture] = useState([
         {   idStruttura: "3333",
@@ -12,7 +14,7 @@ function SchermataStrutture(){
             cap : "90011",
             refComune : "5",
             idComune :"5",
-            nomeComune : "CHISSA",
+            nomeComune : "Comune1",
             refProvincia : "90",
             tipologia: "B&B"
         },
@@ -26,16 +28,30 @@ function SchermataStrutture(){
             cap : "90011",
             refComune : "6",
             idComune :"6",
-            nomeComune : "Why",
+            nomeComune : "Comune 2",
             refProvincia : "81",
+            tipologia: "Casa vacanze"
+        },
+        {   idStruttura: "3999",
+            nomeStruttura: "Struttura 3",
+            refGestore: "7777",
+            refIndirizzo: "3",
+            renditontoEffettuato: "true",
+            idIndirizzo :"3",
+            via : "Anacleto",
+            cap : "90011",
+            refComune : "7",
+            idComune :"7",
+            nomeComune : "Comune3",
+            refProvincia : "6",
             tipologia: "Casa vacanze"
         }
     ]);
 
-    function apri() {
-
+    function apri(event) {
+        let calcolo = event.target.closest("li").lastChild;
+        $(calcolo).toggleClass("collapse")
     }
-    /*TODO: toggle calcolo guadagno, pulsanti, mettere margin top e completare*/
 
     return(
         <div className="container">
@@ -44,7 +60,7 @@ function SchermataStrutture(){
                 {
                     listaStrutture.map((struttura, indice) => {
                         return(
-                            <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key="indice">
+                            <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key={indice}>
                                 <div className="row d-flex justify-content-center">
                                     <div className="col-4 col-md-3 my-auto text-center">
                                         <strong>{struttura.nomeStruttura}</strong>
@@ -59,9 +75,10 @@ function SchermataStrutture(){
                                         <button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button>
                                         <button type="button" className="btn btn-block btn-outline-primary mt-2 mr-2" onClick={apri}>Calcolo Guadagni</button>
                                     </div>
-
                                 </div>
-                                <CalcoloGuadagno/>
+                                <div className="collapse">
+                                    <CalcoloGuadagno/>
+                                </div>
                             </li>
                         )
                     })
