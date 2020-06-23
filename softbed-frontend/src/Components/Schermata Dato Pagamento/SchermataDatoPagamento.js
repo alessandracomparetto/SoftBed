@@ -1,23 +1,28 @@
 import React from "react";
 import FormMetodoPagamento from "./FormMetodoPagamento";
+import Prenotazione from "../Schermata prenotazione struttura/Prenotazione";
+import RichiesteInAttesa from "../Schermata prenotazione struttura/RichiesteInAttesa";
+import RichiesteConfermate from "../Schermata prenotazione struttura/RichiesteConfermate";
 /*
 TODO:
 *Inserire pattern per la carta di credito
 */
-function SchermataDatoPagamento(){
-    function scriviDato(){
-        let listaDatiPagamento = document.getElementById("listaDatiPagamento");
-        let nome = document.getElementById("name");
-        let ncarta = document.getElementById("ncarta");
-        let cvv = document.getElementById("cvv");
-        let data = document.getElementById("data");
+/*
+function scriviDato(){
+    let listaDatiPagamento = document.getElementById("listaDatiPagamento");
+    let nome = document.getElementById("name");
+    let ncarta = document.getElementById("ncarta");
+    let cvv = document.getElementById("cvv");
+    let data = document.getElementById("data");
 
-        let p = document.createElement("P");
-        let info = nome.value + "\t\t\t\t\t" + ncarta.value + "\t\t\t\t\t" + cvv.value +"\t\t\t\t\t" + data.value;
-        let stringa = document.createTextNode(info);
-        p.appendChild(stringa);
-        listaDatiPagamento.appendChild(p);
-    }
+    let p = document.createElement("P");
+    let info = nome.value + ncarta.value + cvv.value + data.value;
+    let stringa = document.createTextNode(info);
+    p.appendChild(stringa);
+    listaDatiPagamento.appendChild(p);
+}*/
+function SchermataDatoPagamento(props){
+
     const GIORNO = 86400000;
     const dataAttuale = new Date();
     //la data di scadenza deve essere maggiore o uguale al mese attuale
@@ -32,59 +37,60 @@ function SchermataDatoPagamento(){
         return anno + "-" + mese;
     }
 
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-// Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
+    let finestra=false;
+    function visualizzaDatiPagamento(e){
+        if(finestra==false){
+            document.getElementById("datiPagamento").classList.add("collapse");
+            finestra=true;
+        }
+        else{
+            document.getElementById("datiPagamento").classList.remove("collapse");
+            finestra=false;
+        }
+    }
+
+
+    function eliminaDatoPagamento(e){
+        {/*TODO inviare richiesta al beckend*/}
+    }
 
     return(
-        <div className="container pt-3 col-xs-10 col-md-10">
-            <form className="needs-validation" noValidate>
-                <h6 className="mt-3 border-bottom border-primary d-inline">Dati di pagamento presenti</h6>
-                <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
+        <div className="container" id="pagamento">
+            <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
+            <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
+            <ul className="list-group list-group-flush ">
 
+                <li className="list-group-item list-group-item-warning">
 
-                <div id="listaDatiPagamento" className="mb-3 col-12 mx-auto border pre-scrollable" style={{maxHeight: 30 + 'vh'}}>
-                    <div className="container mb-3">
-                        <div className="row">
-                            <div className="lead mt-3 d-inline col-sm">
-                                Intestatario carta
-                            </div>
-                            <div className="lead mt-3 d-inline col-sm">
-                                Numero carta
-                            </div>
-                            <div className="lead mt-3 d-inline col-sm">
-                                CVV
-                            </div>
-                            <div className="lead mt-3 d-inline col-sm">
-                                Data di scadenza
-                            </div>
+                    <div className="row  d-flex justify-content-center">
+                        <div className="col-6 col-md-4">
+                            <strong>Carta termina con:</strong> {props.datoPagamento.numeroCarta.substring(12)}
+                        </div >
+
+                        <div className="col-6 col-md-4">
+                            <strong>Scadenza:</strong> {props.datoPagamento.dataScadenza}
+                        </div>
+                        <div className=" col-12 col-md-3 btn-group d-flex justify-content-around">
+                            <button type="button" className="btn btn-primary mt-2 mr-2 " style={{width: 170 + 'px'}} onClick={visualizzaDatiPagamento}>Visualizza</button>
                         </div>
                     </div>
-                    <div>
-                        <p>
-                            <br/>
-                        </p>
-                    </div>
-                </div>
+                    <div id="datiPagamento" className="collapse">
 
-                <br/><br/><br/>
-            </form>
-            <h6 className="lead mt-3 text-uppercase">Aggiungi un nuovo metodo di pagamento</h6>
-            <FormMetodoPagamento/>
+                            <div className="row">
+                                <p className="col-12 col-md-5"><strong>Intestatario carta:</strong> {props.datoPagamento.nomeIntestatario}</p>
+                                <p className="col-12 col-md-5" ><strong>Numero carta: </strong> {props.datoPagamento.numeroCarta}</p>
+                                <p className="col-12 col-md-2" ><strong>CVV: </strong>{props.datoPagamento.cvv}</p>
+                            </div>
+
+                            <div className="col-12 col-md-2 btn-group d-flex justify-content-around">
+                                <button type="button " className="btn btn-danger mr-2" onClick={eliminaDatoPagamento}>Elimina</button>
+                            </div>
+
+                    </div>
+
+                </li>
+            </ul>
+
         </div>
     )
 }

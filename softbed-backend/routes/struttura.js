@@ -26,7 +26,7 @@ async function registrazioneStruttura(req, res, next){
                 SELECT ? AS via, ? AS numero, ? AS cap ', [
                 req.body.via,
                 req.body.numero,
-                req.body.cap,
+                req.body.cap
             ])
             //inserimento indirizzo struttura
             /*results = await db.query('INSERT INTO `indirizzo` \

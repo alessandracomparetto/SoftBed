@@ -1,4 +1,6 @@
 import React from 'react';
+import $ from "jquery";
+import axios from "axios";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -18,9 +20,29 @@ import React from 'react';
 })();
 
 function Login(){
+    function onSubmit(e){
+        e.preventDefault();
 
+        const utenteLogin= {
+            email: document.getElementById("email").value ,
+            pass: document.getElementById("pass").value ,
+
+        }
+        console.log(utenteLogin);
+        try{
+            axios.post("/utente/login", utenteLogin);
+        }
+        catch(err){
+            if (err.response.status === 400) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
+        }
+
+    }
     return(
-            <form className="container needs-validation col-sm-8 mt-3 " method="POST" action="/users/login" noValidate>
+            <form className="container needs-validation col-sm-8 mt-3 " onSubmit={onSubmit} noValidate>
                 <div className="form-group" >
                     <label htmlFor="email">E-mail *</label>
                     <input name="email" id="email" type="email" className="form-control" placeholder="mario.rossi@example.com" required/>
