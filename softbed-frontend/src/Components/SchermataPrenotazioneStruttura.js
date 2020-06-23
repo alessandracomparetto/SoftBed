@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import RichiesteInAttesa from "./Schermata prenotazione struttura/RichiesteInAttesa";
 import RichiesteConfermate from "./Schermata prenotazione struttura/RichiesteConfermate";
 function SchermataPrenotazioneStruttura(){
-    const [listaPrenotazioniNonConfermate, setRichiestePendenti] = useState([{idPrenotazione: "3333",
+const [prenotazioniNonConfermate, aggiornaPrenotazioniNonConfermate] = useState([{idPrenotazione: "3333",
         nome: "Struttura 1",
         checkIn: "22/06/2020",
         checkOut: "22/06/2020",
@@ -46,7 +46,7 @@ function SchermataPrenotazioneStruttura(){
         dataScadenza: "5/06/2020",
         metodoPagamento:"loco",
         refUtente:"1111"}]);
-    const [listaPrenotazioniConfermate, aggiornaPrenotazioniConfermate] = useState([
+    const [prenotazioniConfermate, aggiornaPrenotazioniConfermate] = useState([
         {
             idPrenotazione: "3333",
             nome: "Struttura 1",
@@ -83,21 +83,21 @@ function SchermataPrenotazioneStruttura(){
 
     const rifiutaPrenotazione = (indice) => {
         // Rimuovere dalla lista in attesa
-        let tmp = [...listaPrenotazioniNonConfermate];
+        let tmp = [...prenotazioniNonConfermate];
         tmp.splice(indice, 1);
-        setRichiestePendenti(tmp);
+        aggiornaPrenotazioniNonConfermate(tmp);
     }
 
     const confermaPrenotazione = (indice) => {
         // Aggiungere alla lista confermate
-        let tmp = [...listaPrenotazioniConfermate];
-        tmp.push(listaPrenotazioniNonConfermate[indice]);
+        let tmp = [...prenotazioniConfermate];
+        tmp.push(prenotazioniNonConfermate[indice]);
         aggiornaPrenotazioniConfermate(tmp);
 
         // Rimuovere dalla lista in attesa
-        tmp = [...listaPrenotazioniNonConfermate];
+        tmp = [...prenotazioniNonConfermate];
         tmp.splice(indice, 1);
-        setRichiestePendenti(tmp);
+        aggiornaPrenotazioniNonConfermate(tmp);
     }
 
 
@@ -109,8 +109,8 @@ function SchermataPrenotazioneStruttura(){
                     listaPrenotazioniNonConfermate.map((prenotazioni, indice) => {
                         console.log("Lista:"+listaPrenotazioniNonConfermate);
 
-                            return <li className="list-group-item list-group-item-warning"><RichiesteInAttesa key={indice} indiceElemento={indice} dataCheckIn={prenotazioni.checkIn} dataCheckOut={prenotazioni.checkOut} dataScadenza={prenotazioni.dataScadenza} idPrenotazione={prenotazioni.idPrenotazione} nAdulti={prenotazioni.nAdulti} nBambini={prenotazioni.nBambini} costo={prenotazioni.costo} nEsenti={prenotazioni.nEsenti} metodoPagamento={prenotazioni.metodoPagamento} rifiutaPrenotazione={rifiutaPrenotazione} confermaPrenotazione={confermaPrenotazione}/></li>
-                        })
+                        return <li className="list-group-item list-group-item-warning"><RichiesteInAttesa key={indice} indiceElemento={indice} dataCheckIn={prenotazioni.checkIn} dataCheckOut={prenotazioni.checkOut} dataScadenza={prenotazioni.dataScadenza} idPrenotazione={prenotazioni.idPrenotazione} nAdulti={prenotazioni.nAdulti} nBambini={prenotazioni.nBambini} costo={prenotazioni.costo} nEsenti={prenotazioni.nEsenti} metodoPagamento={prenotazioni.metodoPagamento} rifiutaPrenotazione={rifiutaPrenotazione} confermaPrenotazione={confermaPrenotazione}/></li>
+                    })
 
                 }
             </ul>
@@ -118,7 +118,7 @@ function SchermataPrenotazioneStruttura(){
             <ul id="listPrenotazioneConfermate" className="list-group list-group-flush ">
                 {
                     listaPrenotazioniConfermate.map((prenotazioni, indice) => {
-                            return <li  className="list-group-item list-group-item-success"><RichiesteConfermate key={indice}  dataCheckIn={prenotazioni.checkIn} dataCheckOut={prenotazioni.checkOut} dataConferma={prenotazioni.dataConferma} idPrenotazione={prenotazioni.idPrenotazione} nAdulti={prenotazioni.nAdulti} nBambini={prenotazioni.nBambini} costo={prenotazioni.costo} nEsenti={prenotazioni.nEsenti} metodoPagamento={prenotazioni.metodoPagamento}/></li>
+                        return <li  className="list-group-item list-group-item-success"><RichiesteConfermate key={indice}  dataCheckIn={prenotazioni.checkIn} dataCheckOut={prenotazioni.checkOut} dataConferma={prenotazioni.dataConferma} idPrenotazione={prenotazioni.idPrenotazione} nAdulti={prenotazioni.nAdulti} nBambini={prenotazioni.nBambini} costo={prenotazioni.costo} nEsenti={prenotazioni.nEsenti} metodoPagamento={prenotazioni.metodoPagamento}/></li>
                     })
                 }
             </ul>
