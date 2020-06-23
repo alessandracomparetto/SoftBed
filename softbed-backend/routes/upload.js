@@ -12,24 +12,18 @@ var storage = destinazione => multer.diskStorage({
     }
 });
 
-var uploadDocumenti = multer({ storage: storage('uploads/documenti') }).array('file');
-var uploadFoto = multer({ storage: storage('uploads/foto') }).array('file');
-router.post('/documenti',function(req, res) {
-    uploadDocumenti(req, res, err => {
-        if (err) {
-            return res.status(500).json(err);
-        }
-        return res.status(200).json(req.file);
-    });
-});
+const upload = destinazione => multer({storage: storage(`uploads/${destinazione}`)}).array('file');
 
-router.post('/foto',function(req, res) {
-    uploadFoto(req, res, err => {
+const post = destinazione => router.post(`/${destinazione}`, (req, res) => {
+    upload(destinazione, req, res, err => {
         if (err) {
             return res.status(500).json(err);
         }
         return res.status(200).json(req.file);
     });
-});
+})
+
+post('documenti');
+post('foto');
 
 module.exports = router;
