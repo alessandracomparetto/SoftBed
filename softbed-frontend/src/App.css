@@ -22,6 +22,10 @@ body {
     -webkit-box-orient: vertical;
 }
 
+.border-danger {
+    border-width: 2px !important;
+}
+
 @media screen and (min-width: 768px) {
     .annuncio-box-servizi {
         min-height: 101px;
@@ -42,6 +46,10 @@ body {
 
 .minw-15em {
     min-width: 15em;
+}
+
+.outline-error {
+    outline: 2px solid #dc3545;
 }
 
 .page-item {

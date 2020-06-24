@@ -12,8 +12,9 @@ import { convertiData } from "../../Actions/gestioneDate";
 function SchermataStruttura(props) {
     let { id } = useParams();
 
+    // Gestione delle date
     const oggi = new Date();
-    const minDataA = convertiData(oggi, 2.5);
+    const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
 
     const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2);
@@ -24,16 +25,102 @@ function SchermataStruttura(props) {
         const dataInserita = new Date(event.target.value);
         const nuovaDataConvertita = convertiData(dataInserita, 1);
         setMinDataP(nuovaDataConvertita);
+        controlloDate();
     }
 
     $(document).ready(() => {
-        const adulti = $('#adulti')
+        // Gestione stato numeroAdulti
+        const adulti = $('#adulti');
 
         adulti.on('change', () => {
-            console.log(adulti.val());
             setNumeroAdulti(adulti.val());
         })
     });
+
+
+    const controlloForm = (event) => {
+        if (props.struttura.tipologia && props.struttura.tipologia === "b&b") {
+            const singole = $("#singole");
+            const doppie = $("#doppie");
+
+            // Camere > 0
+            if (singole.val() + doppie.val() < 1)
+                event.preventDefault();
+        }
+    }
+
+    const controlloCamere = () => {
+        const singole = $("#singole");
+        const doppie = $("#doppie");
+        const camereAiuto = $("#camereAiuto");
+
+        if (singole.val() + doppie.val() < 1) {
+            camereAiuto.removeClass("d-none");
+            singole.addClass("border border-danger");
+            doppie.addClass("border border-danger");
+        }
+
+        else {
+            camereAiuto.addClass("d-none");
+            singole.removeClass("border border-danger");
+            doppie.removeClass("border border-danger");
+        }
+    }
+
+    const controlloDate = () => {
+        const dataCI = $("#dataCheckIn");
+        const dataCO = $("#dataCheckOut");
+        const dateAiuto = $("#dateAiuto");
+        const passatoAiuto = $("#passatoAiuto");
+
+        const CI = new Date(dataCI.val());
+        const CO = new Date(dataCO.val());
+
+        if (CI.getTime() <=  oggi.getTime()) {
+            passatoAiuto.removeClass("d-none");
+            dataCI.addClass("border border-danger");
+        }
+
+        else {
+            passatoAiuto.addClass("d-none");
+            dataCI.removeClass("border border-danger");
+        }
+
+        if (CO.getTime() <= CI.getTime()) {
+            dateAiuto.removeClass("d-none");
+            dataCO.addClass("border border-danger");
+        }
+
+        else {
+            dateAiuto.addClass("d-none");
+            dataCO.removeClass("border border-danger");
+        }
+    }
+
+    const controlloOspiti = () => {
+        const esenti = $("#esenti");
+        const adulti = $("#adulti");
+        const adultiAiuto = $("#adultiAiuto");
+        const esentiAiuto = $("#esentiAiuto");
+
+        // Controllo numero adulti
+        if (adulti.val() < 1) {
+            adultiAiuto.removeClass("d-none");
+        }
+
+        else {
+            adultiAiuto.addClass("d-none");
+        }
+
+        // Controllo numero esenti
+        if (esenti.val() > adulti.val()) {
+            esentiAiuto.removeClass("d-none");
+        }
+
+        else {
+            esentiAiuto.addClass("d-none");
+        }
+    }
 
     return (
         <div className="container px-3 mt-3">
@@ -53,7 +140,7 @@ function SchermataStruttura(props) {
             <div className="d-lg-flex flex-lg-row-reverse">
                 {/* Form dati di soggiorno */}
                 <div className="shadow mt-3 card bg-dark text-light p-3 col-12 col-lg-6">
-                    <form className="form" id="formRichiestaPrenotazione">
+                    <form className="form" id="formRichiestaPrenotazione" onSubmit={controlloForm}>
                         <div className="my-3">
                             <h5>Calendario</h5>
 
@@ -76,7 +163,7 @@ function SchermataStruttura(props) {
                                 <div className="col-sm-4">
                                     <input name="dataCheckIn" type="date" className="form-control" id="dataCheckOut"
                                            aria-describedby="Data check-out" min={minDataP} defaultValue={minDataP}
-                                           max={maxData} required/>
+                                           max={maxData} required onChange={controlloDate}/>
                                 </div>
                                 <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
                                 <div className="col-sm-4">
@@ -84,6 +171,14 @@ function SchermataStruttura(props) {
                                            defaultValue="11:00" min="06:00" max="15:00" required/>
                                 </div>
                             </div>
+
+                            <small id="passatoAiuto" className="form-text text-warning d-none">
+                                Non siamo ancora in grado di tornare al passato, ma ci stiamo lavorando.
+                            </small>
+
+                            <small id="dateAiuto" className="form-text text-warning d-none">
+                                La data di check-out deve essere posteriore alla data di check-in.
+                            </small>
                         </div>
 
                         { props.struttura.tipologia && props.struttura.tipologia === "b&b" && (
@@ -92,21 +187,26 @@ function SchermataStruttura(props) {
 
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label" htmlFor="singole">Singole</label>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-3">
                                         <input name="singole" type="number" className="form-control" id="singole"
                                                aria-describedby="Numero camere singole" min={0} max={10}
-                                               defaultValue={0}/>
+                                               defaultValue={0} onChange={controlloCamere}/>
                                     </div>
 
                                 </div>
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label" htmlFor="doppie">Doppie</label>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-3">
                                         <input name="doppie" type="number" className="form-control" id="doppie"
                                                aria-describedby="Numero camere doppie" min={0} max={10}
-                                               defaultValue={1}/>
+                                               defaultValue={1} onChange={controlloCamere}/>
                                     </div>
                                 </div>
+
+
+                                <small id="camereAiuto" className="form-text text-warning d-none">
+                                    Devi selezionare almeno una camera.
+                                </small>
                             </div>
                         )}
 
@@ -118,7 +218,7 @@ function SchermataStruttura(props) {
                                 <div className="col-sm-3">
                                     <input name="adulti" type="number" className="form-control" id="adulti"
                                            aria-describedby="Numero di adulti" min={1} max={100}
-                                           defaultValue={props.ospiti || 2} required/>
+                                           defaultValue={props.ospiti || 2} onChange={controlloOspiti} required/>
                                 </div>
                             </div>
 
@@ -135,10 +235,18 @@ function SchermataStruttura(props) {
                                 <label className="col-sm-3 col-form-label" htmlFor="esenti">Esenti</label>
                                 <div className="col-sm-3">
                                     <input name="esenti" type="number" className="form-control" id="esenti"
-                                           aria-describedby="Numero di esenti" min={0} max={numeroAdulti}
-                                           defaultValue={0} />
+                                           aria-describedby="esentiHelp" min={0} max={numeroAdulti}
+                                           defaultValue={0} onChange={controlloOspiti}/>
                                 </div>
                             </div>
+
+                            <small id="adultiAiuto" className="form-text text-warning d-none">
+                                Deve essere presente almeno un adulto.
+                            </small>
+
+                            <small id="esentiAiuto" className="form-text text-warning d-none">
+                                Il numero di esenti non può essere superiore al numero di adulti.
+                            </small>
                         </div>
 
                         <div className="text-right">
@@ -155,7 +263,7 @@ function SchermataStruttura(props) {
                     </div>
                     <div>
                         <h6>Servizi</h6>
-                        <div className="row">
+                        <div className="row mx-auto">
                             {
                                 props.struttura.servizi && props.struttura.servizi.map((servizio) => {
                                     return (

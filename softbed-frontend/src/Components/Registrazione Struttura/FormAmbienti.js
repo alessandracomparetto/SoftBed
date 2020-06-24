@@ -92,7 +92,7 @@ function FormAmbienti() {
     return(
         <form className="container col-12 col-md-8" action="ambienti/caratteristicheC">
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
-            <div className="form-row-group text-center">
+            <div className="form-row-group text-center offset-5 offset-sm-3">
                 <div className="form-check-inline col-12 col-sm-5">
                     <input type="checkbox" className="mr-1" name="salotto" id="salotto"/>
                     <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
@@ -102,7 +102,7 @@ function FormAmbienti() {
                     <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
                 </div>
             </div>
-            <div className="form-row-group text-center">
+            <div className="form-row-group text-center offset-5 offset-sm-3">
                 <div className="form-check-inline col-12 col-sm-5">
                     <input type="checkbox" className="mr-1" name="giardino" id="giardino"/>
                     <label className="form-check-label" htmlFor="giardino">Giardino</label>
