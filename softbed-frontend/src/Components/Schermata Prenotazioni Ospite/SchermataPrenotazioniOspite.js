@@ -1,8 +1,8 @@
 import React from "react";
-import RichiestaPrenotazione from "./RichiestaPrenotazione";
-import Prenotazione from "./Prenotazione";
+import RichiestaPrenotazioneOspite from "./RichiestaPrenotazioneOspite";
+import PrenotazioneOspite from "./PrenotazioneOspite";
 
-function SchermataPrenotazioni() {
+function SchermataPrenotazioniOspite() {
     const inAttesa = [
         {
             struttura: "Nome struttura 1",
@@ -65,7 +65,7 @@ function SchermataPrenotazioni() {
 
                         { inAttesa.map((richiesta, indice) => {
                             return (
-                                <RichiestaPrenotazione key={indice} richiesta={richiesta} primo={indice === 0}/>
+                                <RichiestaPrenotazioneOspite key={indice} richiesta={richiesta} primo={indice === 0}/>
                             )
                         })}
 
@@ -81,7 +81,7 @@ function SchermataPrenotazioni() {
 
                         { precedenti.map((prenotazione, indice) => {
                             return (
-                                <Prenotazione key={indice} prenotazione={prenotazione} primo={indice === 0}/>
+                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0}/>
                             )
                         })}
 
@@ -92,4 +92,4 @@ function SchermataPrenotazioni() {
     )
 }
 
-export default SchermataPrenotazioni;
+export default SchermataPrenotazioniOspite;

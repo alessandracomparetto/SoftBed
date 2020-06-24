@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ButtonForm from "./ButtonForm";
-import data from "../regioni_province_comuni.js";
+import ButtonForm from "../ButtonForm";
+import data from "../../regioni_province_comuni.js";
 import $ from "jquery"
 import axios from "axios";
 

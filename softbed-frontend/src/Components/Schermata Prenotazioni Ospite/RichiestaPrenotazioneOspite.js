@@ -1,36 +1,32 @@
-import React, {useState} from "react"
+import React, {useState} from "react";
 
-function Prenotazione(props) {
+function RichiestaPrenotazioneOspite(props) {
     const [mostraContenuto, setMostraContenuto] = useState(false);
 
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
 
     return (
-        <li className={"rounded text-center list-group-item border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
+        <li className={"rounded text-center list-group-item list-group-item-warning text-dark border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
             <div className="row">
                 <div className="col-12 col-sm-3 col-lg-4 h-100 my-auto">
                     <strong>Struttura</strong>
                     <br/>
-                    <span>{props.prenotazione.struttura}</span>
-                    <span className="bg-dark d-block d-sm-none" style={{height: 1 + "px"}}/>
+                    <span>{props.richiesta.struttura}</span>
                 </div>
                 <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>Check In</strong>
                     <br/>
-                    <span>{props.prenotazione.checkIn}</span>
-                    <span className="bg-dark d-block d-sm-none" style={{height: 1 + "px"}}/>
+                    <span>{props.richiesta.checkIn}</span>
                 </div>
                 <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>Check out</strong>
                     <br />
-                    <span>{props.prenotazione.checkOut}</span>
-                    <span className="bg-dark d-block d-sm-none" style={{height: 1 + "px"}}/>
+                    <span>{props.richiesta.checkOut}</span>
                 </div>
                 <div className="col-12 col-sm-3 col-lg-2 h-100 my-auto">
-                    <strong>Confermata il</strong>
+                    <strong>Scadenza</strong>
                     <br />
-                    <span>{props.prenotazione.conferma.data}</span>
-                    <span className="bg-dark d-block d-sm-none" style={{height: 1 + "px"}}/>
+                    <span>{props.richiesta.scadenza.data}</span>
                 </div>
                 <div className="col-12 col-lg-2 h-100 text-center my-2">
                     <button className="btn btn-warning btn-block btn-lg-inline" onClick={toggleContenuto}>{mostraContenuto ? "Mostra meno" : "Mostra di più"}</button>
@@ -41,7 +37,7 @@ function Prenotazione(props) {
 
                         <div className="d-none d-lg-block col-3">
                             <figure className="figure overflow-hidden rounded" style={{maxHeight: 140 + "px"}}>
-                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.struttura} src="/uploads/1/1.jpg" />
+                                <img className="w-100 h-100 img-cover img-fluid" alt={props.richiesta.struttura} src="/uploads/1/1.jpg" />
                             </figure>
                         </div>
 
@@ -52,21 +48,21 @@ function Prenotazione(props) {
                                         <strong>Adulti</strong>
                                         <strong className="d-none d-md-inline">: </strong>
                                         <br className="d-md-none" />
-                                        <span>{props.prenotazione.ospiti.adulti}</span>
+                                        <span>{props.richiesta.ospiti.adulti}</span>
                                     </div>
 
                                     <div className="col-4">
                                         <strong>Bambini</strong>
                                         <strong className="d-none d-md-inline">: </strong>
                                         <br className="d-md-none" />
-                                        <span>{props.prenotazione.ospiti.bambini}</span>
+                                        <span>{props.richiesta.ospiti.bambini}</span>
                                     </div>
 
                                     <div className="col-4">
                                         <strong>Esenti da tasse</strong>
                                         <strong className="d-none d-md-inline">: </strong>
                                         <br className="d-md-none" />
-                                        <span>{props.prenotazione.ospiti.esenti}</span>
+                                        <span>{props.richiesta.ospiti.esenti}</span>
                                     </div>
                                 </div>
 
@@ -75,14 +71,14 @@ function Prenotazione(props) {
                                         <strong>Pagamento</strong>
                                         <strong className="d-none d-md-inline">: </strong>
                                         <br className="d-md-none" />
-                                        <span>{props.prenotazione.pagamento}</span>
+                                        <span>{props.richiesta.pagamento}</span>
                                     </div>
 
                                     <div className="col-4">
                                         <strong>Prezzo</strong>
                                         <strong className="d-none d-md-inline">: </strong>
                                         <br className="d-md-none" />
-                                        <span>{props.prenotazione.prezzo}€</span>
+                                        <span>{props.richiesta.prezzo}€</span>
                                     </div>
                                 </div>
 
@@ -90,19 +86,24 @@ function Prenotazione(props) {
                                     <strong>Scadenza</strong>
                                     <strong className="d-none d-md-inline">: </strong>
                                     <br className="d-md-none" />
-                                    <span>{props.prenotazione.conferma.data} alle ore {props.prenotazione.conferma.ora}</span>
+                                    <span>{props.richiesta.scadenza.data} alle ore {props.richiesta.scadenza.ora}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="d-md-flex">
-                        <div className="ml-md-auto p-2 col-12 col-md-3">
+                    <div className="d-md-flex flex-md-nowrap">
+
+                        <div className="order-1 p-2 col-12 col-md-3">
                             <button className="btn btn-primary btn-block">Visualizza struttura</button>
                         </div>
 
-                        <div className="p-2 col-12 col-md-3">
+                        <div className="order-2 p-2 col-12 col-md-3">
                             <button className="btn btn-primary btn-block">Contatta il gestore</button>
+                        </div>
+
+                        <div className="order-0 mr-md-auto p-2 col-12 col-md-3">
+                            <button className="btn btn-secondary btn-block">Annulla prenotazione</button>
                         </div>
                     </div>
                 </div>
@@ -112,4 +113,4 @@ function Prenotazione(props) {
     )
 }
 
-export default Prenotazione;
+export default RichiestaPrenotazioneOspite;
