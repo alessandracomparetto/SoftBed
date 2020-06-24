@@ -8,7 +8,8 @@ import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
-import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import Registration from "./Components/Registration";
+import Login from "./Components/Login";
 
 function App() {
 
@@ -46,9 +47,10 @@ function App() {
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    <SchermataPrenotazioniOspite />
-                    {/*<Carousel />*/}
-                    {/*<FormRicerca />*/}
+                    <Registration />
+                    <Login />
+                    <Carousel />
+                    <FormRicerca />
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}

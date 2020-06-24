@@ -36,16 +36,16 @@ function FormRicerca() {
         const arrivo = query.get("arrivo");
         const partenza = query.get("partenza");
         const ospiti = query.get("ospiti");
-        const bb = query.get("b&b");
-        const cv = query.get("casa vacanze");
 
-        console.log(bb, cv);
-
-        if (!bb || bb !== "true")
-            $("#b\\&b").prop("checked", false);
-
-        if (!cv || cv !== "true")
-            $("#casaVacanze").prop("checked", false);
+        // TODO: Gestire lettura dei parametri b&b e casa vacanze
+        // const bb = query.get("b&b");
+        // const cv = query.get("casa vacanze");
+        //
+        // if (!bb || bb !== "true")
+        //     $("#b\\&b").prop("checked", false);
+        //
+        // if (!cv || cv !== "true")
+        //     $("#cv").prop("checked", false);
 
         if (destinazione)
             $("#destinazione").val(destinazione);
@@ -180,16 +180,18 @@ function FormRicerca() {
                         Seleziona almeno una tipologia di struttura.
                     </small>
 
-                    <div className="form-check form-check-inline w-100">
-                        <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
-                               value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                        <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
-                    </div>
+                    <div className="d-flex d-lg-block justify-content-around">
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
+                                   value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                            <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
+                        </div>
 
-                    <div className="form-check form-check-inline w-100">
-                        <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
-                               value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                        <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                        <div className="form-check form-check-inline">
+                            <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
+                                   value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                            <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                        </div>
                     </div>
                 </div>
 
