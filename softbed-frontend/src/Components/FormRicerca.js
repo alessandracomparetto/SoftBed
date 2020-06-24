@@ -111,6 +111,18 @@ function FormRicerca() {
         }
     }
 
+    const controlloOspiti = () => {
+        const ospiti = $("#ospiti");
+
+        if (ospiti.val() < 1) {
+            ospiti.addClass("border border-danger");
+        }
+
+        else {
+            ospiti.removeClass("border border-danger");
+        }
+    }
+
     return (
         <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" onSubmit={controlloDestinazione}>
             <div className="form-row px-2 px-sm-3 py-2 m-3 w-100 minw-15em maxw-xl">
@@ -147,7 +159,7 @@ function FormRicerca() {
                 <div className="col-12 col-md-2 col-lg-1 mb-3">
                     <label htmlFor="Ospiti">Ospiti</label>
                     <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
-                           defaultValue={2} required/>
+                           defaultValue={2} onChange={controlloOspiti} required/>
                 </div>
 
                 <div className="col-md-2 col-lg-1 mb-3">
