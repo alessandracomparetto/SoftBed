@@ -9,6 +9,8 @@ import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import Login from "./Components/Login";
+import Registration from "./Components/Registration";
 
 function App() {
 
@@ -43,12 +45,20 @@ function App() {
             {/* La navbar è presente in ogni caso */}
             <Navbar />
 
+
             <Switch>
+                {/*NAVBAR*/}
+                <Router exact path='/login'>
+                    <Login/>
+                </Router>
+                <Router exact path='/registration'>
+                    <Registration/>
+                </Router>
+
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    <SchermataPrenotazioniOspite />
-                    {/*<Carousel />*/}
-                    {/*<FormRicerca />*/}
+                    <Carousel />
+                    <FormRicerca />
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}
