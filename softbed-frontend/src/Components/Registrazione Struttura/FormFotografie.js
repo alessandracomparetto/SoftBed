@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react'
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 

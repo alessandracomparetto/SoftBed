@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import './App.css';
 import Navbar from "./Components/Navbar";
@@ -50,12 +50,12 @@ function App() {
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}
-                <Route path="/search">
+                <Route exact path="/search">
                     <SchermataRisultati/>
                 </Route>
 
                 {/* Schermata della struttura */}
-                <Route path="/struttura/">
+                <Route exact path="/struttura/:id">
                     <SchermataStruttura struttura={struttura} />
                 </Route>
 

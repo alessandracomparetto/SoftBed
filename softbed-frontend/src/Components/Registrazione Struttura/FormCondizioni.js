@@ -1,6 +1,6 @@
 import React from "react";
 import $ from "jquery";
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -21,19 +21,15 @@ import ButtonForm from "./ButtonForm";
 function FormCondizioni(){
     function penaleCancellazioneHandler(event) {
         if (event.target.checked) {
-            $('#preavvisoDisdetta').removeAttr('disabled');
-            $('#preavvisoDisdetta').attr('required', 'required');
-            $('#prezzoCancellazione').removeAttr('disabled');
-            $('#prezzoCancellazione').attr('required', 'required')
+            $('#preavvisoDisdetta').removeAttr('disabled').attr('required', 'required');
+            $('#prezzoCancellazione').removeAttr('disabled').attr('required', 'required')
             $('#preavvisoTesto').removeClass('text-muted');
         }
     }
     function cancellazioneGratuitaHandler(event){
         if(event.target.checked){
-            $('#preavvisoDisdetta').attr('disabled', 'disabled');
-            $('#preavvisoDisdetta').removeAttr('required');
-            $('#prezzoCancellazione').attr('disabled', 'disabled');
-            $('#prezzoCancellazione').removeAttr('required');
+            $('#preavvisoDisdetta').attr('disabled', 'disabled').removeAttr('required');
+            $('#prezzoCancellazione').attr('disabled', 'disabled').removeAttr('required');
             $('#preavvisoTesto').addClass('text-muted');
         }
     }
@@ -83,7 +79,7 @@ function FormCondizioni(){
             <div className="progress mt-2">
                 <div className="progress-bar" style={{width: 80 + '%'}}>80%</div>
             </div>
-            <form className="mt-3 needs-validation" noValidate  onSubmit={verificaCheckBox}>
+            <form className="mt-3 needs-validation" noValidate onSubmit={verificaCheckBox} action="condizioni/fotografie">
                 <div className="border p-3 text-center">
                     <h6 className="mt-3 border-bottom border-primary text-left">Durata del soggiorno</h6>
                     <div className="mb-3 form-check-inline mr-3">
