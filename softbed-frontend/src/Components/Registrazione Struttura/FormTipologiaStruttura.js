@@ -32,7 +32,6 @@ function FormTipologiaStruttura(){
         }
     }
     function verificaScelta(event){
-        event.preventDefault();
         if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
             document.getElementById("feedback").classList.add("collapse");
         }

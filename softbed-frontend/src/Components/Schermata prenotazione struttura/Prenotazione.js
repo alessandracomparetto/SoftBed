@@ -15,22 +15,62 @@ return(
             </div>
         </div>
         <h5>Riepilogo:</h5>
-       <div className="mr-1">
+       <div className="mr-1 mt-1">
+           <h8 className="border-bottom">Ospiti</h8>
            <div className="row">
-               <p className="col"><strong>Check-in: </strong> {props.dataCheckIn} ore 15:00</p>
-               <p className="col"><strong>Check-out: </strong> {props.dataCheckOut} ore 15:00</p>
+               <div className="col">
+                   <strong>Check-in: </strong> <span>{props.dataCheckIn} ore 15:00</span>
+               </div>
+               <div className="col">
+                   <strong>Check-out: </strong>
+                   <span> {props.dataCheckOut} ore 15:00</span>
+               </div>
+           </div>
+               { props.tipologia=="B&B" && (
+                   <div className="mt-1">
+                       <h8 className="border-bottom">Camere</h8>
+                       <div className="row">
+                           { props.camere.map((camera, indice) => {
+                           if (camera.numero !== 0) {
+                               return (
+                                   <div key={indice} className="col-6">
+                                       <strong className="text-capitalize">{camera.tipologia}:</strong>
+                                       <span>{camera.nCamerePerTipologia}</span>
+                                   </div>
+                               );
+                           }
+
+                       })}
+                       </div>
+                   </div>
+               )
+           }
+           <h8 className="border-bottom">Altre informazioni</h8>
+           <div className="row mt-1">
+               <div className="col">
+                   <strong>Ospiti:</strong>
+                   <span> {props.nAdulti+props.nBambini} ({props.nAdulti} adulti e {props.nBambini} bambini) </span>
+               </div>
+               <div className="col">
+                   <strong>Esenti:</strong>
+                   <span> {props.nEsenti}</span>
+               </div>
            </div>
            <div className="row ">
-               <p className="col"><strong>Ospiti:</strong> {props.nAdulti+props.nBambini} ({props.nAdulti} adulti e {props.nBambini} bambini)</p>
-               <p className="col"><strong>Esenti:</strong> {props.nEsenti}</p>
+               <div className="col">
+                   <strong>Pagamento:</strong>
+                   <span> {props.metodoPagamento}</span>
+               </div>
+               <div className="col">
+                   <strong>Prezzo: </strong>
+                   <span>{props.costo} € </span>
+               </div>
            </div>
-           <div className="row ">
-               <p className="col"><strong>Stato:</strong> confermata il {props.dataConferma}</p>
-               <p className="col"><strong>Pagamento:</strong> {props.metodoPagamento}</p>
+           <div >
+               <strong>Stato:</strong>
+               <span> confermata il {props.dataConferma}</span>
            </div>
-           <p className="col-6 ml-n3"><strong>Prezzo: </strong>{props.costo} €</p>
        </div>
-        {/*Todo aggiungere informazioni sulla camera prenotata se è un hotel*/}
     </div>
 )
 }

@@ -14,6 +14,7 @@ function RegistrazioneStruttura () {
         <Router>
             <Switch>
                 <Route exact path="/registrazioneStruttura">
+                    {console.log("ciao")}
                     <FormTipologiaStruttura/>
                 </Route>
                 <Route path="*/fotografie">

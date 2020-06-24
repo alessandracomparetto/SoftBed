@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ButtonForm from "../ButtonForm";
-
+import $ from "jquery";
+let contatore = 0;
 function FormAmbienti() {
-    /* TODO: centrare checkbox
-    *
-    */
+
     const camera = "Camera ";
-    let contatore = 0;
+
+    const [camere,setCamere]=useState([]);
 
     function scriviCamera() {
         let lista = document.getElementById("listaCamere");
@@ -60,8 +60,14 @@ function FormAmbienti() {
                 p.appendChild(stringa)
                 lista.appendChild(p);
             }
-            //azzero tutto dopo l'aggiunta
+            //aggiorno lo stato
+            let tmp = [...camere];
+            for(let i=0; i<nCamere;i++){
+                tmp.push({nLettiMatrimoniali: $("#nlettiMatrimoniali").val(), nLettiSingoli: $("#nlettiSingoli").val() , prezzoCamere: $("#prezzo").val()});
+            }
+            setCamere(tmp);
 
+            //azzero tutto dopo l'aggiunta
             nlettiMatrimoniali.value = 0;
             nlettiSingoli.value = 0;
             nCamere.value = 1;
