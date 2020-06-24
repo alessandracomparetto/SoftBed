@@ -42,7 +42,7 @@ exports.makeDb = async function(config) {
     // del nostro middleware
     const connection = await getConnection();
     console.log('connessione creata: ');
-    console.log(connection);
+    // console.log(connection);
 
     return {
         query(sql, args) {

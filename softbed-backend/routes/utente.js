@@ -1,12 +1,41 @@
-var createError = require('http-errors');
-var express = require('express');
-var router = express.Router();
+const createError = require('http-errors');
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const router = express.Router();
 
 // carichiamo crypto, la configurazione e il middleware per il database
 const crypto = require('crypto');
 const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 
+router.use(bodyParser.urlencoded({
+    extended: true //per accedere a req.body
+}))
+
+//setto le opzioni per il middleware
+router.use(session({
+    name : "sid", //session id cookie, lo uso per leggere dalla richiesta
+    resave : false, //non risalvo nello store richieste non modificate
+    saveUninitialized : false, //non mi interessa salvare sessioni non inizializzate (nuova ma non modificata durante la richiesta) nello store
+    secret : "s0f7_B3D", //chiave simmetrica per proteggere il cookie
+    cookie : {
+        //per default è HttpOnly, non accessibile da client
+        maxAge : 1000 * 60 * 60 * 2,  //in millisecondi, 2 ore
+        sameSite : true, //accettiamo solo cookie che arrivano dallo stesso dominio
+        secure : false, //TODO da cambiare in true!
+    }
+}))
+
+//custom middleware
+/*router.use((req, res, utente, next) =>{
+    //prendo session_uid
+    const {session_uid}  = req.session;
+    if(session_uid){
+        //oggetto condiviso nel middleware
+        res.locals.user =
+    }
+})*/
 /* La rotta /users è vietata */
 router.get('/', function(req, res, next) {
     next(createError(403));
@@ -14,13 +43,22 @@ router.get('/', function(req, res, next) {
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', registrazione);
-
 /* Login Utente */
 router.post('/login', autenticazione);
-
 /* Dato Pagamento utente
 router.post('/pagamenti', aggiuntaDatoPagamento);*/
 
+/*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
+router.post('/logout', (req,res) => {
+    req.session.destroy( err =>{
+        if(err){
+            //non posso distruggere la sessione
+            console.log("Errore durante il logout")
+        }
+    })
+    //se tutto ok, distruggo il coockie della sessione
+    res.clearCookie(req.session.name);
+})
 
 async function registrazione(req, res, next) {
     // istanziamo il middleware
@@ -29,38 +67,30 @@ async function registrazione(req, res, next) {
     try {
         await withTransaction(db, async() => {
             // inserimento utente
-
             results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
         SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
                 req.body.nome,
                 req.body.cognome,
                 req.body.data_nascita,
                 req.body.gestore == 'gestore' ? '1' : '0',
-            ])
-                .catch(err => {
+            ]).catch(err => {
                     throw err;
                 });
-
             console.log('Inserimento tabella utente');
-            console.log(results);
-
-
             // recupero dello user id
             let id_utente = results.insertId;
-
-
             // generazione della password cifrata con SHA512
+            //TODO cripta password a frontend
             results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
                 .catch(err => {
                     throw err;
                 });
-
             let encpwd = results[0].encpwd;
             console.log('Password cifrata');
             console.log(results);
 
             results = await db.query('INSERT INTO `autenticazione` \
-        (refUtente, email, password) VALUES ?', [
+            (refUtente, email, password) VALUES ?', [
                 [
                     [
                         id_utente,
@@ -69,13 +99,12 @@ async function registrazione(req, res, next) {
                     ]
                 ]
             ])
-                .catch(err => {
-                    throw err;
-                });
-
-            console.log(results);
+            .catch(err => {
+                throw err;
+            });
             console.log(`Utente ${req.body.email} inserito!`);
-
+            req.session.session_uid = id_utente;
+            console.log(req.sessionID);
         });
     } catch (err) {
         console.log(err);
@@ -84,25 +113,20 @@ async function registrazione(req, res, next) {
     }
 }
 
-
-
 // middleware di autenticazione
 async function autenticazione(req, res, next) {
+    console.log(req.session);
     // istanziamo il middleware
     const db = await makeDb(config);
     let results = {};
     try {
-
         await withTransaction(db, async() => {
             // inserimento utente
             results = await db.query('SELECT * FROM `autenticazione`\
-            WHERE email = ?', [
-                req.body.email
-            ])
+            WHERE email = ?', [req.body.email])
                 .catch(err => {
                     throw err;
                 });
-
             if (results.affectedRows == 0) {
                 console.log('Utente non trovato!');
                 next(createError(404, 'Utente non trovato'));
@@ -116,33 +140,11 @@ async function autenticazione(req, res, next) {
                     console.log('Password errata!');
                     next(createError(403, 'Password errata'));
                 } else {
+                    let refUtente = results[0].refUtente;
+                    //creo id della sessione
+                    req.session.session_uid = refUtente;
                     console.log('Utente autenticato');
-                    console.log(results);
-                    // recupero dello user id
-                    /*let id_utente = results[0].id_utente;
-
-                    // recupero informazioni anagrafiche
-                    results = await db.query('SELECT `utente`.nome, `utente`.genere,\
-                        DATE_FORMAT(`utente`.data_nascita,"%d/%m/%Y") AS data_nascita, `indirizzo`.via, `indirizzo`.numero,\
-                        `indirizzo`.localita, `indirizzo`.cap,`indirizzo`.telefono\
-                        FROM `utente`, `indirizzo` \
-                        WHERE `utente`.id = ? AND `indirizzo`.id_utente = ?', [
-                        id_utente,
-                        id_utente
-                    ])
-                        .catch(err => {
-                            throw err;
-                        });
-
-                    console.log('Dati utente:');
-                    console.log(results[0]);
-                    res.render('profile', {
-                        title: 'Profilo Utente',
-                        profile: {
-                            user: req.body.email,
-                            data: results[0]
-                        }
-                    });*/
+                    console.log(req.get('cookie'))
                 }
             }
         });
@@ -217,3 +219,8 @@ async function aggiuntaDatoPagamento(req, res, next) {
 
 
 module.exports = router;
+
+// recupero dello user id
+
+
+
