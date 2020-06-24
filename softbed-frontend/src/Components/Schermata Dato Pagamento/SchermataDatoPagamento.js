@@ -23,12 +23,14 @@ function SchermataDatoPagamento(props){
         setDatiPagamento(tmp);
     }
 
-  /*  const aggiungiDatoPagamento = (dato) => {
+  const aggiungiDatoPagamento = (dato) => {
         // Aggiungere alla lista
+        console.log(dato);
         let tmp = [...listaDatiPagamento];
         tmp.push(dato);
         setDatiPagamento(tmp);
-    }*/
+        console.log(tmp);
+    }
 
     return(
         <div className="container" >
@@ -43,7 +45,7 @@ function SchermataDatoPagamento(props){
                 }
             </ul>
 
-            <FormMetodoPagamento/>
+            <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
         </div>
     )
 }
