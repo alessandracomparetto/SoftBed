@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 
 
 (function() {
@@ -37,7 +37,7 @@ function FormCaratteristicheB(){
             <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
         </div>
         <h4>Caratteristiche B&B</h4>
-        <form className="w50 justify-content-center mt-3 needs-validation" noValidate>
+        <form className="w50 justify-content-center mt-3 needs-validation" action="caratteristicheB/condizioni" noValidate>
           <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
           <div className="form-row-group text-center offset-1">
               <div className="form-check-inline col-12  col-sm-5  col-lg-3">
