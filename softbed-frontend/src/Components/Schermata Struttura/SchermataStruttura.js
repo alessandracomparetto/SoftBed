@@ -14,7 +14,7 @@ function SchermataStruttura(props) {
 
     // Gestione delle date
     const oggi = new Date();
-    const minDataA = convertiData(oggi, 2.5);
+    const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
 
     const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2);

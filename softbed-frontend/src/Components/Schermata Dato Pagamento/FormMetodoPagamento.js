@@ -33,21 +33,22 @@ function FormMetodoPagamento(props) {
             });
         }, false);
     })();
-/*
-    const [dato, setDato] = useState( {nomeIntestatario:"", cognomeIntestatario:"", numeroCarta:"", cvv:"", dataScadenza:""});
 
-    function changeText(event, field){
-        this.setDato{[field]:event.target.value};
-    }
-*/
+    const [dato, setDato] = useState( {nomeIntestatario:"ciao", cognomeIntestatario:"cioa", numeroCarta:"1234123412341234", cvv:"123", dataScadenza:"12-03-20"});
+
+ /*   function setNome(event){
+        setDato({nomeIntestatario:event.target.value});
+        console.log(dato);
+    }*/
+
+    props.aggiungiDatoPagamento(dato);
     return (
-        <form className="needs-validation" noValidate>
+        <form className="needs-validation" noValidate onSubmit={() => props.aggiungiDatoPagamento(dato)}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
                 <div className="form-group col-12 col-md-6 col-lg-3 ">
                     <label htmlFor="nome">Nome Intestatario</label>
-                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+"
-                           placeholder="Nome" required/>
+                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Nome" required/>
                     <div className="invalid-feedback">
                         Inserire nome
                     </div>
@@ -55,7 +56,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-12 col-md-6 col-lg-3 ">
                     <label htmlFor="cognome">Cognome Intestatario</label>
-                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+\s[A-z]+" placeholder="Cognome" required/>
+                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Cognome" required/>
                     <div className="invalid-feedback">
                         Inserire cognome
                     </div>
@@ -85,7 +86,7 @@ function FormMetodoPagamento(props) {
                     </div>
                 </div>
                 <div className=" col-12 col-md-2 btn-group d-flex justify-content-around">
-                    <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" style={{width: 150 + 'px'}} onClick={() => props.aggiungiDatoPagamento(dato)}>Aggiungi carta</button>
+                    <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" style={{width: 150 + 'px'}} >Aggiungi carta</button>
                 </div>
             </div>
 
