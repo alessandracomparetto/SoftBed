@@ -11,7 +11,8 @@ function FormRicerca() {
      */
 
     // Gestione delle date
-    const oggi = new Date();
+    const oggi = new Date(convertiData(new Date())); // Restituisce la data odierna con orario 00:00:00
+
     const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
 
@@ -29,11 +30,22 @@ function FormRicerca() {
     // Gestione dei parametri della GET
     const query = new URLSearchParams(useLocation().search);
 
+
     useEffect(() => {
         const destinazione = query.get("destinazione");
         const arrivo = query.get("arrivo");
         const partenza = query.get("partenza");
         const ospiti = query.get("ospiti");
+        const bb = query.get("b&b");
+        const cv = query.get("casa vacanze");
+
+        console.log(bb, cv);
+
+        if (!bb || bb !== "true")
+            $("#b\\&b").prop("checked", false);
+
+        if (!cv || cv !== "true")
+            $("#casaVacanze").prop("checked", false);
 
         if (destinazione)
             $("#destinazione").val(destinazione);
@@ -111,16 +123,77 @@ function FormRicerca() {
         }
     }
 
+    const controlloOspiti = () => {
+        const ospiti = $("#ospiti");
+
+        if (ospiti.val() < 1) {
+            ospiti.addClass("border border-danger");
+        }
+
+        else {
+            ospiti.removeClass("border border-danger");
+        }
+    }
+
+    const controlloTipologia = () => {
+        const selezionati = $("#checkboxes :checkbox:checked").length;
+        const tipologiaAiuto = $("#tipologiaAiuto");
+        const bb = $("#b\\&b");
+        const cv = $("#cv");
+
+        if (selezionati === 0) {
+            bb.addClass("outline-error");
+            cv.addClass("outline-error");
+            tipologiaAiuto.removeClass("d-none");
+            return true;
+        }
+
+        else {
+            bb.removeClass("outline-error");
+            cv.removeClass("outline-error");
+            tipologiaAiuto.addClass("d-none");
+            return false;
+        }
+    }
+
+    const controlloForm = (event) => {
+        // Se l'utente non ha modificato la destinazione essa non viene evidenziata automaticamente
+        controlloDestinazione();
+
+        // Controllo sulla selezione di almeno una delle checkbox tipologia
+        if (controlloTipologia()) {
+            event.preventDefault();
+        }
+    }
+
     return (
-        <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" onSubmit={controlloDestinazione}>
+        <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" onSubmit={controlloForm}>
             <div className="form-row px-2 px-sm-3 py-2 m-3 w-100 minw-15em maxw-xl">
-                <div className="col-12 col-lg-4 mb-3">
+                <div className="col-12 col-lg-9 mb-3">
                     <label htmlFor="destinazione">Destinazione</label>
                     <input name="destinazione" id="destinazione" type="text" className="form-control"
                            placeholder="Inserisci la tua destinazione..." onChange={controlloDestinazione} required/>
                 </div>
 
-                <div className="col-6 col-md-4 col-lg-3 mb-3">
+                <div id="checkboxes" className="col-12 col-lg-3 mb-2 mt-auto">
+                    <small id="tipologiaAiuto" className="d-none text-danger">
+                        Seleziona almeno una tipologia di struttura.
+                    </small>
+
+                    <div className="form-check form-check-inline w-100">
+                        <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
+                               value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                        <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
+                    </div>
+
+                    <div className="form-check form-check-inline w-100">
+                        <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
+                               value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                        <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                    </div>
+                </div>
+
+                <div className="col-6 col-md-4 mb-3">
                     <label htmlFor="arrivo">Arrivo</label>
                     <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
                            defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
@@ -134,7 +207,7 @@ function FormRicerca() {
                     </small>
                 </div>
 
-                <div className="col-6 col-md-4 col-lg-3 mb-3">
+                <div className="col-6 col-md-4 mb-3">
                     <label htmlFor="partenza">Partenza</label>
                     <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
                            max={maxData} defaultValue={minDataP} onChange={controlloDate} required/>
@@ -144,13 +217,13 @@ function FormRicerca() {
                     </small>
                 </div>
 
-                <div className="col-12 col-md-2 col-lg-1 mb-3">
+                <div className="col-12 col-md-2 mb-3">
                     <label htmlFor="Ospiti">Ospiti</label>
                     <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
-                           defaultValue={2} required/>
+                           defaultValue={2} onChange={controlloOspiti} required/>
                 </div>
 
-                <div className="col-md-2 col-lg-1 mb-3">
+                <div className="col-md-2 mb-3">
                     <label className="d-none d-md-inline-block">&nbsp;</label>
                     <button id="cerca" type="submit" className="btn btn-primary btn-block">Cerca</button>
                 </div>

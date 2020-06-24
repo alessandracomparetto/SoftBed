@@ -48,6 +48,10 @@ body {
     min-width: 15em;
 }
 
+.outline-error {
+    outline: 2px solid #dc3545;
+}
+
 .page-item {
     width: 43px;
     text-align: center;

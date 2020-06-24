@@ -187,7 +187,7 @@ function SchermataStruttura(props) {
 
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label" htmlFor="singole">Singole</label>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-3">
                                         <input name="singole" type="number" className="form-control" id="singole"
                                                aria-describedby="Numero camere singole" min={0} max={10}
                                                defaultValue={0} onChange={controlloCamere}/>
@@ -196,7 +196,7 @@ function SchermataStruttura(props) {
                                 </div>
                                 <div className="form-group row">
                                     <label className="col-sm-3 col-form-label" htmlFor="doppie">Doppie</label>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-3">
                                         <input name="doppie" type="number" className="form-control" id="doppie"
                                                aria-describedby="Numero camere doppie" min={0} max={10}
                                                defaultValue={1} onChange={controlloCamere}/>
@@ -263,7 +263,7 @@ function SchermataStruttura(props) {
                     </div>
                     <div>
                         <h6>Servizi</h6>
-                        <div className="row">
+                        <div className="row mx-auto">
                             {
                                 props.struttura.servizi && props.struttura.servizi.map((servizio) => {
                                     return (
