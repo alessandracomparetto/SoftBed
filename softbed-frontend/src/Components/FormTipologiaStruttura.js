@@ -23,7 +23,9 @@ import $ from "jquery"
 
 function FormTipologiaStruttura(){
     return(
-        <div className="container pt-3 col-sm-10 col-md-6">
+
+        <div className="container pt-3 ">
+            {/* col-sm-10 col-md-6 */ }
             <div className="progress">
                 <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
             </div>
@@ -35,18 +37,18 @@ function FormTipologiaStruttura(){
                         <div className="custom-control custom-radio custom-control-inline mt-2">
                             <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"
                                    required/>
-                                <label className="custom-control-label" htmlFor="B&B">B&B</label>
+                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div>
                         <i className="fa fa-home fa-5x pl-4" aria-hidden="true"></i> <br></br>
                         <div className="custom-control custom-radio custom-control-inline mt-2">
                             <input type="radio" className="custom-control-input" id="cv" name="tipologia"
-                                   value="cv" required/>
-                                <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
-                                <div className="invalid-feedback ml-2">
-                                    Inserire la tipologia di struttura
-                                </div>
+                                   value="cv"  required/>
+                            <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
+                            <div className="invalid-feedback ml-2">
+                                Inserire la tipologia di struttura
+                            </div>
                         </div>
                     </div>
                 </div>
