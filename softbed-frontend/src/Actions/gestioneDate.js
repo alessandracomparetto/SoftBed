@@ -31,4 +31,4 @@ function convertiData (data, giorni, mesi, anni) {
     return anno + "-" + mese + "-" + giorno;
 }
 
-export { convertiData };
+export { GIORNO, convertiData };
