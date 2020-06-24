@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import $ from 'jquery';
 import { convertiData } from "../Actions/gestioneDate";
+import { useLocation } from "react-router-dom";
 
-function FormRicerca(props) {
+function FormRicerca() {
+
     /* TODO: BACKEND - OPZIONALE
      * Lista delle località (regioni, province e comuni) con almeno una struttura per suggerire
      * le opzioni disponibili mentre si digita la destinazione
@@ -23,34 +25,27 @@ function FormRicerca(props) {
         console.log(nuovaDataConvertita);
         setMinDataP(nuovaDataConvertita);
     }
+    
+    const query = new URLSearchParams(useLocation().search);
 
-    // Gestione della GET
+    // Gestione dei parametri della GET
     useEffect(() => {
-            const currentURL = window.location.href;
-            const basePath = window.location.protocol + "//" + window.location.host + "/";
+        const destinazione = query.get("destinazione");
+        const arrivo = query.get("arrivo");
+        const partenza = query.get("partenza");
+        const ospiti = query.get("ospiti");
 
-            if (currentURL !== basePath) {
-                fetch(currentURL)
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.destinazione) {
-                            $('#destinazione').val(res.destinazione);
+        if (destinazione)
+            $("#destinazione").val(destinazione);
 
-                            if (props.setDestinazione)
-                                props.setDestinazione(res.destinazione);
-                        }
+        if (arrivo)
+            $("#arrivo").val(arrivo);
 
-                        if (res.arrivo)
-                            $('#arrivo').val(res.arrivo);
+        if (partenza)
+            $("#partenza").val(partenza);
 
-                        if (res.partenza)
-                            $('#partenza').val(res.partenza);
-
-                        if (res.ospiti)
-                            $('#ospiti').val(res.ospiti);
-                    })
-                    .catch(err => err);
-            }
+        if (ospiti)
+            $("#ospiti").val(ospiti);
 
     }, []);
 

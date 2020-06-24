@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import $ from "jquery";
+import { useParams } from "react-router-dom";
+
 import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
-import $ from "jquery";
 import ImmaginiStruttura from "./ImmaginiStruttura";
 import { convertiData } from "../../Actions/gestioneDate";
 
 
 function SchermataStruttura(props) {
+    let { id } = useParams();
 
     const oggi = new Date();
     const minDataA = convertiData(oggi, 2.5);
@@ -45,7 +48,7 @@ function SchermataStruttura(props) {
             </div>
 
             {/* Immagini */}
-            <ImmaginiStruttura struttura={props.struttura}/>
+            <ImmaginiStruttura struttura={props.struttura} idStruttura={id}/>
 
             <div className="d-lg-flex flex-lg-row-reverse">
                 {/* Form dati di soggiorno */}

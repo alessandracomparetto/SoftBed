@@ -26,7 +26,7 @@ function ImmaginiStruttura(props) {
             <div className="col-12 col-md-7 pr-md-0">
                 <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
                     <img className="img h-100 m-auto img-cover img-fluid"
-                         src={`/uploads/${props.struttura.id}/1.jpg`} alt={props.struttura.nome} />
+                         src={`/uploads/${props.idStruttura}/1.jpg`} alt={`${props.struttura.nome}`} />
                 </figure>
             </div>
 
@@ -36,7 +36,7 @@ function ImmaginiStruttura(props) {
                     if (indice === 0 || indice > 4) {
                         return
                     }
-                    return <ImmagineSecondaria key={indice} id={props.struttura.id} nomeStruttura={props.struttura.nome}
+                    return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome}
                                                nomeImmagine={immagine}/>
                 })}
             </div>
