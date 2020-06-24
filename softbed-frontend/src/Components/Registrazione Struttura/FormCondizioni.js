@@ -21,19 +21,15 @@ import ButtonForm from "../ButtonForm";
 function FormCondizioni(){
     function penaleCancellazioneHandler(event) {
         if (event.target.checked) {
-            $('#preavvisoDisdetta').removeAttr('disabled');
-            $('#preavvisoDisdetta').attr('required', 'required');
-            $('#prezzoCancellazione').removeAttr('disabled');
-            $('#prezzoCancellazione').attr('required', 'required')
+            $('#preavvisoDisdetta').removeAttr('disabled').attr('required', 'required');
+            $('#prezzoCancellazione').removeAttr('disabled').attr('required', 'required')
             $('#preavvisoTesto').removeClass('text-muted');
         }
     }
     function cancellazioneGratuitaHandler(event){
         if(event.target.checked){
-            $('#preavvisoDisdetta').attr('disabled', 'disabled');
-            $('#preavvisoDisdetta').removeAttr('required');
-            $('#prezzoCancellazione').attr('disabled', 'disabled');
-            $('#prezzoCancellazione').removeAttr('required');
+            $('#preavvisoDisdetta').attr('disabled', 'disabled').removeAttr('required');
+            $('#prezzoCancellazione').attr('disabled', 'disabled').removeAttr('required');
             $('#preavvisoTesto').addClass('text-muted');
         }
     }

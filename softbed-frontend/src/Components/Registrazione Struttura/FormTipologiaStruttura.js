@@ -31,35 +31,46 @@ function FormTipologiaStruttura(){
             setURL("/registrazioneStruttura/camere");
         }
     }
+    function verificaScelta(event){
+        event.preventDefault();
+        if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
+            document.getElementById("feedback").classList.add("collapse");
+        }
+        else{
+            document.getElementById("feedback").classList.remove("collapse");
+        }
+    }
     return(
-        <div className="container pt-3 col-sm-10 col-md-6">
+        <div className="container pt-3 ">
             <div className="progress">
                 <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
             </div>
-            <form className="container needs-validation p-3" onChange={verso} action={URL} noValidate>
+            <form className="container needs-validation p-3" onChange={verso} onSubmit={verificaScelta} action={URL} noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
-                    <div>
-                        <i className="fa fa-bed fa-5x pr-4" aria-hidden="true"></i><br></br>
+                    <i className="fa fa-bed fa-10x" aria-hidden="true"></i>
+                    <i className="fa fa-home fa-10x " aria-hidden="true"></i>
+                </div>
+                <div className="form-row ">
+                    <div className="col-6 text-center">
+                        <div className="custom-control custom-radio custom-control-inline mt-2">
+                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" required/>
+                            <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
+                        </div>
+                    </div>
+                    <div className="col-6 text-center">
                         <div className="custom-control custom-radio custom-control-inline mt-2">
                             <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"required/>
                             <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
-                    <div>
-                        <i className="fa fa-home fa-5x pl-4" aria-hidden="true"></i> <br></br>
-                        <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" required/>
-                                <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
-                                <div className="invalid-feedback ml-2">
-                                    Inserire la tipologia di struttura
-                                </div>
-                        </div>
+                    <div id="feedback" className="col-12 text-danger text-center collapse">
+                        Inserire la tipologia di struttura
                     </div>
                 </div>
-                <ButtonForm/>
-            </form>
-        </div>
+            <ButtonForm/>
+        </form>
+    </div>
     )
 }
 export default FormTipologiaStruttura
