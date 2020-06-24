@@ -10,6 +10,7 @@ function FormRicerca() {
      * le opzioni disponibili mentre si digita la destinazione
      */
 
+    // Gestione delle date
     const oggi = new Date();
     const minDataA = convertiData(oggi, 2.5);
     const maxData = convertiData(oggi, 0, 0, 1);
@@ -25,10 +26,10 @@ function FormRicerca() {
         console.log(nuovaDataConvertita);
         setMinDataP(nuovaDataConvertita);
     }
-    
-    const query = new URLSearchParams(useLocation().search);
 
     // Gestione dei parametri della GET
+    const query = new URLSearchParams(useLocation().search);
+
     useEffect(() => {
         const destinazione = query.get("destinazione");
         const arrivo = query.get("arrivo");
