@@ -74,8 +74,8 @@ async function registrazione(req, res, next) {
                 req.body.data_nascita,
                 req.body.gestore == 'gestore' ? '1' : '0',
             ]).catch(err => {
-                    throw err;
-                });
+                throw err;
+            });
             console.log('Inserimento tabella utente');
             // recupero dello user id
             let id_utente = results.insertId;
@@ -99,12 +99,13 @@ async function registrazione(req, res, next) {
                     ]
                 ]
             ])
-            .catch(err => {
-                throw err;
-            });
+                .catch(err => {
+                    throw err;
+                });
             console.log(`Utente ${req.body.email} inserito!`);
             req.session.session_uid = id_utente;
-            console.log(req.sessionID);
+            console.log(req.session)
+            res.send();
         });
     } catch (err) {
         console.log(err);
@@ -127,7 +128,7 @@ async function autenticazione(req, res, next) {
                 .catch(err => {
                     throw err;
                 });
-            if (results.affectedRows == 0) {
+            if (!results[0]) {
                 console.log('Utente non trovato!');
                 next(createError(404, 'Utente non trovato'));
             } else {
@@ -144,7 +145,8 @@ async function autenticazione(req, res, next) {
                     //creo id della sessione
                     req.session.session_uid = refUtente;
                     console.log('Utente autenticato');
-                    console.log(req.get('cookie'))
+                    console.log(req.sessionID);
+                    res.send();
                 }
             }
         });
