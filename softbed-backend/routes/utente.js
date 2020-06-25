@@ -9,9 +9,6 @@ const { Utente } = require('../sequelize/middleware');
 
 const router = express.Router();
 
-//const { config } = require('../db/config');
-//const { makeDb, withTransaction } = require('../db/dbmiddleware');
-
 router.use(bodyParser.urlencoded({
     extended: true //per accedere a req.body
 }))

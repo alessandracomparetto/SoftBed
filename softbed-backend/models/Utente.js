@@ -17,7 +17,7 @@ module.exports = (sequelize, type) => {
         },
         dataNascita: type.DATEONLY,
         codiceFiscale: type.STRING,
-        refComuneResidenza: type.INTEGER,
+        refIndirizzo: type.INTEGER,
         refComuneNascita: type.INTEGER,
         telefono: type.STRING,
         gestore: type.INTEGER,

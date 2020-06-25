@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ButtonForm from "../ButtonForm";
+import axios from 'axios';
 
 
 (function() {
@@ -20,21 +21,40 @@ import ButtonForm from "../ButtonForm";
 })();
 
 
-function FormTipologiaStruttura(){
-    const [URL, setURL] = useState("");
+function FormTipologiaStruttura(props) {
 
-    function verso(){
+
+    function aggiornaTipologia(){
         if(document.getElementById("cv").checked === true){
-            setURL("/registrazioneStruttura/ambienti");
+            props.aggiornaTipologia(document.getElementById("cv").value)
         }else{
-            setURL("/registrazioneStruttura/camere");
+            props.aggiornaTipologia(document.getElementById("B&B").value)
         }
     }
+
     function verificaScelta(event){
+        event.preventDefault();
         if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
             document.getElementById("feedback").classList.add("collapse");
+            let tip;
+            if(document.getElementById("cv").checked === true){
+                tip = {tipologia : document.getElementById("cv").value}
+            }else{
+               tip = {tipologia : document.getElementById("B&B").value}
+            }
+            try{
+                axios.post("/struttura/tipologia", tip)
+                    .then( res => console.log(res.status))
+            } catch (err) {
+                if (err.response.status === 400) {
+                    console.log('There was a problem with the server');
+                } else {
+                    console.log(err.response.data.msg);
+                }
+            }
         }
         else{
+            event.preventDefault();
             document.getElementById("feedback").classList.remove("collapse");
         }
     }
@@ -43,7 +63,7 @@ function FormTipologiaStruttura(){
             <div className="progress">
                 <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
             </div>
-            <form className="container needs-validation p-3" onChange={verso} onSubmit={verificaScelta} action={URL} noValidate>
+            <form className="container needs-validation p-3" onSubmit={verificaScelta} onChange={aggiornaTipologia} action="/registrazioneStruttura/informazioniGenerali" noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
                     <i className="fa fa-bed fa-10x" aria-hidden="true"></i>

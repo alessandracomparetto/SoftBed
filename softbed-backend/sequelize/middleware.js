@@ -1,6 +1,7 @@
 
 const Sequelize = require("sequelize");
-const UtenteModel = require('../models/Utente')
+const UtenteModel = require('../models/Utente');
+const StrutturaModel = require ('../models/Struttura');
 
 const sequelize = new Sequelize('softbed', 'softAdmin', 'softEngineers', {
     host: 'localhost',
@@ -16,6 +17,7 @@ const sequelize = new Sequelize('softbed', 'softAdmin', 'softEngineers', {
 });
 
 const Utente = UtenteModel(sequelize, Sequelize);
+const Struttura = StrutturaModel(sequelize, Sequelize);
 
 /*TODO riferimenti delle chiavi esterne */
 
@@ -25,5 +27,6 @@ sequelize.sync(/*{ force: true }*/)
     })
 
 module.exports = {
-    Utente
+    Utente,
+    Struttura
 }
