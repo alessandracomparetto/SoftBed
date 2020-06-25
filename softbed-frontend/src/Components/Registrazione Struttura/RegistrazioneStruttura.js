@@ -15,7 +15,6 @@ function RegistrazioneStruttura () {
     const [URL, setURL] = useState(""); */
     const [step, setStep]= useState(1);
     const [info, setInfo]= useState({});
-
     function printObject(o) {
         var out = '';
         for (var p in o) {
@@ -44,17 +43,15 @@ function RegistrazioneStruttura () {
         let currentStep=step-1;
         setStep(currentStep);
     }
-    function previousButton(){
+    {/*function previousButton(){
         let currentStep=step;
-        console.log(currentStep);
-        if(currentStep!=1){
+        {/*if(currentStep!=1){
             return(
                 <button className="btn btn-secondary" type="button" onClick={_prev}>Indietro</button>
             )
         }
-        return null;
-    }
-    function nextButton(){
+        return null; */}
+    {/*function nextButton(){
         let currentStep=step;
         console.log(currentStep);
         if(currentStep<5){
@@ -63,28 +60,26 @@ function RegistrazioneStruttura () {
             )
         }
         return null;
-    }
+    } */}
     return(
         <React.Fragment>
             <form onSubmit={handleSubmit}>
-                <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info}/>
-                 <FormStruttura currentStep={step} handleChange={handleChange} dati={info}/>
+                <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+                 <FormStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 {console.log("tipologia "+info.tipologia)}
                  {
                     (info.tipologia==="cv")?
-                        <FormAmbienti currentStep={step} handleChange={handleChange} dati={info}/>
+                        <FormAmbienti currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                         :
-                        <FormCamere currentStep={step} handleChange={handleChange} dati={info}/>
+                        <FormCamere currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 }
                 {
                     (info.tipologia==="cv")?
-                        <FormCaratteristicheC currentStep={step} handleChange={handleChange} dati={info}/>
+                        <FormCaratteristicheC currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                         :
-                        <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info}/>
+                        <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 }
-                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info}/>
-                {previousButton()}
-                {nextButton()}
+                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             </form>
         </React.Fragment>
 
@@ -107,8 +102,6 @@ function RegistrazioneStruttura () {
                 <Route path="*!/ambienti">
                     <FormAmbienti/>
                 </Route>*/
-
-
     )
 }
 

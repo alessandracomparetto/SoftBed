@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ButtonForm from "../ButtonForm";
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 
 (function() {
@@ -23,20 +24,12 @@ import axios from 'axios';
 
 function FormTipologiaStruttura(props) {
 
-    console.log(props.currentStep);
-    function aggiornaTipologia(){
-        if(document.getElementById("cv").checked === true){
-            props.aggiornaTipologia(document.getElementById("cv").value)
-        }else{
-            props.aggiornaTipologia(document.getElementById("B&B").value)
-        }
-    }
-
-    function verificaScelta(event){
+    function vaiAvanti(event){
         event.preventDefault();
         if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
             document.getElementById("feedback").classList.add("collapse");
-            let tip;
+            props.go();
+           /* let tip;
             if(document.getElementById("cv").checked === true){
                 tip = {tipologia : document.getElementById("cv").value}
             }else{
@@ -51,7 +44,7 @@ function FormTipologiaStruttura(props) {
                 } else {
                     console.log(err.response.data.msg);
                 }
-            }
+            } */
         }
         else{
             event.preventDefault();
@@ -75,19 +68,23 @@ function FormTipologiaStruttura(props) {
                 <div className="form-row ">
                     <div className="col-6 text-center">
                         <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" required/>
+                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" defaultChecked={props.dati.tipologia === "cv"} required/>
                             <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
                         </div>
                     </div>
                     <div className="col-6 text-center">
                         <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B"required/>
+                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B" defaultChecked={props.dati.tipologia === "B&B"}/>
                             <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div id="feedback" className="col-12 text-danger text-center collapse">
                         Inserire la tipologia di struttura
                     </div>
+                </div>
+                <div className="container-fluid p-0 mt-2 mb-5 d-flex justify-content-between">
+                    {/* <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>*/}
+                    <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
                 </div>
         </form>
     </div>

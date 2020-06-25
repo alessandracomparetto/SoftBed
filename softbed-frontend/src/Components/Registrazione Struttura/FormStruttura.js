@@ -43,7 +43,6 @@ function FormStruttura (props) {
         }
 
     }
-    console.log(props.address+props.cap);
     let province = null;
     function addressEventHandler(event) {
         if (event.target.value != '') {
@@ -102,20 +101,23 @@ function FormStruttura (props) {
             }
         }
    }
-    function verificaCap(event){
+    function vaiAvanti(event){
+        props.go();
         let cap=parseInt(event.target.value);
           if(cap>=10 && cap<=98168){
               document.getElementById("feedback").classList.add("collapse");
               document.getElementById("cap").classList.remove("border-danger");
           }
           else{
-              event.preventDefault();
               document.getElementById("cap").classList.add("border-danger");
               document.getElementById("feedback").classList.add("invalid");
-
+              event.preventDefault();
           }
    }
 
+   function vaiIndietro(event){
+            props.goBack();
+    }
     if(props.currentStep != 2){
         return null;
     }
@@ -127,7 +129,7 @@ function FormStruttura (props) {
             <div className="container pt-3 needs-validation" onChange={props.handleChange}>
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
-                    <input id="name" name="name" type="text" className="form-control" maxLength="60" value={props.name}  />
+                    <input id="name" name="name" type="text" className="form-control" maxLength="60" value={props.dati.name}  />
                     <div className="invalid-feedback">
                         Inserisci il nome della struttura
                     </div>
@@ -136,7 +138,7 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} >
+                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} value={props.dati.region} >
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -191,12 +193,12 @@ function FormStruttura (props) {
                     <div className="col-12 col-lg-6">
                         <label htmlFor="address">Via/Piazza</label>
                         <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
-                               maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} value={props.address} required/>
+                               maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} value={props.dati.address} required/>
                     </div>
                     <div className="col-5 col-md-4 col-lg-3">
                         <label htmlFor="addressnum">N.</label>
                         <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
-                               maxLength="4" value={props.num} required/>
+                               maxLength="4" value={props.dati.addressnum} required/>
                         <div className="invalid-feedback">
                             1 - 9999
                         </div>
@@ -204,10 +206,12 @@ function FormStruttura (props) {
                     <div className="col-4 col-md-4 col-lg-3">
                         <label htmlFor="cap">CAP.</label>
                         <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
-                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  value={props.cap} required/>
+                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  value={props.dati.cap} required/>
                     </div>
                     <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
                 </div>
+                 <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+                <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
             </div>
         </div>
         );
