@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from "jquery";
 import axios from "axios";
-
+const crypto = require('crypto');
 
 (function() {
     'use strict';
@@ -24,11 +24,20 @@ import axios from "axios";
 function Login(){
     function onSubmit(e){
         e.preventDefault();
+        let email =  document.getElementById("email").value;
+        let pass = document.getElementById("pass").value;
+
+        let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
+        passhash.update(pass); // cifriamo la password
+        let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
+
         const utenteLogin= {
-            email: document.getElementById("email").value ,
-            pass: document.getElementById("pass").value ,
+            email: email,
+            pass: encpass,
         }
+
         console.log(utenteLogin);
+
         try{
             axios.post("/utente/login", utenteLogin);
         }
@@ -71,7 +80,7 @@ function Login(){
                                 <div className="invalid-feedback">Inserire password</div>
                             </div>
                         </div>
-                        <button id="ok" type="submit" className="btn btn-primary btn btn-warning text-dark mt-5 col-12 col-sm-6">Accedi</button>
+                        <button id="ok" type="submit" className="btn btn-primary btn btn-warning rounded-pill text-dark mt-5 col-12 col-sm-6">Accedi</button>
                     </form>
 
                 </div>
