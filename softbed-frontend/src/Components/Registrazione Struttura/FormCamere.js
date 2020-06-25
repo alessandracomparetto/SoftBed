@@ -7,7 +7,7 @@ import ButtonForm from "../ButtonForm";
 
 
 let contatore = 0;
-function FormCamere(){
+function FormCamere(props){
     const [camere, setCamere] = useState([]);
     const camera = "Camera ";
     //let contatore = 0; //indica il numero di camere inserite
@@ -124,8 +124,11 @@ function FormCamere(){
     }
 
     //****************************************************RETURN
+    if(props.currentStep != 3){
+        return null;
+    }
     return(
-        <form className="container col-12 col-md-8 needs-validation" onSubmit={verificaContatore} action={"camere/caratteristicheB"} noValidate>
+        <form className="container col-12 col-md-8 needs-validation" onSubmit={verificaContatore} oChange={props.handleChange} action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
                 <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
@@ -184,9 +187,6 @@ function FormCamere(){
                     Aggiungi camera
                 </button>
             </div>
-
-            <ButtonForm/>
-
         </form>
 
     )

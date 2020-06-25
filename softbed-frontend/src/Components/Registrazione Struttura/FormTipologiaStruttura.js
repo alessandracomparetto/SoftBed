@@ -23,7 +23,7 @@ import axios from 'axios';
 
 function FormTipologiaStruttura(props) {
 
-
+    console.log(props.currentStep);
     function aggiornaTipologia(){
         if(document.getElementById("cv").checked === true){
             props.aggiornaTipologia(document.getElementById("cv").value)
@@ -58,12 +58,15 @@ function FormTipologiaStruttura(props) {
             document.getElementById("feedback").classList.remove("collapse");
         }
     }
-    return(
+    if(props.currentStep != 1){
+        return null;
+    }
+    else return(
         <div className="container pt-3 ">
             <div className="progress">
                 <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
             </div>
-            <form className="container needs-validation p-3" onSubmit={verificaScelta} onChange={aggiornaTipologia} action="/registrazioneStruttura/informazioniGenerali" noValidate>
+            <form className="container needs-validation p-3" onChange={props.handleChange} noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
                     <i className="fa fa-bed fa-10x" aria-hidden="true"></i>
@@ -86,7 +89,6 @@ function FormTipologiaStruttura(props) {
                         Inserire la tipologia di struttura
                     </div>
                 </div>
-            <ButtonForm/>
         </form>
     </div>
     )

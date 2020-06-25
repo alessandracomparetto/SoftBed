@@ -9,51 +9,106 @@ import FormCondizioni from "./FormCondizioni";
 import FormFotografie from "./FormFotografie";
 import FormStruttura from "./FormStruttura";
 
-let datiC =[];
-let datiB =[];
 
 function RegistrazioneStruttura () {
-    const [tipologia, setTipologia] = useState("");
-    const [URL, setURL] = useState("");
+    /* const [tipologia, setTipologia] = useState("");
+    const [URL, setURL] = useState(""); */
+    const [step, setStep]= useState(1);
+    const [info, setInfo]= useState({});
 
-
-
-    const aggiornaTipologia = (tipologiaStruttura)=>{
-        setTipologia(tipologiaStruttura);
+    function printObject(o) {
+        var out = '';
+        for (var p in o) {
+            out += p + ': ' + o[p] + '\n';
+        } console.log(out);
     }
-    useEffect( () =>{
-        console.log(tipologia)
-    })
-    return(
-        <Router>
-            <Switch>
-                <Route exact path="/registrazioneStruttura">
-                    <FormTipologiaStruttura aggiornaTipologia={aggiornaTipologia}/>
-                </Route>
-                <Route path="*/informazioniGenerali">
-                    <FormStruttura/>
-                </Route>
 
-                <Route path="*/fotografie">
+    function handleChange(event){
+        const{name,value}=event.target
+        let tmp=info;
+        tmp[name]=value;
+        setInfo(tmp);
+        console.log("tmp"+tmp.toString());
+        printObject(tmp);
+    }
+    const handleSubmit=(event)=>{
+        event.preventDefault();
+        /*.axios.*/
+        console.log("hai finito");
+    }
+    function _next(){
+        let currentStep=step+1;
+        setStep(currentStep);
+    }
+    function _prev(){
+        let currentStep=step-1;
+        setStep(currentStep);
+    }
+    function previousButton(){
+        let currentStep=step;
+        console.log(currentStep);
+        if(currentStep!=1){
+            return(
+                <button className="btn btn-secondary" type="button" onClick={_prev}>Indietro</button>
+            )
+        }
+        return null;
+    }
+    function nextButton(){
+        let currentStep=step;
+        console.log(currentStep);
+        if(currentStep<5){
+            return(
+                <button className="btn btn-primary" type="button" onClick={_next}>Continua</button>
+            )
+        }
+        return null;
+    }
+    return(
+        <React.Fragment>
+            <form onSubmit={handleSubmit}>
+                <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info}/>
+                 <FormStruttura currentStep={step} handleChange={handleChange} dati={info}/>
+                {console.log("tipologia "+info.tipologia)}
+                 {
+                    (info.tipologia==="cv")?
+                        <FormAmbienti currentStep={step} handleChange={handleChange} dati={info}/>
+                        :
+                        <FormCamere currentStep={step} handleChange={handleChange} dati={info}/>
+                }
+                {
+                    (info.tipologia==="cv")?
+                        <FormCaratteristicheC currentStep={step} handleChange={handleChange} dati={info}/>
+                        :
+                        <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info}/>
+                }
+                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info}/>
+                {previousButton()}
+                {nextButton()}
+            </form>
+        </React.Fragment>
+
+            /*
+
+                <Route path="*!/fotografie">
                     <FormFotografie/>
-                </Route><Route path="*/condizioni">
+                </Route><Route path="*!/condizioni">
                     <FormCondizioni/>
                 </Route>
-                <Route path="*/caratteristicheB">
+                <Route path="*!/caratteristicheB">
                     <FormCaratteristicheB/>
                 </Route>
-                <Route path="*/caratteristicheC">
+                <Route path="*!/caratteristicheC">
                     <FormCaratteristicheC/>
                 </Route>
-                <Route path="*/camere">
+                <Route path="*!/camere">
                     <FormCamere/>
                 </Route>
-                <Route path="*/ambienti">
+                <Route path="*!/ambienti">
                     <FormAmbienti/>
-                </Route>
+                </Route>*/
 
-            </Switch>
-        </Router>
+
     )
 }
 

@@ -12,6 +12,7 @@ import Registration from "./Components/Registration";
 import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import ModificaDisponibilita from "./Components/SchermataStrutture/ModificaDisponibilità";
 
 function App() {
 
@@ -50,7 +51,7 @@ function App() {
                 {/* Schermata principale */}
                 <Route exact path="/">
                     <Carousel />
-                    <FormRicerca />
+                    <ModificaDisponibilita />
                 </Route>
 
                 <Route exact path="/accedi/">

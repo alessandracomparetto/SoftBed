@@ -18,7 +18,7 @@ import ButtonForm from "../ButtonForm";
         });
     }, false);
 })();
-function FormCondizioni(){
+function FormCondizioni(props){
     function penaleCancellazioneHandler(event) {
         if (event.target.checked) {
             $('#preavvisoDisdetta').removeAttr('disabled').attr('required', 'required');
@@ -74,12 +74,15 @@ function FormCondizioni(){
             event.preventDefault();
         }
     }
+    if(props.currentStep != 5){
+        return null;
+    }
     return(
         <div className="container col-sm-10">
             <div className="progress mt-2">
                 <div className="progress-bar" style={{width: 80 + '%'}}>80%</div>
             </div>
-            <form className="mt-3 needs-validation" noValidate onSubmit={verificaCheckBox} action="condizioni/fotografie">
+            <form className="mt-3 needs-validation" noValidate onSubmit={verificaCheckBox} action="condizioni/fotografie" onChange={props.handleChange}>
                 <div className="border p-3 text-center">
                     <h6 className="mt-3 border-bottom border-primary text-left">Durata del soggiorno</h6>
                     <div className="mb-3 form-check-inline mr-3">
@@ -263,8 +266,8 @@ function FormCondizioni(){
                         </div>
                     </div>
                 </div>
-                <ButtonForm/>
             </form>
+            <button className="btn btn-success btn-block">Sign up</button>
         </div>
     )}
 export default FormCondizioni;

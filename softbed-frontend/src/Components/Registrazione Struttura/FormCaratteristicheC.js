@@ -18,7 +18,7 @@ import ButtonForm from "../ButtonForm";
     }, false);
 })();
 
-function FormCaratteristicheC(){
+function FormCaratteristicheC(props){
     function verificaLunghezza(event){
         if(event.target.value.length>=200){
             document.getElementById("feedback").classList.remove("collapse");
@@ -29,6 +29,9 @@ function FormCaratteristicheC(){
             event.target.classList.remove("border-warning");
         }
     }
+    if(props.currentStep != 4){
+        return null;
+    }
     return(
 
         <div className="container">
@@ -36,7 +39,7 @@ function FormCaratteristicheC(){
                 <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
             </div>
             <h4>Caratteristiche Casa vacanze</h4>
-            <form className="w50  mt-3 needs-validation" action="caratteristicheC/condizioni" noValidate>
+            <form className="w50  mt-3 needs-validation" action="caratteristicheC/condizioni"  onChange={props.handleChange} noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
                 <div className="form-row-group text-center offset-2">
                     <div className="form-check-inline col-12 col-md-5">
@@ -93,8 +96,6 @@ function FormCaratteristicheC(){
                     <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength="200" placeholder="Write something here..." onChange={verificaLunghezza}></textarea>
                     <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 200 caratteri</p>
                 </div>
-
-                <ButtonForm/>
             </form>
         </div>
     )}

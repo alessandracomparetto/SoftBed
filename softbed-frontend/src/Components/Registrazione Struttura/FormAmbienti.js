@@ -4,7 +4,7 @@ import $ from "jquery";
 
 let contatore = 0;
 
-function FormAmbienti() {
+function FormAmbienti(props) {
     const camera = "Camera ";
     const [camere,setCamere] = useState([]);
 
@@ -98,8 +98,11 @@ function FormAmbienti() {
         event.target.classList.add("was-validated");
     }
     //****************************************************RETURN
+    if(props.currentStep != 3){
+        return null;
+    }
     return(
-        <form className="container col-12 col-md-8" action="ambienti/caratteristicheC">
+        <form className="container col-12 col-md-8" action="ambienti/caratteristicheC" onChange={props.handleChange} >
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
             <div className="form-row-group text-center offset-5 offset-sm-3">
                 <div className="form-check-inline col-12 col-sm-5">
@@ -176,8 +179,6 @@ function FormAmbienti() {
                 </div>
 
             </div>
-
-            <ButtonForm/>
         </form>
 
 
