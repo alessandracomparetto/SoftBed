@@ -1,3 +1,7 @@
+/*TODO: gestire gli errori del login e fare apparire messaggi diversi in base all'errore:
+*  password sbagliato o email non corretta*/
+
+
 const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
@@ -5,7 +9,7 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 
 // carichiamo crypto, la configurazione e il middleware per il database
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 
@@ -132,11 +136,8 @@ async function autenticazione(req, res, next) {
                 console.log('Utente non trovato!');
                 next(createError(404, 'Utente non trovato'));
             } else {
-                let pwdhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
-                pwdhash.update(req.body.pass); // cifriamo la password
-                let encpwd = pwdhash.digest('hex'); // otteniamo la stringa esadecimale
 
-                if (encpwd != results[0].password) {
+                if (req.body.pass != results[0].password) {
                     // password non coincidenti
                     console.log('Password errata!');
                     next(createError(403, 'Password errata'));

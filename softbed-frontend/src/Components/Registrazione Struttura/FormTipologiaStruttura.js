@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ButtonForm from "../ButtonForm";
-import data from "../../regioni_province_comuni.js";
-import $ from "jquery"
+
 
 (function() {
     'use strict';

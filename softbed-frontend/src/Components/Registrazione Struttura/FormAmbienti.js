@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import ButtonForm from "../ButtonForm";
 import $ from "jquery";
+
 let contatore = 0;
+
 function FormAmbienti() {
-
     const camera = "Camera ";
-
-    const [camere,setCamere]=useState([]);
+    const [camere,setCamere] = useState([]);
 
     function scriviCamera() {
         let lista = document.getElementById("listaCamere");
@@ -17,7 +17,7 @@ function FormAmbienti() {
 
         //pulisco i residui prima di iniziare (succede se il precedente inserimento camera va male
         let listaCollapse = document.getElementsByClassName("messaggio");
-        let listaWarning = document.getElementsByClassName("border-warning");
+        let listaWarning = document.getElementsByClassName("border-danger");
         let validi = document.getElementsByClassName("controlla")
         for(let i=0; i<listaCollapse.length;i++ ){
             //la lista dei messaggi che devono scomparire è fissa
@@ -25,7 +25,7 @@ function FormAmbienti() {
         }
         while(listaWarning.length>0){
             //la lista delle classi da eliminare si riduce ad ogni elemento eliminato, necessario il while
-            listaWarning[0].classList.remove("border-warning")
+            listaWarning[0].classList.remove("border-danger")
         }
 
         //controllo la validità dell'inserimento
@@ -38,8 +38,8 @@ function FormAmbienti() {
         }
         //questo vuol dire che non ha inserito letti
         if (nlettiMatrimoniali.value + nlettiSingoli.value < 1) {
-            nlettiMatrimoniali.classList.add("border-warning");
-            nlettiSingoli.classList.add("border-warning");
+            nlettiMatrimoniali.classList.add("border-danger");
+            nlettiSingoli.classList.add("border-danger");
             let messaggio = document.getElementsByClassName("indicazioneLetti")
             for (let i = 0; i < messaggio.length; i++) {
                 messaggio[i].classList.remove("collapse");
@@ -52,6 +52,12 @@ function FormAmbienti() {
                 //rimuovo lo spazio vuoto dentro lo scrollable
                 lista.removeChild(lista.childNodes[0]);
             }
+            if (nCamere.value<1){
+                nCamere.value=1;
+            }
+            if(nlettiSingoli.value == "") nlettiSingoli.value=0;
+            if(nlettiMatrimoniali.value == "") nlettiMatrimoniali.value=0;
+
             for(let i = 0; i<nCamere.value; i++){
                 contatore++
                 let p = document.createElement("P");
@@ -62,14 +68,17 @@ function FormAmbienti() {
             }
             //aggiorno lo stato
             let tmp = [...camere];
-            for(let i=0; i<nCamere;i++){
-                tmp.push({nLettiMatrimoniali: $("#nlettiMatrimoniali").val(), nLettiSingoli: $("#nlettiSingoli").val() , prezzoCamere: $("#prezzo").val()});
+            console.log(tmp);
+
+            for(let i=0; i<nCamere.value; i++){
+                tmp.push({nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value});
             }
+            console.log(tmp);
             setCamere(tmp);
 
             //azzero tutto dopo l'aggiunta
-            nlettiMatrimoniali.value = 0;
-            nlettiSingoli.value = 0;
+            nlettiMatrimoniali.value = "";
+            nlettiSingoli.value = "";
             nCamere.value = 1;
             for(let i=0; i<listaCollapse.length;i++ ){
                 //la lista dei messaggi che devono scomparire è fissa
@@ -77,7 +86,7 @@ function FormAmbienti() {
             }
             while(listaWarning.length>0){
                 //la lista delle classi da eliminare si riduce ad ogni elemento eliminato, necessario il while
-                listaWarning[0].classList.remove("border-warning")
+                listaWarning[0].classList.remove("border-danger")
             }
             for(let i = 0; i<validi.length; i++) {
                 validi[i].classList.remove("was-validated");
@@ -125,14 +134,14 @@ function FormAmbienti() {
 
             <div className="form-group controlla">
                 <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
-                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" defaultValue="0"/>
-                <small  className="form-text text-muted collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
+                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0"/>
+                <small  className="form-text text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
                 <div className="invalid-feedback">1 - 10</div>
             </div>
             <div className="form-group controlla">
                 <label htmlFor="nLettiSingoli">Numero letti singoli </label>
-                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" defaultValue="0"/>
-                <small className="form-text text-muted collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
+                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0"/>
+                <small className="form-text text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
                 <div className="invalid-feedback">1 - 10</div>
             </div>
             <div className="form-group">
@@ -161,7 +170,7 @@ function FormAmbienti() {
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" type="number" name="prezzo" className="form-control currency" min="1" step="0.01" max="10000" required
+                    <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" required
                            onChange={(event)=>{event.target.closest("div").classList.add("was-validated")}}/>
                     <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
