@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-
 module.exports = (sequelize, type) => {
     return sequelize.define('utente', {
         idUtente: {
@@ -15,8 +13,8 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
-        dataNascita: type.DATEONLY,
         codiceFiscale: type.STRING,
+        dataNascita: type.DATEONLY,
         refComuneResidenza: type.INTEGER,
         refComuneNascita: type.INTEGER,
         telefono: type.STRING,

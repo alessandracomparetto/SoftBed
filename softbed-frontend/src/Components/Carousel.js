@@ -15,7 +15,7 @@ function CarouselItem(props) {
 
 function Carousel() {
     return (
-        <div id="carousel" className="carousel slide carousel-fade d-none d-sm-block" data-ride="carousel"
+        <div id="carousel" className="carousel slide carousel-fade d-none d-md-block" data-ride="carousel"
              data-pause="false" data-interval="4000">
             <div className="carousel-inner">
                 {/* TODO: Trovare delle immagini appropriate */}
