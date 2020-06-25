@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import $ from 'jquery';
 import { convertiData, GIORNO } from "../Actions/gestioneDate";
 import { useLocation } from "react-router-dom";
 
-function FormRicerca() {
+function FormRicerca(props) {
 
     /* TODO: BACKEND - OPZIONALE
      * Lista delle località (regioni, province e comuni) con almeno una struttura per suggerire
@@ -27,15 +27,21 @@ function FormRicerca() {
         controlloDate();
     }
 
+    // Gestione della comparsa per mobile
+    const [visibile, toggleVisibile] = useState(true);
+
     // Gestione dei parametri della GET
     const query = new URLSearchParams(useLocation().search);
-
+    const path = useLocation().pathname;
 
     useEffect(() => {
         const destinazione = query.get("destinazione");
         const arrivo = query.get("arrivo");
         const partenza = query.get("partenza");
         const ospiti = query.get("ospiti");
+
+        if (path === "/search")
+            toggleVisibile(false);
 
         // TODO: Gestire lettura dei parametri b&b e casa vacanze
         // const bb = query.get("b&b");
@@ -47,8 +53,10 @@ function FormRicerca() {
         // if (!cv || cv !== "true")
         //     $("#cv").prop("checked", false);
 
-        if (destinazione)
+        if (destinazione) {
+            props.setDestinazione(destinazione);
             $("#destinazione").val(destinazione);
+        }
 
         if (arrivo)
             $("#arrivo").val(arrivo);
@@ -167,70 +175,77 @@ function FormRicerca() {
     }
 
     return (
-        <form className="form mb-3 d-flex justify-content-center bg-warning" action="/search" onSubmit={controlloForm}>
-            <div className="form-row px-2 px-sm-3 py-2 m-3 w-100 minw-15em maxw-xl">
-                <div className="col-12 col-lg-9 mb-3">
-                    <label htmlFor="destinazione">Destinazione</label>
-                    <input name="destinazione" id="destinazione" type="text" className="form-control"
-                           placeholder="Inserisci la tua destinazione..." onChange={controlloDestinazione} required/>
-                </div>
+        <Fragment>
+            <form id="formRicerca" className={`form d-md-flex  justify-content-center bg-warning ${visibile ? "d-flex" : "d-none"}`} action="/search" onSubmit={controlloForm}>
+                <div className="form-row px-2 px-sm-3 pt-2 mx-3 mt-3 pb-md-2 mb-md-3 w-100 minw-15em maxw-xl">
+                    <div className="col-12 col-lg-9 mb-3">
+                        <label htmlFor="destinazione">Destinazione</label>
+                        <input name="destinazione" id="destinazione" type="text" className="form-control"
+                               placeholder="Inserisci la tua destinazione..." onChange={controlloDestinazione} required/>
+                    </div>
 
-                <div id="checkboxes" className="col-12 col-lg-3 mb-2 mt-auto">
-                    <small id="tipologiaAiuto" className="d-none text-danger">
-                        Seleziona almeno una tipologia di struttura.
-                    </small>
+                    <div id="checkboxes" className="col-12 col-lg-3 mb-2 mt-auto">
+                        <small id="tipologiaAiuto" className="d-none text-danger">
+                            Seleziona almeno una tipologia di struttura.
+                        </small>
 
-                    <div className="d-flex d-lg-block justify-content-around">
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
-                                   value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                            <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
-                        </div>
+                        <div className="d-flex d-lg-block justify-content-around">
+                            <div className="form-check form-check-inline">
+                                <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
+                                       value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                                <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
+                            </div>
 
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
-                                   value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                            <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                            <div className="form-check form-check-inline">
+                                <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
+                                       value={true} defaultChecked={true} onChange={controlloTipologia}/>
+                                <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                            </div>
                         </div>
                     </div>
+
+                    <div className="col-6 col-md-4 mb-3">
+                        <label htmlFor="arrivo">Arrivo</label>
+                        <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA}
+                               max={maxData} defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
+
+                        <small id="preavvisoAiuto" className="form-text text-danger d-none">
+                            I nostri gestori devono avere a disposizione 48 ore di tempo per visionare una richiesta.
+                        </small>
+
+                        <small id="passatoAiuto" className="form-text text-danger d-none">
+                            Non siamo ancora in grado di tornare al passato, ma ci stiamo lavorando.
+                        </small>
+                    </div>
+
+                    <div className="col-6 col-md-4 mb-3">
+                        <label htmlFor="partenza">Partenza</label>
+                        <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
+                               max={maxData} defaultValue={minDataP} onChange={controlloDate} required/>
+
+                        <small id="dateAiuto" className="form-text text-danger d-none">
+                            La data di partenza deve essere posteriore alla data di arrivo.
+                        </small>
+                    </div>
+
+                    <div className="col-12 col-md-2 mb-3">
+                        <label htmlFor="Ospiti">Ospiti</label>
+                        <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
+                               defaultValue={2} onChange={controlloOspiti} required/>
+                    </div>
+
+                    <div className="col-md-2 mb-3">
+                        <label className="d-none d-md-inline-block">&nbsp;</label>
+                        <button id="cerca" type="submit" className="btn btn-primary btn-block">Cerca</button>
+                    </div>
                 </div>
-
-                <div className="col-6 col-md-4 mb-3">
-                    <label htmlFor="arrivo">Arrivo</label>
-                    <input name="arrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxData}
-                           defaultValue={minDataA} onChange={aggiornaMinDataPartenza} required/>
-
-                    <small id="preavvisoAiuto" className="form-text text-danger d-none">
-                        I nostri gestori devono avere a disposizione 48 ore di tempo per visionare una richiesta.
-                    </small>
-
-                    <small id="passatoAiuto" className="form-text text-danger d-none">
-                        Non siamo ancora in grado di tornare al passato, ma ci stiamo lavorando.
-                    </small>
-                </div>
-
-                <div className="col-6 col-md-4 mb-3">
-                    <label htmlFor="partenza">Partenza</label>
-                    <input name="partenza" id="partenza" type="date" className="form-control" min={minDataP}
-                           max={maxData} defaultValue={minDataP} onChange={controlloDate} required/>
-
-                    <small id="dateAiuto" className="form-text text-danger d-none">
-                        La data di partenza deve essere posteriore alla data di arrivo.
-                    </small>
-                </div>
-
-                <div className="col-12 col-md-2 mb-3">
-                    <label htmlFor="Ospiti">Ospiti</label>
-                    <input name="ospiti" id="ospiti" type="number" className="form-control" min={1} max={99}
-                           defaultValue={2} onChange={controlloOspiti} required/>
-                </div>
-
-                <div className="col-md-2 mb-3">
-                    <label className="d-none d-md-inline-block">&nbsp;</label>
-                    <button id="cerca" type="submit" className="btn btn-primary btn-block">Cerca</button>
-                </div>
+            </form>
+            <div className="mx-auto bg-warning text-center d-md-none">
+                <button type="button" className="btn btn-block" onClick={() => toggleVisibile(!visibile)}>
+                    <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
+                </button>
             </div>
-        </form>
+        </Fragment>
     );
 }
 

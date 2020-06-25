@@ -11,6 +11,7 @@ import SchermataStruttura from "./Components/Schermata Struttura/SchermataStrutt
 import Registration from "./Components/Registration";
 import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
+import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 
 function App() {
 
@@ -60,6 +61,10 @@ function App() {
                     <Registration />
                 </Route>
 
+                <Route path="/registrazioneStruttura/">
+                    <RegistrazioneStruttura />
+                </Route>
+
                 {/* Schermata dei risultati di ricerca */}
                 <Route exact path="/search">
                     <SchermataRisultati/>
@@ -74,12 +79,19 @@ function App() {
                     <RegistrazioneStruttura/>
                 </Route>
 
+                <Route exact path="/profilo/:id">
+                    <Route path="*/prenotazioni-effettuate/">
+                        <SchermataPrenotazioniOspite />
+                    </Route>
+                </Route>
+
                 {/* TODO: Non è possibile accedere alle risorse in backend, come le immagini tramite URL */}
                 {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                 <Route path="*">
                     <PaginaNonTrovata/>
                     <FormRicerca />
                 </Route>
+
             </Switch>
         </Router>
     )
