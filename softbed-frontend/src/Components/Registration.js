@@ -22,18 +22,18 @@ import axios from "axios";
 function Registration() {
     function onSubmit(e){
         e.preventDefault();
-        const utenteRegistrato= {
+        const utenteRegistrato = {
             nome: document.getElementById("name").value,
             cognome: document.getElementById("surname").value,
-            dataNascita: new Date(document.getElementById("birthdate").value),
+            dataNascita: document.getElementById("dataNascita").value,
             email: document.getElementById("email").value ,
             pass: document.getElementById("pass").value ,
             gestore: $( "input:checked" ).val(),
         }
-        console.log( document.getElementById("birthdate").value);
+        console.log(utenteRegistrato);
         try{
             axios.post("/utente/utenteRegistrato", utenteRegistrato)
-                .then(res => console.log(res.statusText));
+                .then(res => console.log(res.text));
         }
         catch(err){
             if (err.response.status === 400) {
@@ -99,8 +99,8 @@ function Registration() {
 
 
             <div className="form-group">
-                <label htmlFor="birthdate">Data di Nascita *</label>
-                <input name="birthdate" id="birthdate" type="date" className="form-control"/>
+                <label htmlFor="dataNascita">Data di Nascita *</label>
+                <input name="dataNascita" id="dataNascita" type="date" className="form-control"/>
                 <div className="invalid-feedback">
                     Selezionare la data di nascita
                 </div>

@@ -3,24 +3,24 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize, type) => {
     return sequelize.define('utente', {
         idUtente: {
-            type: Sequelize.INTEGER,
+            type: type.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
         nome: {
-            type: Sequelize.STRING,
+            type: type.STRING,
             allowNull: false
         },
         cognome: {
-            type: Sequelize.STRING,
+            type: type.STRING,
             allowNull: false
         },
-        codiceFiscale: Sequelize.STRING,
-        dataNacita: Sequelize.DATE,
-        reComuneResidenza: Sequelize.INTEGER,
-        reComuneNascita: Sequelize.INTEGER,
-        telefono: Sequelize.STRING,
-        gestore: Sequelize.INTEGER,
+        dataNascita: type.DATEONLY,
+        codiceFiscale: type.STRING,
+        refComuneResidenza: type.INTEGER,
+        refComuneNascita: type.INTEGER,
+        telefono: type.STRING,
+        gestore: type.INTEGER,
     })
 }
 

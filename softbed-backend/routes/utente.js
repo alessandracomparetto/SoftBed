@@ -38,11 +38,9 @@ router.get('/', function(req, res, next) {
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', (req, res) => {
-    console.log("Entro nella route")
+    console.log(req.body.nome + req.body.cognome + req.body.dataNascita+ req.body.gestore)
     Utente.create(req.body)
-        .then(res.send("finito"));
-        /*.then(res.send("ok"))
-        .catch(res.send("no good"));*/
+        .then(res.send("finito"))
 });
 
 /* Login Utente */
