@@ -2,7 +2,9 @@ const Sequelize = require("sequelize");
 
 const UtenteModel = require('../models/Utente');
 const AutenticazioneModel = require('../models/Autenticazione');
+const StrutturaModel = require ('../models/Struttura');
 // const PrenotazioneModel = require('../models/Prenotazione');
+
 
 const sequelize = new Sequelize('softbed', 'softAdmin', 'softEngineers', {
     host: 'localhost',
@@ -18,6 +20,7 @@ const sequelize = new Sequelize('softbed', 'softAdmin', 'softEngineers', {
 });
 
 const Utente = UtenteModel(sequelize, Sequelize);
+const Struttura = StrutturaModel(sequelize, Sequelize);
 const Autenticazione = AutenticazioneModel(sequelize, Sequelize);
 // const Prenotazione = PrenotazioneModel(sequelize, Sequelize);
 
@@ -30,5 +33,6 @@ sequelize.sync(/*{ force: true }*/)
 
 module.exports = {
     Autenticazione,
-    Utente
+    Utente,
+    Struttura
 }
