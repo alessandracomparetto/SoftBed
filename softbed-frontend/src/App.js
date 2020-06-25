@@ -10,6 +10,7 @@ import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisult
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 import Registration from "./Components/Registration";
 import Login from "./Components/Login";
+import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 
 function App() {
 
@@ -67,6 +68,10 @@ function App() {
                 {/* Schermata della struttura */}
                 <Route exact path="/struttura/:id">
                     <SchermataStruttura struttura={struttura} />
+                </Route>
+
+                <Route path="/registrazioneStruttura">
+                    <RegistrazioneStruttura/>
                 </Route>
 
                 {/* TODO: Non è possibile accedere alle risorse in backend, come le immagini tramite URL */}

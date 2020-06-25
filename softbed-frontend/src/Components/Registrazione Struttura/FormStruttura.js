@@ -121,7 +121,7 @@ function FormStruttura (props) {
             <div className="progress">
                 <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
             </div>
-            <form className="container pt-3 needs-validation" noValidate onSubmit={onSubmit}>
+            <form className="container pt-3 needs-validation" noValidate onSubmit={onSubmit} action="/">
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
                     <input id="name" name="name" type="text" className="form-control" maxLength="60"  />

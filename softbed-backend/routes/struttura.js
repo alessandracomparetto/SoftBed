@@ -1,10 +1,11 @@
+/*
 var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
-const { config } = require('../db/config');
-const { makeDb, withTransaction } = require('../db/dbmiddleware');
+// const { config } = require('../db/config');
+// const { makeDb, withTransaction } = require('../db/dbmiddleware');
 
-/* La rotta / è vietata */
+/!* La rotta / è vietata *!/
 router.get('/', function(req, res, next) {
     next(createError(403));
 });
@@ -29,7 +30,7 @@ async function registrazioneStruttura(req, res, next){
                 req.body.cap
             ])
             //inserimento indirizzo struttura
-            /*results = await db.query('INSERT INTO `indirizzo` \
+            /!*results = await db.query('INSERT INTO `indirizzo` \
                 (via, numero, cap, refComune)\
                 SELECT ? AS via, ? AS numero, ? AS cap, `comuni`.id AS refComune\
                 FROM `regioni`, `province`, `comuni`\
@@ -40,7 +41,7 @@ async function registrazioneStruttura(req, res, next){
                 req.body.region,
                 req.body.state,
                 req.body.town,
-            ])*/
+            ])*!/
                 .catch(err => {
                     throw err;
                 });
@@ -52,4 +53,4 @@ async function registrazioneStruttura(req, res, next){
         next(createError(500));
     }
 }
-module.exports = router;
+module.exports = router;*/
