@@ -10,10 +10,10 @@ function UtenteNonAutenticato() {
             <div className="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul className="navbar-nav ml-auto text-right">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/login/">Accedi</Link>
+                        <Link className="nav-link" to="/accedi/">Accedi</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/registration/">Registrati</Link>
+                        <Link className="nav-link" to="/registrati/">Registrati</Link>
                     </li>
                 </ul>
             </div>
@@ -67,7 +67,7 @@ function UtenteAutenticato(props) {
 
 
 function Navbar() {
-    const accessoEffettuato = true;
+    const accessoEffettuato = false;
     const utente = {nome: "SoftEngineers"}
 
     return (

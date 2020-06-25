@@ -47,10 +47,16 @@ function App() {
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    <Registration />
-                    <Login />
                     <Carousel />
                     <FormRicerca />
+                </Route>
+
+                <Route exact path="/accedi/">
+                    <Login />
+                </Route>
+
+                <Route exact path="/registrati/">
+                    <Registration />
                 </Route>
 
                 {/* Schermata dei risultati di ricerca */}

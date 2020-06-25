@@ -1,16 +1,46 @@
-const { config } = require('../db/config');
-const { makeDb, withTransaction } = require('../db/dbmiddleware');
+const Sequelize = require('sequelize');
 
+// è messa qui perché avevo difficioltà ad importarla
+const conf = ['softbed', 'softAdmin', 'softEngineers', {
+    host: 'localhost',
+    dialect: 'mysql',
+    pool: {
+        max: 10,
+        min: 0
+    },
+    define: {
+        freezeTableName: true
+    }
+}];
 
-//questo model utente deve contenere tutti i riferimenti necessari
-//se è un gestore deve are la lista dei riferimenti alle strutture
-//se è un ospite deve avere la lista dei riferimenti alle prenotazioni
-//TODO i model devono essere due, uno per gestore e uno per ospite
-class Utente extends Model {}
+const sequelize = new Sequelize(...conf);
 
-Utente.init({
-    idUtente : Number,
-    gestore : Boolean,
-    idSessione : String,
-    refStruttura : Number,
+var autenticazione = sequelize.define('autenticazione', {
+    idAutenticazione: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false
+    },
+    refUtente: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+
+// Elimina la tabella se esiste, la crea se non esiste, inserisce
+autenticazione.sync(/* { force: true } <- this drop table if exists */).then(() => {
+    return autenticazione.create({
+        refUtente: 1,
+        email: "sonoletre@etrentatre",
+        password: "buongiorno"
+    })
 })

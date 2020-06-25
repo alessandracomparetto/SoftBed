@@ -54,7 +54,13 @@ function SchermataStruttura(props) {
         const doppie = $("#doppie");
         const camereAiuto = $("#camereAiuto");
 
-        if (singole.val() + doppie.val() < 1) {
+        if (singole.val() < 0)
+            singole.val(0);
+
+        if (doppie.val() < 0)
+            doppie.val(0);
+
+        if (! (singole.val() + doppie.val() > 1)) {
             camereAiuto.removeClass("d-none");
             singole.addClass("border border-danger");
             doppie.addClass("border border-danger");
