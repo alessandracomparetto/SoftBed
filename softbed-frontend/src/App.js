@@ -12,6 +12,7 @@ import Registration from "./Components/Registration";
 import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import SchermataGestioneStruttura from "./Components/SchermataGestioneStruttura";
 
 function App() {
 
@@ -49,8 +50,9 @@ function App() {
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    <Carousel />
-                    <FormRicerca />
+                    <SchermataGestioneStruttura />
+                    {/*<Carousel />*/}
+                    {/*<FormRicerca />*/}
                 </Route>
 
                 <Route exact path="/accedi/">
