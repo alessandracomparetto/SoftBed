@@ -34,60 +34,85 @@ function FormMetodoPagamento(props) {
         }, false);
     })();
 
-    const [dato, setDato] = useState( {nomeIntestatario:"ciao", cognomeIntestatario:"cioa", numeroCarta:"1234123412341234", cvv:"123", dataScadenza:"12-03-20"});
+    const[dato, setDato] = useState( {nomeIntestatario:"cioa", cognomeIntestatario:"ciao", numeroCarta:"1234123412341234", cvv:"123", dataScadenza:"12-03-20"});
 
- /*   function setNome(event){
-        setDato({nomeIntestatario:event.target.value});
-        console.log(dato);
-    }*/
+    function onSubmit(e) {
+        e.preventDefault();
+        props.aggiungiDatoPagamento(dato);
+    }
 
-    props.aggiungiDatoPagamento(dato);
+   function setNome(event){
+       let tmp = dato;
+       tmp.nomeIntestatario=event.target.value;
+       setDato(tmp);
+    }
+    function setCognome(event){
+        let tmp = dato;
+        tmp.cognomeIntestatario=event.target.value;
+        setDato(tmp);
+    }
+    function setNumeroCarta(event){
+        let tmp = dato;
+        tmp.numeroCarta=event.target.value;
+        setDato(tmp);
+    }
+    function setCVV(event){
+        let tmp = dato;
+        tmp.cvv=event.target.value;
+        setDato(tmp);
+    }
+    function setDataScadenza(event){
+        let tmp = dato;
+        tmp.dataScadenza=event.target.value;
+        setDato(tmp);
+    }
     return (
-        <form className="needs-validation" noValidate onSubmit={() => props.aggiungiDatoPagamento(dato)}>
+        <form className=" needs-validation" noValidate onSubmit={onSubmit}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
-                <div className="form-group col-12 col-md-6 col-lg-3 ">
-                    <label htmlFor="nome">Nome Intestatario</label>
-                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Nome" required/>
+                <div className="form-group col-12 col-md-5 ">
+                    <label htmlFor="nome">Nome intestatario</label>
+                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Nome" maxLength="16" onChange={setNome} required/>
                     <div className="invalid-feedback">
                         Inserire nome
                     </div>
                 </div>
 
-                <div className="form-group col-12 col-md-6 col-lg-3 ">
-                    <label htmlFor="cognome">Cognome Intestatario</label>
-                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Cognome" required/>
+                <div className="form-group col-12 col-md-5 ">
+                    <label htmlFor="cognome">Cognome intestatario</label>
+                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Cognome" maxLength="16" onChange={setCognome} required/>
                     <div className="invalid-feedback">
                         Inserire cognome
                     </div>
                 </div>
 
-                <div className="form-group col-12 col-md-6 col-lg-3">
+                <div className="form-group col-12 col-md-4">
                     <label htmlFor="ncarta">Numero carta</label>
-                    <input id="ncarta" name="ncarta" type="tel" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" required/>
+                    <input id="ncarta" name="ncarta" type="text" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" onChange={setNumeroCarta} required/>
                     <div className="invalid-feedback">
                         Inserire numero carta
                     </div>
                 </div>
 
-                <div className="form-group col-6 col-md-2 col-lg-1">
+                <div className="form-group col-5 col-md-2">
                     <label htmlFor="cvv">CVV</label>
-                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" required/>
+                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" onChange={setCVV} required/>
                     <div className="invalid-feedback">
                         Inserire CVV
                     </div>
                 </div>
 
-                <div className="form-group col-6 col-md-4 col-lg-2">
+                <div className="form-group col-7 col-md-4">
                     <label htmlFor="data">Data di scadenza</label>
-                    <input name="data" id="data" type="month" min={minData} className="form-control" required/>
+                    <input name="data" id="data" type="month" min={minData} className="form-control" onChange={setDataScadenza} required/>
                     <div className="invalid-feedback">
                         Inserire data di scadenza
                     </div>
                 </div>
                 <div className=" col-12 col-md-2 btn-group d-flex justify-content-around">
-                    <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3" style={{width: 150 + 'px'}} >Aggiungi carta</button>
+                    <button name="ok" id="ok" type="submit" className="btn btn-warning btn-block mt-4 mb-2" style={{width: 100 + 'px'}} >Aggiungi</button>
                 </div>
+
             </div>
 
         </form>

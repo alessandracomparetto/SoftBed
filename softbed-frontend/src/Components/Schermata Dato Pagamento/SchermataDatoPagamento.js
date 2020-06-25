@@ -28,22 +28,24 @@ function SchermataDatoPagamento(props){
         console.log(dato);
         let tmp = [...listaDatiPagamento];
         tmp.push(dato);
-        setDatiPagamento(tmp);
         console.log(tmp);
+        setDatiPagamento(tmp);
     }
 
     return(
-        <div className="container" >
-            <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
-            <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
-            <ul className="list-group list-group-flush ">
-                {
-                    listaDatiPagamento.map((pagamenti, indice) => {
-                        return <li className="list-group-item list-group-item-warning"><DatiPagamento key={indice} indiceElemento={indice} nomeIntestatario={pagamenti.nomeIntestatario} cognomeIntestatario={pagamenti.cognomeIntestatario} numeroCarta={pagamenti.numeroCarta} cvv = {pagamenti.cvv} dataScadenza={pagamenti.dataScadenza} eliminaDatoPagamento={eliminaDatoPagamento}/></li>
-                    })
+        <div className="container my-3" >
+            <div className="my-3">
+                <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
+                <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
+                <ul className="list-group list-group-flush ">
+                    {
+                        listaDatiPagamento.map((pagamenti, indice) => {
+                            return <DatiPagamento key={indice} indiceElemento={indice} nomeIntestatario={pagamenti.nomeIntestatario} cognomeIntestatario={pagamenti.cognomeIntestatario} numeroCarta={pagamenti.numeroCarta} cvv = {pagamenti.cvv} dataScadenza={pagamenti.dataScadenza} eliminaDatoPagamento={eliminaDatoPagamento}/>
+                        })
 
-                }
-            </ul>
+                    }
+                </ul>
+            </div>
 
             <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
         </div>
