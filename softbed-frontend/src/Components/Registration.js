@@ -25,14 +25,15 @@ function Registration() {
         const utenteRegistrato= {
             nome: document.getElementById("name").value,
             cognome: document.getElementById("surname").value,
-            data_nascita: document.getElementById("birthdate").value,
+            dataNascita: new Date(document.getElementById("birthdate").value),
             email: document.getElementById("email").value ,
             pass: document.getElementById("pass").value ,
             gestore: $( "input:checked" ).val(),
         }
-        console.log(utenteRegistrato);
+        console.log( document.getElementById("birthdate").value);
         try{
-            axios.post("/utente/utenteRegistrato", utenteRegistrato);
+            axios.post("/utente/utenteRegistrato", utenteRegistrato)
+                .then(res => console.log(res.statusText));
         }
         catch(err){
             if (err.response.status === 400) {
@@ -99,7 +100,7 @@ function Registration() {
 
             <div className="form-group">
                 <label htmlFor="birthdate">Data di Nascita *</label>
-                <input name="birthdate" id="birthdate" type="date" className="form-control" required/>
+                <input name="birthdate" id="birthdate" type="date" className="form-control"/>
                 <div className="invalid-feedback">
                     Selezionare la data di nascita
                 </div>
@@ -109,11 +110,11 @@ function Registration() {
                 <label htmlFor="account">Tipo di account *</label>
                 <br/>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="account" id="gestore" value="gestore" required/>
+                    <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required/>
                         <label className="form-check-label" htmlFor="gestore">Gestore</label>
                 </div>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="account" id="ospite" value="ospite" required/>
+                    <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required/>
                         <label className="form-check-label" htmlFor="ospite">Ospite</label>
                     <div className="invalid-feedback ml-2">
                         Inserire il tipo di account
