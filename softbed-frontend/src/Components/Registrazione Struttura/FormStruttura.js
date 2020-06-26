@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import ButtonForm from "../ButtonForm";
+import React from "react";
 import data from "../../regioni_province_comuni.js";
 import $ from 'jquery';
 
@@ -10,7 +9,7 @@ function FormStruttura (props) {
 
     let province = null;
     function addressEventHandler(event) {
-        if (event.target.value != '') {
+        if (event.target.value !== '') {
             $('.form-row input').not('#address').removeAttr('disabled');
             $('.form-row input').not('#address').attr('required', 'required');
         } else {
@@ -19,8 +18,8 @@ function FormStruttura (props) {
         }
     }
     function tabEventHandler(event){
-        if (event.keyCode == 9) { // pressione TAB
-            if ($(this).val() != '') {
+        if (event.keyCode === 9) { // pressione TAB
+            if ($(this).val() !== '') {
                 $('.form-row input').not('#address').removeAttr('disabled');
                 $('.form-row input').not('#address').attr('required', 'required');
             } else {
@@ -31,11 +30,11 @@ function FormStruttura (props) {
     }
     function regioniEventHandle(event){
         // rimozione dei precedenti elementi del menu provinca e comune
-        document.getElementById("state").innerHTML='<option value="" selected></option>';
-        document.getElementById("town").innerHTML='<option value="" selected></option>';
-        if (event.target.value != '') {
+        document.getElementById("state").innerHTML='<option value="" selected/>';
+        document.getElementById("town").innerHTML='<option value="" selected/>';
+        if (event.target.value !== '') {
             for (let regione of data.regioni) {
-                if (regione.nome == event.target.value) {
+                if (regione.nome === event.target.value) {
                     province = regione.province;
                     break;
                 }
@@ -51,10 +50,10 @@ function FormStruttura (props) {
     function provinceEventHandler(event){
        let comuni=null;
        // rimozione dei precedenti elementi del menu Comune
-       document.getElementById("town").innerHTML='<option value="" selected></option>';
-        if (event.target.value != '') {
+       document.getElementById("town").innerHTML='<option value="" selected/>';
+        if (event.target.value !== '') {
             for (let provincia of province) {
-                if (provincia.code == event.target.value) {
+                if (provincia.code === event.target.value) {
                     for (let comune of provincia.comuni) {
                         let opt=document.createElement('option');
                         opt.value=comune.code;
@@ -68,7 +67,7 @@ function FormStruttura (props) {
 }
     function vaiAvanti(event){
         event.preventDefault();
-        document.getElementById("form").classList.add("was-validated");
+       document.getElementById("form").classList.add("was-validated");
         let cap=props.dati.cap;
         if(cap>=10 && cap<=98168){
             document.getElementById("feedback").classList.add("collapse");
@@ -84,10 +83,10 @@ function FormStruttura (props) {
         }
     }
 
-   function vaiIndietro(event){
+   function vaiIndietro(){
             props.goBack();
     }
-    if(props.currentStep != 2){
+    if(props.currentStep !== 2){
         return null;
     }
     return(
@@ -108,7 +107,7 @@ function FormStruttura (props) {
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
                     <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} defaultValue={props.dati.region} required>
-                        <option value=""></option>
+                        <option value=""/>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
                         <option value="Calabria">Calabria</option>
@@ -140,7 +139,7 @@ function FormStruttura (props) {
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
                     <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} defaultValue={props.dati.state} required>
-                        <option value="" ></option>
+                        <option value=""/>
                     </select>
                     <div className="invalid-feedback">
                         Selezionare la provincia
@@ -152,7 +151,7 @@ function FormStruttura (props) {
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
                     <select id="town" name="town" className="custom-select" defaultValue={props.dati.town} required>
-                        <option value=""  ></option>
+                        <option value="" />
                     </select>
                     <div className="invalid-feedback">
                         Selezionare il comune

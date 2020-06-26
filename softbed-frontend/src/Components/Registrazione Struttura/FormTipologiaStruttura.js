@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import ButtonForm from "../ButtonForm";
-import axios from 'axios';
-import {Link} from "react-router-dom";
+import React from "react";
 
 function FormTipologiaStruttura(props) {
 
@@ -43,7 +40,7 @@ function FormTipologiaStruttura(props) {
             document.getElementById("feedback").classList.remove("collapse");
         } */
 
-    if(props.currentStep != 1){
+    if(props.currentStep !== 1){
         return null;
     }
     else return(
@@ -54,8 +51,8 @@ function FormTipologiaStruttura(props) {
             <form id="form" className="container needs-validation p-3" onChange={props.handleChange} noValidate>
                 <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
                 <div className=" container d-flex justify-content-around">
-                    <i className="fa fa-bed fa-10x" aria-hidden="true"></i>
-                    <i className="fa fa-home fa-10x " aria-hidden="true"></i>
+                    <i className="fa fa-bed fa-10x" aria-hidden="true"/>
+                    <i className="fa fa-home fa-10x " aria-hidden="true"/>
                 </div>
                 <div className="form-row ">
                     <div className="col-6 text-center">

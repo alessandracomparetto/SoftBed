@@ -1,15 +1,26 @@
-import React, {useState} from 'react';
-import ButtonForm from "../ButtonForm";
-import $ from "jquery";
-/* TODO: vedere come gestire le camere e checbox*/
+import React from 'react';
+
 let contatore = 0;
 
 function FormAmbienti(props) {
     const camera = "Camera ";
-    const [camere,setCamere] = useState([]);
 
-    function vaiAvanti(){
-        props.go();
+    function vaiAvanti(event){
+        let flag = 0;
+        //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
+        if(contatore === 0){
+            document.getElementById("inserisciCamera").classList.remove("collapse");
+            event.preventDefault();
+            flag = true;
+        }
+        if(!document.getElementById("prezzo").checkValidity() || !document.getElementById("nBagni").checkValidity()){
+            document.getElementById("validazione").classList.add("was-validated");
+            event.preventDefault();
+            flag = true;
+        }
+        if(!flag){
+            props.go();
+        }
     }
     function vaiIndietro(){
         props.goBack();
@@ -25,7 +36,8 @@ function FormAmbienti(props) {
         //pulisco i residui prima di iniziare (succede se il precedente inserimento camera va male
         let listaCollapse = document.getElementsByClassName("messaggio");
         let listaWarning = document.getElementsByClassName("border-danger");
-        let validi = document.getElementsByClassName("controlla")
+        let validi = document.getElementsByClassName("controlla");
+
         for(let i=0; i<listaCollapse.length;i++ ){
             //la lista dei messaggi che devono scomparire è fissa
             listaCollapse[i].classList.add("collapse");
@@ -37,7 +49,7 @@ function FormAmbienti(props) {
 
         //controllo la validità dell'inserimento
         if(!nlettiMatrimoniali.checkValidity() || !nlettiSingoli.checkValidity()){
-            let validi = document.getElementsByClassName("controlla")
+            let validi = document.getElementsByClassName("controlla");
             for (let i = 0; i < validi.length; i++) {
                 validi[i].classList.add("was-validated");
             }
@@ -47,7 +59,7 @@ function FormAmbienti(props) {
         if (nlettiMatrimoniali.value + nlettiSingoli.value < 1) {
             nlettiMatrimoniali.classList.add("border-danger");
             nlettiSingoli.classList.add("border-danger");
-            let messaggio = document.getElementsByClassName("indicazioneLetti")
+            let messaggio = document.getElementsByClassName("indicazioneLetti");
             for (let i = 0; i < messaggio.length; i++) {
                 messaggio[i].classList.remove("collapse");
             }
@@ -62,26 +74,23 @@ function FormAmbienti(props) {
             if (nCamere.value<1){
                 nCamere.value=1;
             }
-            if(nlettiSingoli.value == "") nlettiSingoli.value=0;
-            if(nlettiMatrimoniali.value == "") nlettiMatrimoniali.value=0;
+            if(nlettiSingoli.value === "") nlettiSingoli.value=0;
+            if(nlettiMatrimoniali.value === "") nlettiMatrimoniali.value=0;
 
             for(let i = 0; i<nCamere.value; i++){
-                contatore++
+                contatore++;
                 let p = document.createElement("P");
                 let info = ":\t Letti Matrimoniali: " +nlettiMatrimoniali.value+", Letti Singoli: "+nlettiSingoli.value;
                 let stringa = document.createTextNode(camera + contatore+ info);
-                p.appendChild(stringa)
+                p.appendChild(stringa);
                 lista.appendChild(p);
-            }
-            //aggiorno lo stato
-            let tmp = [...camere];
-            console.log(tmp);
 
-            for(let i=0; i<nCamere.value; i++){
-                tmp.push({nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value});
+                //aggiorno lo stato
+                let tmp = ({nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value});
+                console.log(tmp);
+                props.handleCamere(contatore,tmp);
             }
-            console.log(tmp);
-            setCamere(tmp);
+
 
             //azzero tutto dopo l'aggiunta
             nlettiMatrimoniali.value = "";
@@ -101,34 +110,33 @@ function FormAmbienti(props) {
         }
     }
 
-    function validazione(event) {
-        event.target.classList.add("was-validated");
-    }
     //****************************************************RETURN
-    if(props.currentStep != 3){
+    if(props.currentStep !== 3){
         return null;
     }
     return(
-        <form className="container col-12 col-md-8"  onChange={props.handleChange} >
+        <form className="container col-12 col-md-8">
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
-            <div className="form-row-group text-center offset-5 offset-sm-3">
-                <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="salotto" id="salotto" defaultChecked={props.dati.salotto==="on"}/>
-                    <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
+            <div  onChange={props.handleChange}>
+                <div className="form-row-group text-center offset-5 offset-sm-3">
+                    <div className="form-check-inline col-12 col-sm-5" >
+                        <input type="checkbox" className="mr-1" name="salotto" id="salotto" defaultChecked={props.dati.salotto==="on"}/>
+                        <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
+                    </div>
+                    <div className="form-check-inline col-12 col-sm-5">
+                        <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" defaultChecked={props.dati.terrazza==="on"}/>
+                        <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
+                    </div>
                 </div>
-                <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" defaultChecked={props.dati.terrazza==="on"}/>
-                    <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
-                </div>
-            </div>
-            <div className="form-row-group text-center offset-5 offset-sm-3">
-                <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="giardino" id="giardino" defaultChecked={props.dati.giardino==="on"}/>
-                    <label className="form-check-label" htmlFor="giardino">Giardino</label>
-                </div>
-                <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="piscina" id="piscina" defaultChecked={props.dati.piscina==="on"}/>
-                    <label className="form-check-label" htmlFor="piscina">Piscina</label>
+                <div className="form-row-group text-center offset-5 offset-sm-3">
+                    <div className="form-check-inline col-12 col-sm-5">
+                        <input type="checkbox" className="mr-1" name="giardino" id="giardino" defaultChecked={props.dati.giardino==="on"}/>
+                        <label className="form-check-label" htmlFor="giardino">Giardino</label>
+                    </div>
+                    <div className="form-check-inline col-12 col-sm-5">
+                        <input type="checkbox" className="mr-1" name="piscina" id="piscina" defaultChecked={props.dati.piscina==="on"}/>
+                        <label className="form-check-label" htmlFor="piscina">Piscina</label>
+                    </div>
                 </div>
             </div>
 
@@ -141,6 +149,8 @@ function FormAmbienti(props) {
 
                 </div>
             </div>
+            <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
+
 
             <div className="form-group controlla">
                 <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
@@ -166,23 +176,21 @@ function FormAmbienti(props) {
             </div>
 
             <h6 className="mt-3 border-bottom border-primary">Informazioni generali</h6>
-            <div className="form-group validazione">
-                <label htmlFor="nBagni">Numero bagni</label>
-                <input name="nBagni" type="number" name="nBagni" className="form-control" min={1} max={10}  size="2" maxLength="2" required value={props.dati.nBagni}
-                       onChange={(event)=>{
-                               event.preventDefault();
-                               event.target.closest("div").classList.add("was-validated") }}/>
-                <span className="invalid-feedback small text-danger">1 - 10</span>
-            </div>
-            <div className="input-group validazione">
-                <label htmlFor="prezzo">Prezzo struttura (a notte)</label>
+            <div  id="validazione" >
+                <div className="form-group">
+                    <label htmlFor="nBagni">Numero bagni</label>
+                    <input id="nBagni" type="number" name="nBagni" className="form-control" min={1} max={10}  size="2" maxLength="2" required defaultValue={props.dati.nBagni} onChange={props.handleChange}/>
+                    <span className="invalid-feedback small text-danger">1 - 10</span>
+                </div>
                 <div className="input-group">
-                    <div className="input-group-prepend">
-                        <span className="input-group-text">€</span>
+                    <label htmlFor="prezzo">Prezzo struttura (a notte)</label>
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text">€</span>
+                        </div>
+                        <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" defaultValue={props.dati.prezzo} required onChange={props.handleChange}/>
+                        <span className="invalid-feedback small text-danger">1 - 10000</span>
                     </div>
-                    <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" value={props.dati.prezzo} required
-                           onChange={(event)=>{event.target.closest("div").classList.add("was-validated")}}/>
-                    <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
             </div>
             <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
