@@ -46,18 +46,6 @@ function FormDatiOspite(props){
         e.preventDefault();
         var form = document.getElementById("form");
         form.classList.add('was-validated');
-/*
-        let cap=parseInt(e.target.value);
-        if(cap>=10 && cap<=98168){
-            document.getElementById("feedback").classList.add("collapse");
-            document.getElementById("cap").classList.remove("border-danger");
-        }
-        else{
-            e.preventDefault();
-            document.getElementById("cap").classList.add("border-danger");
-            document.getElementById("feedback").classList.add("invalid");
-
-        }*/
 
 
         if(form.checkValidity()){
@@ -81,74 +69,10 @@ function FormDatiOspite(props){
         }
     }
 
-    function setNome(event){
-        let tmp = ospite;
-        tmp.nome=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setCognome(event){
-        let tmp = ospite;
-        tmp.cognome=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setCf(event){
-        let tmp = ospite;
-        tmp.codiceFiscale=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setDataNascita(event){
-        let tmp = ospite;
-        tmp.dataNascita=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setComuneNascita(event){
-        let tmp = ospite;
-        tmp.nomeComune=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setVia(event){
-        let tmp = ospite;
-        tmp.via=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setNumero(event){
-        let tmp = ospite;
-        tmp.numero=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setCap(event){
-        let tmp = ospite;
-        tmp.cap=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setComuneNascita(event){
-        let tmp = ospite;
-        tmp.nomeComune=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setComuneResidenza(event){
-        let tmp = ospite;
-        tmp.nomeComuneResidenza=event.target.value;
-        setOspite(tmp);
-    }
-
-    function setDataArrivo(event){
-        let tmp = ospite;
-        tmp.dataArrivo=event.target.value;
-        setOspite(tmp);
-    }
-    function setPermanenza(event){
-        let tmp = ospite;
-        tmp.permanenza=event.target.value;
+    function handleChange(event){
+        const{name,value}=event.target;
+        let tmp=ospite;
+        tmp[name]=value;
         setOspite(tmp);
     }
 
@@ -158,10 +82,34 @@ function FormDatiOspite(props){
             tmp.esente=true;
         else
             tmp.esente=false;
-        setOspite(tmp);
-        console.log(tmp);
+            setOspite(tmp);
+            console.log(tmp);
     }
 
+    function controlloCAP(e) {
+        const form = $("#form");
+        const cap = $("#cap");
+        const capVal = cap.val();
+
+        if (capVal >= 10 && capVal <= 98168) {
+            if (form.hasClass("was-validated")) {
+                cap.removeClass("border-danger");
+                cap.removeClass("is-invalid");
+            }
+            let tmp=ospite;
+            tmp.cap=e.target.value;
+            setOspite(tmp);
+            return true;
+        }
+
+        else {
+            if (form.hasClass("was-validated")) {
+                cap.addClass("border-danger");
+                cap.addClass("is-invalid");
+            }
+            return false;
+        }
+    }
 
     let province = null;
 
@@ -197,8 +145,6 @@ function FormDatiOspite(props){
         }
     }
     function provinceEventHandler(event){
-
-        let comuni=null;
         // rimozione dei precedenti elementi del menu Comune
         // rimozione dei precedenti elementi del menu provinca e comune
         if(event.target.id=== "provinciaNascita"){
@@ -265,18 +211,18 @@ function FormDatiOspite(props){
             <div className="form-row">
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="nome">Nome</label>
-                    <input id="nome" name="nome" type="text" className="form-control" onChange={setNome} required/>
+                    <input id="nome" name="nome" type="text" className="form-control" onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="cognome">Cognome</label>
-                    <input id="cognome" name="cognome" type="text" className="form-control" onChange={setCognome} required/>
+                    <input id="cognome" name="cognome" type="text" className="form-control" onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="cf">Codice fiscale</label>
-                    <input name="cf" id="cf" type="text" className="form-control"
-                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" onChange={setCf} required/>
+                    <input name="codiceFiscale" id="cf" type="text" className="form-control"
+                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Codice fiscale errato
                     </div>
@@ -284,7 +230,7 @@ function FormDatiOspite(props){
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="dataNascita">Data di Nascita</label>
-                    <input name="dataNascita" id="dataNascita" type="date" className="form-control" onChange={setDataNascita} required/>
+                    <input name="dataNascita" id="dataNascita" type="date" className="form-control" onChange={handleChange} required/>
                 </div>
 
                 <div className="col-12 mb-2">Nato a</div>
@@ -331,7 +277,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneNascita" name="comuneNascita" className="custom-select" onChange={setComuneNascita} required>
+                    <select id="comuneNascita" name="nomeComune" className="custom-select" onChange={handleChange} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -380,19 +326,19 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneResidenza" name="comuneResidenza" className="custom-select" onChange={setComuneResidenza} required>
+                    <select id="comuneResidenza" name="nomeComuneResidenza" className="custom-select" onChange={handleChange} required>
                         <option value="" selected></option>
                     </select>
                 </div>
 
                 <div className="form-group col-12 col-md-6">
                     <label htmlFor="via">Via/Piazza</label>
-                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={setVia} required/>
+                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-4 col-md-3">
                     <label htmlFor="numero">N.</label>
-                    <input name="numero" id="numero" type="number" className="form-control" min="1" max="9999" disabled onChange={setNumero} required/>
+                    <input name="numero" id="numero" type="number" className="form-control" min="1" max="9999" disabled onChange={handleChange} required/>
                     <div className="invalid-feedback r">
                         1 - 9999
                     </div>
@@ -401,18 +347,18 @@ function FormDatiOspite(props){
                 <div className="form-group col-8 col-md-3">
                     <label htmlFor="cap">CAP</label>
                     <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
-                           title="Inserire 5 cifre da 00100 a 98168" size="5" disabled onChange={setCap} required/>
+                           title="Inserire 5 cifre da 00100 a 98168" size="5" disabled onChange={controlloCAP} required/>
                 </div>
                 <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
 
                 <div className="form-group col-6 col-md-5 col-lg-3">
                     <label htmlFor="arrivo">Data di arrivo</label>
-                    <input name="arrivo" id="arrivo" type="date" className="form-control" defaultValue={maxDataA} min={minDataA} max={maxDataA} onChange={setDataArrivo} required/>
+                    <input name="dataArrivo" id="arrivo" type="date" className="form-control" defaultValue={maxDataA} min={minDataA} max={maxDataA} onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-6 col-md-3 col-lg-2">
                     <label htmlFor="permanenza">Permanenza</label>
-                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" defaultValue="1" onChange={setPermanenza} required/>
+                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" defaultValue="1" onChange={handleChange} required/>
                 </div>
 
 

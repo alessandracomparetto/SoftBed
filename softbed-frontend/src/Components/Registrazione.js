@@ -54,7 +54,6 @@ function Registrazione() {
             } else
                 $('#message').html('Password non coincidenti').css('color', 'red');
         }
-
     }
 
     return(

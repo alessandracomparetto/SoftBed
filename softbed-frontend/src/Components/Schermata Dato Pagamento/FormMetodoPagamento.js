@@ -35,38 +35,20 @@ function FormMetodoPagamento(props) {
         }
     }
 
-   function setNome(event){
-       let tmp = dato;
-       tmp.nomeIntestatario=event.target.value;
-       setDato(tmp);
-    }
-    function setCognome(event){
-        let tmp = dato;
-        tmp.cognomeIntestatario=event.target.value;
+    function handleChange(event){
+        const{name,value}=event.target;
+        let tmp=dato;
+        tmp[name]=value;
         setDato(tmp);
     }
-    function setNumeroCarta(event){
-        let tmp = dato;
-        tmp.numeroCarta=event.target.value;
-        setDato(tmp);
-    }
-    function setCVV(event){
-        let tmp = dato;
-        tmp.cvv=event.target.value;
-        setDato(tmp);
-    }
-    function setDataScadenza(event){
-        let tmp = dato;
-        tmp.dataScadenza=event.target.value;
-        setDato(tmp);
-    }
+
     return (
         <form id="form" noValidate onSubmit={onSubmit}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
                 <div className="form-group col-12 col-md-5 ">
                     <label htmlFor="nome">Nome intestatario</label>
-                    <input id="nome" name="nome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Nome" maxLength="16" onChange={setNome} required/>
+                    <input id="nome" name="nomeIntestatario" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Nome" maxLength="16" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire nome
                     </div>
@@ -74,7 +56,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-12 col-md-5 ">
                     <label htmlFor="cognome">Cognome intestatario</label>
-                    <input id="cognome" name="cognome" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Cognome" maxLength="16" onChange={setCognome} required/>
+                    <input id="cognome" name="cognomeIntestatario" type="text" className="form-control" pattern = "^[A-z]+$" placeholder="Cognome" maxLength="16" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire cognome
                     </div>
@@ -82,7 +64,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-12 col-md-4">
                     <label htmlFor="ncarta">Numero carta</label>
-                    <input id="ncarta" name="ncarta" type="text" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" onChange={setNumeroCarta} required/>
+                    <input id="ncarta" name="numeroCarta" type="text" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire numero carta
                     </div>
@@ -90,7 +72,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-5 col-md-2">
                     <label htmlFor="cvv">CVV</label>
-                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" onChange={setCVV} required/>
+                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire CVV
                     </div>
@@ -98,7 +80,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-7 col-md-4">
                     <label htmlFor="data">Data di scadenza</label>
-                    <input name="data" id="data" type="month" min={minData} className="form-control" onChange={setDataScadenza} required/>
+                    <input name="dataScadenza" id="data" type="month" min={minData} className="form-control" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire data di scadenza
                     </div>

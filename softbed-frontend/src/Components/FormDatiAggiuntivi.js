@@ -3,6 +3,7 @@ import data from "../regioni_province_comuni.js";
 import $ from "jquery";
 import ButtonForm from "./ButtonForm";
 
+/*
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -21,18 +22,25 @@ import ButtonForm from "./ButtonForm";
     }, false);
 })();
 
+*/
 
 function FormDatiAggiuntivi(props){
     /* TODO: PROPS
      * Cognome email e password già compilati
      */
-
     let province = null;
 
     function regioniEventHandler(event){
         // rimozione dei precedenti elementi del menu provinca e comune
-        document.getElementById("state").innerHTML='<option value="" selected></option>';
-        document.getElementById("town").innerHTML='<option value="" selected></option>';
+        if(event.target.id=== "regioneNascita"){
+            document.getElementById("provinciaNascita").innerHTML='<option value="" selected></option>';
+            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
+        }
+        else{
+            document.getElementById("provinciaResidenza").innerHTML='<option value="" selected></option>';
+            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
+        }
+
         if (event.target.value != '') {
             for (let regione of data.regioni) {
                 if (regione.nome == event.target.value) {
@@ -44,14 +52,26 @@ function FormDatiAggiuntivi(props){
                 let opt = document.createElement('option');
                 opt.value = provincia.code;
                 opt.innerText = provincia.nome;
-                document.getElementById("state").appendChild(opt);
+                if(event.target.id === "regioneNascita"){
+                    document.getElementById("provinciaNascita").appendChild(opt);
+                }
+                else{
+                    document.getElementById("provinciaResidenza").appendChild(opt);
+                }
             }
         }
     }
     function provinceEventHandler(event){
-        let comuni=null;
         // rimozione dei precedenti elementi del menu Comune
-        document.getElementById("town").innerHTML='<option value="" selected></option>';
+        // rimozione dei precedenti elementi del menu provinca e comune
+        if(event.target.id=== "provinciaNascita"){
+            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
+        }
+        else{
+            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
+        }
+
+
         if (event.target.value != '') {
             for (let provincia of province) {
                 if (provincia.code == event.target.value) {
@@ -59,7 +79,12 @@ function FormDatiAggiuntivi(props){
                         let opt=document.createElement('option');
                         opt.value=comune.code;
                         opt.innerText = comune.nome;
-                        document.getElementById("town").appendChild(opt);
+                        if(event.target.id === "provinciaNascita"){
+                            document.getElementById("comuneNascita").appendChild(opt);
+                        }
+                        else{
+                            document.getElementById("comuneResidenza").appendChild(opt);
+                        }
                     }
                     break; // non dobbiamo cercare oltre
                 }
@@ -100,22 +125,40 @@ function FormDatiAggiuntivi(props){
         }
     }
 
-    function verificaCap(event){
-        let cap=parseInt(event.target.value);
-        if(cap>=10 && cap<=98168){
-            document.getElementById("feedback").classList.add("collapse");
-            document.getElementById("cap").classList.remove("border-danger");
+    function confermaPass(event){
+        const mdPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$");
+        if(mdPass.test(event.target.value)) {
+            if ($('#pass').val() === $('#repass').val()) {
+                $('#message').html('Password coincidenti').css('color', 'green');
+            } else
+                $('#message').html('Password non coincidenti').css('color', 'red');
         }
-        else{
-            event.preventDefault();
-            document.getElementById("cap").classList.add("border-danger");
-            document.getElementById("feedback").classList.add("invalid");
+    }
 
+    function controlloCAP() {
+        const form = $("#form");
+        const cap = $("#cap");
+        const capVal = cap.val();
+
+        if (capVal >= 10 && capVal <= 98168) {
+            if (form.hasClass("was-validated")) {
+                cap.removeClass("border-danger");
+                cap.removeClass("is-invalid");
+            }
+            return true;
+        }
+
+        else {
+            if (form.hasClass("was-validated")) {
+                cap.addClass("border-danger");
+                cap.addClass("is-invalid");
+            }
+            return false;
         }
     }
 
     return(
-        <form className="container needs-validation pt-3 w-75" noValidate onSubmit={verificaCap}>
+        <form className="container needs-validation pt-3 w-75" noValidate>
             <h6 className="lead mt-3 text-uppercase ">Modifica i tuoi dati</h6>
             <h6 className="mt-4 text-uppercase ">Dati anagrafici</h6>
             <div className="form-row">
@@ -149,7 +192,7 @@ function FormDatiAggiuntivi(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandler} required>
+                    <select id="regioneNascita" className="custom-select" name="region" onChange={regioniEventHandler} required>
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -178,7 +221,7 @@ function FormDatiAggiuntivi(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
+                    <select id="provinciaNascita" name="provinciaNascita" className="custom-select" onChange={ provinceEventHandler} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -187,17 +230,18 @@ function FormDatiAggiuntivi(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="town" name="town" className="custom-select" required>
+                    <select id="comuneNascita" name="nomeComune" className="custom-select" required>
                         <option value="" selected></option>
                     </select>
                 </div>
+
 
                 <div className="col-12 mb-2">Residente a</div>
                 <div className="input-group mb-3 col-12 col-lg-4">
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandler} required>
+                    <select id="regioneResidenza" className="custom-select" name="region" onChange={regioniEventHandler} required>
                         <option value="" selected></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -226,7 +270,7 @@ function FormDatiAggiuntivi(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} required>
+                    <select id="provinciaResidenza" name="provinciaResidenza" className="custom-select" onChange={ provinceEventHandler} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -235,17 +279,17 @@ function FormDatiAggiuntivi(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="town" name="town" className="custom-select" required>
+                    <select id="comuneResidenza" name="nomeComuneResidenza" className="custom-select" required>
                         <option value="" selected></option>
                     </select>
                 </div>
 
-                <div className="form-group col-12 col-md-5">
+                <div className="form-group col-12 col-md-4">
                     <label htmlFor="address">Via/Piazza</label>
                     <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
                 </div>
 
-                <div className="form-group col-4 col-md-1">
+                <div className="form-group col-4 col-md-2">
                     <label htmlFor="addressnum">N.</label>
                     <input name="addressnum" id="addressnum" type="number" className="form-control" min="1" max="9999" disabled required/>
                     <div className="invalid-feedback r">
@@ -256,7 +300,7 @@ function FormDatiAggiuntivi(props){
                 <div className="form-group col-8 col-md-2">
                     <label htmlFor="cap">CAP</label>
                     <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
-                           title="Inserire 5 cifre da 00100 a 98168" size="5"  disabled required/>
+                           title="Inserire 5 cifre da 00100 a 98168" size="5"  disabled onSubmit={controlloCAP} required/>
                 </div>
                 <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
 
@@ -273,12 +317,12 @@ function FormDatiAggiuntivi(props){
 
             <h6 className="mt-4 text-uppercase ">Autenticazione</h6>
                 <div className="form-row">
-                    <div className="form-group col-12 col-md-6">
+                    <div className="form-group col-12 col-md-4">
                         <label htmlFor="email">E-mail</label>
                         <input name="email" id="email" type="email" className="form-control" value={props.email} required/>
                     </div>
 
-                    <div className="form-group col-12 col-md-6">
+                    <div className="form-group col-12 col-md-4">
                         <label htmlFor="pass">Password</label>
                         <input name="pass" id="pass" type="password" className="form-control"
                                title="Almeno 8 caratteri, una lettera maiuscola e un numero"
@@ -290,6 +334,16 @@ function FormDatiAggiuntivi(props){
                             Password media
                         </div>
                     </div>
+
+                    <div className="form-group col-12 col-md-4" >
+                        <label htmlFor="repass">Conferma password</label>
+                            <input id="repass" name="repass" type="password" className="form-control"
+                                   size="32" maxLength="40" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onKeyUp={confermaPass} required/>
+                        <div>
+                            <span id="message"></span>
+                        </div>
+                    </div>
+
                 </div>
 
             <button name="ok" id="ok" type="submit" className="col-12 col-md-3 btn btn-warning mt-3 float-right">Conferma</button>
