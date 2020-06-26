@@ -87,8 +87,10 @@ function FormCaratteristicheC(props){
                     <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength="200" placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}></textarea>
                     <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 200 caratteri</p>
                 </div>
-                <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px " onClick={vaiIndietro}>Indietro</button>
-                <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                <div className="d-flex flex-row-reverse justify-content-around">
+                    <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                    <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+                </div>
             </form>
         </div>
     )}

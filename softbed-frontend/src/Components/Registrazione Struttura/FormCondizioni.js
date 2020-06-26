@@ -14,6 +14,7 @@ function FormCondizioni(props){
         if(document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked){
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
+                console.log(document.getElementById("form").checkValidity())
                 props.go();
             }
         }
@@ -278,8 +279,10 @@ function FormCondizioni(props){
                     </div>
                 </div>
             </form>
-            <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
-            <button id="finish" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+            <div className="d-flex flex-row-reverse justify-content-around">
+                <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+            </div>
         </div>
     )}
 export default FormCondizioni;

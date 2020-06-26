@@ -71,9 +71,9 @@ function FormTipologiaStruttura(props) {
                         Inserire la tipologia di struttura
                     </div>
                 </div>
-                <div className="container-fluid p-0 mt-2 mb-5 d-flex justify-content-between">
-                    <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px disabled" >Indietro</button>
-                    <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                <div className="d-flex flex-row-reverse justify-content-around">
+                    <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                    <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px disabled">Indietro</button>
                 </div>
         </form>
     </div>

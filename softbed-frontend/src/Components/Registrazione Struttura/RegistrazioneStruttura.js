@@ -37,17 +37,20 @@ function RegistrazioneStruttura () {
         let stringa = "camera"+contatore;
         tmp[stringa]=camera;
         setInfo(tmp);
-        console.log("Stampo lo stato ");
-        console.log("tmp"+tmp.toString());
-        console.log("stampo la camera: ")
-        printObject(camera);
     }
+
+    function handleFoto(indice, fileName) {
+            let tmp = info;
+            let stringa = "foto"+indice;
+            tmp[stringa]=fileName;
+            setInfo(tmp);
+        }
 
     const handleSubmit=(event)=>{
         event.preventDefault();
         /*.axios.*/
         console.log("hai finito");
-    }
+    };
     function _next(){
         let currentStep=step+1;
         setStep(currentStep);
@@ -76,7 +79,7 @@ function RegistrazioneStruttura () {
                         <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 }
                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
-                <FormFotografie currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} />
+                <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             </div>
         </React.Fragment>
     )

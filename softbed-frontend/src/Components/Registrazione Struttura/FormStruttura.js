@@ -207,8 +207,10 @@ function FormStruttura (props) {
                     </div>
                     <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
                 </div>
-                 <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
-                <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                <div className="d-flex flex-row-reverse justify-content-around">
+                    <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
+                    <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+                </div>
             </form>
         </div>
         );
