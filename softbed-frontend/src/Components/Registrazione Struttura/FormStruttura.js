@@ -67,7 +67,7 @@ function FormStruttura (props) {
 }
     function vaiAvanti(event){
         event.preventDefault();
-       document.getElementById("form").classList.add("was-validated");
+        document.getElementById("form").classList.add("was-validated");
         let cap=props.dati.cap;
         if(cap>=10 && cap<=98168){
             document.getElementById("feedback").classList.add("collapse");
@@ -78,7 +78,7 @@ function FormStruttura (props) {
         }
         else{
             document.getElementById("cap").classList.add("border-danger");
-            document.getElementById("feedback").classList.add("invalid");
+            document.getElementById("cap").classList.add("is-invalid")
             event.preventDefault();
         }
     }
@@ -106,7 +106,7 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} defaultValue={props.dati.region} required>
+                    <select id="region" className="custom-select" name="region" onLoad={regioniEventHandle} onChange={regioniEventHandle} defaultValue={props.dati.region} required>
                         <option value=""/>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
@@ -138,7 +138,7 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} defaultValue={props.dati.state} required>
+                    <select id="state" name="state" className="custom-select" onLoad={ provinceEventHandler} onChange={ provinceEventHandler} defaultValue={props.dati.state} required>
                         <option value=""/>
                     </select>
                     <div className="invalid-feedback">
@@ -173,7 +173,7 @@ function FormStruttura (props) {
                     </div>
                     <div className="col-4 col-md-4 col-lg-3">
                         <label htmlFor="cap">CAP.</label>
-                        <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
+                        <input name="cap" id="cap" type="tel" className="form-control form-check" pattern="^\d{5}$" placeholder="#####"
                                title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  defaultValue={props.dati.cap} required/>
                     </div>
                     <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>

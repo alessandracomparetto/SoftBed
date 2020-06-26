@@ -28,7 +28,7 @@ function RegistrazioneStruttura () {
         let tmp=info;
         tmp[name]=value;
         setInfo(tmp);
-        console.log("tmp"+tmp.toString());
+        console.log("tmp"+tmp.toString())
         printObject(tmp);
     }
 
@@ -83,7 +83,7 @@ function RegistrazioneStruttura () {
                 {console.log("tipologia "+info.tipologia)}
                 {
                     (info.tipologia==="cv")?
-                        <FormAmbienti currentStep={step} handleChange={handleChange} handleCamere={handleCamere} dati={info} go={_next} goBack={_prev}/>
+                        <FormAmbienti currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                         :
                         <FormCamere currentStep={step} handleChange={handleChange} handleCamere={handleCamere} dati={info} go={_next} goBack={_prev}/>
                 }
