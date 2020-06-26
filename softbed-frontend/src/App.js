@@ -7,13 +7,12 @@ import FormRicerca from "./Components/FormRicerca";
 import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
-import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
-import Registrazione from "./Components/Registrazione";
+import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";;
 import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import Footer from "./Components/Footer";
-
+import Registrazione from "./Components/Registrazione";
 
 function App() {
 
@@ -46,19 +45,17 @@ function App() {
     return (
         <Router>
             {/* La navbar è presente in ogni caso */}
-
+            <Navbar />
 
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    {/*<SchermataGestioneStruttura />*/}
-                    <Navbar />
                     <Carousel />
-                    <FormRicerca/>
+                    <FormRicerca />
                 </Route>
 
                 <Route exact path="/accedi/">
-                    <Login/>
+                    <Login />
                 </Route>
 
                 <Route exact path="/registrati/">
