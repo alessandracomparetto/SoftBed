@@ -2,7 +2,7 @@ import React, {useState} from "react";
 
 function DatiPagamento(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
-    const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+    const toggleContenuto = () => setMostraContenuto(true);
 
     return(
         <li className="rounded list-group-item list-group-item-warning text-dark border border-dark">
@@ -43,12 +43,6 @@ function DatiPagamento(props){
                     </div>
                 </div>
 
-               {/* <div className="row">
-                    <p className="col-12 col-md-4 "><strong>Intestatario carta:</strong> {props.nomeIntestatario} {props.cognomeIntestatario}</p>
-                    <p className="col-12 col-md-4" ><strong>Numero carta: </strong> {props.numeroCarta}</p>
-                    <p className="col-6 col-md-2" ><strong>CVV: </strong>{props.cvv}</p>
-
-                </div>*/}
             </div>
         </li>
     )

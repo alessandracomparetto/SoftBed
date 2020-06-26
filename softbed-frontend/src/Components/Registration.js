@@ -56,74 +56,130 @@ function Registration() {
             }
         }
 
+    function confermaPass(event){
+
+        if ($('#pass').val() == $('#repass').val()) {
+            $('#message').html('Password coincidenti').css('color', 'green');
+        } else
+            $('#message').html('Password non coincidenti').css('color', 'red');
+    }
+
     return(
-
-        <form className="container needs-validation col-sm-8 mt-3" noValidate onSubmit={onSubmit}>
-
-            <div className="form-group">
-                <label htmlFor="name">Nome *</label>
-                <input id="name" name="name" type="text" className="form-control" maxLength="40" required/>
-                <div className="invalid-feedback">
-                    Inserire nome
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="surname">Cognome *</label>
-                <input id="surname" name="surname" type="text" className="form-control" maxLength="40" required/>
-                <div className="invalid-feedback">
-                    Inserire cognome
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="email">E-mail *</label>
-                <input name="email" id="email" type="email" className="form-control" size="32" maxLength="40" required/>
-                <div className="invalid-feedback">
-                    Inserire indirizzo e-mail
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="pass">Password *</label>
-                <input name="pass" id="pass" type="password" className="form-control"
-                       title="Almeno 8 caratteri, una lettera maiuscola e un numero"
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" onChange={verificaPass} required/>
-                <div className="invalid-feedback">
-                    Almeno 8 caratteri di cui uno maiuscolo e un numero
-                </div>
-                <div id="mdPass" className="valid-feedback text-warning">
-                    Password media
-                </div>
-            </div>
-
-
-            <div className="form-group">
-                <label htmlFor="dataNascita">Data di Nascita *</label>
-                <input name="dataNascita" id="dataNascita" type="date" className="form-control"/>
-                <div className="invalid-feedback">
-                    Selezionare la data di nascita
-                </div>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="account">Tipo di account *</label>
-                <br/>
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required/>
-                        <label className="form-check-label" htmlFor="gestore">Gestore</label>
-                </div>
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required/>
-                        <label className="form-check-label" htmlFor="ospite">Ospite</label>
-                    <div className="invalid-feedback ml-2">
-                        Inserire il tipo di account
+        <div className="container">
+            <div style={{height:10+'vh'}}/>
+            <div className="col-12 col-lg-8 mb-3 rounded shadow border border-secondary bg-light mx-auto">
+                <div className="d-flex justify-content-center">
+                    <div className="container rounded-cicle text-center" style={{position: "absolute", top: -45+'px'}}>
+                        <i className="fa fa-user-circle fa-5x text-warning bg-white rounded-circle" aria-hidden="true"></i>
                     </div>
                 </div>
+                <div className="text-center mt-4 pt-2"><h3>Registrati</h3></div>
+                <form className="container needs-validation col-12 col-lg-8 mt-3" style={{ top: -15+'px'}} noValidate onSubmit={onSubmit} action="/">
+
+                    <div className="form-group" >
+                        <label htmlFor="name">Nome</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fa fa-user fa"></i></span>
+                            </div>
+                            <input id="name" name="name" type="text" className="form-control" maxLength="40" required/>
+                            <div className="invalid-feedback">Inserire nome</div>
+                        </div>
+                    </div>
+
+                    <div className="form-group mt-3" >
+                        <label htmlFor="surname">Cognome</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fa fa-user fa"></i></span>
+                            </div>
+                            <input id="surname" name="surname" type="text" className="form-control" maxLength="40" required/>
+                            <div className="invalid-feedback">Inserire cognome</div>
+                        </div>
+                    </div>
+
+                    <div className="form-group mt-3" >
+                        <label htmlFor="birthdate">Data di nascita</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fa fa-birthday-cake"></i></span>
+                            </div>
+                            <input id="birthdate" name="birthdate" type="date" className="form-control" required/>
+                            <div className="invalid-feedback">Inserire la data di nascita</div>
+                        </div>
+                    </div>
+
+                    <div className="form-group mt-3" >
+                        <label htmlFor="email">E-mail</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fa fa-envelope fa" ></i></span>
+                            </div>
+                            <input id="email" name="email" type="email" className="form-control" size="32" maxLength="40" required/>
+                            <div className="invalid-feedback">Inserire indirizzo e-mail</div>
+                        </div>
+                    </div>
+                    <div className="form-group mt-3" >
+                        <label htmlFor="pass">Password</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fas fa-key"/></span>
+                            </div>
+                            <input id="pass" name="pass" type="password" className="form-control"
+                                   title="Almeno 8 caratteri, una lettera maiuscola e un numero"
+                                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" onChange={verificaPass} required/>
+                            <div className="invalid-feedback">Almeno 8 caratteri di cui uno maiuscolo e un numero</div>
+                        </div>
+                        <div id="mdPass" className="valid-feedback text-warning">
+                            Password media
+                        </div>
+                    </div>
+
+                    <div className="form-group mt-3" >
+                        <label htmlFor="repass">Conferma password</label>
+                        <div className="input-group" style={{ top: -8 +'px'}}>
+                            <div className="input-group-prepend">
+                                <span className="input-group-text"><i className="fas fa-key"/></span>
+                            </div>
+                            <input id="repass" name="repass" type="password" className="form-control"
+                                   size="32" maxLength="40" onKeyUp={confermaPass} required/>
+                        </div>
+                        <div>
+                            <span id='message'></span>
+                        </div>
+      ==============================================================                   
+      <div className="form-group">
+                  <label htmlFor="dataNascita">Data di Nascita *</label>
+                  <input name="dataNascita" id="dataNascita" type="date" className="form-control"/>
+                  <div className="invalid-feedback">
+                      Selezionare la data di nascita
+                  </div>
+              </div>
+                    </div>
+      ===============================================================
+
+                    <div className="form-group mt-3">
+                        <label htmlFor="account">Tipo di account</label>
+                        <br/>
+                        <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
+                            <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required/>
+                            <label className="form-check-label" htmlFor="gestore">Gestore</label>
+                        </div>
+                        <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
+                            <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required/>
+                            <label className="form-check-label" htmlFor="ospite">Ospite</label>
+                            <div className="invalid-feedback ml-2">
+                                Inserire il tipo di account
+                            </div>
+                        </div>
+                    </div>
+
+                    <button name="ok" id="ok" type="submit" className="btn btn-warning rounded-pill text-dark  mt-4 col-12 col-sm-6">Continua</button>
+                </form>
+            </div>
             </div>
 
-            <button name="ok" id="ok" type="submit" className="btn btn-primary mt-3">Continua</button>
-        </form>
+
     );
 }
 
