@@ -172,11 +172,11 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                     <div className= "form-row-group d-flex justify-content-around">
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="online"} required/>
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="online"}/>
                             <label htmlFor="pagamentoOnline" className=" form-check-label pl-2" >Pagamento online</label>
                         </div>
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="loco"} required/>
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="loco"}/>
                             <label htmlFor="pagamentoLoco" className=" form-check-label pl-2" >Pagamento in loco</label>
                         </div>
                     </div>
