@@ -19,6 +19,12 @@ import ButtonForm from "../ButtonForm";
     }, false);
 })();
 function FormCondizioni(props){
+    function vaiAvanti(){
+        props.go();
+    }
+    function  vaiIndietro() {
+        props.goBack();
+    }
     function penaleCancellazioneHandler(event) {
         if (event.target.checked) {
             $('#preavvisoDisdetta').removeAttr('disabled').attr('required', 'required');
@@ -88,7 +94,7 @@ function FormCondizioni(props){
                     <div className="mb-3 form-check-inline mr-3">
                         <div className="input-group">
                             <label htmlFor="minSoggiorno" className="mt-3 mr-4 border-bottom border-primary">Minima</label>
-                            <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control my-auto" min="1" max="15" size="2" maxLength="2" defaultValue={2} onChange={verificaMinDurata}  />
+                            <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control my-auto" min="1" max="15" size="2" maxLength="2" defaultValue={props.dati.minSoggiorno} onChange={verificaMinDurata}  />
                             <div className="input-group-prepend">
                                 <span className="input-group-text my-auto">giorni</span>
                             </div>
@@ -98,7 +104,7 @@ function FormCondizioni(props){
                     <div className="mb-3 form-check-inline text-center">
                         <div className="input-group">
                             <label htmlFor="maxSoggiorno" className="mt-3 mr-3 border-bottom border-primary">Massima </label>
-                            <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control my-auto" min="1" max="28" size="2" maxLength="2" defaultValue={7} onChange={verificaMaxDurata}  />
+                            <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control my-auto" min="1" max="28" size="2" maxLength="2" defaultValue={props.dati.maxSoggiorno}  onChange={verificaMaxDurata}  />
                             <div className="input-group-prepend">
                                 <span className="input-group-text my-auto">giorni</span>
                             </div>
@@ -110,7 +116,7 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary text-left">Anticipo di prenotazione</h6>
                     <div className="form-check-inline">
                         <label htmlFor="minPrenotazione" className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
-                        <select id="minPrenotazione" className="custom-select mr-2" name="minPrenotazione" defaultValue="2" style={{minWidth:160+'px'}}>
+                        <select id="minPrenotazione" className="custom-select mr-2" name="minPrenotazione" defaultValue={props.dati.minPrenotazione} style={{minWidth:160+'px'}}>
                             <option value="2">2 giorni</option>
                             <option value="3">3 giorni</option>
                             <option value="5">5 giorni</option>
@@ -121,7 +127,7 @@ function FormCondizioni(props){
                     </div>
                     <div className="form-check-inline pl-md-0">
                         <label htmlFor="maxPrenotazione" className="mt-3 mr-3 border-bottom border-primary" >Massimo</label>
-                        <select id="maxPrenotazione" className="custom-select" name="maxPrenotazione" defaultValue="90" style={{minWidth:160+'px'}}>
+                        <select id="maxPrenotazione" className="custom-select" name="maxPrenotazione" defaultValue={props.dati.maxPrenotazione}  style={{minWidth:160+'px'}}>
                             <option value="14">2 settimane</option>
                             <option value="21">3 settimane</option>
                             <option value="30">1 mese</option>
@@ -137,13 +143,13 @@ function FormCondizioni(props){
                     <div className="d-flex justify-content-around mb-3">
                         <div className="md-form md-outline ">
                             <label htmlFor="oraInizioCheckIn" className="border-bottom border-primary " >Inizio ora check-in</label>
-                            <input type="time" id="oraInizioCheckIn" className="form-control " placeholder="Select time" defaultValue="11:00" min="06:00" max="15:00" onChange={verificaInizioCheckIn}/>
+                            <input type="time" id="oraInizioCheckIn" className="form-control " placeholder="Select time" defaultValue={props.dati.oraInizioCheckIn}  min="06:00" max="15:00" onChange={verificaInizioCheckIn}/>
                             <div className="invalid-feedback">06:00-15:00</div>
                         </div>
 
                         <div className="md-form md-outline">
                             <label htmlFor="oraFineCheckIn" className="border-bottom border-primary">Fine ora check-in</label>
-                            <input type="time" id="oraFineCheckIn" className="form-control " defaultValue="19:00" min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn}/>
+                            <input type="time" id="oraFineCheckIn" className="form-control " defaultValue={props.dati.oraFineCheckIn} min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn}/>
                             <div className="invalid-feedback">09:00-20:00</div>
                         </div>
                     </div>
@@ -151,13 +157,13 @@ function FormCondizioni(props){
                     <div className="d-flex justify-content-around mb-3 ">
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraInizioCheckOut" className="border-bottom border-primary">Inizio ora check-out</label>
-                            <input type="time" id="oraInizioCheckOut" className="form-control" min="09:00" max="13:00" defaultValue="09:00" placeholder="Select time" onChange={verificaInizioCheckOut}/>
+                            <input type="time" id="oraInizioCheckOut" className="form-control" min="09:00" max="13:00" defaultValue={props.dati.oraInizioCheckOut} placeholder="Select time" onChange={verificaInizioCheckOut}/>
                             <div className="invalid-feedback">09:00-13:00</div>
                         </div>
 
                         <div className="md-form md-outline pl-1">
                             <label htmlFor="oraFineCheckOut" className="border-bottom border-primary">Fine ora check-out</label>
-                            <input type="time" id="oraFineCheckOut" className="form-control" min="10:00" max="18:00" defaultValue="11:00" placeholder="Select time" onChange={verificaFineCheckOut}/>
+                            <input type="time" id="oraFineCheckOut" className="form-control" min="10:00" max="18:00" defaultValue={props.dati.oraFineCheckOut} placeholder="Select time" onChange={verificaFineCheckOut}/>
                             <div className="invalid-feedback">10:00-18:00</div>
                         </div>
 
@@ -167,11 +173,11 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                     <div className= "form-row-group d-flex justify-content-around">
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online"/>
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="on"}/>
                             <label htmlFor="online" className="form-check-label pl-2" >Pagamento online</label>
                         </div>
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" />
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="on"}/>
                             <label htmlFor="loco" className="form-check-label pl-2" >Pagamento in loco</label>
                         </div>
                     </div>
@@ -180,13 +186,13 @@ function FormCondizioni(props){
                     <div className="form-check">
                         <div className="radio">
                             <label className="form-check-label">
-                                <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" onClick={cancellazioneGratuitaHandler}/>
+                                <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" onClick={cancellazioneGratuitaHandler} defaultChecked={props.politicaCancellazione==="gratuita"}/>
                                 Cancellazione gratuita</label>
                         </div>
                         <div className="form-row">
                             <div className="radio">
                                 <label htmlFor="penaleCancellazione" className="ml-1 mr-3">
-                                    <input type="radio" className="form-check-input" id="penaleCancellazione" value="pagamento" name="politicaCancellazione" onClick={penaleCancellazioneHandler}/>
+                                    <input type="radio" className="form-check-input" id="penaleCancellazione" value="pagamento" name="politicaCancellazione" onClick={penaleCancellazioneHandler} defaultChecked={props.politicaCancellazione==="pagamento"}/>
                                     Penale di cancellazione</label>
                             </div>
                             <div className="form-group">
@@ -194,14 +200,14 @@ function FormCondizioni(props){
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min="1" step="0.5" max="1000" required style={{maxWidth: 100 + 'px'}} disabled/>
+                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min="1" step="0.5" max="1000"  defaultValue={props.prezzoCancellazione} required style={{maxWidth: 100 + 'px'}} disabled/>
                                     <div className="invalid-feedback">1€-1000€</div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="input-group">
                                     <label htmlFor="preavvisoDisdetta" className="pr-2 text-muted" id="preavvisoTesto" >Preavviso minimo disdetta</label>
-                                    <select id="preavvisoDisdetta" className="custom-select" name="preavvisoDisdetta" defaultValue="30" required disabled>
+                                    <select id="preavvisoDisdetta" className="custom-select" name="preavvisoDisdetta" defaultValue={props.dati.preavvisoDisdetta} required disabled>
                                         <option value="14">2 settimane</option>
                                         <option value="21">3 settimane</option>
                                         <option value="30">1 mese</option>
@@ -223,7 +229,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">€</span>
                             </div>
-                            <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency  " min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} />
+                            <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency " defaultValue={props.dati.prezzoBambini} min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} />
                             <div className="invalid-feedback text-center">1€-10€</div>
                         </div>
                         <div className="input-group col-12 col-md-6 d-flex justify-content-center mb-2">
@@ -231,7 +237,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">€</span>
                             </div>
-                            <input name="prezzoAdulti" id="prezzoAdulti" type="number" className="form-control currency  " min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} />
+                            <input name="prezzoAdulti" id="prezzoAdulti" type="number" className="form-control currency  " min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.prezzoAdulti}/>
                             <div className="invalid-feedback text-center">1€-10€</div>
                         </div>
                     </div>
@@ -241,7 +247,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">giorni</span>
                             </div>
-                            <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2" maxLength="2" required style={{maxWidth: 80 + 'px'}}/>
+                            <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2" maxLength="2" defaultValue={props.dati.nGiorniEsclusione} required style={{maxWidth: 80 + 'px'}}/>
                         </div>
                     </div>
 
@@ -253,21 +259,22 @@ function FormCondizioni(props){
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">%</span>
                                     </div>
-                                    <input name="percentualeCondizioni" id="percentualeCondizioni" type="number" className="form-control currency  " min="0" step="0.1" max="100" required style={{maxWidth: 100 + 'px'}} />
+                                    <input name="percentualeCondizioni" id="percentualeCondizioni" type="number" className="form-control currency  " min="0" step="0.1" max="100" defaultValue={props.dati.percentualeCondizioni} required style={{maxWidth: 100 + 'px'}} />
                                 </div>
                             </div>
 
                             <div  className=" col-sm-12 col-md-8 col-lg-7 pt-3" >
                                 <div className="input-group ">
                                     <label htmlFor="nPersone" className="pr-2">per prenotazioni superiori a n° persone</label>
-                                    <input name="nPersone" id="nPersone" type="number" className="form-control currency  " min="1" step="1" max="100" required style={{maxWidth: 100 + 'px'}} />
+                                    <input name="nPersone" id="nPersone" type="number" className="form-control currency  " min="1" step="1" max="100" required style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.nPersone} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-            <button className="btn btn-success btn-block">Sign up</button>
+            <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+            <button id="finish" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
         </div>
     )}
 export default FormCondizioni;

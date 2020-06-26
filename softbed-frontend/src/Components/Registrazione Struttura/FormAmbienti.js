@@ -1,12 +1,19 @@
 import React, {useState} from 'react';
 import ButtonForm from "../ButtonForm";
 import $ from "jquery";
-
+/* TODO: vedere come gestire le camere e checbox*/
 let contatore = 0;
 
 function FormAmbienti(props) {
     const camera = "Camera ";
     const [camere,setCamere] = useState([]);
+
+    function vaiAvanti(){
+        props.go();
+    }
+    function vaiIndietro(){
+        props.goBack();
+    }
 
     function scriviCamera() {
         let lista = document.getElementById("listaCamere");
@@ -102,25 +109,25 @@ function FormAmbienti(props) {
         return null;
     }
     return(
-        <form className="container col-12 col-md-8" action="ambienti/caratteristicheC" onChange={props.handleChange} >
+        <form className="container col-12 col-md-8"  onChange={props.handleChange} >
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
             <div className="form-row-group text-center offset-5 offset-sm-3">
                 <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="salotto" id="salotto"/>
+                    <input type="checkbox" className="mr-1" name="salotto" id="salotto" defaultChecked={props.dati.salotto==="on"}/>
                     <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
                 </div>
                 <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="terrazza" id="terrazza"/>
+                    <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" defaultChecked={props.dati.terrazza==="on"}/>
                     <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
                 </div>
             </div>
             <div className="form-row-group text-center offset-5 offset-sm-3">
                 <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="giardino" id="giardino"/>
+                    <input type="checkbox" className="mr-1" name="giardino" id="giardino" defaultChecked={props.dati.giardino==="on"}/>
                     <label className="form-check-label" htmlFor="giardino">Giardino</label>
                 </div>
                 <div className="form-check-inline col-12 col-sm-5">
-                    <input type="checkbox" className="mr-1" name="piscina" id="piscina"/>
+                    <input type="checkbox" className="mr-1" name="piscina" id="piscina" defaultChecked={props.dati.piscina==="on"}/>
                     <label className="form-check-label" htmlFor="piscina">Piscina</label>
                 </div>
             </div>
@@ -137,19 +144,19 @@ function FormAmbienti(props) {
 
             <div className="form-group controlla">
                 <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
-                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0"/>
+                <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0" />
                 <small  className="form-text text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
                 <div className="invalid-feedback">1 - 10</div>
             </div>
             <div className="form-group controlla">
                 <label htmlFor="nLettiSingoli">Numero letti singoli </label>
-                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0"/>
+                <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" placeholder="0" />
                 <small className="form-text text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
                 <div className="invalid-feedback">1 - 10</div>
             </div>
             <div className="form-group">
                 <label htmlFor="nCamere">Numero di camere per questa tipologia </label>
-                <input name="nCamere" id="nCamere" type="number" className="form-control" min="1" max="10" size="2" maxLength="2"  defaultValue="1"/>
+                <input name="nCamere" id="nCamere" type="number" className="form-control" min="1" max="10" size="2" maxLength="2"  defaultValue="1" />
             </div>
 
             <div className="d-flex justify-content-end">
@@ -161,7 +168,7 @@ function FormAmbienti(props) {
             <h6 className="mt-3 border-bottom border-primary">Informazioni generali</h6>
             <div className="form-group validazione">
                 <label htmlFor="nBagni">Numero bagni</label>
-                <input name="nBagni" type="number" name="bagni" className="form-control" min={1} max={10}  size="2" maxLength="2" required
+                <input name="nBagni" type="number" name="nBagni" className="form-control" min={1} max={10}  size="2" maxLength="2" required value={props.dati.nBagni}
                        onChange={(event)=>{
                                event.preventDefault();
                                event.target.closest("div").classList.add("was-validated") }}/>
@@ -173,12 +180,13 @@ function FormAmbienti(props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" required
+                    <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" value={props.dati.prezzo} required
                            onChange={(event)=>{event.target.closest("div").classList.add("was-validated")}}/>
                     <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
-
             </div>
+            <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+            <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
         </form>
 
 

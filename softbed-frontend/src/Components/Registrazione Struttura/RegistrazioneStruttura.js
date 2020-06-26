@@ -63,7 +63,7 @@ function RegistrazioneStruttura () {
     } */}
     return(
         <React.Fragment>
-            <form onSubmit={handleSubmit}>
+            <div>
                 <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                  <FormStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 {console.log("tipologia "+info.tipologia)}
@@ -80,7 +80,7 @@ function RegistrazioneStruttura () {
                         <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 }
                  <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
-            </form>
+            </div>
         </React.Fragment>
 
             /*

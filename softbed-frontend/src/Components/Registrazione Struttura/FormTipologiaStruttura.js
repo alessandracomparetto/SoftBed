@@ -25,7 +25,6 @@ import {Link} from "react-router-dom";
 function FormTipologiaStruttura(props) {
 
     function vaiAvanti(event){
-        event.preventDefault();
         if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
             document.getElementById("feedback").classList.add("collapse");
             props.go();
@@ -69,13 +68,13 @@ function FormTipologiaStruttura(props) {
                     <div className="col-6 text-center">
                         <div className="custom-control custom-radio custom-control-inline mt-2">
                             <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" defaultChecked={props.dati.tipologia === "cv"} required/>
-                            <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
+                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
                         </div>
                     </div>
                     <div className="col-6 text-center">
                         <div className="custom-control custom-radio custom-control-inline mt-2">
                             <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B" defaultChecked={props.dati.tipologia === "B&B"}/>
-                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
+                            <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
                         </div>
                     </div>
                     <div id="feedback" className="col-12 text-danger text-center collapse">
@@ -83,7 +82,7 @@ function FormTipologiaStruttura(props) {
                     </div>
                 </div>
                 <div className="container-fluid p-0 mt-2 mb-5 d-flex justify-content-between">
-                    {/* <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>*/}
+                    <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px disabled" >Indietro</button>
                     <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
                 </div>
         </form>

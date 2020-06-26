@@ -11,12 +11,18 @@ function FormCamere(props){
     const [camere, setCamere] = useState([]);
     const camera = "Camera ";
     //let contatore = 0; //indica il numero di camere inserite
-    function verificaContatore (e){
+    function vaiAvanti(e){
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
         if(contatore == 0){
-            e.preventDefault();
             document.getElementById("inserisciCamera").classList.remove("collapse");
+            e.preventDefault();
         }
+        else{
+            props.go();
+        }
+    }
+    function vaiIndietro(){
+        props.goBack();
     }
     function scriviCamera() {
         let lista = document.getElementById("listaCamere");
@@ -128,7 +134,7 @@ function FormCamere(props){
         return null;
     }
     return(
-        <form className="container col-12 col-md-8 needs-validation" onSubmit={verificaContatore} oChange={props.handleChange} action={"camere/caratteristicheB"} noValidate>
+        <form className="container col-12 col-md-8 needs-validation"  oChange={props.handleChange} action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
                 <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
@@ -187,8 +193,9 @@ function FormCamere(props){
                     Aggiungi camera
                 </button>
             </div>
+            <button id="indietro" className="btn btn-secondary mt-3 float-left btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+            <button id="ok" type="submit" className="btn btn-primary mt-3  float-right btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
         </form>
-
     )
 }
 export default FormCamere
