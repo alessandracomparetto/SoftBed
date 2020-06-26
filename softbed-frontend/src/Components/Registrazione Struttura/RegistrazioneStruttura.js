@@ -43,7 +43,6 @@ function RegistrazioneStruttura () {
         printObject(camera);
     }
 
-
     const handleSubmit=(event)=>{
         event.preventDefault();
         /*.axios.*/
@@ -57,24 +56,7 @@ function RegistrazioneStruttura () {
         let currentStep=step-1;
         setStep(currentStep);
     }
-    {/*function previousButton(){
-        let currentStep=step;
-        {/*if(currentStep!=1){
-            return(
-                <button className="btn btn-secondary" type="button" onClick={_prev}>Indietro</button>
-            )
-        }
-        return null; */}
-    {/*function nextButton(){
-        let currentStep=step;
-        console.log(currentStep);
-        if(currentStep<5){
-            return(
-                <button className="btn btn-primary" type="button" onClick={_next}>Continua</button>
-            )
-        }
-        return null;
-    } */}
+
     return(
         <React.Fragment>
             <div>
@@ -94,28 +76,9 @@ function RegistrazioneStruttura () {
                         <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 }
                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+                <FormFotografie currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} />
             </div>
         </React.Fragment>
-
-        /*
-
-            <Route path="*!/fotografie">
-                <FormFotografie/>
-            </Route><Route path="*!/condizioni">
-                <FormCondizioni/>
-            </Route>
-            <Route path="*!/caratteristicheB">
-                <FormCaratteristicheB/>
-            </Route>
-            <Route path="*!/caratteristicheC">
-                <FormCaratteristicheC/>
-            </Route>
-            <Route path="*!/camere">
-                <FormCamere/>
-            </Route>
-            <Route path="*!/ambienti">
-                <FormAmbienti/>
-            </Route>*/
     )
 }
 

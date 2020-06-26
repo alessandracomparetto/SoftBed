@@ -69,7 +69,7 @@ function FormCondizioni(props){
         }
     }
     function verificaFineCheckOut(e){
-        if(document.getElementById("oraInizioCheckOut").value!="" && (e.target.value)<document.getElementById("oraInizioCheckOut").value){
+        if(document.getElementById("oraInizioCheckOut").value!=="" && (e.target.value)<document.getElementById("oraInizioCheckOut").value){
             document.getElementById("oraInizioCheckOut").value=e.target.value;
         }
     }
@@ -82,7 +82,7 @@ function FormCondizioni(props){
             event.preventDefault();
         }
     }
-    if(props.currentStep != 5){
+    if(props.currentStep !== 5){
         return null;
     }
     return(
@@ -119,7 +119,7 @@ function FormCondizioni(props){
                     <div className="form-check-inline">
                         <label htmlFor="minPrenotazione" className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                         <select id="minPrenotazione" className="custom-select mr-2" name="minPrenotazione" defaultValue={props.dati.minPrenotazione} style={{minWidth:160+'px'}} required>
-                            <option value="" selected></option>
+                            <option value=""/>
                             <option value="2">2 giorni</option>
                             <option value="3">3 giorni</option>
                             <option value="5">5 giorni</option>
@@ -131,7 +131,7 @@ function FormCondizioni(props){
                     <div className="form-check-inline pl-md-0">
                         <label htmlFor="maxPrenotazione" className="mt-3 mr-3 border-bottom border-primary" >Massimo</label>
                         <select id="maxPrenotazione" className="custom-select" name="maxPrenotazione" defaultValue={props.dati.maxPrenotazione}  style={{minWidth:160+'px'}} required>
-                            <option value="" selected></option>
+                            <option value="" />
                             <option value="14">2 settimane</option>
                             <option value="21">3 settimane</option>
                             <option value="30">1 mese</option>
@@ -147,7 +147,7 @@ function FormCondizioni(props){
                     <div className="d-flex justify-content-around mb-3">
                         <div className="md-form md-outline ">
                             <label htmlFor="oraInizioCheckIn" className="border-bottom border-primary " >Inizio ora check-in</label>
-                            <input type="time" id="oraInizioCheckIn" name="oraInizioCheckIn"className="form-control " placeholder="Select time" defaultValue={props.dati.oraInizioCheckIn}  min="06:00" max="15:00" onChange={verificaInizioCheckIn} required/>
+                            <input type="time" id="oraInizioCheckIn" name="oraInizioCheckIn" className="form-control " placeholder="Select time" defaultValue={props.dati.oraInizioCheckIn}  min="06:00" max="15:00" onChange={verificaInizioCheckIn} required/>
                             <div className="invalid-feedback">06:00-15:00</div>
                         </div>
 
@@ -212,7 +212,7 @@ function FormCondizioni(props){
                                 <div className="input-group">
                                     <label htmlFor="preavvisoDisdetta" className="pr-2 text-muted" id="preavvisoTesto" >Preavviso minimo disdetta</label>
                                     <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"  defaultValue={props.dati.preavvisoDisdetta} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} disabled={((props.dati.politicaCancellazione==="gratuita")?"true":"false")}>
-                                        <option value=""></option>
+                                        <option value=""/>
                                         <option value="14">2 settimane</option>
                                         <option value="21">3 settimane</option>
                                         <option value="30">1 mese</option>
@@ -227,7 +227,7 @@ function FormCondizioni(props){
                     </div>
                 </div>
                 <div className="border pt-3">
-                    <h5  id="turismo">Si compilano i campi in base alle normative <br></br> dell'ufficio del Turismo in cui si trova la struttura </h5>
+                    <h5  id="turismo">Si compilano i campi in base alle normative <br/> dell'ufficio del Turismo in cui si trova la struttura </h5>
                     <div className="form-row">
                         <div className="input-group col-12 col-md-6 d-flex justify-content-center mb-2">
                             <label htmlFor="prezzoBambini" className="pr-3">Prezzo base bambini</label>
