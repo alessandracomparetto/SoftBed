@@ -6,7 +6,7 @@ function FormCamere(props){
     const camera = "Camera ";
     let [listaCamere, setListaCamere] = useState([]);
     let [lunghezzaLista, setLunghezzaLista] = useState(0);
-    //let contatore = 0; //indica il numero di camere inserite
+
     function vaiAvanti(e){
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
         if(contatore === 0){
@@ -21,7 +21,6 @@ function FormCamere(props){
         props.goBack();
     }
     function scriviCamera() {
-        let lista = document.getElementById("listaCamere");
         let tipologia = document.getElementById("tipologia");
         let nlettiMatrimoniali = document.getElementById("nLettiMatrimoniali");
         let nlettiSingoli = document.getElementById("nLettiSingoli");
@@ -140,7 +139,6 @@ function FormCamere(props){
         <form className="container col-12 col-md-8 needs-validation" action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
-
                 { (lunghezzaLista===0) ? (
                     <p><br/></p>
                 ) : (
@@ -151,7 +149,6 @@ function FormCamere(props){
                     })
                 )
                 }
-
             </div>
 
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
