@@ -1,5 +1,10 @@
+html {
+    min-height: 100vh;
+}
+
 body {
     background-color: #ffe;
+    min-height: 100vh;
 }
 
 .annuncio-btn {
@@ -22,14 +27,29 @@ body {
     -webkit-box-orient: vertical;
 }
 
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.7);
+    right: 0;
+    left: 0;
+    bottom: 30px;
+}
+
 .border-danger {
     border-width: 2px !important;
+}
+
+.carousel-img {
+    max-height: 420px;
 }
 
 @media screen and (min-width: 768px) {
     .annuncio-box-servizi {
         min-height: 101px;
     }
+}
+
+.bg-footer {
+    background-color: #FFA207;
 }
 
 .form-group {
