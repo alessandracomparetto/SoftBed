@@ -35,7 +35,12 @@ router.get('/', function(req, res, next) {
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', (req, res) => {
-    console.log(req.body.nome + req.body.cognome + req.body.dataNascita+ req.body.gestore)
+    console.log(`
+    nome: ${req.body.nome} 
+    cognome: ${req.body.cognome} 
+    nascita: ${req.body.dataNascita} 
+    gestore: ${req.body.gestore}
+    `)
     Utente.create(req.body)
         .then(res.send("finito"))
 });
@@ -134,9 +139,8 @@ async function autenticazione(req, res, next) {
                     console.log('Password errata!');
                     next(createError(403, 'Password errata'));
                 } else {
-                    let refUtente = results[0].refUtente;
                     //creo id della sessione
-                    req.session.session_uid = refUtente;
+                    req.session.session_uid = results[0].refUtente;
                     console.log('Utente autenticato');
                     console.log(req.sessionID);
                     res.send();
