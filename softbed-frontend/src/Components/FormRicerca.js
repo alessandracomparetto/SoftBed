@@ -177,7 +177,7 @@ function FormRicerca(props) {
     return (
         <Fragment>
             <form id="formRicerca" className={`form d-md-flex  justify-content-center bg-warning ${visibile ? "d-flex" : "d-none"}`} action="/search" onSubmit={controlloForm}>
-                <div className="form-row px-2 px-sm-3 pt-2 mx-3 mt-3 pb-md-2 mb-md-3 w-100 minw-15em maxw-xl">
+                <div className={`form-row px-2 px-sm-3 ${(path !== "/") ? "pt-2 pb-md-2" : "py-2"} mx-3 mt-3 mb-md-3 w-100 minw-15em maxw-xl`}>
                     <div className="col-12 col-lg-9 mb-3">
                         <label htmlFor="destinazione">Destinazione</label>
                         <input name="destinazione" id="destinazione" type="text" className="form-control"
@@ -240,11 +240,15 @@ function FormRicerca(props) {
                     </div>
                 </div>
             </form>
-            <div className="mx-auto bg-warning text-center d-md-none">
-                <button type="button" className="btn btn-block" onClick={() => toggleVisibile(!visibile)}>
-                    <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
-                </button>
-            </div>
+            {
+                (path !== "/") && (
+                    <div className={`mx-auto bg-warning text-center d-md-none`}>
+                        <button type="button" className="btn btn-block" onClick={() => toggleVisibile(!visibile)}>
+                            <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
+                        </button>
+                    </div>
+                )
+            }
         </Fragment>
     );
 }

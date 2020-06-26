@@ -16,29 +16,23 @@ function FormMetodoPagamento(props) {
         return anno + "-" + mese;
     }
 
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-// Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
 
-    const[dato, setDato] = useState( {nomeIntestatario:"cioa", cognomeIntestatario:"ciao", numeroCarta:"1234123412341234", cvv:"123", dataScadenza:"12-03-20"});
+    const[dato, setDato] = useState( {nomeIntestatario:"", cognomeIntestatario:"", numeroCarta:"", cvv:"", dataScadenza:""});
 
     function onSubmit(e) {
         e.preventDefault();
-        props.aggiungiDatoPagamento(dato);
+        var form = document.getElementById("form");
+        form.classList.add('was-validated');
+        if(form.checkValidity()){
+            props.aggiungiDatoPagamento(dato);
+            form.classList.remove('was-validated');
+            document.getElementById("nome").value="";
+            document.getElementById("cognome").value="";
+            document.getElementById("ncarta").value="";
+            document.getElementById("cvv").value="";
+            document.getElementById("data").value="";
+
+        }
     }
 
    function setNome(event){
@@ -67,7 +61,7 @@ function FormMetodoPagamento(props) {
         setDato(tmp);
     }
     return (
-        <form className=" needs-validation" noValidate onSubmit={onSubmit}>
+        <form id="form" noValidate onSubmit={onSubmit}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
                 <div className="form-group col-12 col-md-5 ">

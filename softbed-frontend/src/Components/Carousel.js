@@ -4,9 +4,9 @@ function CarouselItem(props) {
     return (
         <div className={"carousel-item " + props.stato}>
             <a href={"/search?destinazione=" + props.titolo}>
-                <img className="d-block w-100" src={props.src} alt={props.titolo} />
-                <div className="carousel-caption d-none d-lg-block">
-                    <h1>{props.titolo}</h1>
+                <img className="d-block w-100 carousel-img" src={props.src} alt={props.titolo} />
+                <div className="carousel-caption d-none d-md-block carousel-caption py-3">
+                    <span className="h2">{props.titolo}</span>
                 </div>
             </a>
         </div>
@@ -19,9 +19,9 @@ function Carousel() {
              data-pause="false" data-interval="4000">
             <div className="carousel-inner">
                 {/* TODO: Trovare delle immagini appropriate */}
-                <CarouselItem src="/images/chicago.jpg" titolo="Palermo" stato="active"/>
-                <CarouselItem src="/images/la.jpg" titolo="Roma" />
-                <CarouselItem src="/images/ny.jpg" titolo="Venezia" />
+                <CarouselItem src="/images/palermo.webp" titolo="Palermo" stato="active"/>
+                <CarouselItem src="/images/milano.webp" titolo="Milano" />
+                <CarouselItem src="/images/venezia.webp" titolo="Venezia" />
             </div>
             <a className="carousel-control-prev" role="button" href="#carousel" data-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"/>

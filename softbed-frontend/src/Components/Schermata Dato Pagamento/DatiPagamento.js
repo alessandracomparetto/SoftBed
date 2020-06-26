@@ -43,12 +43,6 @@ function DatiPagamento(props){
                     </div>
                 </div>
 
-               {/* <div className="row">
-                    <p className="col-12 col-md-4 "><strong>Intestatario carta:</strong> {props.nomeIntestatario} {props.cognomeIntestatario}</p>
-                    <p className="col-12 col-md-4" ><strong>Numero carta: </strong> {props.numeroCarta}</p>
-                    <p className="col-6 col-md-2" ><strong>CVV: </strong>{props.cvv}</p>
-
-                </div>*/}
             </div>
         </li>
     )

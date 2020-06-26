@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react'
-import ButtonForm from "./ButtonForm";
+import ButtonForm from "../ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 
@@ -57,15 +57,16 @@ function FormDocumenti(){
     };
 
     return (
-        <div className="col-10 mx-auto">
-            <h6 className="mt-3 border-bottom border-primary">Documenti degli ospiti</h6>
+
+        <div className="col-10 mx-auto mt-5">
+            <h6 className="border-bottom border-warning">Documenti degli ospiti</h6>
             <p>Inserisci qui i documenti degli ospiti in formato jpeg, jpg, o png</p>
             <form encType="multipart/form-data" onSubmit={onSubmit}>
                 <div className="custom-file mt-3 ">
                     <input name="file" type="file" className="custom-file-input" id="customFile" lang="it"multiple onChange={onChange}/>
                     <label className="custom-file-label" htmlFor="customFile">{numero} file selezionati</label>
                 </div>
-                <input id="carica" type="submit" value="Carica" className="btn btn-outline-primary btn-block mt-4" accept="image/png"/>
+                <input id="carica" type="submit" value="Carica" className="btn btn-outline-warning btn-block mt-4" accept="image/png"/>
                 <span id="vuoto" className="collapse small text-danger">Non hai selezionato nessun file o stai cercando di caricare file già inseriti</span>
                 <span id="formato" className="collapse small text-danger">Puoi caricare solo jpeg, jpg o png.</span>
             </form>
@@ -81,8 +82,8 @@ function FormDocumenti(){
                     })}
                 </div>)
             }
-            <ButtonForm/>
         </div>
+
     );
 }
 export default FormDocumenti;

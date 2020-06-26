@@ -3,7 +3,7 @@ const { Model, DataTypes} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Struttura extends Model {
-        tipologia="";
+        // tipologia="";
 
         setTipologia (value) {
             this.tipologia = value;
