@@ -1,13 +1,7 @@
 import React, {useEffect} from "react";
-import $ from "jquery";
-import ButtonForm from "../ButtonForm";
+import $ from 'jquery';
 
 function FormCondizioni(props){
-
-    useEffect(()=>{
-        console.log("ok");
-    });
-
     function vaiAvanti(event) {
          event.preventDefault();
         document.getElementById("form").classList.add("was-validated");
@@ -23,49 +17,34 @@ function FormCondizioni(props){
             event.preventDefault();
         }
     }
-
-
     function  vaiIndietro() {
         props.goBack();
     }
-  /*  function penaleCancellazioneHandler(event) {
-        if (event.target.checked) {
-            $('#preavvisoDisdetta').removeAttr('disabled').attr('required', 'required');
-            $('#prezzoCancellazione').removeAttr('disabled').attr('required', 'required')
-            $('#preavvisoTesto').removeClass('text-muted');
-        }
-    }
-    function cancellazioneGratuitaHandler(event){
-        if(event.target.checked){
-            $('#preavvisoDisdetta').attr('disabled', 'disabled').removeAttr('required');
-            $('#prezzoCancellazione').attr('disabled', 'disabled').removeAttr('required');
-            $('#preavvisoTesto').addClass('text-muted');
-        }
-    }
-    */ function verificaMinDurata(e){
+
+    function verificaMinDurata(e){
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
-        if(document.getElementById("maxSoggiorno").value!="" && (e.target.value)>document.getElementById("maxSoggiorno").value){
+        if(document.getElementById("maxSoggiorno").value!=="" && (e.target.value)>document.getElementById("maxSoggiorno").value){
             document.getElementById("maxSoggiorno").value=e.target.value;
         }
     }
     function verificaMaxDurata(e){
         /* se la durata massima è minore della minima, imposta la minima uguale alla massima*/
-        if(document.getElementById("minSoggiorno").value!="" && (e.target.value)<document.getElementById("minSoggiorno").value){
+        if(document.getElementById("minSoggiorno").value!=="" && (e.target.value)<document.getElementById("minSoggiorno").value){
             document.getElementById("minSoggiorno").value=e.target.value;
         }
     }
     function verificaInizioCheckIn(e){
-        if(document.getElementById("oraFineCheckIn").value!="" && (e.target.value)>document.getElementById("oraFineCheckIn").value){
+        if(document.getElementById("oraFineCheckIn").value!=="" && (e.target.value)>document.getElementById("oraFineCheckIn").value){
             document.getElementById("oraFineCheckIn").value=e.target.value;
         }
     }
     function verificaFineCheckIn(e){
-        if(document.getElementById("oraInizioCheckIn").value!="" && (e.target.value)<document.getElementById("oraInizioCheckIn").value){
+        if(document.getElementById("oraInizioCheckIn").value!=="" && (e.target.value)<document.getElementById("oraInizioCheckIn").value){
             document.getElementById("oraInizioCheckIn").value=e.target.value;
         }
     }
     function verificaInizioCheckOut(e){
-        if(document.getElementById("oraFineCheckOut").value!="" && (e.target.value)>document.getElementById("oraFineCheckOut").value){
+        if(document.getElementById("oraFineCheckOut").value!=="" && (e.target.value)>document.getElementById("oraFineCheckOut").value){
             document.getElementById("oraFineCheckOut").value=e.target.value;
         }
     }
@@ -83,6 +62,26 @@ function FormCondizioni(props){
             event.preventDefault();
         }
     }
+    function abilitazione() {
+        let prezzoCancellazione = document.getElementById("prezzoCancellazione");
+        let preavvisoDisdetta = document.getElementById("preavvisoDisdetta");
+        let preavvisoTesto =  document.getElementById("preavvisoTesto");
+        if(document.getElementById("penaleCancellazione").checked){
+            prezzoCancellazione.removeAttribute("disabled");
+            prezzoCancellazione.setAttribute("required", "required");
+            preavvisoDisdetta.removeAttribute("disabled");
+            preavvisoDisdetta.setAttribute("required", "required");
+            preavvisoTesto.classList.remove("text-muted");
+
+        }else{
+            prezzoCancellazione.setAttribute("disabled", "disabled");
+            prezzoCancellazione.classList.remove("required");
+            preavvisoDisdetta.setAttribute("disabled", "disabled");
+            preavvisoDisdetta.classList.remove("required");
+            preavvisoTesto.classList.add("text-muted");
+        }
+    }
+
     if(props.currentStep !== 5){
         return null;
     }
@@ -154,7 +153,7 @@ function FormCondizioni(props){
 
                         <div className="md-form md-outline">
                             <label htmlFor="oraFineCheckIn" className="border-bottom border-primary">Fine ora check-in</label>
-                            <input type="time" id="oraFineCheckIn"  name="oraFineCheckIn"className="form-control " defaultValue={props.dati.oraFineCheckIn} min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn} required/>
+                            <input type="time" id="oraFineCheckIn"  name="oraFineCheckIn" className="form-control " defaultValue={props.dati.oraFineCheckIn} min="09:00" max="20:00" placeholder="Select time" onChange={verificaFineCheckIn} required/>
                             <div className="invalid-feedback">09:00-20:00</div>
                         </div>
                     </div>
@@ -178,23 +177,24 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                     <div className= "form-row-group d-flex justify-content-around">
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="online"} required/>
-                            <label htmlFor="online" className=" form-check-label pl-2" >Pagamento online</label>
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="online"} />
+                            <label htmlFor="pagamentoOnline" className=" form-check-label pl-2" >Pagamento online</label>
                         </div>
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="loco"} required/>
-                            <label htmlFor="loco" className=" form-check-label pl-2" >Pagamento in loco</label>
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="loco"}/>
+                            <label htmlFor="pagamentoLoco" className=" form-check-label pl-2" >Pagamento in loco</label>
                         </div>
                     </div>
                     <p id="feedback" className=" text-danger collapse small" >Selezionare almeno una delle due checkbox</p>
+
                     <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
-                    <div className="form-check">
+                    <div className="form-check" onChange={abilitazione}>
                         <div className="radio">
                             <label className="form-check-label">
                                 <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="gratuita"} required/>
                                 Cancellazione gratuita</label>
                         </div>
-                        <div className="form-row">
+                        <div className="form-row" >
                             <div className="radio">
                                 <label htmlFor="penaleCancellazione" className="ml-1 mr-3">
                                     <input type="radio" className="form-check-input" id="penaleCancellazione" value="pagamento" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="pagamento"} required/>
@@ -227,6 +227,8 @@ function FormCondizioni(props){
                         </div>
                     </div>
                 </div>
+
+
                 <div className="border pt-3">
                     <h5  id="turismo">Si compilano i campi in base alle normative <br/> dell'ufficio del Turismo in cui si trova la struttura </h5>
                     <div className="form-row">
