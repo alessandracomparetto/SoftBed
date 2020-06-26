@@ -1,47 +1,37 @@
 import React from 'react';
 import $ from "jquery";
 import axios from "axios";
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
-// Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-})();
 
-function Registration() {
+function Registrazione() {
     function onSubmit(e){
         e.preventDefault();
-        const utenteRegistrato = {
-            nome: document.getElementById("name").value,
-            cognome: document.getElementById("surname").value,
-            dataNascita: document.getElementById("dataNascita").value,
-            email: document.getElementById("email").value ,
-            pass: document.getElementById("pass").value ,
-            gestore: $( "input:checked" ).val(),
-        }
-        console.log(utenteRegistrato);
-        try{
-            axios.post("/utente/utenteRegistrato", utenteRegistrato)
-                .then(res => console.log(res.text));
-        }
-        catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
+        var form = document.getElementById("form");
+        form.classList.add('was-validated');
+
+        if(form.checkValidity()){
+            const utenteRegistrato = {
+                nome: document.getElementById("name").value,
+                cognome: document.getElementById("surname").value,
+                dataNascita: document.getElementById("dataNascita").value,
+                email: document.getElementById("email").value ,
+                pass: document.getElementById("pass").value ,
+                gestore: $( "input:checked" ).val(),
             }
+            console.log(utenteRegistrato);
+            try{
+                axios.post("/utente/utenteRegistrato", utenteRegistrato)
+                    .then(res => console.log(res.text));
+            }
+            catch(err){
+                if (err.response.status === 400) {
+                    console.log('There was a problem with the server');
+                } else {
+                    console.log(err.response.data.msg);
+                }
+            }
+
         }
+
 
     }
     function verificaPass(event) {
@@ -57,11 +47,14 @@ function Registration() {
         }
 
     function confermaPass(event){
+        const mdPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$");
+        if(mdPass.test(event.target.value)) {
+            if ($('#pass').val() === $('#repass').val()) {
+                $('#message').html('Password coincidenti').css('color', 'green');
+            } else
+                $('#message').html('Password non coincidenti').css('color', 'red');
+        }
 
-        if ($('#pass').val() == $('#repass').val()) {
-            $('#message').html('Password coincidenti').css('color', 'green');
-        } else
-            $('#message').html('Password non coincidenti').css('color', 'red');
     }
 
     return(
@@ -74,7 +67,7 @@ function Registration() {
                     </div>
                 </div>
                 <div className="text-center mt-4 pt-2"><h3>Registrati</h3></div>
-                <form className="container needs-validation col-12 col-lg-8 mt-3" style={{ top: -15+'px'}} noValidate onSubmit={onSubmit} action="/">
+                <form id="form" className="container col-12 col-lg-8 mt-3" style={{ top: -15+'px'}} noValidate onSubmit={onSubmit} action="/registrati">
 
                     <div className="form-group" >
                         <label htmlFor="name">Nome</label>
@@ -99,12 +92,12 @@ function Registration() {
                     </div>
 
                     <div className="form-group mt-3" >
-                        <label htmlFor="birthdate">Data di nascita</label>
+                        <label htmlFor="dataNascita">Data di nascita</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-birthday-cake"></i></span>
                             </div>
-                            <input id="birthdate" name="birthdate" type="date" className="form-control" required/>
+                            <input id="dataNascita" name="dataNascita" type="date" className="form-control" required/>
                             <div className="invalid-feedback">Inserire la data di nascita</div>
                         </div>
                     </div>
@@ -129,10 +122,9 @@ function Registration() {
                                    title="Almeno 8 caratteri, una lettera maiuscola e un numero"
                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" size="32" maxLength="40" onChange={verificaPass} required/>
                             <div className="invalid-feedback">Almeno 8 caratteri di cui uno maiuscolo e un numero</div>
+                            <div id="mdPass" className="valid-feedback text-warning">Password media</div>
                         </div>
-                        <div id="mdPass" className="valid-feedback text-warning">
-                            Password media
-                        </div>
+
                     </div>
 
                     <div className="form-group mt-3" >
@@ -142,21 +134,12 @@ function Registration() {
                                 <span className="input-group-text"><i className="fas fa-key"/></span>
                             </div>
                             <input id="repass" name="repass" type="password" className="form-control"
-                                   size="32" maxLength="40" onKeyUp={confermaPass} required/>
+                                   size="32" maxLength="40" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onKeyUp={confermaPass} required/>
                         </div>
                         <div>
-                            <span id='message'></span>
+                            <span id="message"></span>
                         </div>
-      ==============================================================                   
-      <div className="form-group">
-                  <label htmlFor="dataNascita">Data di Nascita *</label>
-                  <input name="dataNascita" id="dataNascita" type="date" className="form-control"/>
-                  <div className="invalid-feedback">
-                      Selezionare la data di nascita
-                  </div>
-              </div>
                     </div>
-      ===============================================================
 
                     <div className="form-group mt-3">
                         <label htmlFor="account">Tipo di account</label>
@@ -174,7 +157,7 @@ function Registration() {
                         </div>
                     </div>
 
-                    <button name="ok" id="ok" type="submit" className="btn btn-warning rounded-pill text-dark  mt-4 col-12 col-sm-6">Continua</button>
+                    <button name="ok" id="ok" type="submit" className="btn btn-warning rounded-pill text-dark mt-4 col-6">Continua</button>
                 </form>
             </div>
             </div>
@@ -183,6 +166,6 @@ function Registration() {
     );
 }
 
-export default Registration;
+export default Registrazione;
 
 

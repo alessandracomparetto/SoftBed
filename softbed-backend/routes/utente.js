@@ -150,67 +150,7 @@ async function autenticazione(req, res, next) {
 }
 
 
-async function aggiuntaDatoPagamento(req, res, next) {
-    // istanziamo il middleware
-    const db = await makeDb(config);
-    let results = {};
-    try {
-        await withTransaction(db, async() => {
-            // inserimento dato
 
-            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
-        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
-                req.body.nome,
-                req.body.cognome,
-                req.body.data_nascita,
-                req.body.gestore == 'gestore' ? '1' : '0',
-            ])
-                .catch(err => {
-                    throw err;
-                });
-
-            console.log('Inserimento tabella utente');
-            console.log(results);
-
-
-            // recupero dello user id
-            let id_utente = results.insertId;
-
-
-            // generazione della password cifrata con SHA512
-            results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
-                .catch(err => {
-                    throw err;
-                });
-
-            let encpwd = results[0].encpwd;
-            console.log('Password cifrata');
-            console.log(results);
-
-            results = await db.query('INSERT INTO `autenticazione` \
-        (refUtente, email, password) VALUES ?', [
-                [
-                    [
-                        id_utente,
-                        req.body.email,
-                        encpwd
-                    ]
-                ]
-            ])
-                .catch(err => {
-                    throw err;
-                });
-
-            console.log(results);
-            console.log(`Utente ${req.body.email} inserito!`);
-
-        });
-    } catch (err) {
-        console.log(err);
-        next(createError(500));
-
-    }
-}
 
 
 module.exports = router;

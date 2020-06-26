@@ -2,7 +2,7 @@ import React, {useState} from "react";
 
 function DatiPagamento(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
-    const toggleContenuto = () => setMostraContenuto(true);
+    const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
 
     return(
         <li className="rounded list-group-item list-group-item-warning text-dark border border-dark">

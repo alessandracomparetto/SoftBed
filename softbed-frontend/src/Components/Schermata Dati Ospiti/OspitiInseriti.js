@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import FormDocumenti from "./FormDocumenti";
 
 function OspitiInseriti(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
@@ -51,9 +52,24 @@ function OspitiInseriti(props){
                     </div>
 
 
-                    <div className="col-7 col-md-3 mt-2"><strong>CAP:</strong>
+                    <div className="col-7 col-md-6 mt-2"><strong>CAP:</strong>
                         <br/>
                         <span>{props.cap}</span>
+                    </div>
+
+                    <div className="col-5 col-md-3 mt-2 h-100"><strong>Data di arrivo:</strong>
+                        <br/>
+                        <span> {props.dataArrivo}</span>
+                    </div>
+
+                    <div className="col-5 col-md-3 mt-2 h-100"><strong>Permanenza:</strong>
+                        <br/>
+                        <span> {props.permanenza}</span>
+                    </div>
+
+
+                    <div className={(props.esente) ? " col-5 col-md-3 mt-2 h-100" : "collapse"}>
+                        <strong>Esente</strong>
                     </div>
 
                     <div className="col-12 col-md-3">

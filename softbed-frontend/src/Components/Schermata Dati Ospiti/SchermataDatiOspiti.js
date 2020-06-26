@@ -29,7 +29,9 @@ function SchermataDatiOspiti(props){
         nomeProvinciaResidenza: "Trapani",
         nomeRegioneResidenza: "Sicilia",
         refPrenotazione:"10",
-        esente:"true"
+        esente:true,
+        dataArrivo:"26-06-20",
+        permanenza:"1",
         },
         {nome: "Mario",
         cognome: "Rossi",
@@ -51,7 +53,9 @@ function SchermataDatiOspiti(props){
         nomeProvinciaResidenza: "Trapani",
         nomeRegioneResidenza: "Sicilia",
         refPrenotazione:"10",
-        esente:"false"
+        esente:false,
+        dataArrivo:"26-06-20",
+        permanenza:"1"
         },
 ])
 
@@ -85,7 +89,8 @@ function SchermataDatiOspiti(props){
                                                   comune={ospiti.nomeComune} provincia={ospiti.nomeProvincia} regione={ospiti.nomeRegione}
                                                   via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
                                                    comuneResidenza={ospiti.nomeComuneResidenza} provinciaResidenza={ospiti.nomeProvinciaResidenza}
-                                                   regioneResidenza={ospiti.nomeRegioneResidenza} eliminaOspite={eliminaOspite}/>
+                                                   regioneResidenza={ospiti.nomeRegioneResidenza} esente={ospiti.esente} dataArrivo={ospiti.dataArrivo}
+                                                   permanenza={ospiti.permanenza} eliminaOspite={eliminaOspite}/>
                         })
 
                     }
