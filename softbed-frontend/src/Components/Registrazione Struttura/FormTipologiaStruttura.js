@@ -44,39 +44,35 @@ function FormTipologiaStruttura(props) {
         return null;
     }
     else return(
-        <div className="container pt-3 ">
-            <div className="progress">
-                <div className="progress-bar" style={{width: 20 + '%'}}>20%</div>
+        <form id="form" className="container needs-validation p-3" onChange={props.handleChange} noValidate>
+            <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
+            <div className=" container d-flex justify-content-around">
+                <i className="fa fa-bed fa-10x" aria-hidden="true"/>
+                <i className="fa fa-home fa-10x " aria-hidden="true"/>
             </div>
-            <form id="form" className="container needs-validation p-3" onChange={props.handleChange} noValidate>
-                <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
-                <div className=" container d-flex justify-content-around">
-                    <i className="fa fa-bed fa-10x" aria-hidden="true"/>
-                    <i className="fa fa-home fa-10x " aria-hidden="true"/>
-                </div>
-                <div className="form-row ">
-                    <div className="col-6 text-center">
-                        <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B" defaultChecked={props.dati.tipologia === "B&B"} required/>
-                            <label className="custom-control-label" htmlFor="B&B">B&B</label>
-                        </div>
-                    </div>
-                    <div className="col-6 text-center">
-                        <div className="custom-control custom-radio custom-control-inline mt-2">
-                            <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" defaultChecked={props.dati.tipologia === "cv"} required/>
-                            <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
-                        </div>
-                    </div>
-                    <div id="feedback" className="col-12 text-danger text-center collapse">
-                        Inserire la tipologia di struttura
+            <div className="form-row ">
+                <div className="col-6 text-center">
+                    <div className="custom-control custom-radio custom-control-inline mt-2">
+                        <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologia" value="B&B" defaultChecked={props.dati.tipologia === "B&B"} required/>
+                        <label className="custom-control-label" htmlFor="B&B">B&B</label>
                     </div>
                 </div>
-                <div className="d-flex flex-row-reverse justify-content-around">
-                    <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
-                    <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px disabled">Indietro</button>
+                <div className="col-6 text-center">
+                    <div className="custom-control custom-radio custom-control-inline mt-2">
+                        <input type="radio" className="custom-control-input" id="cv" name="tipologia" value="cv" defaultChecked={props.dati.tipologia === "cv"} required/>
+                        <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
+                    </div>
                 </div>
-        </form>
-    </div>
+                <div id="feedback" className="col-12 text-danger text-center collapse">
+                    Inserire la tipologia di struttura
+                </div>
+            </div>
+            <div className="d-flex flex-row-reverse justify-content-around">
+                <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua</button>
+                <button id="indietro" className="btn btn-secondary mt-3 w-200px disabled">Indietro</button>
+            </div>
+    </form>
     )
 }
-export default FormTipologiaStruttura
+
+export default FormTipologiaStruttura;

@@ -1,5 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react'
-import ButtonForm from "../ButtonForm";
+import React, {Fragment, useState} from 'react'
 import axios from 'axios';
 import $ from 'jquery';
 
@@ -54,7 +53,7 @@ function FormFotografie(props){
             $("#carica").prop('disabled', true);
             $("#completo").removeClass("collapse");
         }
-        if (file.length == 0){
+        if (file.length === 0){
             $("#vuoto").removeClass("collapse");
             $("#troppi").addClass("collapse");
             $("#formato").addClass("collapse");
@@ -93,12 +92,12 @@ function FormFotografie(props){
     if(props.currentStep !== 6){
         return null;
     }else return (
-        <div className="col-10 mx-auto">
+        <Fragment>
             <h6 className="mt-3 border-bottom border-primary">Foto della struttura</h6>
             <p>Inserisci qui le immagini della tua struttura, per un massimo di 5</p>
             <form encType="multipart/form-data" onSubmit={carica}>
                 <div className="custom-file mt-3 ">
-                    <input name="file" type="file" className="custom-file-input" id="customFile" lang="it"multiple onChange={browse}/>
+                    <input name="file" type="file" className="custom-file-input" id="customFile" lang="it" multiple onChange={browse}/>
                     <label className="custom-file-label" htmlFor="customFile">{numero} file selezionati</label>
                 </div>
                 <input id="carica" type="submit" value="Carica" className="btn btn-outline-primary btn-block mt-4" accept="image/png"/>
@@ -120,11 +119,12 @@ function FormFotografie(props){
                 </div>)
             }
                 <div className="d-flex flex-row-reverse justify-content-around">
-                    <button id="ok" type="submit" className="btn btn-primary mt-3  btn-lg w-200px" onClick={vaiAvanti}>Continua</button>
-                    <button id="indietro" className="btn btn-secondary mt-3 btn-lg w-200px" onClick={vaiIndietro}>Indietro</button>
+                    <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua</button>
+                    <button id="indietro" className="btn btn-secondary mt-3 w-200px" onClick={vaiIndietro}>Indietro</button>
                 </div>
             </form>
-        </div>
+        </Fragment>
     )
 }
+
 export default FormFotografie;
