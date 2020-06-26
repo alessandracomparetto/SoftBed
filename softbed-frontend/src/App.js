@@ -10,6 +10,9 @@ import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisult
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 import Registration from "./Components/Registration";
 import Login from "./Components/Login";
+import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
+import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import Footer from "./Components/Footer";
 
 function App() {
 
@@ -47,6 +50,7 @@ function App() {
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
+                    {/*<SchermataGestioneStruttura />*/}
                     <Carousel />
                     <FormRicerca />
                 </Route>
@@ -59,6 +63,10 @@ function App() {
                     <Registration />
                 </Route>
 
+                <Route path="/registrazioneStruttura/">
+                    <RegistrazioneStruttura />
+                </Route>
+
                 {/* Schermata dei risultati di ricerca */}
                 <Route exact path="/search">
                     <SchermataRisultati/>
@@ -69,6 +77,16 @@ function App() {
                     <SchermataStruttura struttura={struttura} />
                 </Route>
 
+                <Route path="/registrazioneStruttura">
+                    <RegistrazioneStruttura/>
+                </Route>
+
+                <Route exact path="/profilo/:id">
+                    <Route path="*/prenotazioni-effettuate/">
+                        <SchermataPrenotazioniOspite />
+                    </Route>
+                </Route>
+
                 {/* TODO: Non è possibile accedere alle risorse in backend, come le immagini tramite URL */}
                 {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                 <Route path="*">
@@ -76,6 +94,8 @@ function App() {
                     <FormRicerca />
                 </Route>
             </Switch>
+
+            <Footer />
         </Router>
     )
 }

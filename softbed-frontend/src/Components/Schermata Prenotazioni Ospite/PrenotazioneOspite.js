@@ -5,6 +5,9 @@ function RichiestaPrenotazioneOspite(props) {
 
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
 
+    // TODO: Da rimuovere
+    const struttura = { gestore: { email: "softengineers@gmail.com" } };
+
     return (
         <li className={"rounded list-group-item text-dark border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
             <div className="row">
@@ -124,7 +127,7 @@ function RichiestaPrenotazioneOspite(props) {
                         </div>
 
                         <div className="p-2 col-12 col-md-3">
-                            <button className="btn btn-primary btn-block">Contatta il gestore</button>
+                            <a href={`mailto:${struttura.gestore.email}`} className="btn btn-primary btn-block">Contatta il gestore</a>
                         </div>
                     </div>
                 </div>

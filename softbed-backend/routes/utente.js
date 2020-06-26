@@ -1,21 +1,18 @@
 /*TODO: gestire gli errori del login e fare apparire messaggi diversi in base all'errore:
 *  password sbagliato o email non corretta*/
 
-
 const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const router = express.Router();
+const { Utente } = require('../sequelize/middleware');
 
-// carichiamo crypto, la configurazione e il middleware per il database
-// const crypto = require('crypto');
-const { config } = require('../db/config');
-const { makeDb, withTransaction } = require('../db/dbmiddleware');
+const router = express.Router();
 
 router.use(bodyParser.urlencoded({
     extended: true //per accedere a req.body
 }))
+router.use(bodyParser.json())
 
 //setto le opzioni per il middleware
 router.use(session({
@@ -31,29 +28,26 @@ router.use(session({
     }
 }))
 
-//custom middleware
-/*router.use((req, res, utente, next) =>{
-    //prendo session_uid
-    const {session_uid}  = req.session;
-    if(session_uid){
-        //oggetto condiviso nel middleware
-        res.locals.user =
-    }
-})*/
 /* La rotta /users è vietata */
 router.get('/', function(req, res, next) {
     next(createError(403));
 });
 
 /* Registrazione Utente */
-router.post('/utenteRegistrato', registrazione);
+router.post('/utenteRegistrato', (req, res) => {
+    console.log(req.body.nome + req.body.cognome + req.body.dataNascita+ req.body.gestore)
+    Utente.create(req.body)
+        .then(res.send("finito"))
+});
+
 /* Login Utente */
 router.post('/login', autenticazione);
+
 /* Dato Pagamento utente
 router.post('/pagamenti', aggiuntaDatoPagamento);*/
 
 /*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
-router.post('/logout', (req,res) => {
+/*router.post('/logout', (req,res) => {
     req.session.destroy( err =>{
         if(err){
             //non posso distruggere la sessione
@@ -62,10 +56,9 @@ router.post('/logout', (req,res) => {
     })
     //se tutto ok, distruggo il coockie della sessione
     res.clearCookie(req.session.name);
-})
+})*/
 
-async function registrazione(req, res, next) {
-    // istanziamo il middleware
+/*async function registrazione(req, res, next)   {
     const db = await makeDb(config);
     let results = {};
     try {
@@ -116,11 +109,10 @@ async function registrazione(req, res, next) {
         next(createError(500));
 
     }
-}
+}*/
 
 // middleware di autenticazione
 async function autenticazione(req, res, next) {
-    console.log(req.session);
     // istanziamo il middleware
     const db = await makeDb(config);
     let results = {};
@@ -225,5 +217,15 @@ module.exports = router;
 
 // recupero dello user id
 
+
+//custom middleware
+/*router.use((req, res, utente, next) =>{
+    //prendo session_uid
+    const {session_uid}  = req.session;
+    if(session_uid){
+        //oggetto condiviso nel middleware
+        res.locals.user =
+    }
+})*/
 
 

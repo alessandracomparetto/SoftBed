@@ -9,14 +9,16 @@ function Mappa(props) {
 
     // Aggiorna la posizione della mappa in base alla destinazione selezionata
     useEffect(() => {
-        provider.search({ query: props.destinazione })
-            .then(res => {
-                return res[0]
-            })
-            .then(res => {
-                setPosizione([res.y, res.x])
-            })
-            .catch(err => err);
+        if (props.destinazione) {
+            provider.search({ query: props.destinazione })
+                .then(res => {
+                    return res[0]
+                })
+                .then(res => {
+                    setPosizione([res.y, res.x])
+                })
+                .catch(err => err);
+        }
     }, [props.destinazione]);
 
     const [posizione, setPosizione] = useState([37.9995003, 13.6293525]);

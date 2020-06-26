@@ -22,17 +22,18 @@ import axios from "axios";
 function Registration() {
     function onSubmit(e){
         e.preventDefault();
-        const utenteRegistrato= {
+        const utenteRegistrato = {
             nome: document.getElementById("name").value,
             cognome: document.getElementById("surname").value,
-            dataNascita: document.getElementById("birthdate").value,
+            dataNascita: document.getElementById("dataNascita").value,
             email: document.getElementById("email").value ,
             pass: document.getElementById("pass").value ,
             gestore: $( "input:checked" ).val(),
         }
         console.log(utenteRegistrato);
         try{
-            axios.post("/utente/utenteRegistrato", utenteRegistrato);
+            axios.post("/utente/utenteRegistrato", utenteRegistrato)
+                .then(res => console.log(res.text));
         }
         catch(err){
             if (err.response.status === 400) {
@@ -118,7 +119,6 @@ function Registration() {
                             <div className="invalid-feedback">Inserire indirizzo e-mail</div>
                         </div>
                     </div>
-
                     <div className="form-group mt-3" >
                         <label htmlFor="pass">Password</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
@@ -147,17 +147,26 @@ function Registration() {
                         <div>
                             <span id='message'></span>
                         </div>
+      ==============================================================                   
+      <div className="form-group">
+                  <label htmlFor="dataNascita">Data di Nascita *</label>
+                  <input name="dataNascita" id="dataNascita" type="date" className="form-control"/>
+                  <div className="invalid-feedback">
+                      Selezionare la data di nascita
+                  </div>
+              </div>
                     </div>
+      ===============================================================
 
                     <div className="form-group mt-3">
                         <label htmlFor="account">Tipo di account</label>
                         <br/>
                         <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="gestore" value="gestore" required/>
+                            <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required/>
                             <label className="form-check-label" htmlFor="gestore">Gestore</label>
                         </div>
                         <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="ospite" value="ospite" required/>
+                            <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required/>
                             <label className="form-check-label" htmlFor="ospite">Ospite</label>
                             <div className="invalid-feedback ml-2">
                                 Inserire il tipo di account

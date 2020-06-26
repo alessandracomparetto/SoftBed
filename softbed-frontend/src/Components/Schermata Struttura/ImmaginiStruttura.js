@@ -12,7 +12,7 @@ function ImmagineSecondaria(props) {
 
 function ImmaginiStruttura(props) {
 
-    const listaImmagini = [
+    const listaImmagini = [ // TODO: Da rimuovere
         "1.jpg",
         "2.jpg",
         "3.jpg",
