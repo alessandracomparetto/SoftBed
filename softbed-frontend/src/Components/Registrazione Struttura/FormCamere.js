@@ -34,6 +34,7 @@ function FormCamere(props){
         let validi = document.getElementsByClassName("controlla");
 
 
+
         for(let i=0; i<listaCollapse.length;i++ ){
             //la lista dei messaggi che devono scomparire è fissa
             listaCollapse[i].classList.add("collapse");
@@ -88,10 +89,10 @@ function FormCamere(props){
 
         //flag falso se tutti i dati sono ok
         if(!flag) {
-
             if (nCamere.value<1){
                 nCamere.value=1;
             }
+
             if(nlettiSingoli.value === "") nlettiSingoli.value=0;
             if(nlettiMatrimoniali.value === "") nlettiMatrimoniali.value=0;
 
@@ -170,13 +171,13 @@ function FormCamere(props){
                 <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
                 <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="2" size="2" maxLength="2" defaultValue={0}/>
                 <small  className="form-text  text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
-                <div className="invalid-feedback">1 - 10</div>
+                <div className="invalid-feedback">0 - 2</div>
             </div>
             <div className="form-group controlla">
                 <label htmlFor="nLettiSingoli">Numero letti singoli </label>
                 <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="4" size="2" maxLength="2" defaultValue={0}/>
                 <small className="form-text text-danger collapse indicazioneLetti messaggio">Per registrare la camera devi aver inserito almeno un letto</small>
-                <div className="invalid-feedback">1 - 10</div>
+                <div className="invalid-feedback">0 -4</div>
             </div>
             <div className="form-group">
                 <label htmlFor="nCamere">Numero di camere per questa tipologia </label>

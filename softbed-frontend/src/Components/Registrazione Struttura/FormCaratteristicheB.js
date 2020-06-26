@@ -30,7 +30,6 @@ function FormCaratteristicheB(props){
         <div className="progress mt-2">
             <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
         </div>
-        <h4>Caratteristiche B&B</h4>
         <form id="form" className="w50 justify-content-center mt-3 needs-validation" onChange={props.handleChange} noValidate>
           <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
           <div className="form-row-group text-center offset-1">
