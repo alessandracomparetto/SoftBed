@@ -2,16 +2,16 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import './App.css';
+import Login from "./Components/Login";
+import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
+import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
 import FormRicerca from "./Components/FormRicerca";
 import Carousel from "./Components/Carousel";
 import PaginaNonTrovata from "./Components/PaginaNonTrovata";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
-import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";;
-import Login from "./Components/Login";
-import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
-import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
-import Footer from "./Components/Footer";
+import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 import Registrazione from "./Components/Registrazione";
 
 function App() {
