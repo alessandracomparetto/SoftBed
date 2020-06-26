@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 let contatore = 0;
 
 function FormAmbienti(props) {
     const camera = "Camera ";
+    let [listaCamere, setListaCamere] = useState([]);
+    let [lunghezzaLista, setLunghezzaLista] = useState(0);
 
     function vaiAvanti(event){
-        let flag = 0;
+        let flag = false;
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
         if(contatore === 0){
             document.getElementById("inserisciCamera").classList.remove("collapse");
@@ -27,7 +29,6 @@ function FormAmbienti(props) {
     }
 
     function scriviCamera() {
-        let lista = document.getElementById("listaCamere");
         let nlettiMatrimoniali = document.getElementById("nLettiMatrimoniali");
         let nlettiSingoli = document.getElementById("nLettiSingoli");
         let nCamere = document.getElementById("nCamere");
@@ -67,10 +68,7 @@ function FormAmbienti(props) {
         }
         //flag falso se tutti i dati sono ok
         if(!flag) {
-            if (contatore===0) {
-                //rimuovo lo spazio vuoto dentro lo scrollable
-                lista.removeChild(lista.childNodes[0]);
-            }
+
             if (nCamere.value<1){
                 nCamere.value=1;
             }
@@ -79,11 +77,12 @@ function FormAmbienti(props) {
 
             for(let i = 0; i<nCamere.value; i++){
                 contatore++;
-                let p = document.createElement("P");
-                let info = ":\t Letti Matrimoniali: " +nlettiMatrimoniali.value+", Letti Singoli: "+nlettiSingoli.value;
-                let stringa = document.createTextNode(camera + contatore+ info);
-                p.appendChild(stringa);
-                lista.appendChild(p);
+                let info = ": "+ ", Letti Matrimoniali: " +nlettiMatrimoniali.value+", Letti Singoli: "+nlettiSingoli.value;
+                let stringa = camera+contatore+info;
+                let temp = listaCamere;
+                temp.push(stringa);
+                setListaCamere(temp);
+                setLunghezzaLista(listaCamere.length);
 
                 //aggiorno lo stato
                 let tmp = ({nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value});
@@ -143,10 +142,16 @@ function FormAmbienti(props) {
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
                 <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
-                    <p>
-                        <br/>
-                    </p>
-
+                    { (lunghezzaLista===0) ? (
+                        <p><br/></p>
+                    ) : (
+                        listaCamere.map((stringa, indice) =>{
+                            return(
+                                <p key={indice}>{stringa}</p>
+                            )
+                        })
+                    )
+                    }
                 </div>
             </div>
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>

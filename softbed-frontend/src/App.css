@@ -48,6 +48,11 @@ body {
     }
 }
 
+.footer{
+    clear: both;
+}
+
+
 .bg-footer {
     background-color: #FFA207;
 }
