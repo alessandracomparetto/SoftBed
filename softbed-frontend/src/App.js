@@ -14,6 +14,7 @@ import RegistrazioneStruttura from "./Components/Registrazione Struttura/Registr
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import Footer from "./Components/Footer";
 
+
 function App() {
 
     // TODO: da rimuovere, solo per test
@@ -52,7 +53,7 @@ function App() {
                 <Route exact path="/">
                     {/*<SchermataGestioneStruttura />*/}
                     <Carousel />
-                    <FormRicerca />
+                    <ModificaDisponibilita />
                 </Route>
 
                 <Route exact path="/accedi/">
