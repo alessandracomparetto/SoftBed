@@ -9,22 +9,26 @@ function FormStruttura (props) {
 
     let province = null;
     function addressEventHandler(event) {
+        const inputs = $(".form-row input");
+
         if (event.target.value !== '') {
-            $('.form-row input').not('#address').removeAttr('disabled');
-            $('.form-row input').not('#address').attr('required', 'required');
+            inputs.not('#address').removeAttr('disabled');
+            inputs.not('#address').attr('required', 'required');
         } else {
-            $('.form-row input').not('#address').attr('disabled', 'disabled');
-            $('.form-row input').not('#address').removeAttr('required');
+            inputs.not('#address').attr('disabled', 'disabled');
+            inputs.not('#address').removeAttr('required');
         }
     }
     function tabEventHandler(event){
+        const inputs = $(".form-row input");
+
         if (event.keyCode === 9) { // pressione TAB
             if ($(this).val() !== '') {
-                $('.form-row input').not('#address').removeAttr('disabled');
-                $('.form-row input').not('#address').attr('required', 'required');
+                inputs.not('#address').removeAttr('disabled');
+                inputs.not('#address').attr('required', 'required');
             } else {
-                $('.form-row input').not('#address').attr('disabled', 'disabled');
-                $('.form-row input').not('#address').removeAttr('required');
+                inputs.not('#address').attr('disabled', 'disabled');
+                inputs.not('#address').removeAttr('required');
             }
         }
     }
@@ -47,6 +51,7 @@ function FormStruttura (props) {
             }
         }
     }
+
     function provinceEventHandler(event){
        let comuni=null;
        // rimozione dei precedenti elementi del menu Comune
@@ -64,28 +69,51 @@ function FormStruttura (props) {
                 }
             }
         }
-}
+    }
+
     function vaiAvanti(event){
         event.preventDefault();
         document.getElementById("form").classList.add("was-validated");
-        let cap=props.dati.cap;
-        if(cap>=10 && cap<=98168){
+        let cap = props.dati.cap;
+
+        if(controlloCAP()){
             document.getElementById("feedback").classList.add("collapse");
-            document.getElementById("cap").classList.remove("border-danger");
             if (document.getElementById("form").checkValidity()) {
                 props.go();
             }
         }
+
         else{
-            document.getElementById("cap").classList.add("border-danger");
-            document.getElementById("cap").classList.add("is-invalid")
             event.preventDefault();
+        }
+    }
+
+    function controlloCAP() {
+        const form = $("#form");
+        const cap = $("#cap");
+        const capVal = cap.val();
+
+        if (capVal >= 10 && capVal <= 98168) {
+            if (form.hasClass("was-validated")) {
+                cap.removeClass("border-danger");
+                cap.removeClass("is-invalid");
+            }
+            return true;
+        }
+
+        else {
+            if (form.hasClass("was-validated")) {
+                cap.addClass("border-danger");
+                cap.addClass("is-invalid");
+            }
+            return false;
         }
     }
 
    function vaiIndietro(){
             props.goBack();
     }
+
     if(props.currentStep !== 2){
         return null;
     }
@@ -174,7 +202,8 @@ function FormStruttura (props) {
                     <div className="col-4 col-md-4 col-lg-3">
                         <label htmlFor="cap">CAP.</label>
                         <input name="cap" id="cap" type="tel" className="form-control form-check" pattern="^\d{5}$" placeholder="#####"
-                               title="Inserire 5 cifre da 00100 a 98168" size="5" maxLength="5"  defaultValue={props.dati.cap} required/>
+                               title="Inserire 5 cifre da 00010 a 98168" size="5" maxLength="5"  defaultValue={props.dati.cap}
+                               onChange={controlloCAP} required/>
                     </div>
                     <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
                 </div>
