@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 
-
-
 let contatore = 0;
+
 function FormCamere(props){
     const camera = "Camera ";
-
+    let [listaCamere, setListaCamere] = useState([])
     //let contatore = 0; //indica il numero di camere inserite
     function vaiAvanti(e){
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
-        if(contatore == 0){
+        if(contatore === 0){
             document.getElementById("inserisciCamera").classList.remove("collapse");
             e.preventDefault();
         }
@@ -29,11 +28,10 @@ function FormCamere(props){
         let prezzo = document.getElementById("prezzo");
         let flag = false;
 
-
         //pulisco i residui prima di iniziare (succede se il precedente inserimento camera va male
         let listaCollapse = document.getElementsByClassName("messaggio");
         let listaWarning = document.getElementsByClassName("border-warning");
-        let validi = document.getElementsByClassName("controlla")
+        let validi = document.getElementsByClassName("controlla");
 
 
         for(let i=0; i<listaCollapse.length;i++ ){
@@ -54,7 +52,7 @@ function FormCamere(props){
         }
         //controllo la validità dell'inserimento
         if(!nlettiMatrimoniali.checkValidity() || !nlettiSingoli.checkValidity()){
-            let validi = document.getElementsByClassName("controlla")
+            let validi = document.getElementsByClassName("controlla");
             for (let i = 0; i < validi.length; i++) {
                 validi[i].classList.add("was-validated");
             }
@@ -64,23 +62,16 @@ function FormCamere(props){
         if (nlettiMatrimoniali.value + nlettiSingoli.value < 1) {
             nlettiMatrimoniali.classList.add("border-warning");
             nlettiSingoli.classList.add("border-warning");
-            let messaggio = document.getElementsByClassName("indicazioneLetti")
+            let messaggio = document.getElementsByClassName("indicazioneLetti");
             for (let i = 0; i < messaggio.length; i++) {
                 messaggio[i].classList.remove("collapse");
             }
             flag=true;
         }
         let nPosti=parseInt(nlettiSingoli.value, 10)+2*parseInt(nlettiMatrimoniali.value, 10);
-        console.log("posti:")
-        console.log(nPosti);
-        console.log("singoli");
-        console.log(nlettiSingoli.value);
-        console.log("\nmatrimoniali");
-        console.log(nlettiMatrimoniali.value);
-
         //questo vuol dire che non ha fatto la combinazione giusta
-        if((tipologia.value=="Singola" && !(nPosti==1)) || (tipologia.value=="Doppia" && !(nPosti==2))
-            || (tipologia.value=="Tripla" && !(nPosti==3)) || (tipologia.value=="Quadrupla" && !(nPosti==4)))
+        if((tipologia.value==="Singola" && !(nPosti===1)) || (tipologia.value==="Doppia" && !(nPosti===2))
+            || (tipologia.value==="Tripla" && !(nPosti===3)) || (tipologia.value==="Quadrupla" && !(nPosti===4)))
         {
             nlettiMatrimoniali.classList.add("border-warning");
             nlettiSingoli.classList.add("border-warning");
@@ -97,23 +88,21 @@ function FormCamere(props){
 
         //flag falso se tutti i dati sono ok
         if(!flag) {
-            if (contatore===0) {
-                //rimuovo lo spazio vuoto dentro lo scrollable
-                lista.removeChild(lista.childNodes[0]);
-            }
+
             if (nCamere.value<1){
                 nCamere.value=1;
             }
-            if(nlettiSingoli.value == "") nlettiSingoli.value=0;
-            if(nlettiMatrimoniali.value == "") nlettiMatrimoniali.value=0;
+            if(nlettiSingoli.value === "") nlettiSingoli.value=0;
+            if(nlettiMatrimoniali.value === "") nlettiMatrimoniali.value=0;
 
             for(let i = 0; i<nCamere.value; i++){
-                contatore++
-                let p = document.createElement("P");
-                let info = ":\t "+ tipologia.value +", Letti Matrimoniali: " +nlettiMatrimoniali.value+", Letti Singoli: "+nlettiSingoli.value+", Prezzo: "+prezzo.value;
-                let stringa = document.createTextNode(camera + contatore+ info);
-                p.appendChild(stringa)
-                lista.appendChild(p);
+                //aggiorno lo stato locale
+                contatore++;
+                let info = ": "+ tipologia.value +", Letti Matrimoniali: " +nlettiMatrimoniali.value+", Letti Singoli: "+nlettiSingoli.value+", Prezzo: "+prezzo.value;
+                let stringa = camera+contatore+info;
+                let temp = listaCamere;
+                temp.push(stringa);
+                setListaCamere(temp);
 
                 //aggiorno lo stato
                 let tmp = ({tipologia: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
@@ -122,9 +111,9 @@ function FormCamere(props){
             }
 
             //azzero tutto dopo l'aggiunta
-            tipologia.value = 0;
+            tipologia.value = "";
             nlettiMatrimoniali.value = 0;
-            nlettiSingoli.value = "";
+            nlettiSingoli.value = 0;
             nCamere.value = 1;
             prezzo.value = null;
             for(let i=0; i<listaCollapse.length;i++ ){
@@ -142,20 +131,24 @@ function FormCamere(props){
     }
 
     //****************************************************RETURN
-    if(props.currentStep != 3){
+    if(props.currentStep !== 3){
         return null;
     }
     return(
         <form className="container col-12 col-md-8 needs-validation" action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
-            <div>
-                <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
-                    <p>
-                        <br/>
-                    </p>
+            <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
 
-                </div>
+            {listaCamere &&
+                    listaCamere.map((stringa,indice) => {
+                            return(
+                                <p key={indice}>{stringa}</p>
+                            )
+                    })
+
+            }
             </div>
+
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
             <div className="form-group bootstrap-select-wrapper">
                 <label htmlFor="tipologiaCamera" >Tipologia di camera</label>

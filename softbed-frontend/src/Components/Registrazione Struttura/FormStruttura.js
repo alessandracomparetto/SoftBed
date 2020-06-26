@@ -67,7 +67,10 @@ function FormStruttura (props) {
 }
     function vaiAvanti(event){
         event.preventDefault();
-       document.getElementById("form").classList.add("was-validated");
+
+        props.go();
+
+       /* document.getElementById("form").classList.add("was-validated");
         let cap=props.dati.cap;
         if(cap>=10 && cap<=98168){
             document.getElementById("feedback").classList.add("collapse");
@@ -80,7 +83,7 @@ function FormStruttura (props) {
             document.getElementById("cap").classList.add("border-danger");
             document.getElementById("feedback").classList.add("invalid");
             event.preventDefault();
-        }
+        }*/
     }
 
    function vaiIndietro(){
