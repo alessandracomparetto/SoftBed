@@ -3,47 +3,11 @@ import ButtonForm from "../ButtonForm";
 import data from "../../regioni_province_comuni.js";
 import $ from 'jquery';
 
-/* TODO sistemare cap*/
+/* TODO sistemare cap, rimuovere spunta quando non validato*/
 
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        // Get the forms we want to add validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
-        // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-            }, false);
-        });
-    }, false);
-})();
 
 function FormStruttura (props) {
-   /* function onSubmit(e){
-        e.preventDefault();
-        const indirizzo = {
-            via: document.getElementById("address").value,
-            numero: document.getElementById("addressnum").value,
-            cap: document.getElementById("cap").value ,
-        }
-        console.log(indirizzo);
-        try{
-            axios.post("/struttura", indirizzo);
-        }
-        catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
-            }
-        }
 
-    } */
     let province = null;
     function addressEventHandler(event) {
         if (event.target.value != '') {
@@ -101,23 +65,24 @@ function FormStruttura (props) {
                 }
             }
         }
-   }
+}
     function vaiAvanti(event){
-    event.preventDefault();
-    props.go();
-        /* let cap=parseInt(document.getElementById(cap));
-        console.log(cap);
-          if(cap>=10 && cap<=98168){
-              document.getElementById("feedback").classList.add("collapse");
-              document.getElementById("cap").classList.remove("border-danger");
-
-          }
-          else{
-              document.getElementById("cap").classList.add("border-danger");
-              document.getElementById("feedback").classList.add("invalid");
-              event.preventDefault();
-          } */
-   }
+        event.preventDefault();
+        document.getElementById("form").classList.add("was-validated");
+        let cap=props.dati.cap;
+        if(cap>=10 && cap<=98168){
+            document.getElementById("feedback").classList.add("collapse");
+            document.getElementById("cap").classList.remove("border-danger");
+            if (document.getElementById("form").checkValidity()) {
+                props.go();
+            }
+        }
+        else{
+            document.getElementById("cap").classList.add("border-danger");
+            document.getElementById("feedback").classList.add("invalid");
+            event.preventDefault();
+        }
+    }
 
    function vaiIndietro(event){
             props.goBack();
@@ -130,10 +95,10 @@ function FormStruttura (props) {
             <div className="progress">
                 <div className="progress-bar" style={{width: 40 + '%'}}>40%</div>
             </div>
-            <form className="container pt-3 needs-validation" onChange={props.handleChange} noValidate>
+            <form id="form" className="container pt-3 needs-validation" onChange={props.handleChange} noValidate>
                 <div className="form-group">
                     <label htmlFor="name">Come si chiama la tua struttura?</label>
-                    <input id="name" name="name" type="text" className="form-control" maxLength="60" defaultValue={props.dati.name}  />
+                    <input id="name" name="name" type="text" className="form-control" maxLength="60" defaultValue={props.dati.name}  required/>
                     <div className="invalid-feedback">
                         Inserisci il nome della struttura
                     </div>
@@ -142,8 +107,8 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                     </div>
-                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} defaultValue={props.dati.region} >
-                        <option value="" selected></option>
+                    <select id="region" className="custom-select" name="region" onChange={regioniEventHandle} defaultValue={props.dati.region} required>
+                        <option value=""></option>
                         <option value="Abruzzo">Abruzzo</option>
                         <option value="Basilicata">Basilicata</option>
                         <option value="Calabria">Calabria</option>
@@ -174,8 +139,8 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Provincia&nbsp;</span>
                     </div>
-                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} defaultValue={props.dati.state}>
-                        <option value="" selected></option>
+                    <select id="state" name="state" className="custom-select" onChange={ provinceEventHandler} defaultValue={props.dati.state} required>
+                        <option value="" ></option>
                     </select>
                     <div className="invalid-feedback">
                         Selezionare la provincia
@@ -186,8 +151,8 @@ function FormStruttura (props) {
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="town" name="town" className="custom-select" defaultValue={props.dati.town}>
-                        <option value=""  selected></option>
+                    <select id="town" name="town" className="custom-select" defaultValue={props.dati.town} required>
+                        <option value=""  ></option>
                     </select>
                     <div className="invalid-feedback">
                         Selezionare il comune

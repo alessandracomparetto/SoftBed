@@ -1,29 +1,14 @@
 import React from "react";
-import ButtonForm from "../ButtonForm";
-
-
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-    // Get the forms we want to add validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-        }, false);
-    });
-    }, false);
-})();
 
 function FormCaratteristicheB(props){
-    function vaiAvanti(){
-        props.go();
+    function vaiAvanti(event) {
+        event.preventDefault();
+        document.getElementById("form").classList.add("was-validated");
+        if (document.getElementById("form").checkValidity()) {
+            props.go();
+        }
     }
+
     function  vaiIndietro() {
         props.goBack();
     }
@@ -46,7 +31,7 @@ function FormCaratteristicheB(props){
             <div className="progress-bar" style={{width: 60 + '%'}}>60%</div>
         </div>
         <h4>Caratteristiche B&B</h4>
-        <form className="w50 justify-content-center mt-3 needs-validation" onChange={props.handleChange} noValidate>
+        <form id="form" className="w50 justify-content-center mt-3 needs-validation" onChange={props.handleChange} noValidate>
           <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
           <div className="form-row-group text-center offset-1">
               <div className="form-check-inline col-12  col-sm-5  col-lg-3">
