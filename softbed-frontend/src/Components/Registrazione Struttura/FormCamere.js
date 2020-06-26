@@ -10,6 +10,7 @@ let contatore = 0;
 function FormCamere(props){
     const [camere, setCamere] = useState([]);
     const camera = "Camera ";
+
     //let contatore = 0; //indica il numero di camere inserite
     function vaiAvanti(e){
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
@@ -95,6 +96,7 @@ function FormCamere(props){
                 //rimuovo lo spazio vuoto dentro lo scrollable
                 lista.removeChild(lista.childNodes[0]);
             }
+
             for(let i = 0; i<nCamere.value; i++){
                 contatore++
                 let p = document.createElement("P");
@@ -102,13 +104,13 @@ function FormCamere(props){
                 let stringa = document.createTextNode(camera + contatore+ info);
                 p.appendChild(stringa)
                 lista.appendChild(p);
+
+                //aggiorno lo stato
+                let tmp = ({tipologia: tipologia.value,nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
+                console.log(tmp);
+                props.handleCamere(contatore,tmp);
             }
-            //aggiorno lo stato
-            let tmp = [...camere];
-            for(let i=0; i<nCamere;i++){
-                tmp.push({nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
-            }
-            setCamere(tmp);
+
             //azzero tutto dopo l'aggiunta
             tipologia.value = "";
             nlettiMatrimoniali.value = 0;
@@ -134,7 +136,7 @@ function FormCamere(props){
         return null;
     }
     return(
-        <form className="container col-12 col-md-8 needs-validation"  oChange={props.handleChange} action={"camere/caratteristicheB"} noValidate>
+        <form className="container col-12 col-md-8 needs-validation" action={"camere/caratteristicheB"} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div>
                 <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
@@ -147,7 +149,7 @@ function FormCamere(props){
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
             <div className="form-group bootstrap-select-wrapper">
                 <label htmlFor="tipologiaCamera" >Tipologia di camera</label>
-                <select className="form-control selectpicker" id="tipologia" defaultValue="" required>
+                <select className="form-control selectpicker" id="tipologia"  name="camera" defaultValue="" required>
                     <option value="">Scegli una opzione</option>
                     <option value="Singola">Singola</option>
                     <option value="Doppia">Doppia</option>
