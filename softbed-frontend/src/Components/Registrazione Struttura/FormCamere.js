@@ -4,7 +4,8 @@ let contatore = 0;
 
 function FormCamere(props){
     const camera = "Camera ";
-    let [listaCamere, setListaCamere] = useState([])
+    let [listaCamere, setListaCamere] = useState([]);
+    let [lunghezzaLista, setLunghezzaLista] = useState(0);
     //let contatore = 0; //indica il numero di camere inserite
     function vaiAvanti(e){
         //controlla che sia stata aggiunta almeno una camera, quando si clicca su continua bisogna vedere la lista delle camere non sia vuota
@@ -103,6 +104,7 @@ function FormCamere(props){
                 let temp = listaCamere;
                 temp.push(stringa);
                 setListaCamere(temp);
+                setLunghezzaLista(listaCamere.length);
 
                 //aggiorno lo stato
                 let tmp = ({tipologia: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
@@ -139,14 +141,17 @@ function FormCamere(props){
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
 
-            {listaCamere &&
-                    listaCamere.map((stringa,indice) => {
-                            return(
-                                <p key={indice}>{stringa}</p>
-                            )
+                { (lunghezzaLista===0) ? (
+                    <p><br/></p>
+                ) : (
+                    listaCamere.map((stringa, indice) =>{
+                        return(
+                            <p key={indice}>{stringa}</p>
+                        )
                     })
+                )
+                }
 
-            }
             </div>
 
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
