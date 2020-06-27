@@ -13,6 +13,7 @@ import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import Footer from "./Components/Footer";
+import StruttureRecenti from "./Components/StruttureRecenti";
 
 
 function App() {
@@ -53,6 +54,9 @@ function App() {
                 <Route exact path="/">
                     <Carousel />
                     <FormRicerca />
+                    <div className="d-flex justify-content-center">
+                        <StruttureRecenti />
+                    </div>
                 </Route>
 
                 <Route exact path="/accedi/">

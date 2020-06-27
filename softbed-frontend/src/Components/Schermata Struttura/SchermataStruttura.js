@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import $ from "jquery";
 import { useParams } from "react-router-dom";
 
@@ -11,6 +11,91 @@ import { convertiData } from "../../Actions/gestioneDate";
 
 function SchermataStruttura(props) {
     let { id } = useParams();
+
+    const struttura = {
+        id: id,
+        nome: "Dolce Risveglio",
+        descrizione: "Questa struttura è bella, ma mai quanto te che stai leggendo ^-^",
+        servizi: [
+            {servizio: "Aria condizionata", icona: "snowflake"},
+            {servizio: "Riscaldamento", icona: "fire"},
+            {servizio: "TV", icona: "tv"},
+            {servizio: "Wi-Fi", icona: "wifi"},
+            {servizio: "Piscina", icona: "water"},
+            {servizio: "Idonea per bambini", icona: "child"},
+            {servizio: "Animali ammessi", icona: "paw"}
+        ],
+        localita: {
+            regione: "Sicilia",
+            provincia: "Palermo",
+            comune: "Trabia"
+        },
+        prezzo: 40, // in casa vacanze
+        ambienti: ["Giardino", "Terrazza", "Piscina"],
+        bagni: 4,
+        camere: [
+            {matrimoniali: 2, singoli: 3, prezzo: 65},
+            {matrimoniali: 2, singoli: 0, prezzo: 42},
+            {matrimoniali: 0, singoli: 3, prezzo: 30},
+        ], // in B&B
+        prenotazione: {
+            durata: {
+                min: 4,
+                max: 28
+            },
+            anticipo: {
+                min: 3,
+                max: 90,
+            },
+            checkIn: {
+                inizio: "13:00",
+                fine: "17:00"
+            },
+            checkOut: {
+                inizio: "09:00",
+                fine: "13:00"
+            }
+        },
+        pagamento: {
+            inLoco: true,
+            online: false,
+            cancellazione: true,
+            preavviso: true
+        },
+        tasse: {
+            adulti: 10,
+            bambini: 5,
+            bonus: {
+                durataSoggiorno: 3,
+                numeroPersone: 10
+            }
+        }
+    }
+
+    useEffect(() => {
+        let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
+        console.log("LS:", LS);
+
+        const nuovaStruttura = {id: struttura.id, nome: struttura.nome}
+
+        const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
+
+        while (pos !== -1) {
+            LS.splice(pos, 1);
+        }
+
+        const nuovoLS = [...LS, nuovaStruttura];
+        console.log("NuovoLS:", nuovoLS);
+
+        localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
+
+        // Gestione stato numeroAdulti
+        const adulti = $('#adulti');
+
+        adulti.on('change', () => {
+            setNumeroAdulti(adulti.val());
+        })
+    }, [])
 
     // Gestione delle date
     const oggi = new Date();
@@ -28,18 +113,8 @@ function SchermataStruttura(props) {
         controlloDate();
     }
 
-    $(document).ready(() => {
-        // Gestione stato numeroAdulti
-        const adulti = $('#adulti');
-
-        adulti.on('change', () => {
-            setNumeroAdulti(adulti.val());
-        })
-    });
-
-
     const controlloForm = (event) => {
-        if (props.struttura.tipologia && props.struttura.tipologia === "b&b") {
+        if (struttura.tipologia && struttura.tipologia === "b&b") {
             const singole = $("#singole");
             const doppie = $("#doppie");
 
@@ -132,16 +207,16 @@ function SchermataStruttura(props) {
         <div className="container px-3 mt-3">
             {/* Nome e località */}
             <div className="shadow mt-3 card bg-white p-3">
-                <h3>{props.struttura.nome}</h3>
+                <h3>{struttura.nome}</h3>
                 <Breadcrumb gerarchia={[
-                    {url: "/search?destinazione=" + props.struttura.regione, testo: props.struttura.regione},
-                    {url: "/search?destinazione=" + props.struttura.provincia, testo: props.struttura.provincia},
-                    {url: "/search?destinazione=" + props.struttura.comune, testo: props.struttura.comune}
+                    {url: "/search?destinazione=" + struttura.localita.regione, testo: struttura.localita.regione},
+                    {url: "/search?destinazione=" + struttura.localita.provincia, testo: struttura.localita.provincia},
+                    {url: "/search?destinazione=" + struttura.localita.comune, testo: struttura.localita.comune}
                 ]} icona="map"/>
             </div>
 
             {/* Immagini */}
-            <ImmaginiStruttura struttura={props.struttura} idStruttura={id}/>
+            <ImmaginiStruttura struttura={struttura} idStruttura={id}/>
 
             <div className="d-lg-flex flex-lg-row-reverse">
                 {/* Form dati di soggiorno */}
@@ -187,7 +262,7 @@ function SchermataStruttura(props) {
                             </small>
                         </div>
 
-                        { props.struttura.tipologia && props.struttura.tipologia === "b&b" && (
+                        { struttura.tipologia && struttura.tipologia === "b&b" && (
                             <div className="my-3">
                                 <h5>Seleziona camere</h5>
 
@@ -265,13 +340,13 @@ function SchermataStruttura(props) {
                 <div className="shadow mt-3 card bg-white p-3 col-12 col-lg-6">
                     <div>
                         <h6>Informazioni sulla struttura</h6>
-                        <p>{props.struttura.descrizione}</p>
+                        <p>{struttura.descrizione}</p>
                     </div>
                     <div>
                         <h6>Servizi</h6>
                         <div className="row mx-auto">
                             {
-                                props.struttura.servizi && props.struttura.servizi.map((servizio) => {
+                                struttura.servizi && struttura.servizi.map((servizio) => {
                                     return (
                                         <Servizio key={servizio.servizio} servizio={servizio.servizio} icona={servizio.icona}/>
                                     )
@@ -286,7 +361,7 @@ function SchermataStruttura(props) {
             <div className="shadow mt-3 card bg-white p-3">
                 <h6>Esplora la zona</h6>
                 <div className="shadow-sm w-100" style={{height: 250 + "px"}}>
-                    <Mappa destinazione={props.struttura.comune}/>
+                    <Mappa destinazione={struttura.comune}/>
                 </div>
             </div>
 
