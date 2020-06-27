@@ -7,6 +7,8 @@ import FormCaratteristicheC from "./FormCaratteristicheC";
 import FormCondizioni from "./FormCondizioni";
 import FormFotografie from "./FormFotografie";
 import FormStruttura from "./FormStruttura";
+import SchermataRisultati from "../Schermata Risultati/SchermataRisultati";
+import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
 
 
 function RegistrazioneStruttura () {
@@ -85,6 +87,7 @@ function RegistrazioneStruttura () {
                 }
                 <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                 <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
+                {/*<SchermataRiepilogoRegistrazione currentStep={step} dati={info}/>*/}
         </div>
     )
 }
