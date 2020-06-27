@@ -41,8 +41,10 @@ router.post('/utenteRegistrato', (req, res) => {
     nascita: ${req.body.dataNascita} 
     gestore: ${req.body.gestore}
     `)
-    Utente.create(req.body)
-        .then(res.send("finito"))
+    Utente.create(req.body);
+    req.session.uid = req.body.nome;
+    console.log(req.sessionID);
+    res.send("finito")
 });
 
 /* Login Utente */

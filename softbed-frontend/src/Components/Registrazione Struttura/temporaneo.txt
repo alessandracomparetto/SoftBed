@@ -52,14 +52,14 @@ foto2: "/uploads/foto/kore2.PNG"
 */
 
 /*
-tipologia:"B&B"
-name:"NOME STRUTTURA"
+tipologia:"B&B"  ------
+name:"NOME STRUTTURA" ------
 region:"Sardegna"
 state:"OG"
-town:"105018"
-address:"via"
-addressnum:"2"
-cap:"12322"
+town:"105018"   ------
+address:"via" --------
+addressnum:"2" ------
+cap:"12322"     -------
 camera1:
     tipologia:"Doppia"
     nLettiMatrimoniali:"1"

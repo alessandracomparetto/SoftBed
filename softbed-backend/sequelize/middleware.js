@@ -1,3 +1,4 @@
+/*
 const Sequelize = require("sequelize");
 
 const UtenteModel = require('../models/Utente');
@@ -5,7 +6,7 @@ const AutenticazioneModel = require('../models/Autenticazione');
 const StrutturaModel = require ('../models/Struttura');
 // const PrenotazioneModel = require('../models/Prenotazione');
 
-
+//definisco la connessione
 const sequelize = new Sequelize('softbed', 'softAdmin', 'softEngineers', {
     host: 'localhost',
     dialect: 'mysql',
@@ -24,8 +25,8 @@ const Struttura = StrutturaModel(sequelize, Sequelize);
 const Autenticazione = AutenticazioneModel(sequelize, Sequelize);
 // const Prenotazione = PrenotazioneModel(sequelize, Sequelize);
 
-/*TODO riferimenti delle chiavi esterne */
-sequelize.sync(/*{ force: true }*/)
+/!*TODO riferimenti delle chiavi esterne *!/
+sequelize.sync(/!*{ force: true }*!/)
     .then(() => {
         console.log(`Database & tables created!`)
     })
@@ -35,4 +36,4 @@ module.exports = {
     Autenticazione,
     Utente,
     Struttura
-}
+}*/
