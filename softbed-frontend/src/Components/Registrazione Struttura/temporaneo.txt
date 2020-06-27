@@ -90,20 +90,20 @@ bambini:"true" ----------------
 descrizione:"Descrizione farlocca" ----------------
 minSoggiorno:"1" ----------------
 maxSoggiorno:"1"---------------
-minPrenotazione:"7"
-maxPrenotazione:"365"
+minPrenotazione:"7" --------
+maxPrenotazione:"365 ----------
 oraInizioCheckIn:"09:00"-------------
 oraFineCheckIn:"09:00"------------------------
-oraInizioCheckOut:"12:00"
+oraInizioCheckOut:"12:00" -----------------
 oraFineCheckOut:"10:00" --------------
-pagamentoOnline:"online"
-pagamentoLoco:"loco"
+pagamentoOnline:"online" ???????????????
+pagamentoLoco:"loco" ??????????????????????
 politicaCancellazione:"pagamento" // "gratuita"
-prezzoCancellazione:"11"
-preavvisoDisdetta:"21"
+prezzoCancellazione:"11" -----------------
+preavvisoDisdetta:"21" ?????????????????????????
 prezzoBambini:"1" ------------
 prezzoAdulti:"1"------------
-nGiorniEsclusione:"4"
+nGiorniEsclusione:"4" ---------------------------
 percentualeCondizioni:"1"-------------------
 nPersone:"2"--------------------
 */

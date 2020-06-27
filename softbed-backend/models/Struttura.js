@@ -42,8 +42,14 @@ module.exports={
                             oraFineCheckOut, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
                             cancellazioneGratuita, penaleCancellazione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
                         datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
-                            datiStruttura.oraFineCheckOut, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeCondizioni, datiStruttura.nPersone,
-                            datiStruttura.]
+                            datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeCondizioni, datiStruttura.nPersone,
+                            datiStruttura.nGiorniEsclusione, datiStruttura.minPrenotazione, datiStruttura.maxPrenotazione, ???????, datiStruttura.prezzoCancellazione];
+                        /*TODO: ricontrollare quello che ho scritto, non combaciano alcune cose
+                        *  per esempio il fatto che pagamento può essere sia in loco che online e qui non c'è traccia di questa cosa
+                        *  allo stesso modo non c'è traccia del preavviso disdetta, che invece è presente nel form condizioni
+                        *
+                        *FIXME:  parseInt in tutti i campi numerici
+                        * */
                     });
 
 
@@ -52,7 +58,7 @@ module.exports={
                 }
 
             });
-
+        /
         });//end query
     }
 
