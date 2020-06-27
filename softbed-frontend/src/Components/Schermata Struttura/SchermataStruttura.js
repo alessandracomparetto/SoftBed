@@ -80,7 +80,7 @@ function SchermataStruttura(props) {
 
         const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 
-        while (pos !== -1) {
+        if (pos !== -1) {
             LS.splice(pos, 1);
         }
 
