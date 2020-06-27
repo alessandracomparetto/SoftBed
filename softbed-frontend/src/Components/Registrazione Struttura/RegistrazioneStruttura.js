@@ -36,10 +36,16 @@ function RegistrazioneStruttura () {
     function handleCamere(contatore, camera) {
         let tmp = info;
         let stringa = "camera"+contatore;
-        tmp[stringa]=camera;
+        if(!tmp["camere"]){
+            tmp["camere"] =[];
+        }
+        let temp = tmp["camere"];
+        temp.push({stringa:camera});
+        tmp["camere"]=temp;
         setInfo(tmp);
     }
 
+    //TODO : COME SOPRA
     function handleFoto(indice, fileName) {
             let tmp = info;
             let stringa = "foto"+indice;

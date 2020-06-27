@@ -20,8 +20,36 @@ module.exports={
             //TODO: REF GESTORE
             datiQuery =[datiStruttura.name, datiStruttura.tipologia, 3, refIndirizzo, giorno];
             db.query(sql, datiQuery, function (err, risultato2){
-                if (err) throw err
+                if (err) throw err;
+                let refStruttura = risultato2.insertId;
+                if(datiStruttura.tipologia == "B&B"){ //query per B&B
+                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
+                        animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                    datiQuery=[refStruttura, datiStruttura.bambini, datiStruttura.aria, datiStruttura.connessione, datiStruttura.parcheggio,
+                    datiStruttura.disabili, datiStruttura.animali, datiStruttura.permessoFumo, datiStruttura.tv,  datiStruttura.cucina,
+                    datiStruttura.navettaAereoportuale,  datiStruttura.servizioInCamera, datiStruttura.descrizione];
+                    db.query(sql, datiQuery, function (err, risultato3) {
+                        if(err) throw err;
+                        for( camera of datiStruttura.camere){
+                            sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                                nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)'
+                            datiQuery = [refStruttura, camera.tipologia, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoCamere]
+                            db.query(sql, datiQuery, function( err, risultato){
+                                if (err) throw err;
+                            });
+                        }
+                        sql = ('INSERT INTO `condizioni` (refIdStruttra, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
+                            oraFineCheckOut, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
+                            cancellazioneGratuita, penaleCancellazione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                        datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
+                            datiStruttura.oraFineCheckOut, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeCondizioni, datiStruttura.nPersone,
+                            datiStruttura.]
+                    });
 
+
+
+
+                }
 
             });
 

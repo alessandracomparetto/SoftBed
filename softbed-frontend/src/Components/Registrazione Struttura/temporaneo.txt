@@ -54,51 +54,56 @@ foto2: "/uploads/foto/kore2.PNG"
 /*
 tipologia:"B&B"  ------
 name:"NOME STRUTTURA" ------
-region:"Sardegna"
-state:"OG"
+region:"Sardegna"    *
+state:"OG"           *
 town:"105018"   ------
 address:"via" --------
 addressnum:"2" ------
 cap:"12322"     -------
-camera1:
-    tipologia:"Doppia"
-    nLettiMatrimoniali:"1"
-    nLettiSingoli:"0"
-    prezzoCamere:"1"
-camera2:
-    tipologia:"Tripla"
-    nLettiMatrimoniali:""
-    nLettiSingoli:"3"
-    prezzoCamere:"1"
-cucina:"true"
-connessione:"true"
+
+camere :[----------
+    camera1:
+        tipologia:"Doppia"
+        nLettiMatrimoniali:"1"
+        nLettiSingoli:"0"
+        prezzoCamere:"1"
+    camera2:
+        tipologia:"Tripla"
+        nLettiMatrimoniali:""
+        nLettiSingoli:"3"
+        prezzoCamere:"1"
+]
+
+
+cucina:"true" ----------
+connessione:"true" ------------
 riscaldamento:"true"
-disabili:"true"
-aria:"true"
-servizioInCamera:"true"
-parcheggio:"true"
-tv:"true"
-navettaAereoportuale:"true"
-animali:"true"
-permessoFumo:"true"
-bambini:"true"
-descrizione:"Descrizione farlocca"
-minSoggiorno:"1"
-maxSoggiorno:"1"
+disabili:"true" ----------------
+aria:"true"-----------
+servizioInCamera:"true"----------------
+parcheggio:"true"  --------------
+tv:"true" ----------
+navettaAereoportuale:"true" ----------
+animali:"true"----------
+permessoFumo:"true" ----------
+bambini:"true" ----------------
+descrizione:"Descrizione farlocca" ----------------
+minSoggiorno:"1" ----------------
+maxSoggiorno:"1"---------------
 minPrenotazione:"7"
 maxPrenotazione:"365"
-oraInizioCheckIn:"09:00"
-oraFineCheckIn:"09:00"
+oraInizioCheckIn:"09:00"-------------
+oraFineCheckIn:"09:00"------------------------
 oraInizioCheckOut:"12:00"
-oraFineCheckOut:"10:00"
+oraFineCheckOut:"10:00" --------------
 pagamentoOnline:"online"
 pagamentoLoco:"loco"
 politicaCancellazione:"pagamento" // "gratuita"
 prezzoCancellazione:"11"
 preavvisoDisdetta:"21"
-prezzoBambini:"1"
-prezzoAdulti:"1"
+prezzoBambini:"1" ------------
+prezzoAdulti:"1"------------
 nGiorniEsclusione:"4"
-percentualeCondizioni:"1"
-nPersone:"2"
+percentualeCondizioni:"1"-------------------
+nPersone:"2"--------------------
 */

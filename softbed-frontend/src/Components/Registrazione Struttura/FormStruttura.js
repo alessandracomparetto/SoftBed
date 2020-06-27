@@ -110,7 +110,7 @@ function FormStruttura (props) {
                         .then(res => { // then print response status
                             console.log(res.data);
                         })
-                    //props.go();
+                    props.go();
                 } catch (e) {
                     console.log(e);
                 }
