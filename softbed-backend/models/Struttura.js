@@ -7,23 +7,25 @@ var db = require('../db/dbmiddleware');
 module.exports={
 
     create:async function(datiStruttura, callback){
+        let refIndirizzo;
         console.log("qui ci sono");
-        let sqlIndirizzo = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES (?,?,?,?)');
+        let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES (?,?,?,?)');
         let datiQuery = [datiStruttura.address, parseInt(datiStruttura.addressnum), datiStruttura.cap, datiStruttura.town]
-         db.query(sqlIndirizzo, datiQuery, function (err) {
+        db.query(sql, datiQuery, function (err, risultato1){
             if (err) throw err;
-         });
-            console.log("query indirizzo fatta");
-            // let refIndirizzo = data.idIndirizzo;
-            // console.log(refIndirizzo);
+            //se tutto va bene, trovo id indirizzo e inserisco nella struttura
+            refIndirizzo = risultato1.insertId;
             let giorno = new Date().toLocaleDateString();
-            let sqlStruttura = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES (?,?,?,?,?)');
-             datiQuery =[datiStruttura.name, datiStruttura.tipologia, 3, 13, giorno];
-            console.log(sqlStruttura);
-            db.query(sqlStruttura, datiQuery, function (err, data){
+            sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES (?,?,?,?,?)');
+            //TODO: REF GESTORE
+            datiQuery =[datiStruttura.name, datiStruttura.tipologia, 3, refIndirizzo, giorno];
+            db.query(sql, datiQuery, function (err, risultato2){
                 if (err) throw err
-                return callback(data);
-            })
+
+
+            });
+
+        });//end query
     }
 
 
