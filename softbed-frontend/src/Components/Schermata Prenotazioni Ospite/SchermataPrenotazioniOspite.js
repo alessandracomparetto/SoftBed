@@ -5,6 +5,7 @@ import PrenotazioneOspite from "./PrenotazioneOspite";
 function SchermataPrenotazioniOspite() {
     const inAttesa = [
         {
+            id: 75,
             struttura: {
                 nome: "Nome struttura 1",
                 tipologia: "b&b",
@@ -23,6 +24,7 @@ function SchermataPrenotazioniOspite() {
             prezzo: "42.00",
         },
         {
+            id: 2,
             struttura: {
                 nome: "Nome struttura 2",
                 tipologia: "casa vacanze"
@@ -38,6 +40,7 @@ function SchermataPrenotazioniOspite() {
 
     const precedenti = [
         {
+            id: 3,
             struttura: {
                 nome: "Nome struttura 3",
                 tipologia: "casa vacanze"
@@ -50,6 +53,7 @@ function SchermataPrenotazioniOspite() {
             prezzo: "42.00"
         },
         {
+            id: 4,
             struttura: {
                 nome: "Nome struttura 4",
                 tipologia: "casa vacanze"
@@ -62,6 +66,7 @@ function SchermataPrenotazioniOspite() {
             prezzo: "42.00"
         },
         {
+            id: 5,
             struttura: {
                 nome: "Nome struttura 5",
                 tipologia: "b&b",

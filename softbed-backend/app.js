@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cors = require('cors')
 
 const uploadRouter = require('./routes/upload');
+const prenotazioneRouter = require('./routes/prenotazione');
 const strutturaRouter = require('./routes/struttura');
 const utenteRouter=require('./routes/utente');
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('/', indexRouter);
 app.use('/upload', uploadRouter);
+app.use('/prenotazione', prenotazioneRouter);
 app.use('/struttura', strutturaRouter);
 app.use('/utente', utenteRouter);
 

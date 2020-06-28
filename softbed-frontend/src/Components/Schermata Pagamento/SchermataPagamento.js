@@ -1,16 +1,20 @@
-import React, { useState, Fragment } from "react";
+import React, {useState, Fragment, useEffect} from "react";
 import Breadcrumb from "../Breadcrumb";
 import $ from "jquery"
 import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
+import axios from "axios";
 
 function SchermataPagamento() {
-    // TODO: utilizzate per test, da sostituire
+
+    // TODO: utilizzate per test, da rimuovere
     const pagamentoOnLine = true;
     const pagamentoInLoco = true;
+
     const metodiUtente = [
-        {nome: "Mastercard", numero: "0000 1111 2222 3333"},
-        {nome: "Poste", numero: "3333 4444 5555 6666"}
+        {id: 2751, nome: "Mastercard", numero: "0000 1111 2222 3333"},
+        {id: 3725, nome: "Poste", numero: "3333 4444 5555 6666"}
     ]
+
     const richiesta = {
         struttura: "Nome struttura",
         checkIn: "29-05-2020",
@@ -28,8 +32,21 @@ function SchermataPagamento() {
     const [onLineAttivo, setStatoOnline] = useState(false);
     const [nuovoMetodo, setNuovoMetodo] = useState(false);
 
+    const datiPrenotazione = {
+        dataCheckIn: "2020-12-20",
+        oraCheckIn: "17:00",
+        dataCheckOut: "2020-12-31",
+        oraCheckOut: "12:00",
+        costo: 42,
+        nAdulti: 3,
+        nBambini: 1,
+        nEsenti: 2,
+        refMetodoPagamento: 1,
+        refUtente: 1,
+        refStruttura: 1
+    }
 
-    $(document).ready(() => {
+    useEffect(() => {
         const modPagamento = $("input[name='modPagamento']");
         const modPagamentoOnline = $("#online");
 
@@ -46,20 +63,30 @@ function SchermataPagamento() {
                     setNuovoMetodo(false);
                 }
             }
-        })
+        }, []);
 
         // Gestione della selezione sul metodo di pagamento online (vecchio o nuovo)
         metodoPagamentoOnline.on('change', () => {
             if (nuovoMetodoPagamento[0]) {
                 const stato = nuovoMetodoPagamento[0].checked;
                 setNuovoMetodo(stato);
-
-                if (stato) {
-
-                }
             }
         })
     })
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        axios.post('/prenotazione/richiesta', datiPrenotazione)
+            .then(res => {
+                // Azione da compiere se la post va a buon fine
+                console.log("res:", res);
+            })
+            .catch(err => {
+                // Azione da compiere in caso di errore
+                console.log("err", err);
+            });
+    }
 
     return (
         <div className="container my-3">
@@ -106,7 +133,7 @@ function SchermataPagamento() {
                             <h5 className="mb-0">Persone</h5>
                             <span className="text-90">{richiesta.adulti}x adulto</span>
                             { richiesta.esenti && richiesta.esenti > 0 && (
-                                <span className="text-90">&nbsp;({richiesta.esenti} esent{richiesta.esenti == 1 ? "e" : "i"} da tasse)</span>
+                                <span className="text-90">&nbsp;({richiesta.esenti} esent{richiesta.esenti === 1 ? "e" : "i"} da tasse)</span>
                             )}
 
                             { richiesta.bambini && richiesta.bambini > 0 && (
@@ -129,7 +156,7 @@ function SchermataPagamento() {
                 <div className="col-12 col-lg-8 py-3 pt-lg-2">
                     <h2>Seleziona il metodo di pagamento</h2>
                     <div className="form">
-                        <form>
+                        <form onSubmit={onSubmit}>
                             { pagamentoOnLine && (
                                 <div className="radio">
                                     <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
