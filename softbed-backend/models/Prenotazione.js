@@ -1,60 +1,35 @@
-import Sequelize from "sequelize";
+var db = require('../db/dbmiddleware');
 
-const Model = Sequelize.Model;
+module.exports = {
 
-class Prenotazione extends Model {}
+    create: async function (datiPrenotazione, callback) {
 
-Prenotazione.init({
-    id: {
-        type: sequelize.INTEGER,
-        allowNull: false
+        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsenti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+
+        let datiQuery = [
+            datiPrenotazione.dataCheckIn + " " + datiPrenotazione.oraCheckIn,
+            datiPrenotazione.dataCheckOut + " " + datiPrenotazione.oraCheckOut,
+            datiPrenotazione.costo,
+            datiPrenotazione.nAdulti,
+            datiPrenotazione.nBambini,
+            datiPrenotazione.nEsenti,
+            datiPrenotazione.refMetodoPagamento,
+            datiPrenotazione.refUtente,
+            datiPrenotazione.refStruttura];
+
+        db.query(query, datiQuery, function (err, risultato) {
+            if (err) console.log("Errore:", err.code);
+            else console.log("Riusltato:", risultato);
+        });
     },
-    checkIn: {
-        type: sequelize.DATE,
-        allowNull: false
-    },
-    checkOut: {
-        type: sequelize.DATE,
-        allowNull: false
-    },
-    prezzo: {
-        type: sequelize.DECIMAL(7, 2),
-        allowNull: false
-    },
-    nAdulti: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
-    nBambini: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
-    nEsenti: {
-        type: sequelize.INTEGER,
-        allowNull: false
-    },
-    metodoPagamento: {
-        type: sequelize.Model,
-        allowNull: false
-    },
-    utente: {
-        type: sequelize.Model,
-        allowNull: false
-    },
-    struttura: {
-        type: sequelize.Model,
-        allowNull: false
-    },
-    confermata: {
-        type: sequelize.BOOLEAN,
-        allowNull: false
-    },
-    dichiarazioneOspiti: {
-        type: sequelize.Model,
-        allowNull: false
+
+    delete: async function (idPrenotazione, callback) {
+
+        let query = ('DELETE FROM `prenotazione` WHERE `idPrenotazione`=?');
+
+        db.query(query, idPrenotazione, function (err, risultato) {
+            if (err) console.log("Errore:", err.code);
+            else console.log("Riusltato:", risultato);
+        })
     }
-
-}, {
-    sequelize,
-    modelName: 'prenotazione'
-});
+}
