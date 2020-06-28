@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 
 function FormCondizioni(props){
     function vaiAvanti(event) {
@@ -7,7 +7,7 @@ function FormCondizioni(props){
         if(document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked){
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                console.log(document.getElementById("form").checkValidity())
+                console.log(document.getElementById("form").checkValidity());
                 props.go();
             }
         }

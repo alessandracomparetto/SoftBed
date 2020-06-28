@@ -109,7 +109,7 @@ function FormStruttura (props) {
                     axios.post('/struttura', dati)
                         .then(res => { // then print response status
                             console.log(res.data);
-                        })
+                        });
                     props.go();
                 } catch (e) {
                     console.log(e);
