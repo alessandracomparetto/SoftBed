@@ -31,30 +31,30 @@ function FormCaratteristicheC(props){
             <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
             <div className="form-row-group text-center offset-2">
                 <div className="form-check-inline col-12 col-md-5">
-                    <input type="checkbox" className="form-check-input" id="connessione" value="true" name="connessione" defaultChecked={props.dati.connessione==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="connessione" value={1} name="connessione" defaultChecked={props.dati.connessione==="true"}/>
                     <label className="form-check-label" htmlFor="connessione">Connessione Wi-fi</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5">
                     <input type="checkbox" className="form-check-input" id="riscaldamento" name="riscaldamento"
-                           value="true" defaultChecked={props.dati.riscaldamento==="true"}/>
+                           value={1} defaultChecked={props.dati.riscaldamento==="true"}/>
                     <label className="form-check-label" htmlFor="riscaldamento">Riscaldamento</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5 ">
-                    <input type="checkbox" className="form-check-input" id="disabili" name="disabili" value="true" defaultChecked={props.dati.disabili==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="disabili" name="disabili" value={1} defaultChecked={props.dati.disabili==="true"}/>
                     <label className="form-check-label" htmlFor="disabili">Strutture per disabili
                     </label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5 ">
-                    <input type="checkbox" className="form-check-input" id="aria" name="aria" value="true" defaultChecked={props.dati.aria==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="aria" name="aria" value={1} defaultChecked={props.dati.aria==="true"}/>
                     <label className="form-check-label" htmlFor="aria">Aria condizionata</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5 ">
-                    <input type="checkbox" className="form-check-input" id="tv" name="tv" value="true" defaultChecked={props.dati.tv==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="tv" name="tv" value={1} defaultChecked={props.dati.tv==="true"}/>
                     <label className="form-check-label" htmlFor="tv">TV</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5 ">
                     <input type="checkbox" className="form-check-input" id="parcheggio" name="parcheggio"
-                           value="true" defaultChecked={props.dati.parcheggio==="true"}/>
+                           value={1} defaultChecked={props.dati.parcheggio==="true"}/>
                     <label className="form-check-label" htmlFor="parcheggio">Parcheggio</label>
                 </div>
             </div>
@@ -62,19 +62,19 @@ function FormCaratteristicheC(props){
             <h6 className="mt-3 border-bottom border-primary">Sugli ospiti</h6>
             <div className="form-row-group text-center offset-2">
                 <div className="form-check-inline col-12 col-md-5 text-left p-0">
-                    <input type="checkbox" className="form-check-input" id="feste" name="feste" value="true" defaultChecked={props.dati.feste==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="feste" name="feste" value={1} defaultChecked={props.dati.feste==="true"}/>
                     <label className="form-check-label" htmlFor="feste" style={{minWidth : 290+'px'}}>Permesso per feste/eventi</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5">
-                    <input type="checkbox" className="form-check-input" id="animali" name="animali" value="true" defaultChecked={props.dati.animali==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="animali" name="animali" value={1} defaultChecked={props.dati.animali==="true"}/>
                     <label className="form-check-label" htmlFor="animali">Animali ammessi</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5">
-                    <input type="checkbox" className="form-check-input" id="permessoFumo" name="permessoFumo" value="true" defaultChecked={props.dati.permessoFumo==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="permessoFumo" name="permessoFumo" value={1} defaultChecked={props.dati.permessoFumo==="true"}/>
                     <label className="form-check-label" htmlFor="permessoFumo">Permesso di fumare</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5 p-0 text-left">
-                    <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value="true" defaultChecked={props.dati.bambini==="true"}/>
+                    <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value={1} defaultChecked={props.dati.bambini==="true"}/>
                     <label className="form-check-label " htmlFor="bambini" style={{minWidth : 290+'px'}}>Idoneità ad ospitare bambini</label>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import data from "../../regioni_province_comuni.js";
 import $ from 'jquery';
-import axios from 'axios';
+
 
 /* TODO sistemare cap, rimuovere spunta quando non validato*/
 
@@ -102,18 +102,7 @@ function FormStruttura (props) {
         if (controlloCAP()) {
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                try {
-                    let dati = props.dati;
-                    console.log("DATI======= ");
-                    console.log(dati);
-                    axios.post('/struttura', dati)
-                        .then(res => { // then print response status
-                            console.log(res.data);
-                        });
-                    props.go();
-                } catch (e) {
-                    console.log(e);
-                }
+               props.go();
             } else {
                 event.preventDefault();
             }
