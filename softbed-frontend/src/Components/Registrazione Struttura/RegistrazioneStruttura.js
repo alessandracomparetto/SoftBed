@@ -71,7 +71,7 @@ function RegistrazioneStruttura () {
     return(
         <div className="container col-sm-8 py-3">
             <div className="progress">
-                <div className="progress-bar" style={{width: (Math.round(step * 100 / 6)) + '%'}}>{Math.round(step * 100 / 6)}%</div>
+                <div className="progress-bar" style={{width: (Math.round(step * 100 / 6)) + '%'}}>{Math.min(Math.round(step * 100 / 6), 100)}%</div>
             </div>
 
             <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
@@ -92,7 +92,7 @@ function RegistrazioneStruttura () {
             }
             <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
-            {/*<SchermataRiepilogoRegistrazione currentStep={step} dati={info}/>*/}
+            {/*<SchermataRiepilogoRegistrazione currentStep={step} struttura={info}/>*/}
     </div>
     )
 }

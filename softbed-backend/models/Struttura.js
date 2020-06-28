@@ -26,7 +26,7 @@ module.exports={
                 console.log("inserita struttura");
 
                 let refStruttura = risultato2.insertId;
-                 /*sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
+                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
                  if(datiStruttura.foto) {
                      for(foto of datiStruttura.foto){
                          datiQuery = [refStruttura, foto];
@@ -34,7 +34,7 @@ module.exports={
                              if(err) throw err;
                              console.log("inserite foto");
                          }); //chiusura query foto
-                 }}//end for*/
+                 }}//end for
 
 
                 sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
