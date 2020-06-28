@@ -109,7 +109,7 @@ function FormCamere(props){
                 //aggiorno lo stato
                 let tmp = ({tipologia: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
                 console.log(tmp);
-                props.handleCamere(contatore,tmp);
+                props.handleCamere(tmp);
             }
 
             //azzero tutto dopo l'aggiunta

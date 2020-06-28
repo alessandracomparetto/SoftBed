@@ -54,7 +54,34 @@ module.exports={
                         db.query(sql, datiQuery, function (err, risultato3) {
                             if (err) throw err;
                             console.log("inserite caratteristiche");
-                            /!* FIXME:  parseInt in tutti i campi numerici *!/
+                            for(camera of datiStruttura.camere) {
+                                sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                                nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
+                                datiQuery = [refStruttura, camera.tipologia, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoCamere]
+                                db.query(sql, datiQuery, function (err, risultato) {
+                                    if (err) throw err;
+                                    console.log("inserite camere");
+                                    for(foto of datiStruttura.foto){
+                                        datiQuery = [refStruttura, foto];
+                                        db.query(sql, datiQuery, function (err) {
+                                            if(err) throw err;
+                                        });
+                                    }
+                                    console.log("inserite fotografie");
+                                });
+                            }
+
+                        });
+                    }
+                    else if(datiStruttura.tipologia==="cv") {
+                        sql = ('INSERT INTO `cv` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
+                       animaliammessi, permessofumare,festeammesse, tv,salotto,giardino,terrazza,piscina,nBagni,nCamere,nlettiSingoli,nlettiMatrimoniali,prezzonotte,descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                        datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.aria, datiStruttura.connessione, datiStruttura.parcheggio,
+                            datiStruttura.disabili, datiStruttura.animali, datiStruttura.permessoFumo, datiStruttura.feste, datiStruttura.tv, datiStruttura.salotto,
+                            datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzo, datiStruttura.descrizione];
+                        db.query(sql, datiQuery, function (err, risultato3) {
+                            if (err) throw err;
+                            console.log("inserite caratteristiche");
                         });
                     }
                 });
@@ -63,21 +90,6 @@ module.exports={
     }
 }
 
-                   /* for( camera of datiStruttura.camere){
-                          FIXME => la camera è camere: [
-                          *                       camera0 : {dati:valori}
-                          *                       camera1 : {dati:valori}
-                          *   quindi bisogna fare in modo di essere sicuri di selezionare i valori e non il singolo oggetto
-                          *   let {tipologia, nLettiSingoli, nLettiMatrimoniali, prezzoCamere} = camera;
-                          *   potrebbe risolvere?
-                          *
-
-                          sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
-                              nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
-                          datiQuery = [refStruttura, camera.tipologia, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoCamere]
-                          db.query(sql, datiQuery, function( err, risultato){
-                              if (err) throw err;
-                          });*/
 
 
 

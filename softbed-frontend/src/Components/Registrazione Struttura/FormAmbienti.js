@@ -1,11 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-let contatore = 0;
 
 function FormAmbienti(props) {
-    const camera = "Camera ";
-    let [listaCamere, setListaCamere] = useState([]);
-    let [lunghezzaLista, setLunghezzaLista] = useState(0);
 
     function vaiAvanti(event){
         event.preventDefault();
@@ -31,21 +27,21 @@ function FormAmbienti(props) {
 
                 <div className="form-row-group text-center offset-5 offset-sm-3">
                     <div className="form-check-inline col-12 col-sm-5" >
-                        <input type="checkbox" className="mr-1" name="salotto" id="salotto" value="true" defaultChecked={props.dati.salotto==="on"}/>
+                        <input type="checkbox" className="mr-1" name="salotto" id="salotto" value={1} defaultChecked={props.dati.salotto===1}/>
                         <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
                     </div>
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" value="true" defaultChecked={props.dati.terrazza==="on"}/>
+                        <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" value={1} defaultChecked={props.dati.terrazza===1}/>
                         <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
                     </div>
                 </div>
                 <div className="form-row-group text-center offset-5 offset-sm-3">
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="giardino" id="giardino" value="true" defaultChecked={props.dati.giardino==="on"}/>
+                        <input type="checkbox" className="mr-1" name="giardino" id="giardino" value={1} defaultChecked={props.dati.giardino===1}/>
                         <label className="form-check-label" htmlFor="giardino">Giardino</label>
                     </div>
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="piscina" id="piscina" value="true" defaultChecked={props.dati.piscina==="on"}/>
+                        <input type="checkbox" className="mr-1" name="piscina" id="piscina" value={1} defaultChecked={props.dati.piscina===1}/>
                         <label className="form-check-label" htmlFor="piscina">Piscina</label>
                     </div>
                 </div>

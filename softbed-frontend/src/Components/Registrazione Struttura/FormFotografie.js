@@ -77,7 +77,7 @@ function FormFotografie(props){
                 for(let i = 0; i<numero; i++) {
                     let nomeFile = filename[i];
                     let percorso = `/uploads/foto/` + nomeFile.name;
-                    props.handleFoto(i+1, percorso);
+                    props.handleFoto(percorso);
                 }})
     };
 
