@@ -7,7 +7,6 @@ function FormCondizioni(props){
         if(document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked){
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                console.log(document.getElementById("form").checkValidity());
                 props.go();
             }
         }
@@ -199,14 +198,14 @@ function FormCondizioni(props){
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min="1" step="0.5" max="1000"  defaultValue={props.dati.prezzoCancellazione} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} style={{maxWidth: 100 + 'px'}} disabled="false"/>
+                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min="1" step="0.5" max="1000"  defaultValue={props.dati.prezzoCancellazione} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} style={{maxWidth: 100 + 'px'}} disabled={false}/>
                                     <div className="invalid-feedback">1€-1000€</div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="input-group">
                                     <label htmlFor="preavvisoDisdetta" className="pr-2 text-muted" id="preavvisoTesto" >Preavviso minimo disdetta</label>
-                                    <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"  defaultValue={props.dati.preavvisoDisdetta} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} disabled={((props.dati.politicaCancellazione==="gratuita")?"true":"false")}>
+                                    <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"  defaultValue={props.dati.preavvisoDisdetta} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} disabled={props.dati.politicaCancellazione==="gratuita"}>
                                         <option value=""/>
                                         <option value="14">2 settimane</option>
                                         <option value="21">3 settimane</option>

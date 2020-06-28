@@ -28,8 +28,6 @@ function RegistrazioneStruttura () {
         let tmp=info;
         tmp[name]=value;
         setInfo(tmp);
-        console.log("tmp"+tmp.toString());
-        printObject(tmp);
     }
 
     function handleCamere(contatore, camera) {
