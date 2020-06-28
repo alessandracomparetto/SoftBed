@@ -36,7 +36,6 @@ module.exports={
                          }); //chiusura query foto
                  }}//end for
 
-
                 sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
                             oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
                             politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -53,7 +52,7 @@ module.exports={
                         datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.aria, datiStruttura.connessione, datiStruttura.parcheggio,
                             datiStruttura.disabili, datiStruttura.animali, datiStruttura.permessoFumo, datiStruttura.tv, datiStruttura.cucina,
                             datiStruttura.navettaAereoportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
-                        db.query(sql, datiQuery, function (err, risultato3) {
+                        db.query(sql, datiQuery, function (err) {
                             if (err) throw err;
 
                             console.log("inserite caratteristiche");
@@ -61,7 +60,7 @@ module.exports={
                                 sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
                                 datiQuery = [refStruttura, camera.tipologia, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoCamere];
-                                db.query(sql, datiQuery, function (err, risultato4) {
+                                db.query(sql, datiQuery, function (err) {
                                     if (err) throw err;
                                     console.log("inserite camere");
                                 });//chiusura query camere

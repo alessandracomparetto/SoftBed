@@ -20,11 +20,9 @@ function FormStruttura (props) {
         const inputs = $(".form-row input");
 
         if (event.target.value !== '') {
-            inputs.not('#address').removeAttr('disabled');
-            inputs.not('#address').attr('required', 'required');
+            inputs.not('#address').removeAttr('disabled').attr('required', 'required');
         } else {
-            inputs.not('#address').attr('disabled', 'disabled');
-            inputs.not('#address').removeAttr('required');
+            inputs.not('#address').attr('disabled', 'disabled').removeAttr('required');
         }
     }
 
@@ -33,11 +31,9 @@ function FormStruttura (props) {
 
         if (event.keyCode === 9) { // pressione TAB
             if ($(this).val() !== '') {
-                inputs.not('#address').removeAttr('disabled');
-                inputs.not('#address').attr('required', 'required');
+                inputs.not('#address').removeAttr('disabled').attr('required', 'required');
             } else {
-                inputs.not('#address').attr('disabled', 'disabled');
-                inputs.not('#address').removeAttr('required');
+                inputs.not('#address').attr('disabled', 'disabled').removeAttr('required');
             }
         }
     }
@@ -140,7 +136,7 @@ function FormStruttura (props) {
     }
 
     return(
-        <form id="form" className="container pt-3 needs-validation" onChange={props.handleChange} noValidate>
+        <form id="form" className="p-3 needs-validation" onChange={props.handleChange} noValidate>
             <div className="form-group mb-3">
                 <label htmlFor="name">Come si chiama la tua struttura?</label>
                 <input id="name" name="name" type="text" className="form-control" maxLength="60" defaultValue={props.dati.name}  required/>

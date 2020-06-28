@@ -137,7 +137,7 @@ function FormCamere(props){
         return null;
     }
     return(
-        <form className="container col-12 col-md-8 needs-validation" action={"camere/caratteristicheB"} noValidate>
+        <form id="form" className="p-3 needs-validation"  noValidate>
             <h6 className="mt-3 border-bottom border-primary">Camere presenti</h6>
             <div id="listaCamere" className="mb-3 col-12 mx-auto border pre-scrollable bg-white" style={{maxHeight: 30 + 'vh'}}>
                 { (lunghezzaLista===0) ? (
