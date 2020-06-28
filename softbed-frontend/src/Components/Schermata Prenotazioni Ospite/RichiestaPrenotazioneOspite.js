@@ -38,6 +38,7 @@ function RichiestaPrenotazioneOspite(props) {
             .then(res => {
                 // Azione da compiere se la post va a buon fine
                 // TODO: Rimuovere prenotazione dallo stato / local storage
+                // TODO: Inviare e-mail a gestore [e ospite]
             })
             .catch(err => {
                 // Azione da compiere in caso di errore
