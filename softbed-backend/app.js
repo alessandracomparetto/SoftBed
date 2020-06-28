@@ -2,11 +2,13 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
-var cors = require('cors')
+var cors = require('cors');
+var nodemailer = require('nodemailer');
 
 const uploadRouter = require('./routes/upload');
 const strutturaRouter = require('./routes/struttura');
 const utenteRouter=require('./routes/utente');
+const mailRouter=require('./routes/mail');
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', uploadRouter);
 app.use('/struttura', strutturaRouter);
 app.use('/utente', utenteRouter);
+app.use('/mail', mailRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -35,7 +35,7 @@ function FormDatiOspite(props){
         nomeProvinciaResidenza: "",
         nomeRegioneResidenza: "",
         refPrenotazione:"",
-        esente:"",
+        tassa:"",
         dataArrivo:"",
         permanenza:""
     });
@@ -76,15 +76,6 @@ function FormDatiOspite(props){
         setOspite(tmp);
     }
 
-    function setEsente(){
-        let tmp = ospite;
-        if ($("#isEsente").is(":checked"))
-            tmp.esente=true;
-        else
-            tmp.esente=false;
-            setOspite(tmp);
-            console.log(tmp);
-    }
 
     function controlloCAP(e) {
         const form = $("#form");
@@ -331,7 +322,7 @@ function FormDatiOspite(props){
                     </select>
                 </div>
 
-                <div className="form-group col-12 col-md-6">
+                <div className="form-group col-12 col-md-5">
                     <label htmlFor="via">Via/Piazza</label>
                     <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={handleChange} required/>
                 </div>
@@ -344,7 +335,7 @@ function FormDatiOspite(props){
                     </div>
                 </div>
 
-                <div className="form-group col-8 col-md-3">
+                <div className="form-group col-8 col-md-4">
                     <label htmlFor="cap">CAP</label>
                     <input name="cap" id="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
                            title="Inserire 5 cifre da 00100 a 98168" size="5" disabled onChange={controlloCAP} required/>
@@ -361,13 +352,15 @@ function FormDatiOspite(props){
                     <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" defaultValue="1" onChange={handleChange} required/>
                 </div>
 
-
-                <div className="form-check mt-4 ml-2">
-                    <input name="esente" id="isEsente" type="radio" className="form-check-input" onChange={setEsente} required/>
-                    <label className="form-check-label" htmlFor="esente">Esente da tasse</label><br/>
-                    <input name="esente" id="notEsente" type="radio" className="form-check-input" onChange={setEsente}/>
-                    <label className="form-check-label" htmlFor="esente">Non esente da tasse</label>
+                <div className="form-group col-12 col-lg-3">
+                    <label htmlFor="tassa">Tassa di soggiorno</label>
+                    <select id="tassa" name="tassa" className="custom-select" onChange={handleChange} required>
+                        <option value="bambino">Bambino</option>
+                        <option value="adulto">Adulto</option>
+                        <option value="esente">Esente</option>
+                    </select>
                 </div>
+
             </div>
 
             <button name="ok" id="ok" type="submit" className="btn btn-warning mt-3 float-right btn-lg w-200px">Aggiungi ospite</button>
