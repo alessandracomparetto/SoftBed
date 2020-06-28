@@ -30,26 +30,24 @@ function RegistrazioneStruttura () {
         setInfo(tmp);
     }
 
-    function handleCamere(contatore, camera) {
+    function handleCamere(camera) {
         let tmp = info;
-        let cc = "camera"+contatore;
         if(!tmp["camere"]){
             tmp["camere"] =[];
         }
         let temp = tmp["camere"];
-        temp.push({[cc]:camera});
+        temp.push(camera);
         tmp["camere"]=temp;
         setInfo(tmp);
     }
 
-    function handleFoto(indice, fileName) {
+    function handleFoto(fileName) {
         let tmp = info;
-        let stringa = "foto"+indice;
         if(!tmp["foto"]){
             tmp["foto"]=[];
         }
         let temp = tmp["foto"];
-        temp.push({[stringa]:fileName});
+        temp.push(fileName);
         tmp["foto"]=temp;
         setInfo(tmp);
     }
