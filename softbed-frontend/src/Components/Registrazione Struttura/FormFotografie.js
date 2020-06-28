@@ -76,14 +76,14 @@ function FormFotografie(props){
             }).then( res =>{
                 for(let i = 0; i<numero; i++) {
                     let nomeFile = filename[i];
-                    let percorso = `/uploads/foto/` + nomeFile.name;
-                    props.handleFoto(percorso);
+                    props.handleFoto(nomeFile.name);
                 }})
     };
 
     function vaiAvanti(event) {
         event.preventDefault();
-        try {
+        props.go();
+        /*try {
             let dati = props.dati;
             console.log("DATI======= ");
             console.log(dati);
@@ -92,7 +92,7 @@ function FormFotografie(props){
                     console.log(res.data);
                 });
         } catch (e) {
-        }
+        }*/
     }
     function  vaiIndietro() {
         props.goBack();

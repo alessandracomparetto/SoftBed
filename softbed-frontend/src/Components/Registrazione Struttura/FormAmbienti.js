@@ -71,12 +71,12 @@ function FormAmbienti(props) {
                     <span className="invalid-feedback small text-danger">1 - 10</span>
                 </div>
                 <div className="input-group">
-                    <label htmlFor="prezzo">Prezzo struttura (a notte)</label>
+                    <label htmlFor="prezzoNotte">Prezzo struttura (a notte)</label>
                     <div className="input-group">
                         <div className="input-group-prepend">
                             <span className="input-group-text">€</span>
                         </div>
-                        <input name="prezzo" type="number" id="prezzo" className="form-control currency" min="1" step="0.01" max="10000" defaultValue={props.dati.prezzo} required onChange={props.handleChange}/>
+                        <input name="prezzoNotte" type="number" id="prezzoNotte" className="form-control currency" min="1" step="0.01" max="10000" defaultValue={props.dati.prezzoNotte} required onChange={props.handleChange}/>
                         <span className="invalid-feedback small text-danger">1 - 10000</span>
                     </div>
                 </div>

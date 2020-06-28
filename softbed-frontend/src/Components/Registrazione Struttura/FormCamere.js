@@ -21,11 +21,11 @@ function FormCamere(props){
         props.goBack();
     }
     function scriviCamera() {
-        let tipologia = document.getElementById("tipologia");
+        let tipologia = document.getElementById("tipologiaCamera");
         let nlettiMatrimoniali = document.getElementById("nLettiMatrimoniali");
         let nlettiSingoli = document.getElementById("nLettiSingoli");
         let nCamere = document.getElementById("nCamere");
-        let prezzo = document.getElementById("prezzo");
+        let prezzo = document.getElementById("prezzoBaseANotte");
         let flag = false;
 
         //pulisco i residui prima di iniziare (succede se il precedente inserimento camera va male
@@ -107,7 +107,7 @@ function FormCamere(props){
                 setLunghezzaLista(listaCamere.length);
 
                 //aggiorno lo stato
-                let tmp = ({tipologia: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoCamere: prezzo.value});
+                let tmp = ({tipologiaCamera: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoBaseANotte: prezzo.value});
                 console.log(tmp);
                 props.handleCamere(tmp);
             }
@@ -155,7 +155,7 @@ function FormCamere(props){
             <small  id="inserisciCamera" className="form-text text-danger collapse messaggio">Per continuare devi inserire almeno una camera</small>
             <div className="form-group bootstrap-select-wrapper">
                 <label htmlFor="tipologiaCamera" >Tipologia di camera</label>
-                <select className="form-control selectpicker" id="tipologia"  name="camera" defaultValue="" required>
+                <select className="form-control selectpicker" id="tipologiaCamera"  name="tipologiaCamera" defaultValue="" required>
                     <option value="">Scegli una opzione</option>
                     <option value="Singola">Singola</option>
                     <option value="Doppia">Doppia</option>
@@ -185,12 +185,12 @@ function FormCamere(props){
             </div>
 
             <div className="form-group">
-                <label htmlFor="prezzo">Prezzo base a notte</label>
+                <label htmlFor="prezzoBaseANotte">Prezzo base a notte</label>
                 <div className="input-group">
                     <div className="input-group-prepend">
                         <span className="input-group-text">€</span>
                     </div>
-                    <input name="prezzo" id="prezzo" type="number" className="form-control currency" min="1" step="0.01" max="10000" required/>
+                    <input name="prezzoBaseANotte" id="prezzoBaseANotte" type="number" className="form-control currency" min="1" step="0.01" max="10000" required/>
                     <span className="invalid-feedback small text-danger">1 - 10000</span>
                 </div>
                 <small id="indicazionePrezzo" className="form-text collapse text-danger messaggio">Per registrare la camera devi aver inserito il prezzo base a notte</small>
