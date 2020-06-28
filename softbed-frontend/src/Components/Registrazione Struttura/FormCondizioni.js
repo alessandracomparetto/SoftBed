@@ -9,17 +9,7 @@ function FormCondizioni(props){
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
                 console.log(document.getElementById("form").checkValidity());
-                try {
-                    let dati = props.dati;
-                    console.log("DATI======= ");
-                    console.log(dati);
-                    axios.post('/struttura', dati)
-                        .then(res => { // then print response status
-                            console.log(res.data);
-                        });
-                    props.go();
-                } catch (e) {
-                   }
+                props.go();
             }
         }
         else{

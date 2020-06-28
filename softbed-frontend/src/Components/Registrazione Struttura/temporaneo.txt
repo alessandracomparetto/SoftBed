@@ -1,13 +1,13 @@
 
 /*
-tipologia: cv
-name: a
-region: Basilicata
-state: PZ
-town: 076016
-address: u
-cap: 90011
-addressnum: 1
+tipologia: cv ----------------
+name: a---------------
+region: Basilicata ------------
+state: PZ---------------------
+town: 076016--------------
+address: u--------------
+cap: 90011--------------
+addressnum: 1----------------
 salotto: true
 giardino: true
 piscina: true
@@ -18,15 +18,15 @@ nLettiSingoli: 1
 nBagni: 1
 prezzo: 1
 riscaldamento: true
-connessione: true
-disabili: true
-aria: true
-tv: true
-parcheggio: true
-animali: true
-feste: true
-permessoFumo: true
-bambini: true
+connessione: true -----------------
+disabili: true---------------
+aria: true----------
+tv: true -------------
+parcheggio: true --------------
+animali: true -----------------------
+feste: true -----------------
+permessoFumo: true ------------
+bambini: true--------------
 descrizione: 1
 politicaCancellazione: pagamento
 minPrenotazione: 5

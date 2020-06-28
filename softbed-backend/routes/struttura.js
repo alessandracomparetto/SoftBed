@@ -14,9 +14,8 @@ router.get('/', function(req, res, next) {
 router.post('/', function (req, res) {
     console.log("REQ.BODY ====")
     console.log(req.body);
-    console.log(typeof(req.body.addressnum));
     strutturaModel.create(req.body,function(data){
-        console.log(data.affectedRows + " record(s) updated");
+        console.log(data);
         res.send(data);
     });
 });
