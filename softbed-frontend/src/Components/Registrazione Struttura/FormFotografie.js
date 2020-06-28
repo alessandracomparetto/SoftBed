@@ -91,7 +91,6 @@ function FormFotografie(props){
                 .then(res => { // then print response status
                     console.log(res.data);
                 });
-            props.go();
         } catch (e) {
         }
     }

@@ -22,26 +22,26 @@ function FormAmbienti(props) {
         return null;
     }
     return(
-        <form id="form" className="container col-12 col-md-8" onChange={props.handleChange}>
+        <form id="form" className="p-3 needs-validation" onChange={props.handleChange}>
             <h6 className="mt-3 border-bottom border-primary">Ambienti presenti</h6>
 
                 <div className="form-row-group text-center offset-5 offset-sm-3">
                     <div className="form-check-inline col-12 col-sm-5" >
-                        <input type="checkbox" className="mr-1" name="salotto" id="salotto" value={1} defaultChecked={props.dati.salotto===1}/>
+                        <input type="checkbox" className="mr-1" name="salotto" id="salotto" value={1} defaultChecked={props.dati.salotto==="1"}/>
                         <label className="form-check-label text-center" htmlFor="salotto">Salotto</label>
                     </div>
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" value={1} defaultChecked={props.dati.terrazza===1}/>
+                        <input type="checkbox" className="mr-1" name="terrazza" id="terrazza" value={1} defaultChecked={props.dati.terrazza==="1"}/>
                         <label className="form-check-label" htmlFor="terrazza">Terrazza</label>
                     </div>
                 </div>
                 <div className="form-row-group text-center offset-5 offset-sm-3">
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="giardino" id="giardino" value={1} defaultChecked={props.dati.giardino===1}/>
+                        <input type="checkbox" className="mr-1" name="giardino" id="giardino" value={1} defaultChecked={props.dati.giardino==="1"}/>
                         <label className="form-check-label" htmlFor="giardino">Giardino</label>
                     </div>
                     <div className="form-check-inline col-12 col-sm-5">
-                        <input type="checkbox" className="mr-1" name="piscina" id="piscina" value={1} defaultChecked={props.dati.piscina===1}/>
+                        <input type="checkbox" className="mr-1" name="piscina" id="piscina" value={1} defaultChecked={props.dati.piscina==="1"}/>
                         <label className="form-check-label" htmlFor="piscina">Piscina</label>
                     </div>
                 </div>

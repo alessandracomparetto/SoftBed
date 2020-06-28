@@ -1,7 +1,12 @@
-import React from "react";
-import axios from "axios";
+import React, {useEffect} from "react";
 
 function FormCondizioni(props){
+
+    useEffect(() => {
+        if (props.currentStep === 5) {
+          abilitazione();
+        }
+    }, [props.currentStep]);
     function vaiAvanti(event) {
          event.preventDefault();
         document.getElementById("form").classList.add("was-validated");
@@ -79,6 +84,8 @@ function FormCondizioni(props){
             preavvisoDisdetta.setAttribute("disabled", "disabled");
             preavvisoDisdetta.classList.remove("required");
             preavvisoTesto.classList.add("text-muted");
+            prezzoCancellazione.value=null;
+            preavvisoDisdetta.value=null;
         }
     }
 
@@ -86,7 +93,7 @@ function FormCondizioni(props){
         return null;
     }
     return(
-        <form id="form" className="mt-3 needs-validation" noValidate onSubmit={verificaCheckBox} onChange={props.handleChange}>
+        <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox} onChange={props.handleChange}>
             <div className="border p-3 text-center">
                 <h6 className="mt-3 border-bottom border-primary text-left">Durata del soggiorno</h6>
                 <div className="mb-3 form-check-inline mr-3">
@@ -173,11 +180,11 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                     <div className= "form-row-group d-flex justify-content-around">
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value={1} defaultChecked={props.dati.pagamentoOnline==="online"}/>
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value={1} defaultChecked={props.dati.pagamentoOnline==="1"}/>
                             <label htmlFor="pagamentoOnline" className=" form-check-label pl-2" >Pagamento online</label>
                         </div>
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value={1} defaultChecked={props.dati.pagamentoLoco==="loco"}/>
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value={1} defaultChecked={props.dati.pagamentoLoco==="1"}/>
                             <label htmlFor="pagamentoLoco" className=" form-check-label pl-2" >Pagamento in loco</label>
                         </div>
                     </div>
