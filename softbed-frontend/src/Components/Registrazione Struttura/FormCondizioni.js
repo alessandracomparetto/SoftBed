@@ -1,4 +1,5 @@
-import React, {useEffect} from "react";
+import React from "react";
+import axios from "axios";
 
 function FormCondizioni(props){
     function vaiAvanti(event) {
@@ -7,7 +8,7 @@ function FormCondizioni(props){
         if(document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked){
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                console.log(document.getElementById("form").checkValidity())
+                console.log(document.getElementById("form").checkValidity());
                 props.go();
             }
         }
@@ -91,7 +92,7 @@ function FormCondizioni(props){
                 <div className="mb-3 form-check-inline mr-3">
                     <div className="input-group">
                         <label htmlFor="minSoggiorno" className="mt-3 mr-4 border-bottom border-primary">Minima</label>
-                        <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control my-auto" min="1" max="15" size="2" maxLength="2" defaultValue={props.dati.minSoggiorno} onChange={verificaMinDurata}  required />
+                        <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control my-auto" min={1} max={15} size="2" maxLength="2" defaultValue={props.dati.minSoggiorno} onChange={verificaMinDurata}  required />
                         <div className="input-group-prepend">
                             <span className="input-group-text my-auto">giorni</span>
                         </div>
@@ -101,7 +102,7 @@ function FormCondizioni(props){
                 <div className="mb-3 form-check-inline text-center">
                     <div className="input-group">
                         <label htmlFor="maxSoggiorno" className="mt-3 mr-3 border-bottom border-primary">Massima </label>
-                        <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control my-auto" min="1" max="28" size="2" maxLength="2" defaultValue={props.dati.maxSoggiorno}  onChange={verificaMaxDurata} required  />
+                        <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control my-auto" min={1} max={28} size="2" maxLength="2" defaultValue={props.dati.maxSoggiorno}  onChange={verificaMaxDurata} required  />
                         <div className="input-group-prepend">
                             <span className="input-group-text my-auto">giorni</span>
                         </div>
@@ -115,25 +116,25 @@ function FormCondizioni(props){
                     <label htmlFor="minPrenotazione" className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                     <select id="minPrenotazione" className="custom-select mr-2" name="minPrenotazione" defaultValue={props.dati.minPrenotazione} style={{minWidth:160+'px'}} required>
                         <option value=""/>
-                        <option value="2">2 giorni</option>
-                        <option value="3">3 giorni</option>
-                        <option value="5">5 giorni</option>
-                        <option value="7">1 settimana</option>
-                        <option value="10">10 giorni</option>
-                        <option value="14">2 settimane</option>
+                        <option value={2}>2 giorni</option>
+                        <option value={3}>3 giorni</option>
+                        <option value={5}>5 giorni</option>
+                        <option value={7}>1 settimana</option>
+                        <option value={10}>10 giorni</option>
+                        <option value={14}>2 settimane</option>
                     </select>
                 </div>
                 <div className="form-check-inline pl-md-0">
                     <label htmlFor="maxPrenotazione" className="mt-3 mr-3 border-bottom border-primary" >Massimo</label>
                     <select id="maxPrenotazione" className="custom-select" name="maxPrenotazione" defaultValue={props.dati.maxPrenotazione}  style={{minWidth:160+'px'}} required>
                         <option value="" />
-                        <option value="14">2 settimane</option>
-                        <option value="21">3 settimane</option>
-                        <option value="30">1 mese</option>
-                        <option value="60" >2 mesi</option>
-                        <option value="90">3 mesi</option>
-                        <option value="180">6 mesi</option>
-                        <option value="365">1 anno</option>
+                        <option value={14}>2 settimane</option>
+                        <option value={21}>3 settimane</option>
+                        <option value={30}>1 mese</option>
+                        <option value={60} >2 mesi</option>
+                        <option value={90}>3 mesi</option>
+                        <option value={180}>6 mesi</option>
+                        <option value={365}>1 anno</option>
                     </select>
                 </div>
             </div>
@@ -172,11 +173,11 @@ function FormCondizioni(props){
                     <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                     <div className= "form-row-group d-flex justify-content-around">
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value="online" defaultChecked={props.dati.pagamentoOnline==="online"}/>
+                            <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value={1} defaultChecked={props.dati.pagamentoOnline==="online"}/>
                             <label htmlFor="pagamentoOnline" className=" form-check-label pl-2" >Pagamento online</label>
                         </div>
                         <div className="form-check-inline ">
-                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value="loco" defaultChecked={props.dati.pagamentoLoco==="loco"}/>
+                            <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco"  value={1} defaultChecked={props.dati.pagamentoLoco==="loco"}/>
                             <label htmlFor="pagamentoLoco" className=" form-check-label pl-2" >Pagamento in loco</label>
                         </div>
                     </div>
@@ -199,7 +200,7 @@ function FormCondizioni(props){
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min="1" step="0.5" max="1000"  defaultValue={props.dati.prezzoCancellazione} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} style={{maxWidth: 100 + 'px'}} disabled="false"/>
+                                    <input name="prezzoCancellazione" id="prezzoCancellazione" type="number" className="form-control currency mr-3" min={1} step={0.5} max={1000}  defaultValue={props.dati.prezzoCancellazione} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} style={{maxWidth: 100 + 'px'}} disabled="false"/>
                                     <div className="invalid-feedback">1€-1000€</div>
                                 </div>
                             </div>
@@ -207,14 +208,14 @@ function FormCondizioni(props){
                                 <div className="input-group">
                                     <label htmlFor="preavvisoDisdetta" className="pr-2 text-muted" id="preavvisoTesto" >Preavviso minimo disdetta</label>
                                     <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"  defaultValue={props.dati.preavvisoDisdetta} required={((props.dati.politicaCancellazione==="pagamento")?"":"none")} disabled={((props.dati.politicaCancellazione==="gratuita")?"true":"false")}>
-                                        <option value=""/>
-                                        <option value="14">2 settimane</option>
-                                        <option value="21">3 settimane</option>
-                                        <option value="30">1 mese</option>
-                                        <option value="60" >2 mesi</option>
-                                        <option value="90">3 mesi</option>
-                                        <option value="180">6 mesi</option>
-                                        <option value="365">1 anno</option>
+                                        <option value="" />
+                                        <option value={14}>2 settimane</option>
+                                        <option value={21}>3 settimane</option>
+                                        <option value={30}>1 mese</option>
+                                        <option value={60} >2 mesi</option>
+                                        <option value={90}>3 mesi</option>
+                                        <option value={180}>6 mesi</option>
+                                        <option value={365}>1 anno</option>
                                     </select>
                                 </div>
                             </div>
@@ -229,7 +230,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">€</span>
                             </div>
-                            <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency " defaultValue={props.dati.prezzoBambini} min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} />
+                            <input name="prezzoBambini" id="prezzoBambini" type="number" className="form-control currency " defaultValue={props.dati.prezzoBambini} min={0} step={0.5} max={10} required style={{maxWidth: 100 + 'px'}} />
                             <div className="invalid-feedback text-center">1€-10€</div>
                         </div>
                         <div className="input-group col-12 col-md-6 d-flex justify-content-center mb-2">
@@ -237,7 +238,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">€</span>
                             </div>
-                            <input name="prezzoAdulti" id="prezzoAdulti" type="number" className="form-control currency  " min="0" step="0.5" max="10" required style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.prezzoAdulti}/>
+                            <input name="prezzoAdulti" id="prezzoAdulti" type="number" className="form-control currency  " min={0} step={0.5} max={10} required style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.prezzoAdulti}/>
                             <div className="invalid-feedback text-center">1€-10€</div>
                         </div>
                     </div>
@@ -247,7 +248,7 @@ function FormCondizioni(props){
                             <div className="input-group-prepend">
                                 <span className="input-group-text">giorni</span>
                             </div>
-                            <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min="2" maxLength="2" defaultValue={props.dati.nGiorniEsclusione} required style={{maxWidth: 80 + 'px'}}/>
+                            <input name="nGiorniEsclusione" id="nGiorniEsclusione" type="number"  className="form-control" min={2} maxLength="2" defaultValue={props.dati.nGiorniEsclusione} required style={{maxWidth: 80 + 'px'}}/>
                         </div>
                     </div>
 
@@ -259,7 +260,7 @@ function FormCondizioni(props){
                                 <div className="input-group-prepend">
                                     <span className="input-group-text">%</span>
                                 </div>
-                                <input name="percentualeCondizioni" id="percentualeCondizioni" type="number" className="form-control currency  " min="0" step="0.1" max="100" defaultValue={props.dati.percentualeCondizioni} required style={{maxWidth: 100 + 'px'}} />
+                                <input name="percentualeCondizioni" id="percentualeCondizioni" type="number" className="form-control currency  " min={0} step={0.1} max={100} defaultValue={props.dati.percentualeCondizioni} required style={{maxWidth: 100 + 'px'}} />
                             </div>
                         </div>
 

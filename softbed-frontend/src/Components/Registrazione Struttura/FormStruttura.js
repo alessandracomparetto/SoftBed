@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import data from "../../regioni_province_comuni.js";
 import $ from 'jquery';
 
+
 /* TODO sistemare cap, rimuovere spunta quando non validato*/
 
 
@@ -95,19 +96,16 @@ function FormStruttura (props) {
         }
     }
 
-    function vaiAvanti(event){
+    function vaiAvanti(event) {
         event.preventDefault();
         document.getElementById("form").classList.add("was-validated");
-
-        if(controlloCAP()){
+        if (controlloCAP()) {
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                props.go();
+               props.go();
+            } else {
+                event.preventDefault();
             }
-        }
-
-        else{
-            event.preventDefault();
         }
     }
 

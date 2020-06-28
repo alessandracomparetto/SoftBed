@@ -1,14 +1,29 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import FormRicerca from "../FormRicerca";
 import RisultatoRicerca from "./RisultatoRicerca";
 import Paginazione from "./Paginazione";
 import Mappa from "./Mappa";
 import FormFiltri from "./FormFiltri/FormFiltri";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
     const [pagina, setPagina] = useState(1);
     const [destinazione, setDestinazione] = useState("");
+    const [listaStrutture, setListaStrutture] = useState([]);
+
+    const valoriRicerca = useLocation().search;
+
+    useEffect(() => {
+        // TODO: Verificare se i risultati sono memorizzati in cache
+
+        // Se i risultati non sono memorizzati in cache allora viene effettuata una richiesta GET
+        axios.get(valoriRicerca)
+            .then(res => {
+                console.log(res);
+            })
+    }, []);
 
     // TODO: da rimuovere, solo per test
     const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
@@ -17,7 +32,7 @@ function SchermataRisultati() {
         " Sed commodo lacus nulla, non placerat libero gravida a. Orci varius natoque penatibus et magnis dis" +
         " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
 
-    const [listaStrutture] = useState([
+    const [listaStruttureTMP] = useState([
         {id: "1",
             nome: "Struttura 1",
             descrizione: descrizione,
@@ -51,12 +66,11 @@ function SchermataRisultati() {
                     </div>
                     <div className="col-12 col-lg-8">
                         {
-                            listaStrutture.map((struttura, indice) => {
+                            listaStruttureTMP.map((struttura, indice) => {
                                 return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi}/>
                             })
                         }
                         <Paginazione paginaAttuale={pagina} numPagine={20} setPagina={setPagina} />
-
 
                     </div>
                 </div>

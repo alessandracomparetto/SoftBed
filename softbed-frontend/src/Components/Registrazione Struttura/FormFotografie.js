@@ -60,7 +60,7 @@ function FormFotografie(props){
             return;
         }
 
-        const data = new FormData()
+        const data = new FormData();
         for(var i = 0; i<file.length; i++) {
             data.append('file', file[i]);
         }
@@ -77,13 +77,23 @@ function FormFotografie(props){
                 for(let i = 0; i<numero; i++) {
                     let nomeFile = filename[i];
                     let percorso = `/uploads/foto/` + nomeFile.name;
-                    props.handleFoto(i+1, percorso);
+                    props.handleFoto(percorso);
                 }})
     };
 
     function vaiAvanti(event) {
         event.preventDefault();
-        props.go();
+        try {
+            let dati = props.dati;
+            console.log("DATI======= ");
+            console.log(dati);
+            axios.post('/struttura', dati)
+                .then(res => { // then print response status
+                    console.log(res.data);
+                });
+            props.go();
+        } catch (e) {
+        }
     }
     function  vaiIndietro() {
         props.goBack();

@@ -1,4 +1,7 @@
 import React, {useState} from "react";
+import axios from "axios";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function RichiestaPrenotazioneOspite(props) {
     const [mostraContenuto, setMostraContenuto] = useState(false);
@@ -7,6 +10,40 @@ function RichiestaPrenotazioneOspite(props) {
 
     // TODO: Da rimuovere
     const struttura = { gestore: { email: "softengineers@gmail.com" } };
+
+    const mostraDialog = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+            return (
+                <div className="custom-ui">
+                    <h1>Sei sicuro di voler annullare la prenotazione?</h1>
+                    <div className="text-right">
+                        <button className="btn btn-secondary px-3 py-2 m-2" onClick={onClose}>No, torna indietro</button>
+                        <button className="btn btn-danger px-3 py-2 m-2" onClick={() => {
+                            annullaPrenotazione();
+                            onClose();
+                        }} >
+                            Sì, voglio annullare la prenotazione!
+                        </button>
+                    </div>
+                </div>
+            )
+        }
+    })
+
+    }
+
+    const annullaPrenotazione = () => {
+        axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.id})
+            .then(res => {
+                // Azione da compiere se la post va a buon fine
+                // TODO: Rimuovere prenotazione dallo stato / local storage
+                // TODO: Inviare e-mail a gestore [e ospite]
+            })
+            .catch(err => {
+                // Azione da compiere in caso di errore
+            });
+    }
 
     return (
         <li className={"rounded list-group-item list-group-item-warning text-dark border border-dark"+ ((!props.primo) ? " border-top-0" : "")}>
@@ -132,7 +169,7 @@ function RichiestaPrenotazioneOspite(props) {
                         </div>
 
                         <div className="order-0 mr-md-auto p-2 col-12 col-md-3">
-                            <button className="btn btn-secondary btn-block">Annulla prenotazione</button>
+                            <button className="btn btn-secondary btn-block" onClick={mostraDialog}>Annulla prenotazione</button>
                         </div>
                     </div>
                 </div>

@@ -6,9 +6,11 @@ var cors = require('cors');
 var nodemailer = require('nodemailer');
 
 const uploadRouter = require('./routes/upload');
+const prenotazioneRouter = require('./routes/prenotazione');
 const strutturaRouter = require('./routes/struttura');
-const utenteRouter=require('./routes/utente');
-const mailRouter=require('./routes/mail');
+const utenteRouter = require('./routes/utente');
+const ricercaRouter = require('./routes/ricerca');
+const mailRouter = require('./routes/mail');
 
 const app = express();
 
@@ -22,8 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', indexRouter);
+app.use('/search', ricercaRouter);
 app.use('/upload', uploadRouter);
+app.use('/prenotazione', prenotazioneRouter);
 app.use('/struttura', strutturaRouter);
 app.use('/utente', utenteRouter);
 app.use('/mail', mailRouter);
@@ -44,4 +47,5 @@ app.use(function(err, req, res, next) {
   //res.render('error');
 
 });
+
 module.exports = app;

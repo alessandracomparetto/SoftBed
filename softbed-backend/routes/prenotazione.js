@@ -1,9 +1,8 @@
 let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-/* const { config } = require('../db/config');
-const { makeDb, withTransaction } = require('../db/dbmiddleware');*/
-let strutturaModel = require('../models/Struttura')
+
+let prenotazioneModel = require('../models/Prenotazione')
 
 /* La rotta / è vietata */
 router.get('/', function(req, res, next) {
@@ -11,14 +10,24 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('/', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
-    strutturaModel.create(req.body,function(data){
-        console.log(data);
+router.post('/richiesta', function (req, res) {
+    console.log("Richiesta\nReq body:", req.body);
+
+    prenotazioneModel.create(req.body, function (data) {
+        console.log(data.affectedRows + " record(s) updated");
+        console.log("data:", data);
         res.send(data);
-    });
+    }).catch(err => res.send(err));
 });
+
+router.post('/annullamento', function (req, res) {
+    console.log("Annullamento\nReq body:", req.body);
+
+    prenotazioneModel.delete(req.body.idPrenotazione, function (data) {
+        console.log(data.affectedRows + " recors(s) updated");
+        res.send(data);
+    }).catch(err => res.send(err));
+})
 
 module.exports = router;
 
