@@ -20,9 +20,9 @@ function FormStruttura (props) {
         const inputs = $(".form-row input");
 
         if (event.target.value !== '') {
-            inputs.not('#address').removeAttr('disabled').attr('required', 'required');
+            inputs.not('#via').removeAttr('disabled').attr('required', 'required');
         } else {
-            inputs.not('#address').attr('disabled', 'disabled').removeAttr('required');
+            inputs.not('#via').attr('disabled', 'disabled').removeAttr('required');
         }
     }
 
@@ -31,20 +31,20 @@ function FormStruttura (props) {
 
         if (event.keyCode === 9) { // pressione TAB
             if ($(this).val() !== '') {
-                inputs.not('#address').removeAttr('disabled').attr('required', 'required');
+                inputs.not('#via').removeAttr('disabled').attr('required', 'required');
             } else {
-                inputs.not('#address').attr('disabled', 'disabled').removeAttr('required');
+                inputs.not('#via').attr('disabled', 'disabled').removeAttr('required');
             }
         }
     }
 
     function regioniEventHandler() {
-        const regioneInput = document.getElementById("region");
-        const provinceInput = document.getElementById("state");
+        const regioneInput = document.getElementById("nomeRegione");
+        const provinceInput = document.getElementById("nomeProvincia");
 
         // rimozione dei precedenti elementi del menu provinca e comune
         provinceInput.innerHTML = '<option value="" selected/>';
-        document.getElementById("town").innerHTML='<option value="" selected/>';
+        document.getElementById("nomeComune").innerHTML='<option value="" selected/>';
 
         if (regioneInput.value !== '') {
             for (let regione of data.regioni) {
@@ -61,15 +61,15 @@ function FormStruttura (props) {
                 provinceInput.appendChild(opt);
             }
 
-            if (props.dati.state) {
-                provinceInput.value = props.dati.state;
+            if (props.dati.nomeProvincia) {
+                provinceInput.value = props.dati.nomeProvincia;
             }
         }
     }
 
     function provinceEventHandler(){
-        const provinceInput = document.getElementById("state");
-        const comuniInput = document.getElementById("town");
+        const provinceInput = document.getElementById("nomeProvincia");
+        const comuniInput = document.getElementById("nomeComune");
 
         // rimozione dei precedenti elementi del menu Comune
         comuniInput.innerHTML='<option value="" selected/>';
@@ -80,14 +80,14 @@ function FormStruttura (props) {
                         let opt = document.createElement('option');
                         opt.value = comune.code;
                         opt.innerText = comune.nome;
-                        document.getElementById("town").appendChild(opt);
+                        document.getElementById("nomeComune").appendChild(opt);
                     }
                     break; // non dobbiamo cercare oltre
                 }
             }
 
-            if (props.dati.town) {
-                comuniInput.value = props.dati.town;
+            if (props.dati.nomeComune) {
+                comuniInput.value = props.dati.nomeComune;
             }
         }
     }
@@ -138,8 +138,8 @@ function FormStruttura (props) {
     return(
         <form id="form" className="p-3 needs-validation" onChange={props.handleChange} noValidate>
             <div className="form-group mb-3">
-                <label htmlFor="name">Come si chiama la tua struttura?</label>
-                <input id="name" name="name" type="text" className="form-control" maxLength="60" defaultValue={props.dati.name}  required/>
+                <label htmlFor="nomeStruttura">Come si chiama la tua struttura?</label>
+                <input id="nomeStruttura" name="nomeStruttura" type="text" className="form-control" maxLength="60" defaultValue={props.dati.nomeStruttura}  required/>
                 <div className="invalid-feedback">
                     Inserisci il nome della struttura
                 </div>
@@ -149,7 +149,7 @@ function FormStruttura (props) {
                 <div className="input-group-prepend">
                     <span className="input-group-text w-105px">Regione&nbsp;&nbsp;</span>
                 </div>
-                <select id="region" className="custom-select" name="region" onLoad={regioniEventHandler} onChange={regioniEventHandler} defaultValue={props.dati.region} required>
+                <select id="nomeRegione" className="custom-select" name="nomeRegione" onLoad={regioniEventHandler} onChange={regioniEventHandler} defaultValue={props.dati.nomeRegione} required>
                     <option value=""/>
                     <option value="Abruzzo">Abruzzo</option>
                     <option value="Basilicata">Basilicata</option>
@@ -181,7 +181,7 @@ function FormStruttura (props) {
                 <div className="input-group-prepend">
                     <span className="input-group-text w-105px">Provincia&nbsp;</span>
                 </div>
-                <select id="state" name="state" className="custom-select" onLoad={provinceEventHandler} onChange={provinceEventHandler} defaultValue={props.dati.state} required>
+                <select id="nomeProvincia" name="nomeProvincia" className="custom-select" onLoad={provinceEventHandler} onChange={provinceEventHandler} defaultValue={props.dati.nomeProvincia} required>
                     <option value=""/>
                 </select>
                 <div className="invalid-feedback">
@@ -193,7 +193,7 @@ function FormStruttura (props) {
                 <div className="input-group-prepend">
                     <span className="input-group-text w-105px">Comune&nbsp;&nbsp;</span>
                 </div>
-                <select id="town" name="town" className="custom-select" defaultValue={props.dati.town} required>
+                <select id="nomeComune" name="nomeComune" className="custom-select" defaultValue={props.dati.nomeComune} required>
                     <option value="" />
                 </select>
                 <div className="invalid-feedback">
@@ -203,14 +203,14 @@ function FormStruttura (props) {
 
             <div className="form-row mb-3">
                 <div className="col-12 col-lg-6">
-                    <label htmlFor="address">Via/Piazza</label>
-                    <input name="address" id="address" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
-                           maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={props.dati.address} required/>
+                    <label htmlFor="via">Via/Piazza</label>
+                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
+                           maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={props.dati.via} required/>
                 </div>
                 <div className="col-5 col-md-4 col-lg-3">
-                    <label htmlFor="addressnum">N.</label>
-                    <input name="addressnum" id="addressnum" type="number" className="form-control " min="1" max="9999" size="4"
-                           maxLength="4" defaultValue={props.dati.addressnum} required/>
+                    <label htmlFor="numeroCivico">N.</label>
+                    <input name="numeroCivico" id="numeroCivico" type="number" className="form-control " min="1" max="9999" size="4"
+                           maxLength="4" defaultValue={props.dati.numeroCivico} required/>
                     <div className="invalid-feedback">1 - 9999</div>
                 </div>
                 <div className="col-4 col-md-4 col-lg-3">

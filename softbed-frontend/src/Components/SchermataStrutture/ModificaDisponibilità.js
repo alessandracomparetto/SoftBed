@@ -55,7 +55,7 @@ function ModificaDisponibilita(){
         aggiornaPeriodi(tmp);
     }
     return(
-       <div className="col-8">
+       <div>
            <form className=" d-block m-2">
                <h6 className="mt-3 border-bottom border-primary">Lista dei periodi in cui la tua struttura non è disponibile</h6>
                <div>

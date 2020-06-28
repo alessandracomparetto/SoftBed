@@ -17,67 +17,7 @@ function InformazioneLineare(props) {
     );
 }
 
-function InformazioniStruttura() {
-    const struttura = { // TODO: da eliminare - potrebbe tornare utile un dizionario {nomeServizio: icona}
-        id: 1,
-        nome: "Dolce Risveglio",
-        descrizione: "Questa struttura è bella, ma mai quanto te che stai leggendo ^-^",
-        servizi: [
-            {servizio: "Aria condizionata", icona: "snowflake"},
-            {servizio: "Riscaldamento", icona: "fire"},
-            {servizio: "TV", icona: "tv"},
-            {servizio: "Wi-Fi", icona: "wifi"},
-            {servizio: "Piscina", icona: "water"},
-            {servizio: "Idonea per bambini", icona: "child"},
-            {servizio: "Animali ammessi", icona: "paw"}
-        ],
-        localita: {
-            regione: "Sicilia",
-            provincia: "Palermo",
-            comune: "Trabia"
-        },
-        prezzo: 40, // in casa vacanze
-        ambienti: ["Giardino", "Terrazza", "Piscina"],
-        bagni: 4,
-        camere: [
-            {matrimoniali: 2, singoli: 3, prezzo: 65},
-            {matrimoniali: 2, singoli: 0, prezzo: 42},
-            {matrimoniali: 0, singoli: 3, prezzo: 30},
-        ], // in B&B
-        prenotazione: {
-            durata: {
-                min: 4,
-                max: 28
-            },
-            anticipo: {
-                min: 3,
-                max: 90,
-            },
-            checkIn: {
-                inizio: "13:00",
-                fine: "17:00"
-            },
-            checkOut: {
-                inizio: "09:00",
-                fine: "13:00"
-            }
-        },
-        pagamento: {
-            inLoco: true,
-            online: false,
-            cancellazione: true,
-            preavviso: true
-        },
-        tasse: {
-            adulti: 10,
-            bambini: 5,
-            bonus: {
-                durataSoggiorno: 3,
-                numeroPersone: 10
-            }
-        }
-    }
-
+function InformazioniStruttura(struttura) {
     return (
         <Fragment>
             {/* Nome e località */}

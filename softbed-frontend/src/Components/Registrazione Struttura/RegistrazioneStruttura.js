@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import FormTipologiaStruttura from "./FormTipologiaStruttura";
 import FormCamere from "./FormCamere";
-import FormCaratteristicheB from "./FormCaratteristicheB";
+import InserimentoCaratteristicheB from "./InserimentoCaratteristicheB";
 import FormAmbienti from "./FormAmbienti";
-import FormCaratteristicheC from "./FormCaratteristicheC";
-import FormCondizioni from "./FormCondizioni";
+import InserimentoCaratteristicheC from "./InserimentoCaratteristicheC";
+import InserimentoCondizioni from "./InserimentoCondizioni";
 import FormFotografie from "./FormFotografie";
 import FormStruttura from "./FormStruttura";
 import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
@@ -28,6 +28,7 @@ function RegistrazioneStruttura () {
         let tmp=info;
         tmp[name]=value;
         setInfo(tmp);
+        printObject(tmp);
     }
 
     function handleCamere(camera) {
@@ -78,19 +79,19 @@ function RegistrazioneStruttura () {
             <FormStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
 
             {
-                (info.tipologia==="cv")?
+                (info.tipologiaStruttura==="cv")?
                     <FormAmbienti currentStep={step} handleChange={handleChange} handleCamere={handleCamere} dati={info} go={_next} goBack={_prev}/>
                     :
                     <FormCamere currentStep={step} handleChange={handleChange} handleCamere={handleCamere} dati={info} go={_next} goBack={_prev}/>
             }
 
             {
-                (info.tipologia==="cv")?
-                    <FormCaratteristicheC currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+                (info.tipologiaStruttura==="cv")?
+                    <InserimentoCaratteristicheC currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
                     :
-                    <FormCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+                    <InserimentoCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             }
-            <FormCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+            <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             {/*<SchermataRiepilogoRegistrazione currentStep={step} dati={info}/>*/}
     </div>
