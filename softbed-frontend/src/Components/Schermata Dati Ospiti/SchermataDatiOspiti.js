@@ -29,7 +29,7 @@ function SchermataDatiOspiti(props){
         nomeProvinciaResidenza: "Trapani",
         nomeRegioneResidenza: "Sicilia",
         refPrenotazione:"10",
-        esente:true,
+        tassa:"Adulto",
         dataArrivo:"26-06-20",
         permanenza:"1",
         },
@@ -53,7 +53,7 @@ function SchermataDatiOspiti(props){
         nomeProvinciaResidenza: "Trapani",
         nomeRegioneResidenza: "Sicilia",
         refPrenotazione:"10",
-        esente:false,
+        tassa:"Bambino",
         dataArrivo:"26-06-20",
         permanenza:"1"
         },
@@ -89,7 +89,7 @@ function SchermataDatiOspiti(props){
                                                   comune={ospiti.nomeComune} provincia={ospiti.nomeProvincia} regione={ospiti.nomeRegione}
                                                   via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
                                                    comuneResidenza={ospiti.nomeComuneResidenza} provinciaResidenza={ospiti.nomeProvinciaResidenza}
-                                                   regioneResidenza={ospiti.nomeRegioneResidenza} esente={ospiti.esente} dataArrivo={ospiti.dataArrivo}
+                                                   regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo}
                                                    permanenza={ospiti.permanenza} eliminaOspite={eliminaOspite}/>
                         })
 
@@ -98,6 +98,7 @@ function SchermataDatiOspiti(props){
             </div>
 
             <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
+            {/*<a href={`/dichiarazioneOspiti`} className="btn btn-warning d-block d-md-inline-block m-auto stretched-link">Procedi alla dichiarazione</a>*/}
         </div>
     )
 }

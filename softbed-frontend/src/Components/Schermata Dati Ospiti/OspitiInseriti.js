@@ -68,8 +68,9 @@ function OspitiInseriti(props){
                     </div>
 
 
-                    <div className={(props.esente) ? " col-5 col-md-3 mt-2 h-100" : "collapse"}>
-                        <strong>Esente</strong>
+                    <div className=" col-5 col-md-3 mt-2 h-100"><strong>Tassa di soggiorno:</strong>
+                        <br/>
+                        <span> {props.tassa}</span>
                     </div>
 
                     <div className="col-12 col-md-3">
