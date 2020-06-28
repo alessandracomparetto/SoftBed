@@ -6,6 +6,7 @@ var db = require('../db/dbmiddleware');
 
 module.exports={
 
+    //FIXME: rimane pending???
     create:async function(datiStruttura, callback){
         let refIndirizzo;
         console.log("qui ci sono");
@@ -22,7 +23,24 @@ module.exports={
             db.query(sql, datiQuery, function (err, risultato2){
                 if (err) throw err;
                 let refStruttura = risultato2.insertId;
-                if(datiStruttura.tipologia == "B&B"){ //query per B&B
+                return risultato2
+
+                //qwery delle foto
+                //TODO non esiste ancora questa tabella
+                sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
+                for(foto of datiStruttura.foto){
+                    let {stringa, percorso} = foto;
+                    datiQuery = [refStruttura, percorso];
+                    db.query(sql, datiQuery, function (err) {
+                        if(err) throw err;
+                    })
+                }
+
+                //qui magari query condizioni
+
+
+
+                if(datiStruttura.tipologia === "B&B"){ //query per B&B
                     sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                         animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
                     datiQuery=[refStruttura, datiStruttura.bambini, datiStruttura.aria, datiStruttura.connessione, datiStruttura.parcheggio,
@@ -31,8 +49,16 @@ module.exports={
                     db.query(sql, datiQuery, function (err, risultato3) {
                         if(err) throw err;
                         for( camera of datiStruttura.camere){
+                            /*FIXME => la camera è camere: [
+                            *                       camera0 : {dati:valori}
+                            *                       camera1 : {dati:valori}
+                            *   quindi bisogna fare in modo di essere sicuri di selezionare i valori e non il singolo oggetto
+                            *   let {tipologia, nLettiSingoli, nLettiMatrimoniali, prezzoCamere} = camera;
+                            *   potrebbe risolvere?
+                            * */
+
                             sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
-                                nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)'
+                                nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
                             datiQuery = [refStruttura, camera.tipologia, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoCamere]
                             db.query(sql, datiQuery, function( err, risultato){
                                 if (err) throw err;
@@ -43,13 +69,14 @@ module.exports={
                             cancellazioneGratuita, penaleCancellazione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
                         datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
                             datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeCondizioni, datiStruttura.nPersone,
-                            datiStruttura.nGiorniEsclusione, datiStruttura.minPrenotazione, datiStruttura.maxPrenotazione, ???????, datiStruttura.prezzoCancellazione];
+                            datiStruttura.nGiorniEsclusione, datiStruttura.minPrenotazione, datiStruttura.maxPrenotazione, "???????", datiStruttura.prezzoCancellazione];
                         /*TODO: ricontrollare quello che ho scritto, non combaciano alcune cose
                         *  per esempio il fatto che pagamento può essere sia in loco che online e qui non c'è traccia di questa cosa
                         *  allo stesso modo non c'è traccia del preavviso disdetta, che invece è presente nel form condizioni
                         *
                         *FIXME:  parseInt in tutti i campi numerici
-                        * */
+                        * FIXME: la query delle condizioni è uguale per entrambe le strutture, quindi meglio farla prima dell'if per non riscriverla
+                        */
                     });
 
 
@@ -58,8 +85,9 @@ module.exports={
                 }
 
             });
-        /
         });//end query
+
+
     }
 
 

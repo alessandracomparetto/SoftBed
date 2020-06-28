@@ -60,7 +60,7 @@ function FormFotografie(props){
             return;
         }
 
-        const data = new FormData()
+        const data = new FormData();
         for(var i = 0; i<file.length; i++) {
             data.append('file', file[i]);
         }
