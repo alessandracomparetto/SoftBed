@@ -26,16 +26,15 @@ module.exports= {
                 console.log("inserita struttura");
 
                 let refStruttura = risultato2.insertId;
-                sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
-                if (datiStruttura.foto) {
-                    for (foto of datiStruttura.foto) {
-                        datiQuery = [refStruttura, foto];
-                        db.query(sql, datiQuery, function (err) { //INSERIMENTO IN FOTOGRAFIE
-                            if (err) throw err;
-                            console.log("inserite foto");
-                        }); //chiusura query foto
-                    }
-                }//end for
+                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
+                 if(datiStruttura.foto) {
+                     for(foto of datiStruttura.foto){
+                         datiQuery = [refStruttura, foto];
+                         db.query(sql, datiQuery, function (err) { //INSERIMENTO IN FOTOGRAFIE
+                             if(err) throw err;
+                             console.log("inserite foto");
+                         }); //chiusura query foto
+                 }}//end for
 
                 //TODO CONTROLLARE PENALE DI CANCELLAZIONE E PREAVVISO DISDETTA, NON SONO RIUSCITA AD INSERIRLE
                 sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
@@ -48,7 +47,7 @@ module.exports= {
                     if (err) throw err;
 
                     console.log("inserite condizioni");
-                    if (datiStruttura.tipologia === "B&B") { //query per B&B
+                    if(datiStruttura.tipologia === "B&B") { //query per B&B
                         //TODO CONTROLLA RISCALDAMENTO
                         sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -59,7 +58,7 @@ module.exports= {
                             if (err) throw err;
 
                             console.log("inserite caratteristiche");
-                            for (camera of datiStruttura.camere) {
+                            for(camera of datiStruttura.camere) {
                                 sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
                                 datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
@@ -70,7 +69,7 @@ module.exports= {
                             }
                         }); //chiusura query caratteristiche
                     }//chiusura if
-                    else if (datiStruttura.tipologia === "cv") {
+                    else if(datiStruttura.tipologia==="cv") {
                         //TODO MANCA RISCALDAMENTO
                         sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare,festeammesse, tv,salotto,giardino,terrazza,piscina,nBagni,nCamere,nlettiSingoli,nlettiMatrimoniali,prezzonotte,descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -89,6 +88,59 @@ module.exports= {
             return callback("OK");
         }); //chiusura query inidirizzo
     }, //end create
+    search: async function(datiRicerca, callback) {
+
+        console.log('search');
+        // Strutture che si trovano nella zona cercata
+        // (?, ?, ?) -> (destinazione, destinazione, destinazione)
+        let queryDestinazione = `SELECT comuni.idComune \
+            FROM comuni, province, regioni \
+            WHERE \
+            comuni.refProvincia = province.idProvincia AND \
+            province.refRegione = regioni.idRegione AND (\
+            comuni.nomeComune = ? OR \
+            province.nomeProvincia = ? OR \
+            regioni.nomeRegione = ?)`
+
+        // Strutture NON disponibili nel periodo cercato
+        // (?, ?) -> (dataArrivo, dataPartenza)
+        let queryData = `SELECT refStruttura \
+        FROM indisponibilita \
+        WHERE \
+        (? BETWEEN dataInizio AND dataFine) OR \
+        (? BETWEEN dataInizio AND dataFine)`;
+
+        // Strutture disponibili nel periodo e nella zona cercata
+        let queryID = `SELECT struttura.idStruttura \
+        FROM struttura, indirizzo \
+        WHERE \
+        struttura.refIndirizzo = indirizzo.idIndirizzo AND \
+        indirizzo.refComune IN (${queryDestinazione}) AND \
+        struttura.idStruttura NOT IN (${queryData})`;
+
+        // Query per B&B
+        let queryBB = `SELECT struttura.idStruttura \
+        FROM struttura, "B&B" \
+        WHERE struttura.idStruttura = "B&B".refStruttura`
+
+        // Query per CasaVacanze
+        let queryCV = `SELECT struttura.idStruttura \
+        FROM struttura, casaVacanze \
+        WHERE struttura.idStruttura = casaVacanze.refStruttura`
+
+        // TODO: Controllo sul numero di ospiti...
+
+        let queryTMP = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
+        FROM struttura \
+        WHERE struttura.idStruttura IN (${queryID})`;
+
+        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.dataArrivo, datiRicerca.dataPartenza]
+
+        db.query(queryTMP, parametri, function(err, risultato) {
+            if (err) return callback(err);
+            else return callback(risultato);
+        })
+    },
 
     fetch: async function (callback) {
         /*TODO CAMBIARE refGestore */
@@ -104,5 +156,5 @@ module.exports= {
             }
         )
     }
-}
+};
 

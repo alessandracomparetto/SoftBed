@@ -11,7 +11,7 @@ function RichiestaPrenotazioneOspite(props) {
     // TODO: Da rimuovere
     const struttura = { gestore: { email: "softengineers@gmail.com" } };
 
-    const mostraDialog = () => {
+    const mostraDialogConferma = () => {
         confirmAlert({
             customUI: ({ onClose }) => {
             return (
@@ -27,21 +27,32 @@ function RichiestaPrenotazioneOspite(props) {
                         </button>
                     </div>
                 </div>
-            )
-        }
-    })
+            )}
+        })
+    }
 
+    const mostraDialogErrore = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="custom-ui text-center">
+                        <h1>Si è verificato un problema, ti invitiamo a riprovare!</h1>
+                        <button className="btn btn-warning px-3 py-2 m-2 minw-200px" onClick={onClose}>OK</button>
+                    </div>
+                )
+            }
+        })
     }
 
     const annullaPrenotazione = () => {
         axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.id})
-            .then(res => {
-                // Azione da compiere se la post va a buon fine
-                // TODO: Rimuovere prenotazione dallo stato / local storage
+            .then(() => {
+                props.rimuovi(props.prenotazione.id);
+
                 // TODO: Inviare e-mail a gestore [e ospite]
             })
-            .catch(err => {
-                // Azione da compiere in caso di errore
+            .catch(() => {
+                mostraDialogErrore();
             });
     }
 
@@ -77,7 +88,7 @@ function RichiestaPrenotazioneOspite(props) {
 
                         <div className="d-none d-lg-block col-3">
                             <figure className="figure overflow-hidden rounded" style={{maxHeight: 140 + "px"}}>
-                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.struttura.nome} src="/uploads/1/1.jpg" />
+                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.struttura.nome} src="/uploads/foto/1/1.jpg" />
                             </figure>
                         </div>
 
@@ -169,7 +180,7 @@ function RichiestaPrenotazioneOspite(props) {
                         </div>
 
                         <div className="order-0 mr-md-auto p-2 col-12 col-md-3">
-                            <button className="btn btn-secondary btn-block" onClick={mostraDialog}>Annulla prenotazione</button>
+                            <button className="btn btn-secondary btn-block" onClick={mostraDialogConferma}>Annulla prenotazione</button>
                         </div>
                     </div>
                 </div>

@@ -13,8 +13,7 @@ import Login from "./Components/Login";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import Footer from "./Components/Footer";
-import RiepilogoDatiQuestura from "./Components/RiepilogoDatiQuestura";
-import SchermataDatiOspiti from "./Components/Schermata Dati Ospiti/SchermataDatiOspiti";
+import StruttureRecenti from "./Components/StruttureRecenti";
 
 
 function App() {
@@ -53,7 +52,11 @@ function App() {
             <Switch>
                 {/* Schermata principale */}
                 <Route exact path="/">
-                    <SchermataDatiOspiti/>
+                    <Carousel />
+                    <FormRicerca />
+                    <div className="d-flex justify-content-center">
+                        <StruttureRecenti />
+                    </div>
                 </Route>
 
                 <Route exact path="/accedi/">
@@ -82,11 +85,7 @@ function App() {
                     <RegistrazioneStruttura/>
                 </Route>
 
-                <Route path="/dichiarazioneOspiti">
-                    <RiepilogoDatiQuestura/>
-                </Route>
-
-                <Route exact path="/profilo/:id">
+                <Route path="/profilo/:id">
                     <Route path="*/prenotazioni-effettuate/">
                         <SchermataPrenotazioniOspite />
                     </Route>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {Fragment, useEffect, useState} from "react"
 import FormRicerca from "../FormRicerca";
 import RisultatoRicerca from "./RisultatoRicerca";
 import Paginazione from "./Paginazione";
@@ -16,39 +16,22 @@ function SchermataRisultati() {
     const valoriRicerca = useLocation().search;
 
     useEffect(() => {
-        // TODO: Verificare se i risultati sono memorizzati in cache
-
-        // Se i risultati non sono memorizzati in cache allora viene effettuata una richiesta GET
-        axios.get(valoriRicerca)
-            .then(res => {
-                console.log(res);
-            })
+        axios
+            .get(valoriRicerca)
+            .then(res => setListaStrutture(res.data))
+            .catch(err => console.log(err));
     }, []);
 
     // TODO: da rimuovere, solo per test
-    const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
-        " In sed interdum augue. Aliquam lacinia lectus pulvinar lacus feugiat commodo. Praesent suscipit quam a" +
-        " ipsum luctus congue. Sed quis nibh mauris. Vivamus massa elit, rhoncus a velit non, suscipit elementum sem." +
-        " Sed commodo lacus nulla, non placerat libero gravida a. Orci varius natoque penatibus et magnis dis" +
-        " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
 
-    const [listaStruttureTMP] = useState([
-        {id: "1",
-            nome: "Struttura 1",
-            descrizione: descrizione,
-            servizi: [
-                {servizio: "Aria condizionata", icona: "snowflake"},
-                {servizio: "Riscaldamento", icona: "fire"},
-                {servizio: "TV", icona: "tv"},
-                {servizio: "Wi-Fi", icona: "wifi"},
-                {servizio: "Piscina", icona: "water"},
-                {servizio: "Idonea per bambini", icona: "child"}
-            ]
-        },
-
-        {id: "2", nome: "Struttura 2", descrizione: descrizione, servizi: []},
-        {id: "3", nome: "Struttura 3", descrizione: descrizione, servizi: []}
-    ])
+    const servizi = [
+            {servizio: "Aria condizionata", icona: "snowflake"},
+            {servizio: "Riscaldamento", icona: "fire"},
+            {servizio: "TV", icona: "tv"},
+            {servizio: "Wi-Fi", icona: "wifi"},
+            {servizio: "Piscina", icona: "water"},
+            {servizio: "Idonea per bambini", icona: "child"}
+        ]
 
     return (
         <React.Fragment>
@@ -65,12 +48,20 @@ function SchermataRisultati() {
                             ]}/>
                     </div>
                     <div className="col-12 col-lg-8">
-                        {
-                            listaStruttureTMP.map((struttura, indice) => {
-                                return <RisultatoRicerca key={indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi}/>
-                            })
-                        }
-                        <Paginazione paginaAttuale={pagina} numPagine={20} setPagina={setPagina} />
+                        { listaStrutture[0] ? (
+                            <Fragment>
+                                { listaStrutture.map((struttura, indice) => {
+                                    if (indice >= (pagina - 1) * 10 && indice < pagina * 10)
+                                        return <RisultatoRicerca key={indice} idStruttura={struttura.idStruttura} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi}/>
+                                    else return null;
+                                })}
+                                <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
+                            </Fragment>
+                        ) : (
+                            <div className="card shadow p-3 m-2 m-sm-3 d-flex flex-md-row maxw-xl text-center">
+                                <h4>Siamo spiacenti, non è stato trovato alcun alloggio per i criteri di ricerca inseriti.</h4>
+                            </div>
+                        )}
 
                     </div>
                 </div>

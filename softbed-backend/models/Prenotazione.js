@@ -18,18 +18,18 @@ module.exports = {
             datiPrenotazione.refStruttura];
 
         db.query(query, datiQuery, function (err, risultato) {
-            if (err) console.log("Errore:", err.code);
-            else console.log("Riusltato:", risultato);
+            if (err) callback(err);
+            else callback(risultato);
         });
     },
 
     delete: async function (idPrenotazione, callback) {
 
-        let query = ('DELETE FROM `prenotazione` WHERE `idPrenotazione`=?');
+        let query = (`DELETE FROM prenotazione WHERE idPrenotazione = ? `);
 
         db.query(query, idPrenotazione, function (err, risultato) {
-            if (err) console.log("Errore:", err.code);
-            else console.log("Riusltato:", risultato);
+            if (err) callback(err);
+            else callback(risultato);
         })
     }
 }

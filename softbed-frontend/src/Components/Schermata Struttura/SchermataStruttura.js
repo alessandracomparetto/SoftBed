@@ -13,7 +13,7 @@ function SchermataStruttura(props) {
     let { id } = useParams();
 
     const struttura = {
-        id: id,
+        idStruttura: id,
         nome: "Dolce Risveglio",
         descrizione: "Questa struttura è bella, ma mai quanto te che stai leggendo ^-^",
         servizi: [
@@ -25,6 +25,7 @@ function SchermataStruttura(props) {
             {servizio: "Idonea per bambini", icona: "child"},
             {servizio: "Animali ammessi", icona: "paw"}
         ],
+        foto: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
         localita: {
             regione: "Sicilia",
             provincia: "Palermo",
@@ -74,9 +75,8 @@ function SchermataStruttura(props) {
 
     useEffect(() => {
         let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
-        console.log("LS:", LS);
 
-        const nuovaStruttura = {id: struttura.id, nome: struttura.nome}
+        const nuovaStruttura = {id: id, nome: struttura.nome}
 
         const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 
@@ -85,7 +85,6 @@ function SchermataStruttura(props) {
         }
 
         const nuovoLS = [...LS, nuovaStruttura];
-        console.log("NuovoLS:", nuovoLS);
 
         localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
 

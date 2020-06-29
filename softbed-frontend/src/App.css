@@ -43,6 +43,10 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+    .annuncio-box-descrizione {
+        min-height: 90px;
+    }
+
     .annuncio-box-servizi {
         min-height: 101px;
     }
@@ -75,6 +79,10 @@ body {
 
 .minw-15em {
     min-width: 15em;
+}
+
+.minw-200px {
+    min-width: 200px;
 }
 
 .outline-error {

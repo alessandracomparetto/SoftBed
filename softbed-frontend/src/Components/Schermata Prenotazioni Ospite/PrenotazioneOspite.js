@@ -40,7 +40,7 @@ function RichiestaPrenotazioneOspite(props) {
 
                         <div className="d-none d-lg-block col-3">
                             <figure className="figure overflow-hidden rounded" style={{maxHeight: 140 + "px"}}>
-                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.struttura.nome} src="/uploads/1/1.jpg" />
+                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.struttura.nome} src="/uploads/foto/1/1.jpg" />
                             </figure>
                         </div>
 

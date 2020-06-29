@@ -3,27 +3,33 @@ let router = express.Router();
 
 // Cache
 let cacheManager = require('cache-manager');
-let cacheStrutture = cacheManager.caching({store: 'memory', max: 100, ttl: 300}) // 5 minuti
+let cacheRicerche = cacheManager.caching({store: 'memory', max: 100, ttl: 180}) // 3 minuti
 
 // Model
 let strutturaModel = require('../models/Struttura')
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     // Controllo se la ricerca è presente in cache
     const query = JSON.stringify(req.query);
 
-    cacheStrutture.get(query, function(err, result) {
+    cacheRicerche.get(query, function(err, result) {
         if (result) {
+            console.log("Cache hit!");
             res.send(result);
         }
 
         else {
-            // TODO: fare query al DB
+            strutturaModel.search(req.query, function(data) {
+                console.log("Cache miss!");
 
-            cacheStrutture.set(query, "ciao", function(err) {
-                if (err) throw err;
-            })
-            res.send(req.query);
+                // Inserimento in cache
+                cacheRicerche.set(query, JSON.stringify(data), function(err) {
+                    if (err) throw err;
+                    else res.send(data);
+                })
+            }).catch(err => console.log(err));
+
+
         }
     });
 })
