@@ -75,7 +75,7 @@ function InformazioniStruttura (props){
             </div>
 
             {/* Immagini */}
-            <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
+            {/*<ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>*/}
 
             {/* Informazioni e caratteristiche struttura */}
             <div className="d-block">
@@ -86,8 +86,6 @@ function InformazioniStruttura (props){
 
                     {/*Caratteristiche*/}
                     <div className="my-3">
-                        <h6><strong>Caratteristiche</strong></h6>
-
                         {/* Per Casa Vacanze */}
                         { props.struttura.tipologiaStruttura==="cv" && (
                             <Fragment>
@@ -99,7 +97,7 @@ function InformazioniStruttura (props){
                                     {(props.struttura.salotto || props.struttura.giardino|| props.struttura.terrazza || props.struttura.piscina) &&
                                     (
                                         <div className="col-12">
-                                            <strong>Ambienti: </strong>
+                                            <h6><strong>Ambienti: </strong></h6>
                                             <ul>
                                                 {props.struttura.salotto &&(
                                                     <li>Salotto </li>
@@ -116,43 +114,13 @@ function InformazioniStruttura (props){
                                             </ul>
                                         </div>)}
                                 </div>
-                                {/* Servizi */}
-                                <div className="my-1">
-                                    { (props.struttura.wifi || props.struttura.riscaldamento|| props.struttura.strutturaDisabili || props.struttura.ariaCondizionata
-                                        || props.struttura.TV || props.struttura.parcheggio)&&
-                                    (
-                                        <div className="col-12">
-                                            <h6><strong>Servizi</strong></h6>
-
-                                            <strong>Servizi disponibili: </strong>
-                                            <ul>
-                                                {props.struttura.wifi &&(
-                                                    <li>Wifi</li>
-                                                )}
-                                                {props.struttura.riscaldamento &&(
-                                                    <li>Riscaldamento </li>
-                                                )}
-                                                { props.struttura.strutturaDisabili &&(
-                                                    <li>Strutture per disabili </li>
-                                                )}
-                                                {props.struttura.ariaCondizionata &&(
-                                                    <li>Aria condizionata </li>
-                                                )}
-                                                {props.struttura.TV &&(
-                                                    <li>TV </li>
-                                                )}
-                                                {props.struttura.parcheggio &&(
-                                                    <li>Parcheggio </li>
-                                                )}
-                                            </ul>
-                                        </div>)}
-                                </div>
                             </Fragment>
                         )}
                         {/* Per B&B */}
                         { props.struttura.tipologiaStruttura==="B&B" && (
                             <Fragment>
-                                <strong>Camere: </strong>
+                                <h6><strong>Camere: </strong></h6>
+
                                 <ul>
                                     { props.struttura.camere.map((camera, indice) => {
                                         return (
@@ -161,45 +129,45 @@ function InformazioniStruttura (props){
                                         )
                                     })}
                                 </ul>
-                                {/* Servizi */}
-                                <div className="my-1">
-                                    {(props.struttura.wifi || props.struttura.riscaldamento|| props.struttura.strutturaDisabili || props.struttura.ariaCondizionata
-                                        || props.struttura.TV || props.struttura.parcheggio || props.struttura.servizioInCamera || props.struttura.navettaAeroportuale) &&
-                                    (
-                                        <div className="col-12">
-                                            <h6><strong>Servizi</strong></h6>
-
-                                            <strong>Servizi disponibili: </strong>
-                                            <ul>
-                                                {props.struttura.wifi &&(
-                                                    <li>Wifi</li>
-                                                )}
-                                                {props.struttura.riscaldamento &&(
-                                                    <li>Riscaldamento </li>
-                                                )}
-                                                { props.struttura.strutturaDisabili &&(
-                                                    <li>Strutture per disabili </li>
-                                                )}
-                                                {props.struttura.ariaCondizionata &&(
-                                                    <li>Aria condizionata </li>
-                                                )}
-                                                {props.struttura.TV &&(
-                                                    <li>TV </li>
-                                                )}
-                                                {props.struttura.parcheggio &&(
-                                                    <li>Parcheggio </li>
-                                                )}
-                                                {props.struttura.servizioInCamera &&(
-                                                    <li>Servizio in camera </li>
-                                                )}
-                                                {props.struttura.navettaAeroportuale &&(
-                                                    <li>Navetta Aereoportuale</li>
-                                                )}
-                                            </ul>
-                                        </div>)}
-                                </div>
                             </Fragment>
                         )}
+                        {/* Servizi */}
+                        <div className="my-1">
+                            {(props.struttura.wifi || props.struttura.riscaldamento|| props.struttura.strutturaDisabili || props.struttura.ariaCondizionata
+                                || props.struttura.TV || props.struttura.parcheggio || props.struttura.servizioInCamera || props.struttura.navettaAeroportuale) &&
+                            (
+                                <div className="col-12">
+                                    <h6><strong>Servizi</strong></h6>
+
+                                    <strong>Servizi disponibili: </strong>
+                                    <ul>
+                                        {props.struttura.wifi &&(
+                                            <li>Wifi</li>
+                                        )}
+                                        {props.struttura.riscaldamento &&(
+                                            <li>Riscaldamento </li>
+                                        )}
+                                        { props.struttura.strutturaDisabili &&(
+                                            <li>Strutture per disabili </li>
+                                        )}
+                                        {props.struttura.ariaCondizionata &&(
+                                            <li>Aria condizionata </li>
+                                        )}
+                                        {props.struttura.TV &&(
+                                            <li>TV </li>
+                                        )}
+                                        {props.struttura.parcheggio &&(
+                                            <li>Parcheggio </li>
+                                        )}
+                                        {props.struttura.servizioInCamera &&(
+                                            <li>Servizio in camera </li>
+                                        )}
+                                        {props.struttura.navettaAeroportuale &&(
+                                            <li>Navetta Aereoportuale</li>
+                                        )}
+                                    </ul>
+                                </div>)}
+                        </div>
 
                         { (props.struttura.permessoFumare || props.struttura.animaliAmmessi|| props.struttura.festeAmmesse || props.struttura.bambini) &&
                         (

@@ -56,8 +56,7 @@ function RegistrazioneStruttura () {
         printObject(tmp);
     }
 
-    const handleSubmit=(event)=>{
-        event.preventDefault();
+    const handleSubmit=()=>{
         try {
            let dati = info;
            console.log("DATI======= ");
