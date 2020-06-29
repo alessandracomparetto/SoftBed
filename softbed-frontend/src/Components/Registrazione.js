@@ -1,26 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 import $ from "jquery";
 import axios from "axios";
+import {Redirect} from "react-router-dom";
 
 function Registrazione() {
+    const[redirect, setRedirect] = useState(false);
+
     function onSubmit(e){
         e.preventDefault();
         var form = document.getElementById("form");
         form.classList.add('was-validated');
 
         if(form.checkValidity()){
+            let pass = document.getElementById("pass").value;
+          /*  let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
+            passhash.update(pass); // cifriamo la password
+            let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
+*/
             const utenteRegistrato = {
                 nome: document.getElementById("name").value,
                 cognome: document.getElementById("surname").value,
                 dataNascita: document.getElementById("dataNascita").value,
                 email: document.getElementById("email").value ,
-                pass: document.getElementById("pass").value ,
+                pass: pass,
                 gestore: $( "input:checked" ).val(),
             }
-            console.log(utenteRegistrato);
             try{
                 axios.post("/utente/utenteRegistrato", utenteRegistrato)
-                    .then(res => console.log(res.text));
+                    .then(() => setRedirect(true));
             }
             catch(err){
                 if (err.response.status === 400) {
@@ -56,7 +63,12 @@ function Registrazione() {
         }
     }
 
+    if (redirect){
+        return <Redirect to='/'/>;
+    }
+
     return(
+
         <div className="container">
             <div style={{height:10+'vh'}}/>
             <div className="col-12 col-lg-8 mb-3 rounded shadow border border-secondary bg-light mx-auto">

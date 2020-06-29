@@ -3,7 +3,6 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cors = require('cors');
-var nodemailer = require('nodemailer');
 
 const uploadRouter = require('./routes/upload');
 const prenotazioneRouter = require('./routes/prenotazione');
@@ -11,6 +10,7 @@ const strutturaRouter = require('./routes/struttura');
 const utenteRouter = require('./routes/utente');
 const ricercaRouter = require('./routes/ricerca');
 const mailRouter = require('./routes/mail');
+const ospiteRouter = require('./routes/ospite');
 
 const app = express();
 
@@ -30,6 +30,7 @@ app.use('/prenotazione', prenotazioneRouter);
 app.use('/struttura', strutturaRouter);
 app.use('/utente', utenteRouter);
 app.use('/mail', mailRouter);
+app.use('/ospite', ospiteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

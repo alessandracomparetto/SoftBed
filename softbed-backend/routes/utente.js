@@ -5,8 +5,8 @@ const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const { Utente } = require('../sequelize/middleware');
-
+//const { Utente } = require('../sequelize/middleware');
+let utenteModel = require('../models/Utente');
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({
@@ -33,90 +33,22 @@ router.get('/', function(req, res, next) {
     next(createError(403));
 });
 
+
+
 /* Registrazione Utente */
-router.post('/utenteRegistrato', (req, res) => {
-    console.log(`
-    nome: ${req.body.nome} 
-    cognome: ${req.body.cognome} 
-    nascita: ${req.body.dataNascita} 
-    gestore: ${req.body.gestore}
-    `)
-    Utente.create(req.body);
-    req.session.uid = req.body.nome;
-    console.log(req.sessionID);
-    res.send("finito")
+router.post('/utenteRegistrato', function (req, res) {
+    console.log("REQ.BODY ====")
+    console.log(req.body);
+    utenteModel.create(req.body,function(data){
+        console.log(data);
+        res.send(data);
+    });
 });
 
-/* Login Utente */
+
+/* Login Utente con sequelize*/
 router.post('/login', autenticazione);
 
-/* Dato Pagamento utente
-router.post('/pagamenti', aggiuntaDatoPagamento);*/
-
-/*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
-/*router.post('/logout', (req,res) => {
-    req.session.destroy( err =>{
-        if(err){
-            //non posso distruggere la sessione
-            console.log("Errore durante il logout")
-        }
-    })
-    //se tutto ok, distruggo il coockie della sessione
-    res.clearCookie(req.session.name);
-})*/
-
-/*async function registrazione(req, res, next)   {
-    const db = await makeDb(config);
-    let results = {};
-    try {
-        await withTransaction(db, async() => {
-            // inserimento utente
-            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
-        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
-                req.body.nome,
-                req.body.cognome,
-                req.body.data_nascita,
-                req.body.gestore == 'gestore' ? '1' : '0',
-            ]).catch(err => {
-                throw err;
-            });
-            console.log('Inserimento tabella utente');
-            // recupero dello user id
-            let id_utente = results.insertId;
-            // generazione della password cifrata con SHA512
-            //TODO cripta password a frontend
-            results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
-                .catch(err => {
-                    throw err;
-                });
-            let encpwd = results[0].encpwd;
-            console.log('Password cifrata');
-            console.log(results);
-
-            results = await db.query('INSERT INTO `autenticazione` \
-            (refUtente, email, password) VALUES ?', [
-                [
-                    [
-                        id_utente,
-                        req.body.email,
-                        encpwd
-                    ]
-                ]
-            ])
-                .catch(err => {
-                    throw err;
-                });
-            console.log(`Utente ${req.body.email} inserito!`);
-            req.session.session_uid = id_utente;
-            console.log(req.session)
-            res.send();
-        });
-    } catch (err) {
-        console.log(err);
-        next(createError(500));
-
-    }
-}*/
 
 // middleware di autenticazione
 async function autenticazione(req, res, next) {
@@ -155,8 +87,17 @@ async function autenticazione(req, res, next) {
     }
 }
 
-
-
+/*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
+/*router.post('/logout', (req,res) => {
+    req.session.destroy( err =>{
+        if(err){
+            //non posso distruggere la sessione
+            console.log("Errore durante il logout")
+        }
+    })
+    //se tutto ok, distruggo il coockie della sessione
+    res.clearCookie(req.session.name);
+})*/
 
 
 module.exports = router;
@@ -174,4 +115,64 @@ module.exports = router;
     }
 })*/
 
+
+
+/* Registrazione Utente con sequelize
+router.post('/utenteRegistrato', (req, res) => {
+    Utente.create(req.body);
+    req.session.uid = req.body.nome;
+    console.log(req.sessionID);
+    res.send("finito")
+});
+    async function registrazione(req, res, next)   {
+    const db = await makeDb(config);
+    let results = {};
+    try {
+        await withTransaction(db, async() => {
+            // inserimento utente
+            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
+        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
+                req.body.nome,
+                req.body.cognome,
+                req.body.data_nascita,
+                req.body.gestore == 'gestore' ? '1' : '0',
+            ]).catch(err => {
+                throw err;
+            });
+            console.log('Inserimento tabella utente');
+            // recupero dello user id
+            let id_utente = results.insertId;
+            // generazione della password cifrata con SHA512
+            results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
+                .catch(err => {
+                    throw err;
+                });
+            let encpwd = results[0].encpwd;
+            console.log('Password cifrata');
+            console.log(results);
+
+            results = await db.query('INSERT INTO `autenticazione` \
+            (refUtente, email, password) VALUES ?', [
+                [
+                    [
+                        id_utente,
+                        req.body.email,
+                        encpwd
+                    ]
+                ]
+            ])
+                .catch(err => {
+                    throw err;
+                });
+            console.log(`Utente ${req.body.email} inserito!`);
+            req.session.session_uid = id_utente;
+            console.log(req.session)
+            res.send();
+        });
+    } catch (err) {
+        console.log(err);
+        next(createError(500));
+
+    }
+}*/
 
