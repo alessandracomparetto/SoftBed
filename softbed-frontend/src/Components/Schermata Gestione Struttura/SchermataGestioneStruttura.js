@@ -1,6 +1,6 @@
 
 
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
 import $ from "jquery";
 import InformazioniStruttura from "./InformazioniStruttura";
@@ -10,56 +10,20 @@ import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 
 function SchermataGestioneStruttura() {
-    let struttura;
+const [struttura,setStruttura]=useState([]);
     useEffect(() => {
         axios
             .get("/struttura")
-            .then(res => {struttura=res.body; console.log("Struttura"+struttura)})
+            .then(res => {setStruttura(res.data[0][0]); console.log("Strutturaaa:"+res.data[0][0])})
             .catch(err => console.log(err));
     }, []);
 
-   /* const struttura={ tipologiaStruttura: "B&B",
-        nomeStruttura: "aa",
-        nomeRegione: "Basilicata",
-        nomeProvincia: "MT",
-        nomeComune: "077006",
-        via: "aa",
-        numeroCivico: 33,
-        cap: "33333",
-        camere: null,
-        strutturaDisabili: 1,
-        wifi: 1,
-        animaliAmmessi: 1,
-        parcheggio: 1,
-        riscaldamento: 1,
-        ariaCondizionata: 1,
-        servizioInCamera: 1,
-        permessoFumare: 1,
-        TV: 1,
-        navettaAeroportuale: 1,
-        cucinaCeliaci: 1,
-        bambini: 1,
-        descrizione: "ciao",
-        anticipoPrenotazioneMin: "5",
-        anticipoPrenotazioneMax: "21",
-        oraInizioCheckIn: "13:00",
-    oraFineCheckIn: "15:00",
-    oraInizioCheckOut: "21:00",
-    oraFineCheckOut: "18:00",
-    pagamentoOnline: 1,
-    pagamentoLoco: 1,
-    politicaCancellazione: "gratuita",
-    prezzoBambini: 3,
-    prezzoAdulti: 3,
-    esclusioneSoggiorni: 3,
-    percentualeRiduzione: 3,
-    nPersoneRiduzione: 3
-}*/
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
        /* document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
+        console.log(struttura);
     }
     function modificaCondizioni(){
         document.getElementById("condizioni").classList.remove("collapse");

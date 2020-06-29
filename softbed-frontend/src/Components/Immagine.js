@@ -11,7 +11,7 @@ function Immagine() {
             .then(img => {
                 setImgURL(URL.createObjectURL(img));
             })
-    }, [])
+    }, [id, immagine]);
 
     return (
         <img src={imgURL} alt={immagine} />

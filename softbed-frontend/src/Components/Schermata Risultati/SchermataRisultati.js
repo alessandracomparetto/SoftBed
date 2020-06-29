@@ -20,7 +20,7 @@ function SchermataRisultati() {
             .get(valoriRicerca)
             .then(res => setListaStrutture(res.data))
             .catch(err => console.log(err));
-    }, []);
+    }, [valoriRicerca]);
 
     // TODO: da rimuovere, solo per test
 
@@ -50,10 +50,8 @@ function SchermataRisultati() {
                     <div className="col-12 col-lg-8">
                         { listaStrutture[0] ? (
                             <Fragment>
-                                { listaStrutture.map((struttura, indice) => {
-                                    if (indice >= (pagina - 1) * 10 && indice < pagina * 10)
-                                        return <RisultatoRicerca key={indice} idStruttura={struttura.idStruttura} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi}/>
-                                    else return null;
+                                { listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
+                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.idStruttura} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi}/>
                                 })}
                                 <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
                             </Fragment>

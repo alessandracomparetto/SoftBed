@@ -133,6 +133,8 @@ function RichiestaPrenotazioneOspite(props) {
                                                             </div>
                                                         );
                                                     }
+
+                                                    else return null;
                                                 })}
                                             </div>
                                         </div>

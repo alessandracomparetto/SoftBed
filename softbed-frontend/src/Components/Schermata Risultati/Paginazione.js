@@ -55,7 +55,7 @@ function Paginazione(props) {
 
                 { props.paginaAttuale + 1 <= props.numPagine && (
                     <li className="page-item shadow">
-                        <a className="page-link" href="#" aria-label="Next">
+                        <a className="page-link" href="#" aria-label="Next" onClick={() => aggiornaPagina(+1)}>
                             <span aria-hidden="true">&raquo;</span>
                             <span className="sr-only">Next</span>
                         </a>

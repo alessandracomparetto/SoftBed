@@ -120,6 +120,7 @@ function FormCondizioni(props) {
                         <option value={180}>6 mesi</option>
                         <option value={365}>1 anno</option>
                     </select>
+                    {console.log(props.dati.anticipoPrenotazioneMax)}
                 </div>
             </div>
             <div className="border p-3 text-center">
@@ -170,12 +171,12 @@ function FormCondizioni(props) {
                 <div className="form-row-group d-flex justify-content-around">
                     <div className="form-check-inline ">
                         <input type="checkbox" id="pagamentoOnline" name="pagamentoOnline" value={1}
-                               defaultChecked={props.dati.pagamentoOnline === "1"}/>
+                               defaultChecked={props.dati.pagamentoOnline}/>
                         <label htmlFor="pagamentoOnline" className=" form-check-label pl-2">Pagamento online</label>
                     </div>
                     <div className="form-check-inline ">
                         <input type="checkbox" id="pagamentoLoco" name="pagamentoLoco" value={1}
-                               defaultChecked={props.dati.pagamentoLoco === "1"}/>
+                               defaultChecked={props.dati.pagamentoLoco}/>
                         <label htmlFor="pagamentoLoco" className=" form-check-label pl-2">Pagamento in loco</label>
                     </div>
                 </div>
