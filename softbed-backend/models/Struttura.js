@@ -87,7 +87,62 @@ module.exports={
 
             return callback("OK");
         }); //chiusura query inidirizzo
-    } //end create
+    }, //end create
+
+
+    search: async function(datiRicerca, callback) {
+
+        console.log('search');
+        // Strutture che si trovano nella zona cercata
+        // (?, ?, ?) -> (destinazione, destinazione, destinazione)
+        let queryDestinazione = `SELECT comuni.idComune \
+            FROM comuni, province, regioni \
+            WHERE \
+            comuni.refProvincia = province.idProvincia AND \
+            province.refRegione = regioni.idRegione AND (\
+            comuni.nomeComune = ? OR \
+            province.nomeProvincia = ? OR \
+            regioni.nomeRegione = ?)`
+
+        // Strutture NON disponibili nel periodo cercato
+        // (?, ?) -> (dataArrivo, dataPartenza)
+        let queryData = `SELECT refStruttura \
+        FROM indisponibilita \
+        WHERE \
+        (? BETWEEN dataInizio AND dataFine) OR \
+        (? BETWEEN dataInizio AND dataFine)`;
+
+        // Strutture disponibili nel periodo e nella zona cercata
+        let queryID = `SELECT struttura.idStruttura \
+        FROM struttura, indirizzo \
+        WHERE \
+        struttura.refIndirizzo = indirizzo.idIndirizzo AND \
+        indirizzo.refComune IN (${queryDestinazione}) AND \
+        struttura.idStruttura NOT IN (${queryData})`;
+
+        // Query per B&B
+        let queryBB = `SELECT struttura.idStruttura \
+        FROM struttura, "B&B" \
+        WHERE struttura.idStruttura = "B&B".refStruttura`
+
+        // Query per CasaVacanze
+        let queryCV = `SELECT struttura.idStruttura \
+        FROM struttura, casaVacanze \
+        WHERE struttura.idStruttura = casaVacanze.refStruttura`
+
+        // TODO: Controllo sul numero di ospiti...
+
+        let queryTMP = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
+        FROM struttura \
+        WHERE struttura.idStruttura IN (${queryID})`;
+
+        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.dataArrivo, datiRicerca.dataPartenza]
+
+        db.query(queryTMP, parametri, function(err, risultato) {
+            if (err) return callback(err);
+            else return callback(risultato);
+        })
+    }
 };
 
 

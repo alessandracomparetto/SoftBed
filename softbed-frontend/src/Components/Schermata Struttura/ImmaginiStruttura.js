@@ -4,7 +4,7 @@ function ImmagineSecondaria(props) {
     return (
         <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 15 + "vw", maxHeight: 214 + "px"}}>
             <img className="img h-100 w-100 m-auto d-block img-cover img-fluid"
-                 src={`/uploads/foto/${(props.id ? "" : (props.id+"/"))}${props.nomeImmagine}`} alt={props.nomeStruttura} />
+                 src={`/uploads/foto/${(props.id ? (props.id + "/") : "")}${props.nomeImmagine}`} alt={props.nomeStruttura} />
         </figure>
     )
 
@@ -24,7 +24,7 @@ function ImmaginiStruttura(props) {
             <div className="col-12 col-md-7 pr-md-0">
                 <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
                     <img className="img h-100 m-auto img-cover img-fluid"
-                         src={`/uploads/foto/${(props.idStruttura ? "" : (props.idStruttura +"/"))}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
+                         src={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
                 </figure>
             </div>
 
