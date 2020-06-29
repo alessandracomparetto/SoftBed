@@ -3,12 +3,6 @@ import FormCondizioni from "../Registrazione Struttura/FormCondizioni";
 
 function ModificaCondizioni(props) {
 
-    useEffect(() => {
-        if (props.currentStep === 5) {
-            /* abilitazione(); */ /*TODO:Rimuovere commento*/
-        }
-    }, [props.currentStep]);
-
     function verificaCheckBox(event) {
         if (document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked) {
             document.getElementById("feedback").classList.add("collapse");
@@ -18,9 +12,6 @@ function ModificaCondizioni(props) {
         }
     }
 
-    if (props.currentStep !== 5) {
-        return null;
-    }
     return (
         <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox}
               onChange={props.handleChange}>

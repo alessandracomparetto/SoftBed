@@ -5,9 +5,13 @@ let router = express.Router();
 const { makeDb, withTransaction } = require('../db/dbmiddleware');*/
 let strutturaModel = require('../models/Struttura')
 
-/* La rotta / è vietata */
+
 router.get('/', function(req, res, next) {
-    next(createError(403));
+    console.log("sono qui");
+    strutturaModel.fetch(function(data){
+        console.log(data);
+        res.send(data);
+    })
 });
 
 
@@ -19,6 +23,7 @@ router.post('/', function (req, res) {
         res.send(data);
     });
 });
+
 
 module.exports = router;
 

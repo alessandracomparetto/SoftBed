@@ -1,6 +1,12 @@
 import React from "react";
 
 function FormCaratteristicheB(props){
+    function printObject(o) {
+        let out = '';
+        for (let p in o) {
+            out += p + ': ' + o[p] + '\n';
+        } console.log("Datix2  "+out);
+    }
     function verificaLunghezza(event){
         if(event.target.value.length>=200){
             document.getElementById("feedback").classList.remove("collapse");
@@ -14,13 +20,14 @@ function FormCaratteristicheB(props){
     return(
         <div>
             <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
+            {console.log(props.dati.wifi)}
             <div className="form-row-group text-center offset-1">
                 <div className="form-check-inline col-12  col-sm-5  col-lg-3">
                     <input type="checkbox" className="form-check-input " id="wifi" value={1} name="wifi" defaultChecked={props.dati.wifi==="1"}/>
                     <label className="form-check-label" htmlFor="wifi">Connessione Wi-fi</label>
                 </div>
                 <div className="form-check-inline col-12  col-sm-5 col-lg-3">
-                    <input type="checkbox" className="form-check-input" id="riscaldamento" name="riscaldamento" value={1} defaultChecked={props.dati.riscaldamento=="1"}/>
+                    <input type="checkbox" className="form-check-input" id="riscaldamento" name="riscaldamento" value={1} defaultChecked={props.dati.riscaldamento==="1"}/>
                     <label className="form-check-label" htmlFor="riscaldamento">Riscaldamento</label>
                 </div>
                 <div className="form-check-inline col-12 col-sm-5 col-lg-3">
@@ -70,8 +77,8 @@ function FormCaratteristicheB(props){
             </div>
             <h6 className="mt-3 border-bottom border-primary">Descrizione</h6>
             <div className="md-form amber-textarea active-amber-textarea">
-                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength="500" placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
-                <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 500 caratteri</p>
+                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength={500} placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
+                <p id="feedback" className="text-danger form-text text-muted collapse" >Hai raggiunto il massimo di 500 caratteri</p>
             </div>
         </div>
     )

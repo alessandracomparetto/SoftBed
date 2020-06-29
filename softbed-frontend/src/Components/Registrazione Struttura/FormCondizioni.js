@@ -1,6 +1,27 @@
 import React from "react";
 
 function FormCondizioni(props) {
+    function abilitazione() {
+        let prezzoCancellazione = document.getElementById("penaleCancellazione");
+        let preavvisoDisdetta = document.getElementById("preavvisoDisdetta");
+        let preavvisoTesto = document.getElementById("preavvisoTesto");
+        if (props.dati.politicaCancellazione === "pagamento") {
+            prezzoCancellazione.removeAttribute("disabled");
+            prezzoCancellazione.setAttribute("required", "required");
+            preavvisoDisdetta.removeAttribute("disabled");
+            preavvisoDisdetta.setAttribute("required", "required");
+            preavvisoTesto.classList.remove("text-muted");
+
+        } else {
+            prezzoCancellazione.setAttribute("disabled", "disabled");
+            prezzoCancellazione.classList.remove("required");
+            preavvisoDisdetta.setAttribute("disabled", "disabled");
+            preavvisoDisdetta.classList.remove("required");
+            preavvisoTesto.classList.add("text-muted");
+            prezzoCancellazione.value = null;
+            preavvisoDisdetta.value = null;
+        }
+    }
     function verificaMinDurata(e) {
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
         if (document.getElementById("maxSoggiorno").value !== "" && (e.target.value) > document.getElementById("maxSoggiorno").value) {
@@ -38,27 +59,7 @@ function FormCondizioni(props) {
             document.getElementById("oraInizioCheckOut").value = e.target.value;
         }
     }
-    function abilitazione() {
-        let prezzoCancellazione = document.getElementById("penaleCancellazione");
-        let preavvisoDisdetta = document.getElementById("preavvisoDisdetta");
-        let preavvisoTesto = document.getElementById("preavvisoTesto");
-        if (document.getElementById("penaleCancellazione").checked) {
-            prezzoCancellazione.removeAttribute("disabled");
-            prezzoCancellazione.setAttribute("required", "required");
-            preavvisoDisdetta.removeAttribute("disabled");
-            preavvisoDisdetta.setAttribute("required", "required");
-            preavvisoTesto.classList.remove("text-muted");
 
-        } else {
-            prezzoCancellazione.setAttribute("disabled", "disabled");
-            prezzoCancellazione.classList.remove("required");
-            preavvisoDisdetta.setAttribute("disabled", "disabled");
-            preavvisoDisdetta.classList.remove("required");
-            preavvisoTesto.classList.add("text-muted");
-            prezzoCancellazione.value = null;
-            preavvisoDisdetta.value = null;
-        }
-    }
     return(
         <div>
             <div className="border p-3 text-center">
@@ -183,13 +184,13 @@ function FormCondizioni(props) {
                 <div className="form-check" onChange={abilitazione}>
                     <div className="radio">
                         <label className="form-check-label">
-                            <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="gratuita"} required/>
+                            <input type="radio" className="form-check-input" id="politicaCancellazione" value="gratuita" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="gratuita"} required/>
                             Cancellazione gratuita</label>
                     </div>
                     <div className="form-row">
                         <div className="radio">
                             <label htmlFor="penaleCancellazione" className="ml-1 mr-3">
-                                <input type="radio" className="form-check-input" id="penaleCancellazione" value="pagamento" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione === "pagamento"} required/>
+                                <input type="radio" className="form-check-input" id="politicaCancellazione" value="pagamento" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione === "pagamento"} required/>
                                 Penale di cancellazione</label>
                         </div>
                         <div className="form-group">

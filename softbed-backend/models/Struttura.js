@@ -4,14 +4,15 @@
 // const db = makeDb(config);
 var db = require('../db/dbmiddleware');
 
-module.exports={
+module.exports= {
+
     //FIXME: rimane pending???
-    create:async function(datiStruttura, callback) {
+    create: async function (datiStruttura, callback) {
         let refIndirizzo;
         console.log("qui ci sono");
         let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES (?,?,?,?)');
         let datiQuery = [datiStruttura.via, datiStruttura.numeroCivico, datiStruttura.cap, datiStruttura.nomeComune];
-        db.query(sql, datiQuery, function (err, risultato1){  //INSERIMENTO IN INDIRIZZO
+        db.query(sql, datiQuery, function (err, risultato1) {  //INSERIMENTO IN INDIRIZZO
             if (err) throw err;
 
             //se tutto va bene, trovo id indirizzo e inserisco nella struttura
@@ -87,8 +88,6 @@ module.exports={
             return callback("OK");
         }); //chiusura query inidirizzo
     }, //end create
-
-
     search: async function(datiRicerca, callback) {
 
         console.log('search');
@@ -141,43 +140,21 @@ module.exports={
             if (err) return callback(err);
             else return callback(risultato);
         })
+    },
+
+    fetch: async function (callback) {
+        /*TODO CAMBIARE refGestore */
+        //recupero le informazioni generali della struttura
+        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', 3, function (err) {
+                if (err) throw err;
+                if(infoStruttura.length==0){
+                        infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `casaVacanze`.refStruttura=`struttura`.idStruttura', 3, function (err) {
+                        if (err) throw err;
+                    })
+                }
+                return callback(infoStruttura._results);
+            }
+        )
     }
 };
 
-
-
-
-
-
-/*
-        ,
-    fetchCrud:function(callback){
-        var sql='SELECT * FROM crud';
-        db.query(sql, function (err, data, fields) {
-            if (err) throw err;
-            return callback(data);
-        });
-    },
-    editCrud:function(editId, callback){
-
-        var sql=`SELECT * FROM crud WHERE id=${editId}`;
-        db.query(sql, function (err, data) {
-            if (err) throw err;
-            return callback(data[0]);
-        });
-    },
-    UpdateCrud:function(updateData,updateId,callback){
-
-        var sql = `UPDATE crud SET ? WHERE id= ?`;
-        db.query(sql, [updateData, updateId], function (err, data) {
-            if (err) throw err;
-            return callback(data);
-        });
-    },
-    deleteCrud:function(deleteId,callback){
-        var sql = 'DELETE FROM crud WHERE id = ?';
-        db.query(sql, [deleteId], function (err, data) {
-            if (err) throw err;
-            return callback(data);
-        });
-    }};*/
