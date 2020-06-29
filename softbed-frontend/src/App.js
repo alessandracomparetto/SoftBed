@@ -14,6 +14,7 @@ import RegistrazioneStruttura from "./Components/Registrazione Struttura/Registr
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import Footer from "./Components/Footer";
 import StruttureRecenti from "./Components/StruttureRecenti";
+import Immagine from "./Components/Immagine";
 
 
 function App() {
@@ -46,60 +47,66 @@ function App() {
 
     return (
         <Router>
-            {/* La navbar è presente in ogni caso */}
-            <Navbar />
-
             <Switch>
-                {/* Schermata principale */}
-                <Route exact path="/">
-                    <Carousel />
-                    <FormRicerca />
-                    <div className="d-flex justify-content-center">
-                        <StruttureRecenti />
-                    </div>
+                {/* Immagini da backend */}
+                <Route path="/uploads/foto/:id/:immagine">
+                    <Immagine />
                 </Route>
 
-                <Route exact path="/accedi/">
-                    <Login />
-                </Route>
-
-                <Route exact path="/registrati/">
-                    <Registrazione />
-                </Route>
-
-                <Route path="/registrazioneStruttura/">
-                    <RegistrazioneStruttura />
-                </Route>
-
-                {/* Schermata dei risultati di ricerca */}
-                <Route exact path="/search">
-                    <SchermataRisultati/>
-                </Route>
-
-                {/* Schermata della struttura */}
-                <Route exact path="/struttura/:id">
-                    <SchermataStruttura struttura={struttura} />
-                </Route>
-
-                <Route path="/registrazioneStruttura">
-                    <RegistrazioneStruttura/>
-                </Route>
-
-                <Route path="/profilo/:id">
-                    <Route path="*/prenotazioni-effettuate/">
-                        <SchermataPrenotazioniOspite />
-                    </Route>
-                </Route>
-
-                {/* TODO: Non è possibile accedere alle risorse in backend, come le immagini tramite URL */}
-                {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                 <Route path="*">
-                    <PaginaNonTrovata/>
-                    <FormRicerca />
+                    {/* La navbar è presente in ogni caso */}
+                    <Navbar />
+
+                    <Switch>
+                        {/* Schermata principale */}
+                        <Route exact path="/">
+                            <Carousel />
+                            <FormRicerca />
+                            <StruttureRecenti />
+                        </Route>
+
+                        <Route exact path="/accedi/">
+                            <Login />
+                        </Route>
+
+                        <Route exact path="/registrati/">
+                            <Registrazione />
+                        </Route>
+
+                        <Route path="/registrazioneStruttura/">
+                            <RegistrazioneStruttura />
+                        </Route>
+
+                        {/* Schermata dei risultati di ricerca */}
+                        <Route exact path="/search">
+                            <SchermataRisultati/>
+                        </Route>
+
+                        {/* Schermata della struttura */}
+                        <Route exact path="/struttura/:id">
+                            <SchermataStruttura struttura={struttura} />
+                        </Route>
+
+                        <Route path="/registrazioneStruttura">
+                            <RegistrazioneStruttura/>
+                        </Route>
+
+                        <Route path="/profilo/:id">
+                            <Route path="*/prenotazioni-effettuate/">
+                                <SchermataPrenotazioniOspite />
+                            </Route>
+                        </Route>
+
+                        {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
+                        <Route path="*">
+                            <PaginaNonTrovata/>
+                            <FormRicerca />
+                        </Route>
+                    </Switch>
+
+                    <Footer />
                 </Route>
             </Switch>
-
-            <Footer />
         </Router>
     )
 }

@@ -2,30 +2,27 @@ import React from "react";
 
 function ImmagineSecondaria(props) {
     return (
-        <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 15 + "vw", maxHeight: 214 + "px"}}>
-            <img className="img h-100 w-100 m-auto d-block img-cover img-fluid"
-                 src={`/uploads/foto/${(props.id ? (props.id + "/") : "")}${props.nomeImmagine}`} alt={props.nomeStruttura} />
-        </figure>
+        <a href={`/uploads/foto/${(props.id ? (props.id + "/") : "")}${props.nomeImmagine}`} target="_blank">
+            <figure className="figure overflow-hidden w-100 col-3 col-md-6 px-2" style={{height: 15 + "vw", maxHeight: 214 + "px"}}>
+                <img className="img h-100 w-100 m-auto d-block img-cover img-fluid"
+                     src={`/uploads/foto/${(props.id ? (props.id + "/") : "")}${props.nomeImmagine}`} alt={props.nomeStruttura} />
+            </figure>
+        </a>
     )
 
 }
 
 function ImmaginiStruttura(props) {
-    /*const listaImmagini = [ // TODO: Da rimuovere
-        "1.jpg",
-        "2.jpg",
-        "3.jpg",
-        "4.jpg",
-        "5.jpg"
-    ]*/
     return (
         <div className="m-3 row">
             {/* Immagine principale */}
             <div className="col-12 col-md-7 pr-md-0">
-                <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
-                    <img className="img h-100 m-auto img-cover img-fluid"
-                         src={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
-                </figure>
+                <a href={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} target="_blank" >
+                    <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
+                        <img className="img h-100 m-auto img-cover img-fluid"
+                             src={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
+                    </figure>
+                </a>
             </div>
 
             {/* Altre immagini */}
