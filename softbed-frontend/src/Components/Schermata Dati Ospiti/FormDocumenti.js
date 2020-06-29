@@ -4,11 +4,12 @@ import axios from 'axios';
 import $ from 'jquery';
 
 function FormDocumenti(){
-    const [file, setFile] = useState([]);
-    const [numero, setNumero] = useState(0);
-    const [filename, setFilename] = useState([]);
-    let fileList = {};
+    const [file, setFile] = useState([]); //lista file prima di essere caricati
+    const [numero, setNumero] = useState(0); //numero totale dei file caricati
+    const [filename, setFilename] = useState([]); //lista dei nomi dei file
+    let fileList = {}; //copia dei file
 
+    //controlla che tuti i file siano immagini
     const checkMimeType=(fileList)=>{
         let files = fileList;
         const types = ['image/png', 'image/jpeg', 'image/jpg']

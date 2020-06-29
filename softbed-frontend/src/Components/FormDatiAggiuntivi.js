@@ -158,7 +158,7 @@ function FormDatiAggiuntivi(props){
     }
 
     return(
-        <form className="container needs-validation pt-3 w-75" noValidate>
+        <form className="container needs-validation p-3 w-75" noValidate>
             <h6 className="lead mt-3 text-uppercase ">Modifica i tuoi dati</h6>
             <h6 className="mt-4 text-uppercase ">Dati anagrafici</h6>
             <div className="form-row">

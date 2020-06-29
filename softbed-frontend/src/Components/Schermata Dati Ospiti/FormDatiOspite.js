@@ -3,6 +3,7 @@ import data from "../../regioni_province_comuni";
 import $ from "jquery";
 import FormDocumenti from "./FormDocumenti";
 import {convertiData} from "../../Actions/gestioneDate";
+import axios from "axios";
 
 
 function FormDatiOspite(props){
@@ -20,20 +21,13 @@ function FormDatiOspite(props){
         codiceFiscale: "",
         dataNascita: "",
         refComuneNascita: "",
-        idComune: "",
-        nomeComune:"",
         nomeProvincia: "",
-        nomeRegione: "",
         refIndirizzo: "",
-        idIndirizzo: "",
         via: "",
         numero: "",
         cap: "",
         refComuneResidenza:"",
-        idComuneResidenza:"",
-        nomeComuneResidenza:"",
-        nomeProvinciaResidenza: "",
-        nomeRegioneResidenza: "",
+        nomeProvinciaResidenza:"",
         refPrenotazione:"",
         tassa:"",
         dataArrivo:"",
@@ -50,6 +44,7 @@ function FormDatiOspite(props){
 
         if(form.checkValidity()){
             props.aggiungiOspite(ospite);
+
             form.classList.remove('was-validated');
             document.getElementById("nome").value="";
             document.getElementById("cognome").value="";
@@ -66,6 +61,7 @@ function FormDatiOspite(props){
             document.getElementById("cap").value="";
             document.getElementById("arrivo").value="";
             document.getElementById("permanenza").value="";
+
         }
     }
 
@@ -157,7 +153,7 @@ function FormDatiOspite(props){
                 if (provincia.code == event.target.value) {
                     for (let comune of provincia.comuni) {
                         let opt=document.createElement('option');
-                        opt.value=comune.nome;
+                        opt.value=comune.code;
                         opt.innerText = comune.nome;
                         if(event.target.id === "provinciaNascita"){
                             document.getElementById("comuneNascita").appendChild(opt);
@@ -196,7 +192,7 @@ function FormDatiOspite(props){
 
 
     return(
-        <form id="form" className="container pt-3 w-75" noValidate onSubmit={onSubmit}>
+        <form id="form" className="container p-3 w-75" noValidate onSubmit={onSubmit}>
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>
             <h6 className="mt-3 ">Inserisci i dati dell'ospite:</h6>
             <div className="form-row">
@@ -268,7 +264,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneNascita" name="nomeComune" className="custom-select" onChange={handleChange} required>
+                    <select id="comuneNascita" name="refComuneNascita" className="custom-select" onChange={handleChange} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -317,7 +313,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneResidenza" name="nomeComuneResidenza" className="custom-select" onChange={handleChange} required>
+                    <select id="comuneResidenza" name="refComuneResidenza" className="custom-select" onChange={handleChange} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -344,7 +340,7 @@ function FormDatiOspite(props){
 
                 <div className="form-group col-6 col-md-5 col-lg-3">
                     <label htmlFor="arrivo">Data di arrivo</label>
-                    <input name="dataArrivo" id="arrivo" type="date" className="form-control" defaultValue={maxDataA} min={minDataA} max={maxDataA} onChange={handleChange} required/>
+                    <input name="dataArrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxDataA} onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-6 col-md-3 col-lg-2">
@@ -352,9 +348,10 @@ function FormDatiOspite(props){
                     <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" defaultValue="1" onChange={handleChange} required/>
                 </div>
 
-                <div className="form-group col-12 col-lg-3">
+                <div className="form-group col-12 col-md-4 col-lg-3">
                     <label htmlFor="tassa">Tassa di soggiorno</label>
                     <select id="tassa" name="tassa" className="custom-select" onChange={handleChange} required>
+                        <option value="" disabled selected></option>
                         <option value="bambino">Bambino</option>
                         <option value="adulto">Adulto</option>
                         <option value="esente">Esente</option>
@@ -363,7 +360,7 @@ function FormDatiOspite(props){
 
             </div>
 
-            <button name="ok" id="ok" type="submit" className="btn btn-warning mt-3 float-right btn-lg w-200px">Aggiungi ospite</button>
+            <button name="ok" id="ok" type="submit" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" }>Aggiungi ospite</button>
 
                 <button name="ok" id="ok" type="button" className="btn btn-warning mt-3 float-left" onClick={toggleContenuto}>Aggiungi documento</button>
                 <br/><br/>

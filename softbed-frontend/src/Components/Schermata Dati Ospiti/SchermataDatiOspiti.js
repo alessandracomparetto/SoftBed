@@ -1,66 +1,25 @@
 import React,{useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
-
+import axios from "axios";
 
 /*
 TODO: gestire le props
 */
 
 function SchermataDatiOspiti(props){
-    const[listaOspiti, setOspiti] = useState([
-        {nome: "Mario",
-        cognome: "Rossi",
-        codiceFiscale: "CVLJLU06E54L219B",
-        dataNascita: "22-08-20",
-        refComune: "6",
-        idComune: "6",
-        nomeComune:"Castelvetrano",
-        nomeProvincia: "Trapani",
-        nomeRegione: "Sicilia",
-        refIndirizzo: "1",
-        idIndirizzo: "1",
-        via: "Napoli",
-        numero: "1",
-        cap: "91022",
-        refComuneResidenzaq:"2",
-        idComuneResidenza:"2",
-        nomeComuneResidenza:"Castelvetrano",
-        nomeProvinciaResidenza: "Trapani",
-        nomeRegioneResidenza: "Sicilia",
-        refPrenotazione:"10",
-        tassa:"Adulto",
-        dataArrivo:"26-06-20",
-        permanenza:"1",
-        },
-        {nome: "Mario",
-        cognome: "Rossi",
-        codiceFiscale: "CVLJLU06E54L219B",
-        dataNascita: "22-08-20",
-        refComuneNascita: "6",
-        idComune: "6",
-        nomeComune:"Castelvetrano",
-        nomeProvincia: "Trapani",
-        nomeRegione: "Sicilia",
-        refIndirizzo: "1",
-        idIndirizzo: "1",
-        via: "Napoli",
-        numero: "1",
-        cap: "91022",
-        refComuneResidenza:"2",
-        idComuneResidenza:"2",
-        nomeComuneResidenza:"Marsala",
-        nomeProvinciaResidenza: "Trapani",
-        nomeRegioneResidenza: "Sicilia",
-        refPrenotazione:"10",
-        tassa:"Bambino",
-        dataArrivo:"26-06-20",
-        permanenza:"1"
-        },
-])
+    const[listaOspiti, setOspiti] = useState([])
 
     const eliminaOspite = (indice) => {
-        {/*TODO inviare richiesta al beckend*/}
+        try {
+            console.log("DATI======= ");
+            console.log(listaOspiti[indice]);
+            axios.post('/ospite/cancellazione', listaOspiti[indice])
+                .then(res => { // then print response status
+                    console.log(res.data);
+                });
+        }catch (e) {
+        }
         // Rimuovere dalla lista
         let tmp = [...listaOspiti];
         tmp.splice(indice, 1);
@@ -68,9 +27,16 @@ function SchermataDatiOspiti(props){
     }
 
     const aggiungiOspite = (dato) => {
-        {/*TODO inviare richiesta al beckend*/}
+        try {
+            console.log("OSPITE==== ");
+            console.log(dato);
+            axios.post('/ospite/inserimento', dato)
+                .then(res => { // then print response status
+                    console.log(res.data);
+                });
+        } catch (e) {
+        }
         // Aggiungere alla lista
-        console.log(dato);
         let tmp = [...listaOspiti];
         tmp.push(dato);
         console.log(tmp);
@@ -97,7 +63,7 @@ function SchermataDatiOspiti(props){
                 </ul>
             </div>
 
-            <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
+            <FormDatiOspite aggiungiOspite={aggiungiOspite} dati={listaOspiti}/>
             {/*<a href={`/dichiarazioneOspiti`} className="btn btn-warning d-block d-md-inline-block m-auto stretched-link">Procedi alla dichiarazione</a>*/}
         </div>
     )

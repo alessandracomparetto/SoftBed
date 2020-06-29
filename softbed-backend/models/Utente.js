@@ -1,3 +1,4 @@
+/* CON SEQUELIZE
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, type) => {
@@ -23,3 +24,29 @@ module.exports = (sequelize, type) => {
         gestore: type.INTEGER,
     })
 }
+*/
+
+var db = require('../db/dbmiddleware');
+
+module.exports= {
+
+    create:async function(datiUtente, callback) {
+        let refUtente;
+        let sql = ('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) VALUES (?,?,?,?)');
+        let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore == 'gestore' ? '1' : '0'];
+        db.query(sql, datiQuery, function (err, risultato1) {  //INSERIMENTO IN UTENTE
+            if (err) throw err;
+            refUtente = risultato1.insertId;
+
+            let sql = ('INSERT INTO `autenticazione` (refUtente, email, password) VALUES (?,?,?)');
+            let datiQuery = [refUtente, datiUtente.email, datiUtente.pass];
+            db.query(sql, datiQuery, function (err, risultato3) {  //INSERIMENTO IN AUTENTICAZIONE
+                if (err) throw err;
+                console.log(`Utente inserito!`);
+            }); //chiusura query autenticazione
+        return callback("OK");
+    }); //chiusura query utente
+
+    }//end create
+
+};

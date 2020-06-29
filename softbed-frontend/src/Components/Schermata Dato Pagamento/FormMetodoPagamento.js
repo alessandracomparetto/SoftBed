@@ -43,7 +43,7 @@ function FormMetodoPagamento(props) {
     }
 
     return (
-        <form id="form" noValidate onSubmit={onSubmit}>
+        <form id="form" className="container p-3" oValidate onSubmit={onSubmit}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
                 <div className="form-group col-12 col-md-5 ">
