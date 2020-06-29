@@ -83,17 +83,8 @@ function FormFotografie(props){
     function vaiAvanti(event) {
         event.preventDefault();
         props.go();
-        /*try {
-            let dati = props.dati;
-            console.log("DATI======= ");
-            console.log(dati);
-            axios.post('/struttura', dati)
-                .then(res => { // then print response status
-                    console.log(res.data);
-                });
-        } catch (e) {
-        }*/
     }
+
     function  vaiIndietro() {
         props.goBack();
     }

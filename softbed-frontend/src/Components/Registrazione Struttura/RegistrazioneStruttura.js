@@ -8,6 +8,7 @@ import InserimentoCondizioni from "./InserimentoCondizioni";
 import FormFotografie from "./FormFotografie";
 import FormStruttura from "./FormStruttura";
 import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
+import axios from 'axios';
 
 
 function RegistrazioneStruttura () {
@@ -57,8 +58,18 @@ function RegistrazioneStruttura () {
 
     const handleSubmit=(event)=>{
         event.preventDefault();
-        /*.axios.*/
-        console.log("hai finito");
+        try {
+           let dati = info;
+           console.log("DATI======= ");
+           console.log(dati);
+           axios.post('/struttura', dati)
+               .then(res => { // then print response status
+                   console.log(res.data);
+                   console.log("hai finito");
+               });
+       } catch (e) {
+            console.log(e);
+       }
     };
 
     function _next(){
@@ -95,7 +106,7 @@ function RegistrazioneStruttura () {
             }
             <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
-            <SchermataRiepilogoRegistrazione currentStep={step} struttura={info}/>
+            <SchermataRiepilogoRegistrazione currentStep={step} struttura={info} handleSubmit={handleSubmit}  goBack={_prev}/>
     </div>
     )
 }
