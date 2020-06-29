@@ -10,14 +10,15 @@ import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 
 function SchermataGestioneStruttura() {
+    let struttura;
     useEffect(() => {
         axios
             .get("/struttura")
-            .then(res => console.log(res.data))
+            .then(res => {struttura=res.body; console.log("Struttura"+struttura)})
             .catch(err => console.log(err));
     }, []);
 
-    const struttura={ tipologiaStruttura: "B&B",
+   /* const struttura={ tipologiaStruttura: "B&B",
         nomeStruttura: "aa",
         nomeRegione: "Basilicata",
         nomeProvincia: "MT",
@@ -53,7 +54,7 @@ function SchermataGestioneStruttura() {
     esclusioneSoggiorni: 3,
     percentualeRiduzione: 3,
     nPersoneRiduzione: 3
-}
+}*/
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
        /* document.getElementById("InformazioniPrincipali").classList.add("collapse"); */

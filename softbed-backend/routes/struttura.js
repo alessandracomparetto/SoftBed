@@ -7,9 +7,10 @@ let strutturaModel = require('../models/Struttura')
 
 
 router.get('/', function(req, res, next) {
+    console.log("sono qui");
     strutturaModel.fetch(function(data){
         console.log(data);
-        res.send("ok");
+        res.send(data);
     })
 });
 
