@@ -4,15 +4,15 @@
 // const db = makeDb(config);
 var db = require('../db/dbmiddleware');
 
-module.exports={
+module.exports= {
 
     //FIXME: rimane pending???
-    create:async function(datiStruttura, callback) {
+    create: async function (datiStruttura, callback) {
         let refIndirizzo;
         console.log("qui ci sono");
         let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES (?,?,?,?)');
         let datiQuery = [datiStruttura.via, datiStruttura.numeroCivico, datiStruttura.cap, datiStruttura.nomeComune];
-        db.query(sql, datiQuery, function (err, risultato1){  //INSERIMENTO IN INDIRIZZO
+        db.query(sql, datiQuery, function (err, risultato1) {  //INSERIMENTO IN INDIRIZZO
             if (err) throw err;
 
             //se tutto va bene, trovo id indirizzo e inserisco nella struttura
@@ -26,15 +26,16 @@ module.exports={
                 console.log("inserita struttura");
 
                 let refStruttura = risultato2.insertId;
-                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
-                 if(datiStruttura.foto) {
-                     for(foto of datiStruttura.foto){
-                         datiQuery = [refStruttura, foto];
-                         db.query(sql, datiQuery, function (err) { //INSERIMENTO IN FOTOGRAFIE
-                             if(err) throw err;
-                             console.log("inserite foto");
-                         }); //chiusura query foto
-                 }}//end for
+                sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES (?,?)');
+                if (datiStruttura.foto) {
+                    for (foto of datiStruttura.foto) {
+                        datiQuery = [refStruttura, foto];
+                        db.query(sql, datiQuery, function (err) { //INSERIMENTO IN FOTOGRAFIE
+                            if (err) throw err;
+                            console.log("inserite foto");
+                        }); //chiusura query foto
+                    }
+                }//end for
 
                 //TODO CONTROLLARE PENALE DI CANCELLAZIONE E PREAVVISO DISDETTA, NON SONO RIUSCITA AD INSERIRLE
                 sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
@@ -47,7 +48,7 @@ module.exports={
                     if (err) throw err;
 
                     console.log("inserite condizioni");
-                    if(datiStruttura.tipologia === "B&B") { //query per B&B
+                    if (datiStruttura.tipologia === "B&B") { //query per B&B
                         //TODO CONTROLLA RISCALDAMENTO
                         sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -58,7 +59,7 @@ module.exports={
                             if (err) throw err;
 
                             console.log("inserite caratteristiche");
-                            for(camera of datiStruttura.camere) {
+                            for (camera of datiStruttura.camere) {
                                 sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
                                 datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
@@ -69,7 +70,7 @@ module.exports={
                             }
                         }); //chiusura query caratteristiche
                     }//chiusura if
-                    else if(datiStruttura.tipologia==="cv") {
+                    else if (datiStruttura.tipologia === "cv") {
                         //TODO MANCA RISCALDAMENTO
                         sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare,festeammesse, tv,salotto,giardino,terrazza,piscina,nBagni,nCamere,nlettiSingoli,nlettiMatrimoniali,prezzonotte,descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -87,43 +88,21 @@ module.exports={
 
             return callback("OK");
         }); //chiusura query inidirizzo
-    } //end create
-};
+    }, //end create
 
+    fetch: async function (callback) {
+        /*TODO CAMBIARE refGestore */
+        //recupero le informazioni generali della struttura
+        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', 3, function (err) {
+                if (err) throw err;
+                if(infoStruttura.length==0){
+                        infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `casaVacanze`.refStruttura=`struttura`.idStruttura', 3, function (err) {
+                        if (err) throw err;
+                    })
+                }
+                return callback(infoStruttura._results);
+            }
+        )
+    }
+}
 
-
-
-
-
-/*
-        ,
-    fetchCrud:function(callback){
-        var sql='SELECT * FROM crud';
-        db.query(sql, function (err, data, fields) {
-            if (err) throw err;
-            return callback(data);
-        });
-    },
-    editCrud:function(editId, callback){
-
-        var sql=`SELECT * FROM crud WHERE id=${editId}`;
-        db.query(sql, function (err, data) {
-            if (err) throw err;
-            return callback(data[0]);
-        });
-    },
-    UpdateCrud:function(updateData,updateId,callback){
-
-        var sql = `UPDATE crud SET ? WHERE id= ?`;
-        db.query(sql, [updateData, updateId], function (err, data) {
-            if (err) throw err;
-            return callback(data);
-        });
-    },
-    deleteCrud:function(deleteId,callback){
-        var sql = 'DELETE FROM crud WHERE id = ?';
-        db.query(sql, [deleteId], function (err, data) {
-            if (err) throw err;
-            return callback(data);
-        });
-    }};*/

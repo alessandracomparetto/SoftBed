@@ -1,6 +1,7 @@
 
 
-import React, {Fragment} from "react"
+import React, {Fragment, useEffect} from "react";
+import axios from 'axios';
 import $ from "jquery";
 import InformazioniStruttura from "./InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
@@ -9,6 +10,13 @@ import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 
 function SchermataGestioneStruttura() {
+    useEffect(() => {
+        axios
+            .get("/struttura")
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err));
+    }, []);
+
     const struttura={ tipologiaStruttura: "B&B",
         nomeStruttura: "aa",
         nomeRegione: "Basilicata",
@@ -46,7 +54,6 @@ function SchermataGestioneStruttura() {
     percentualeRiduzione: 3,
     nPersoneRiduzione: 3
 }
-
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
        /* document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
@@ -56,7 +63,7 @@ function SchermataGestioneStruttura() {
     function modificaCondizioni(){
         document.getElementById("condizioni").classList.remove("collapse");
         /*document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
-        document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
     }
     function modificaDisponibilità(){
@@ -79,9 +86,21 @@ function SchermataGestioneStruttura() {
                         <div className="collapse navbar-collapse" id="menu">
                             <ul className="navbar-nav ml-auto text-right">
                                 <Fragment>
-                                    <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
-                                    <a className="nav-link text-dark" onClick={modificaCondizioni}>Modifica condizioni</a>
-                                    <a className="nav-link text-dark" onClick={modificaDisponibilità}>Modifica disponibilità</a>
+                                    <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={modificaCondizioni}>Modifica condizioni</a>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={modificaDisponibilità}>Modifica disponibilità</a>
+                                    </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                             </ul>

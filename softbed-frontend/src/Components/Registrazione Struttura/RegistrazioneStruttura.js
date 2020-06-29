@@ -95,7 +95,7 @@ function RegistrazioneStruttura () {
             }
             <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
-            {/*<SchermataRiepilogoRegistrazione currentStep={step} struttura={info}/>*/}
+            <SchermataRiepilogoRegistrazione currentStep={step} struttura={info}/>
     </div>
     )
 }

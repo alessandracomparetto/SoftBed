@@ -16,8 +16,8 @@ function FormCaratteristicheC(props){
             <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
             <div className="form-row-group text-center offset-2">
                 <div className="form-check-inline col-12 col-md-5">
-                    <input type="checkbox" className="form-check-input" id="wifi" value={1} name="wifi" defaultChecked={props.dati.Wifi==="1"}/>
-                    <label className="form-check-label" htmlFor="wifi">Connessione Wi-fi</label>
+                    <input type="checkbox" className="form-check-input" id="Wifi" value={1} name="Wifi" defaultChecked={props.dati.Wifi==="1"}/>
+                    <label className="form-check-label" htmlFor="Wifi">Connessione Wi-fi</label>
                 </div>
                 <div className="form-check-inline col-12 col-md-5">
                     <input type="checkbox" className="form-check-input" id="riscaldamento" name="riscaldamento"
@@ -66,7 +66,7 @@ function FormCaratteristicheC(props){
 
             <h6 className="mt-3 border-bottom border-primary">Descrizione</h6>
             <div className="md-form amber-textarea active-amber-textarea">
-                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength="500" placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
+                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength={500} placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
                 <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 500 caratteri</p>
             </div>
         </div>
