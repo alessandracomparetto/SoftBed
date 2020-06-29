@@ -7,23 +7,28 @@ let strutturaModel = require('../models/Struttura')
 
 
 router.get('/', function(req, res, next) {
-    console.log("sono qui");
+    // console.log("sono qui");
     strutturaModel.fetch(function(data){
-        console.log(data);
+        // console.log(data);
         res.json(data);
     })
 });
 
 
 router.post('/', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     strutturaModel.create(req.body,function(data){
         console.log(data);
         res.send(data);
     });
 });
 
+router.post('/modificaCondizioni', function (req, res) {
+    console.log("REQ.BODY ====")
+    strutturaModel.modificaCondizioni(req.body,function(data){
+        console.log(data);
+        res.send(data);
+    });
+});
 
 module.exports = router;
 

@@ -56,6 +56,13 @@ const [struttura,setStruttura]=useState([]);
         console.log(struttura);*/
     }
 
+    function handleChange(event){
+        const{name,value}=event.target;
+        let tmp=struttura
+        tmp[name]=value;
+        setStruttura(tmp);
+    }
+
     return (
         <div className="d-flex justify-content-center">
             <div className="row mx-auto maxw-xl">
@@ -112,7 +119,7 @@ const [struttura,setStruttura]=useState([]);
 
                  <div id="InformazioniPricipali" className="col-12 col-md-9">
                     {/* Contenitore principale */}
-                    <InformazioniStruttura struttura={struttura} />
+                    <InformazioniStruttura struttura={struttura}  />
                 </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
@@ -126,7 +133,7 @@ const [struttura,setStruttura]=useState([]);
                     <CalcoloGuadagno dati={struttura}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura}/>
+                    <ModificaCondizioni dati={struttura} handleChange={handleChange}/>
                 </div>
                 <div id="disponibilità" className="collapse col-12 col-md-9">
                     <ModificaDisponibilita props={struttura}/>

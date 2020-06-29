@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import FormCondizioni from "../Registrazione Struttura/FormCondizioni";
+import axios from "axios";
 
 function ModificaCondizioni(props) {
 
@@ -12,13 +13,28 @@ function ModificaCondizioni(props) {
         }
     }
 
+    function modificaCondizioni(event) {
+        event.preventDefault()
+
+        try {
+            let dato = props.dati;
+            console.log("DATI======= ");
+            console.log(dato);
+            axios.post('/struttura/modificaCondizioni', dato)
+                .then(res => { // then print response status
+                    console.log(res.data);
+                    console.log("finito");
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
-        <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox}
-              onChange={props.handleChange}>
+        <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox} onChange={props.handleChange}>
             <FormCondizioni dati={props.dati}></FormCondizioni>
             <div className="d-flex flex-row-reverse justify-content-around">
-                <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" >Conferma
-                </button>
+                <button id="ok" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px">Annulla</button>
             </div>
         </form>

@@ -6,7 +6,6 @@ var db = require('../db/dbmiddleware');
 
 module.exports= {
 
-    //FIXME: rimane pending???
     create: async function (datiStruttura, callback) {
         let refIndirizzo;
         console.log("qui ci sono");
@@ -36,7 +35,6 @@ module.exports= {
                          }); //chiusura query foto
                  }}//end for
 
-                //TODO CONTROLLARE PENALE DI CANCELLAZIONE E PREAVVISO DISDETTA, NON SONO RIUSCITA AD INSERIRLE
                 sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
                             oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
                             politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -48,7 +46,6 @@ module.exports= {
 
                     console.log("inserite condizioni");
                     if(datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
-                        //TODO CONTROLLA RISCALDAMENTO
                         sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
                         datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
@@ -70,7 +67,6 @@ module.exports= {
                         }); //chiusura query caratteristiche
                     }//chiusura if
                     else if(datiStruttura.tipologiaStruttura ==="cv") {
-                        //TODO MANCA RISCALDAMENTO
                         sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
                         datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
@@ -143,7 +139,8 @@ module.exports= {
     },
 
     fetch: async function (callback) {
-        /*TODO CAMBIARE refGestore */
+        /*TODO CAMBIARE refGestore
+        *  TODO sistemare per casa vacanze*/
         let camere;
         let foto;
         let array = [];
@@ -177,6 +174,22 @@ module.exports= {
             });
             }
         )
+    },
+
+    modificaCondizioni : async function ( struttura, callback){
+
+        let query = ('UPDATE `condizioni` SET minSoggiorno=?, maxSoggiorno=?, oraInizioCheckIn=?, oraInizioCheckOut=?, oraFineCheckIn=?, oraFineCheckOut=?, \
+             pagamentoLoco=?, pagamentoOnline=?, prezzoBambini=?, prezzoAdulti=?, percentualeRiduzione=?, nPersoneRiduzione=?, esclusioneSoggiorni=?, anticipoPrenotazioneMin=?, \
+             anticipoPrenotazioneMax=?, politicaCancellazione=?, penaleCancellazione=?, preavvisoDisdetta=? WHERE (idCondizioni=4)');
+        console.log(query);
+        let datiQuery = [struttura.minSoggiorno, struttura.maxSoggiorno, struttura.oraInizioCheckIn,struttura.oraFineCheckOut, struttura.pagamentoLoco, struttura.pagamentoOnLine, parseInt(struttura.prezzoBambini), parseInt(struttura.prezzoAdulti), struttura.percentualeRiduzione, struttura.nPersoneRiduzione,
+            struttura.esclusioneSoggiorni, struttura.anticipoPrenotazioneMin, struttura.anticipoPrenotazioneMax, struttura.politicaCancellazione, struttura.penaleCancellazione, struttura.preavvisoDisdetta];
+        console.log("sto per modificare!");
+        db.query=(query, datiQuery, function (err, data) {
+            if(err) throw err;
+            console.log("ho modificato!");
+            return callback(data);
+        });
     }
 };
 
