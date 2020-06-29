@@ -1,6 +1,7 @@
 import React, {Fragment} from "react";
 import Breadcrumb from "../Breadcrumb";
 import ImmaginiStruttura from "../Schermata Struttura/ImmaginiStruttura";
+import data from "../../regioni_province_comuni.js";
 
 
 function InformazioneLineare(props) {
@@ -77,6 +78,7 @@ function InformazioniStruttura (props){
             </div>
 
             {/* Immagini */}
+            {/*TODO idStruttura={props.struttura.idStruttura}*/}
             <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
 
             {/* Informazioni e caratteristiche struttura */}

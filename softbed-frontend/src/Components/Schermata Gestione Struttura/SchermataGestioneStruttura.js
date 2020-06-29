@@ -68,6 +68,12 @@ const [struttura,setStruttura]=useState([]);
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={informazioniStruttura}>Prenotazioni</a>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
                                         <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
                                     </li>
                                     <div className="dropdown-divider"/>

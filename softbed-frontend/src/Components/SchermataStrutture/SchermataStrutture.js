@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import CalcoloGuadagno from "./CalcoloGuadagno"
 import $ from 'jquery';
+import {Link} from "react-router-dom";
 
 function SchermataStrutture(){
     const [listaStrutture] = useState([
@@ -72,7 +73,7 @@ function SchermataStrutture(){
                                         <strong>{struttura.tipologia}</strong>
                                     </div>
                                     <div  className=" col-12 col-lg-3">
-                                        <button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button>
+                                        <button type="button" className="btn btn-block btn-primary mt-2 mr-2 "><Link className="text-light" to="/gestioneStruttura">Visualizza</Link></button>
                                         <button type="button" className="btn btn-block btn-outline-primary mt-2 mr-2" onClick={apri}>Calcolo Guadagni</button>
                                     </div>
                                 </div>
