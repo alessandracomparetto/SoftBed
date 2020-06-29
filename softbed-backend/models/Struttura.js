@@ -57,7 +57,7 @@ module.exports= {
                         db.query(sql, datiQuery, function (err) {
                             if (err) throw err;
 
-                            console.log("inserite caratteristiche");
+                            console.log("inserito b&b");
                             for(camera of datiStruttura.camere) {
                                 sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
