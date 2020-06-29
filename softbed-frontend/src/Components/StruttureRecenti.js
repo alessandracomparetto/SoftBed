@@ -27,6 +27,8 @@ function StruttureRecenti() {
                                         </div>
                                     )
                                 }
+
+                                else return null;
                             })
                         }
                     </div>

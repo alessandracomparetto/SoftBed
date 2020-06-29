@@ -33,41 +33,41 @@ function FormRicerca(props) {
     // Gestione dei parametri della GET
     const query = new URLSearchParams(useLocation().search);
     const path = useLocation().pathname;
+    const setDestinazione = props.setDestinazione;
 
     useEffect(() => {
-        const destinazione = query.get("destinazione");
-        const arrivo = query.get("arrivo");
-        const partenza = query.get("partenza");
-        const ospiti = query.get("ospiti");
+        if (path === "/search") {
+            const destinazione = query.get("destinazione");
+            const bb = query.get("b&b");
+            const cv = query.get("casa vacanze");
+            const arrivo = query.get("arrivo");
+            const partenza = query.get("partenza");
+            const ospiti = query.get("ospiti");
 
-        if (path === "/search")
-            toggleVisibile(false);
+            if (destinazione) {
+                setDestinazione(destinazione);
+                $("#destinazione").val(destinazione);
+            }
 
-        // TODO: Gestire lettura dei parametri b&b e casa vacanze
-        // const bb = query.get("b&b");
-        // const cv = query.get("casa vacanze");
-        //
-        // if (!bb || bb !== "true")
-        //     $("#b\\&b").prop("checked", false);
-        //
-        // if (!cv || cv !== "true")
-        //     $("#cv").prop("checked", false);
+            if (!bb || bb !== "true")
+                $("#b\\&b").prop("checked", false);
 
-        if (destinazione) {
-            props.setDestinazione(destinazione);
-            $("#destinazione").val(destinazione);
+            if (!cv || cv !== "true")
+                $("#cv").prop("checked", false);
+
+            if (arrivo)
+                $("#arrivo").val(arrivo);
+
+            if (partenza)
+                $("#partenza").val(partenza);
+
+            if (ospiti)
+                $("#ospiti").val(ospiti);
+
+            toggleVisibile(false); // Viene chiuso il form
         }
 
-        if (arrivo)
-            $("#arrivo").val(arrivo);
-
-        if (partenza)
-            $("#partenza").val(partenza);
-
-        if (ospiti)
-            $("#ospiti").val(ospiti);
-
-    }, []);
+    }, [path, setDestinazione, query]);
 
     // Controllo destinazione
     const controlloDestinazione = () => {

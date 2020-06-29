@@ -87,11 +87,18 @@ function SchermataPrenotazioniOspite() {
         }
     ]);
 
-    const rimuoviPrenotazione = (id) => {
+    const rimuoviRichiesta = (id) => {
         let tmp = [...inAttesa];
         const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
         tmp.splice(index, 1);
         setInAttesa(tmp);
+    }
+
+    const rimuoviPrenotazione = (id) => {
+        let tmp = [...precedenti];
+        const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
+        tmp.splice(index, 1);
+        setPrecedenti(tmp);
     }
 
     return (
@@ -104,7 +111,7 @@ function SchermataPrenotazioniOspite() {
 
                         { inAttesa.map((richiesta, indice) => {
                             return (
-                                <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviPrenotazione}/>
+                                <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviRichiesta}/>
                             )
                         })}
 
@@ -121,7 +128,7 @@ function SchermataPrenotazioniOspite() {
                         { precedenti.map((prenotazione, indice) => {
                             return (
                                 // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (non passate)
-                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0}/>
+                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0} rimuovi={rimuoviPrenotazione()}/>
                             )
                         })}
 

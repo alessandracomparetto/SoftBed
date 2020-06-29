@@ -94,7 +94,7 @@ function SchermataStruttura(props) {
         adulti.on('change', () => {
             setNumeroAdulti(adulti.val());
         })
-    }, [])
+    }, [id, struttura.nome])
 
     // Gestione delle date
     const oggi = new Date();
