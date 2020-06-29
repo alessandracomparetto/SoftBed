@@ -5,7 +5,6 @@
 var db = require('../db/dbmiddleware');
 
 module.exports={
-
     //FIXME: rimane pending???
     create:async function(datiStruttura, callback) {
         let refIndirizzo;
