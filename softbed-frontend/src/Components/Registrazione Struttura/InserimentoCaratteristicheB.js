@@ -1,5 +1,5 @@
 import React from "react";
-import FormCaratteristiceB from "./FormCaratteristiceB";
+import FormCaratteristicheB from "./FormCaratteristicheB";
 function InserimentoCaratteristicheB(props){
     function vaiAvanti(event) {
         event.preventDefault();
@@ -16,7 +16,7 @@ function InserimentoCaratteristicheB(props){
     }
     return(
         <form id="form" className="p-3 needs-validation" onChange={props.handleChange} noValidate>
-            <FormCaratteristiceB dati={props.dati}/>
+            <FormCaratteristicheB dati={props.dati}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px" onClick={vaiIndietro}>Indietro</button>

@@ -1,6 +1,6 @@
 import React from "react";
 
-function FormCaratteristiceB(props){
+function FormCaratteristicheB(props){
     function verificaLunghezza(event){
         if(event.target.value.length>=200){
             document.getElementById("feedback").classList.remove("collapse");
@@ -76,4 +76,4 @@ function FormCaratteristiceB(props){
         </div>
     )
 }
-export default FormCaratteristiceB;
+export default FormCaratteristicheB;
