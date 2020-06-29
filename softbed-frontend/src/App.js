@@ -15,6 +15,8 @@ import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Osp
 import Footer from "./Components/Footer";
 import StruttureRecenti from "./Components/StruttureRecenti";
 import Immagine from "./Components/Immagine";
+import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
+import SchermataStrutture from "./Components/SchermataStrutture/SchermataStrutture";
 
 
 function App() {
@@ -56,7 +58,6 @@ function App() {
                 <Route path="*">
                     {/* La navbar è presente in ogni caso */}
                     <Navbar />
-
                     <Switch>
                         {/* Schermata principale */}
                         <Route exact path="/">
@@ -71,6 +72,10 @@ function App() {
 
                         <Route exact path="/registrati/">
                             <Registrazione />
+                        </Route>
+
+                        <Route path="/gestioneStrutture/">
+                            <SchermataStrutture />
                         </Route>
 
                         <Route path="/registrazioneStruttura/">
@@ -95,6 +100,10 @@ function App() {
                             <Route path="*/prenotazioni-effettuate/">
                                 <SchermataPrenotazioniOspite />
                             </Route>
+                        </Route>
+
+                        <Route path="/gestioneStruttura/">
+                            <SchermataGestioneStruttura/>
                         </Route>
 
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}

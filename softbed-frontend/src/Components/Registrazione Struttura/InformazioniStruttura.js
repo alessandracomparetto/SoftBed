@@ -1,8 +1,6 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 import Breadcrumb from "../Breadcrumb";
 import ImmaginiStruttura from "../Schermata Struttura/ImmaginiStruttura";
-import data from "../../regioni_province_comuni.js";
-
 
 function InformazioneLineare(props) {
     return (

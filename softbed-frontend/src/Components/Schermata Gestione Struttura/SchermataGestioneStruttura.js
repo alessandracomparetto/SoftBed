@@ -8,6 +8,7 @@ import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
+import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
 
 function SchermataGestioneStruttura() {
 const [struttura,setStruttura]=useState([]);
@@ -47,6 +48,14 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
     }
+    function calcoloGuadagno(){
+        document.getElementById("guadagno").classList.remove("collapse");
+       /* document.getElementById("InformazioniPricipali").classList.add("collapse");
+        document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("disponibilità").classList.add("collapse");
+        console.log(struttura);*/
+    }
+
     return (
         <div className="d-flex justify-content-center">
             <div className="row mx-auto maxw-xl">
@@ -68,13 +77,19 @@ const [struttura,setStruttura]=useState([]);
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={informazioniStruttura}>Prenotazioni</a>
+                                        <a className="nav-link text-dark" onClick={""}>Prenotazioni</a>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
+                                        <a className="nav-link text-dark" onClick={calcoloGuadagno}>Calcolo guadagno</a>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica caratteristiche</a>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
@@ -107,11 +122,14 @@ const [struttura,setStruttura]=useState([]);
                             <ModificaCaratteristicheB props={struttura}/>
                     }
                 </div>
+                <div id="guadagno" className="collapse col-12 col-md-9">
+                    <CalcoloGuadagno dati={struttura}/>
+                </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura}></ModificaCondizioni>
+                    <ModificaCondizioni dati={struttura}/>
                 </div>
                 <div id="disponibilità" className="collapse col-12 col-md-9">
-                    <ModificaDisponibilita props={struttura}></ModificaDisponibilita>
+                    <ModificaDisponibilita props={struttura}/>
                 </div>
             </div>
         </div>
