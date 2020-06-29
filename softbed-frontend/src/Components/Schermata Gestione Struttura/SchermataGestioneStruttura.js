@@ -2,7 +2,7 @@
 
 import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
-import $ from "jquery";
+
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
@@ -22,7 +22,7 @@ const [struttura,setStruttura]=useState([]);
     }, []);
 
     function informazioniStruttura(){
-        /*document.getElementById("InformazioniPrincipali").classList.remove("collapse"); */
+        document.getElementById("InformazioniPricipali").classList.remove("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
@@ -30,20 +30,20 @@ const [struttura,setStruttura]=useState([]);
 
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
-       /* document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
+        document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
         console.log(struttura);
     }
     function modificaCondizioni(){
         document.getElementById("condizioni").classList.remove("collapse");
-        /*document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
+        document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
     }
     function modificaDisponibilità(){
         document.getElementById("disponibilità").classList.remove("collapse");
-       /* document.getElementById("InformazioniPrincipali").classList.add("collapse"); */
+        document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
     }
@@ -55,11 +55,17 @@ const [struttura,setStruttura]=useState([]);
                     {/* <Sidebar */}
                     <nav className="navbar bg-warning">
                         <button className="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
-                            <span className="d-none d-sm-inline mr-2">Modifica struttura</span>
+                            <span className="d-none d-sm-inline mr-2">La mia struttura</span>
                             <span className="fas fa-edit"/>
                         </button>
                         <div className="collapse navbar-collapse" id="menu">
                             <ul className="navbar-nav ml-auto text-right">
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
+                                        <a className="nav-link text-dark" onClick={informazioniStruttura}>Informazioni sulla struttura</a>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
                                         <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
