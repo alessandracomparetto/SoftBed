@@ -18,8 +18,10 @@ function InformazioneLineare(props) {
 
 function InformazioniStruttura (props){
     function converti(giorni){
+        console.log(giorni);
+        console.log(typeof giorni);
         let x;
-        switch (giorni) {
+        switch (parseInt(giorni)) {
             case 2 :
                 x = "2 giorni";
                 break;
@@ -57,7 +59,7 @@ function InformazioniStruttura (props){
                 x = "1 anno";
                 break;
             default:
-                x="debug";
+                x = "debug";
         }
         return x;
     }
@@ -75,7 +77,7 @@ function InformazioniStruttura (props){
             </div>
 
             {/* Immagini */}
-            {/*<ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>*/}
+            <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
 
             {/* Informazioni e caratteristiche struttura */}
             <div className="d-block">
@@ -212,7 +214,6 @@ function InformazioniStruttura (props){
                                     )
                             }
                         </div>
-
                         <div className="py-3">
                             <h6><strong>Tasse di soggiorno</strong></h6>
                             <InformazioneLineare nome="Prezzo base adulti" valore={`${props.struttura.prezzoAdulti} €`}/>
