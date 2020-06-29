@@ -75,7 +75,7 @@ function InformazioniStruttura (props){
             </div>
 
             {/* Immagini */}
-            <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
+            {/*<ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>*/}
 
             {/* Informazioni e caratteristiche struttura */}
             <div className="d-block">
@@ -86,8 +86,6 @@ function InformazioniStruttura (props){
 
                     {/*Caratteristiche*/}
                     <div className="my-3">
-                        <h6><strong>Caratteristiche</strong></h6>
-
                         {/* Per Casa Vacanze */}
                         { props.struttura.tipologiaStruttura==="cv" && (
                             <Fragment>
@@ -99,7 +97,7 @@ function InformazioniStruttura (props){
                                     {(props.struttura.salotto || props.struttura.giardino|| props.struttura.terrazza || props.struttura.piscina) &&
                                     (
                                         <div className="col-12">
-                                            <strong>Ambienti: </strong>
+                                            <h6><strong>Ambienti: </strong></h6>
                                             <ul>
                                                 {props.struttura.salotto &&(
                                                     <li>Salotto </li>
@@ -121,7 +119,8 @@ function InformazioniStruttura (props){
                         {/* Per B&B */}
                         { props.struttura.tipologiaStruttura==="B&B" && (
                             <Fragment>
-                                <strong>Camere: </strong>
+                                <h6><strong>Camere: </strong></h6>
+
                                 <ul>
                                     { props.struttura.camere.map((camera, indice) => {
                                         return (

@@ -144,15 +144,26 @@ module.exports= {
 
     fetch: async function (callback) {
         /*TODO CAMBIARE refGestore */
+        let camere;
         //recupero le informazioni generali della struttura
-        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', 3, function (err) {
-                if (err) throw err;
-                if(infoStruttura._results.length==0){
-                        infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `casaVacanze`.refStruttura=`struttura`.idStruttura', 3, function (err) {
-                        if (err) throw err;
-                    })
-                }
-                return callback(infoStruttura._results);
+        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.idStruttura=20 AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', function (err) {
+            if (err) throw err;
+            if(infoStruttura._results.length==0){
+                    infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `casaVacanze`.refStruttura=`struttura`.idStruttura', 3, function (err) {
+                    if (err) throw err;
+                    //TODO RIVEDERE
+                    return callback("ok");
+                })
+            }
+            else {
+                let idStruttura = 20;
+                camere = db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), idStruttura, function (err) {
+                    if (err) throw err;
+                    infoStruttura._results[0][0]["camere"] = camere._results[0];
+                    return callback(infoStruttura._results[0][0]);
+                });
+            }
+
             }
         )
     }
