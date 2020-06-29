@@ -47,7 +47,7 @@ module.exports= {
                     if (err) throw err;
 
                     console.log("inserite condizioni");
-                    if(datiStruttura.tipologia === "B&B") { //query per B&B
+                    if(datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
                         //TODO CONTROLLA RISCALDAMENTO
                         sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
@@ -69,7 +69,7 @@ module.exports= {
                             }
                         }); //chiusura query caratteristiche
                     }//chiusura if
-                    else if(datiStruttura.tipologia==="cv") {
+                    else if(datiStruttura.tipologiaStruttura ==="cv") {
                         //TODO MANCA RISCALDAMENTO
                         sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
                        animaliammessi, permessofumare,festeammesse, tv,salotto,giardino,terrazza,piscina,nBagni,nCamere,nlettiSingoli,nlettiMatrimoniali,prezzonotte,descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
