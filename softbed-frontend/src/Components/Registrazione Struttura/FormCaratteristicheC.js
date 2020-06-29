@@ -66,8 +66,8 @@ function FormCaratteristicheC(props){
 
             <h6 className="mt-3 border-bottom border-primary">Descrizione</h6>
             <div className="md-form amber-textarea active-amber-textarea">
-                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength={500} placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
-                <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 500 caratteri</p>
+                <textarea id="descrizione" name="descrizione" className="md-textarea form-control" rows="5"  maxLength={300} placeholder="Write something here..." onChange={verificaLunghezza} defaultValue={props.dati.descrizione}/>
+                <p id="feedback" className="text-danger form-text text-muted collapse ">Hai raggiunto il massimo di 300 caratteri</p>
             </div>
         </div>
     )
