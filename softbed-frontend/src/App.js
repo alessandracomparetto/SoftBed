@@ -85,7 +85,7 @@ function App() {
                     <RegistrazioneStruttura/>
                 </Route>
 
-                <Route exact path="/profilo/:id">
+                <Route path="/profilo/:id">
                     <Route path="*/prenotazioni-effettuate/">
                         <SchermataPrenotazioniOspite />
                     </Route>

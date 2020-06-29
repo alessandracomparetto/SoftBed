@@ -81,6 +81,10 @@ body {
     min-width: 15em;
 }
 
+.minw-200px {
+    min-width: 200px;
+}
+
 .outline-error {
     outline: 2px solid #dc3545;
 }

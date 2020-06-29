@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import RichiestaPrenotazioneOspite from "./RichiestaPrenotazioneOspite";
 import PrenotazioneOspite from "./PrenotazioneOspite";
 
 function SchermataPrenotazioniOspite() {
-    const inAttesa = [
+
+    // TODO: da rimuovere
+    const [inAttesa, setInAttesa] = useState([
         {
             id: 75,
             struttura: {
@@ -36,9 +38,8 @@ function SchermataPrenotazioniOspite() {
             pagamento: "online",
             prezzo: "123.70"
         }
-    ]
-
-    const precedenti = [
+    ]);
+    const [precedenti, setPrecedenti] = useState([
         {
             id: 3,
             struttura: {
@@ -84,7 +85,14 @@ function SchermataPrenotazioniOspite() {
             pagamento: "in loco",
             prezzo: "42.00"
         }
-    ]
+    ]);
+
+    const rimuoviPrenotazione = (id) => {
+        let tmp = [...inAttesa];
+        const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
+        tmp.splice(index, 1);
+        setInAttesa(tmp);
+    }
 
     return (
         <div className="container my-3">
@@ -96,7 +104,7 @@ function SchermataPrenotazioniOspite() {
 
                         { inAttesa.map((richiesta, indice) => {
                             return (
-                                <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0}/>
+                                <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviPrenotazione}/>
                             )
                         })}
 
@@ -112,6 +120,7 @@ function SchermataPrenotazioniOspite() {
 
                         { precedenti.map((prenotazione, indice) => {
                             return (
+                                // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (non passate)
                                 <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0}/>
                             )
                         })}
