@@ -25,8 +25,9 @@ router.get('/', function(req, res) {
                 // Inserimento in cache
                 cacheRicerche.set(query, JSON.stringify(data), function(err) {
                     if (err) throw err;
-                    else res.send(data);
                 })
+
+                res.send(data);
             }).catch(err => console.log(err));
 
 
