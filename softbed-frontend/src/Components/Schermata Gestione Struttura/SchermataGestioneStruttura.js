@@ -3,7 +3,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
 import $ from "jquery";
-import InformazioniStruttura from "./InformazioniStruttura";
+import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
 import ModificaCondizioni from "./ModificaCondizioni";
@@ -14,9 +14,16 @@ const [struttura,setStruttura]=useState([]);
     useEffect(() => {
         axios
             .get("/struttura")
-            .then(res => {setStruttura(res.data[0][0]); console.log("Strutturaaa:"+res.data[0][0])})
+            .then(res => {setStruttura(res.data); console.log("Strutturaaa:"+res.data)})
             .catch(err => console.log(err));
     }, []);
+
+    function informazioniStruttura(){
+        /*document.getElementById("InformazioniPrincipali").classList.remove("collapse"); */
+        document.getElementById("caratteristiche").classList.add("collapse");
+        document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("disponibilità").classList.add("collapse");
+    }
 
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
@@ -73,10 +80,10 @@ const [struttura,setStruttura]=useState([]);
                     </nav>
                 </div>
 
-                {/*} <div id="InformazioniPricipali" className="col-12 col-md-9">
-                    {/!* Contenitore principale *!/}
-                    <InformazioniStruttura datiStruttura={struttura} />
-                </div>*/}
+                 <div id="InformazioniPricipali" className="col-12 col-md-9">
+                    {/* Contenitore principale */}
+                    <InformazioniStruttura struttura={struttura} />
+                </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
