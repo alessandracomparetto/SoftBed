@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 function ImmagineSecondaria(props) {
     return (
@@ -13,26 +13,36 @@ function ImmagineSecondaria(props) {
 }
 
 function ImmaginiStruttura(props) {
+    useEffect(()=>{
+        console.log(props.struttura.foto);
+    });
+
     return (
         <div className="m-3 row">
             {/* Immagine principale */}
             <div className="col-12 col-md-7 pr-md-0">
-                <a href={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} target="_blank" rel="noopener noreferrer" >
-                    <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
-                        <img className="img h-100 m-auto img-cover img-fluid"
-                             src={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
-                    </figure>
-                </a>
+                {props.struttura.foto &&
+                (
+
+                    <a href={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} target="_blank" rel="noopener noreferrer" >
+                        <figure className="figure overflow-hidden h-100" style={{height: 30 + "vw", maxHeight: 450 + "px"}}>
+                            <img className="img h-100 m-auto img-cover img-fluid"
+                                 src={`/uploads/foto/${(props.idStruttura ? (props.idStruttura +"/") : "")}${props.struttura.foto[0]}`} alt={`${props.struttura.nome}`} />
+                        </figure>
+                    </a>
+                )
+                }
+
             </div>
 
             {/* Altre immagini */}
-            <div className="col-12 col-md-5 mt-3 mt-md-0">
-                { props.struttura.foto.map((immagine, indice) => {
+           <div className="col-12 col-md-5 mt-3 mt-md-0">
+               {props.struttura.foto &&
+               props.struttura.foto.map((immagine, indice) => {
                     if (indice === 0 || indice > 4) {
                         return null;
                     }
-                    return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome}
-                                               nomeImmagine={props.struttura.foto[indice]}/>
+                    return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome} nomeImmagine={props.struttura.foto[indice]}/>
                 })}
             </div>
         </div>

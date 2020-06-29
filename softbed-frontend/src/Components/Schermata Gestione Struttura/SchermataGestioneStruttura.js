@@ -14,7 +14,10 @@ const [struttura,setStruttura]=useState([]);
     useEffect(() => {
         axios
             .get("/struttura")
-            .then(res => {setStruttura(res.data); console.log("Strutturaaa:"+res.data)})
+            .then(res => {
+                setStruttura(res.data);
+                console.log("Strutturaaa:");
+                console.log(res.data)})
             .catch(err => console.log(err));
     }, []);
 

@@ -49,9 +49,9 @@ module.exports= {
                     console.log("inserite condizioni");
                     if(datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
                         //TODO CONTROLLA RISCALDAMENTO
-                        sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
-                       animaliammessi, permessofumare, tv, cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
-                        datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                        sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
+                            cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                        datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
                             datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.tv, datiStruttura.cucinaCeliaci,
                             datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
                         db.query(sql, datiQuery, function (err) {
@@ -71,9 +71,9 @@ module.exports= {
                     }//chiusura if
                     else if(datiStruttura.tipologiaStruttura ==="cv") {
                         //TODO MANCA RISCALDAMENTO
-                        sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, \
-                       animaliammessi, permessofumare,festeammesse, tv,salotto,giardino,terrazza,piscina,nBagni,nCamere,nlettiSingoli,nlettiMatrimoniali,prezzonotte,descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
-                        datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                        sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
+                            festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                        datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                             datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
                             datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
                         db.query(sql, datiQuery, function (err, risultato3) {
@@ -145,25 +145,36 @@ module.exports= {
     fetch: async function (callback) {
         /*TODO CAMBIARE refGestore */
         let camere;
+        let foto;
+        let array = [];
+        let idStruttura = 4;
         //recupero le informazioni generali della struttura
-        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.idStruttura=20 AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', function (err) {
+        let infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `B&B`  WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
+            AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `B&B`.refStruttura=`struttura`.idStruttura', idStruttura,function (err) {
             if (err) throw err;
-            if(infoStruttura._results.length==0){
+            foto = db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), idStruttura , function (err) {
+                if(err) throw err;
+                for(let i = 0; i< foto._results[0].length; i++){
+                    array.push(foto._results[0][i].percorso);
+                }
+                console.log(array);
+                infoStruttura._results[0][0]["foto"] = array;
+                if(infoStruttura._results.length==0){
                     infoStruttura = db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze`  WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refIdStruttura AND `casaVacanze`.refStruttura=`struttura`.idStruttura', 3, function (err) {
-                    if (err) throw err;
-                    //TODO RIVEDERE
-                    return callback("ok");
-                })
-            }
-            else {
-                let idStruttura = 20;
-                camere = db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), idStruttura, function (err) {
-                    if (err) throw err;
-                    infoStruttura._results[0][0]["camere"] = camere._results[0];
-                    return callback(infoStruttura._results[0][0]);
-                });
-            }
+                        if (err) throw err;
+                        //TODO RIVEDERE
+                        return callback("ok");
+                    })
+                }
+                else {
+                    camere = db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), idStruttura, function (err) {
+                        if (err) throw err;
+                        infoStruttura._results[0][0]["camere"] = camere._results[0];
 
+                        return callback(infoStruttura._results[0][0]);
+                    });
+                }
+            });
             }
         )
     }
