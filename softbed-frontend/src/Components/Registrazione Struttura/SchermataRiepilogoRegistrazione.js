@@ -74,15 +74,16 @@ function SchermataRiepilogoRegistrazione(props) {
         <Fragment>
             {/* Nome e località */}
             <div className="shadow mt-3 card bg-white p-3">
-                <h3>{props.struttura.name}</h3>
+                <h3>{props.struttura.nomeStruttura}</h3>
                 <Breadcrumb gerarchia={[
-                    {testo: props.struttura.region, active: true},
-                    {testo: props.struttura.state, active: true},
-                    {testo: props.struttura.town, active: true},
+                    {testo: props.struttura.nomeRegione, active: true},
+                    {testo: props.struttura.nomeProvincia, active: true},
+                    {testo: props.struttura.nomeComune, active: true},
                 ]} icona="map"/>
             </div>
 
            {/* Immagini */}
+           //FIXME NULL
             <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
 
             {/* Informazioni e caratteristiche struttura */}
@@ -90,7 +91,7 @@ function SchermataRiepilogoRegistrazione(props) {
                 <div className="shadow my-3 card bg-white p-3">
                     <h6>Descrizione</h6>
                     <p>{props.struttura.descrizione}</p>
-                    <InformazioneLineare nome="Indirizzo" valore={`${props.struttura.address}, numero ${props.struttura.addressnum}, CAP ${props.struttura.cap}`} />
+                    <InformazioneLineare nome="Indirizzo" valore={`${props.struttura.via}, numero ${props.struttura.numeroCivico}, CAP ${props.struttura.cap}`} />
 
                     {/*Caratteristiche*/}
                 <div className="my-3">
@@ -102,7 +103,7 @@ function SchermataRiepilogoRegistrazione(props) {
                             <InformazioneLineare nome="Numero diletti matrimoniali" valore={`${props.struttura.nLettiMatrimoniali}`}/>
                             <InformazioneLineare nome="Numero di letti singoli" valore={`${props.struttura.nLettiSingoli}`}/>
                             <InformazioneLineare nome="Numero di bagni" valore={`${props.struttura.nBagni}`}/>
-                            <InformazioneLineare nome="Prezzo a notte" valore={`${props.struttura.prezzo} €`} />
+                            <InformazioneLineare nome="Prezzo a notte" valore={`${props.struttura.prezzoNotte} €`} />
                             <div className="row py-2 mx-0">
                                 {(props.struttura.salotto || props.struttura.giardino|| props.struttura.terrazza || props.struttura.piscina) &&
                                    (
@@ -126,27 +127,27 @@ function SchermataRiepilogoRegistrazione(props) {
                             </div>
                             {/* Servizi */}
                             <div className="my-1">
-                                {(props.struttura.connessione || props.struttura.riscaldamento|| props.struttura.disabili || props.struttura.aria
-                                    || props.struttura.tv || props.struttura.parcheggio) &&
+                                {(props.struttura.wifi || props.struttura.riscaldamento|| props.struttura.strutturaDisabili || props.struttura.ariaCondizionata
+                                    || props.struttura.TV || props.struttura.parcheggio) &&
                                 (
                                     <div className="col-12">
                                         <h6><strong>Servizi</strong></h6>
 
                                         <strong>Servizi disponibili: </strong>
                                         <ul>
-                                            {props.struttura.connessione &&(
+                                            {props.struttura.wifi &&(
                                                 <li>Wifi</li>
                                             )}
                                             {props.struttura.riscaldamento &&(
                                                 <li>Riscaldamento </li>
                                             )}
-                                            { props.struttura.disabili &&(
+                                            { props.struttura.strutturaDisabili &&(
                                                 <li>Strutture per disabili </li>
                                             )}
-                                            {props.struttura.aria &&(
+                                            {props.struttura.ariaCondizionata &&(
                                                 <li>Aria condizionata </li>
                                             )}
-                                            {props.struttura.tv &&(
+                                            {props.struttura.TV &&(
                                                 <li>TV </li>
                                             )}
                                             {props.struttura.parcheggio &&(
@@ -154,16 +155,19 @@ function SchermataRiepilogoRegistrazione(props) {
                                             )}
                                         </ul>
                                     </div>)}
-                                {(props.struttura.feste || props.struttura.animali || props.struttura.permessoFumo || props.struttura.bambini) &&
+                                {(props.struttura.festeAmmesse || props.struttura.animaliAmmessi || props.struttura.permessoFumare || props.struttura.bambini) &&
                                 (
                                     <div className="col-12">
                                         <strong>Sugli ospiti: </strong>
                                         <ul>
-                                            {props.struttura.feste &&(
+                                            {props.struttura.festeAmmesse &&(
                                                 <li>Permesso per feste/eventi</li>
                                             )}
-                                            {props.struttura.animali &&(
+                                            {props.struttura.animaliAmmessi &&(
                                                 <li>Animali ammessi </li>
+                                            )}
+                                            {props.struttura.permessoFumare &&(
+                                                <li>Permesso di fumare </li>
                                             )}
                                             { props.struttura.bambini &&(
                                                 <li>Idoneità ad ospitare bambini </li>
@@ -208,7 +212,7 @@ function SchermataRiepilogoRegistrazione(props) {
                     <div className="py-3">
                         <h6><strong>Condizioni di prenotazione</strong></h6>
                         <InformazioneLineare nome="Durata soggiorno" valore={`${props.struttura.minSoggiorno} - ${props.struttura.maxSoggiorno}`} />
-                        <InformazioneLineare nome="Anticipo prenotazione" valore={`${converti(props.struttura.minPrenotazione)} (min) - ${converti(props.struttura.maxPrenotazione)} (max)`} />
+                        <InformazioneLineare nome="Anticipo prenotazione" valore={`${converti(props.struttura.anticipoPrenotazioneMin)} (min) - ${converti(props.struttura.anticipoPrenotazioneMax)} (max)`} />
 
                         {/* Fascia oraria check-in e check-out */}
                         <InformazioneLineare nome="Fascia oraria check-in" valore={`${props.struttura.oraInizioCheckIn} - ${props.struttura.oraFineCheckIn}`} />
@@ -219,15 +223,15 @@ function SchermataRiepilogoRegistrazione(props) {
                         <h6><strong>Condizioni di pagamento</strong></h6>
                         <InformazioneLineare nome="Pagamento in loco" valore={(props.struttura.pagamentoLoco) ? "accettato" : "non accettato"} />
                         <InformazioneLineare nome="Pagamento online" valore={(props.struttura.pagamentoOnline) ? "accettato" : "non accettato"} />
-                        <InformazioneLineare nome="Politica di cancellazione" valore={`${(props.struttura.politicaCancellazione === "gratuita") ? "gratuita" : "non gratuita con preavviso di "} ${converti(props.struttura.preavvisoDisdetta)} e penale pari a ${props.struttura.prezzoCancellazione} €`} />
+                        <InformazioneLineare nome="Politica di cancellazione" valore={`${(props.struttura.politicaCancellazione === "gratuita") ? "gratuita" : "non gratuita con preavviso di "} ${converti(props.struttura.preavvisoDisdetta)} e penale pari a ${props.struttura.penaleCancellazione} €`} />
                     </div>
 
                     <div className="py-3">
                         <h6><strong>Tasse di soggiorno</strong></h6>
                         <InformazioneLineare nome="Prezzo base adulti" valore={`${props.struttura.prezzoAdulti} €`}/>
                         <InformazioneLineare nome="Prezzo base bambini" valore={`${props.struttura.prezzoBambini} €`}/>
-                        <InformazioneLineare nome="Esclusione per soggiorni superiori a" valore={`${props.struttura.nGiorniEsclusione} giorni`} />
-                        <InformazioneLineare nome="Riduzioni per gruppi composti da almeno" valore={`${props.struttura.nPersone} persone`} />
+                        <InformazioneLineare nome="Esclusione per soggiorni superiori a" valore={`${props.struttura.esclusioneSoggiorni} giorni`} />
+                        <InformazioneLineare nome="Riduzioni per gruppi composti da almeno" valore={`${props.struttura.nPersoneRiduzione} persone`} />
                     </div>
                 </div>
             </div>

@@ -40,6 +40,7 @@ function RegistrazioneStruttura () {
         temp.push(camera);
         tmp["camere"]=temp;
         setInfo(tmp);
+        printObject(tmp);
     }
 
     function handleFoto(fileName) {
@@ -51,6 +52,7 @@ function RegistrazioneStruttura () {
         temp.push(fileName);
         tmp["foto"]=temp;
         setInfo(tmp);
+        printObject(tmp);
     }
 
     const handleSubmit=(event)=>{
