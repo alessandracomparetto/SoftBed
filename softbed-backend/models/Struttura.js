@@ -340,9 +340,8 @@ module.exports= {
             })
 
         } catch (err) { console.log(err) }
-    }
+    },
 
-}
 
     modificaCaratteristicheB: async function (struttura, callback) {
         const db = await makeDb(config);
@@ -373,8 +372,7 @@ module.exports= {
             console.log(err);
         }
     },
-
-    listaStrutture:async function(callback){
+    listaStrutture:async function(){
         const db = await makeDb(config);
         let result={};
         let idGestore=3;
