@@ -23,13 +23,11 @@ router.get('/calcoloGuadagno', function(req, res, next) {
 });
 
 
-
 router.get('/:idStruttura', function(req, res) {
-    strutturaModel.inserisciStruttura(req.body,function(data){
-        console.log(data);
+    strutturaModel.carica(req.params.idStruttura, function(data) {
         res.send(data);
     })
-});
+})
 
 
 /*
@@ -46,9 +44,11 @@ router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
         console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
-        res.sendStatus( status);
+        res.status(status);
+        res.send();
     }).catch( (err) =>{
         console.log(err);
+
     })
 });
 router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {

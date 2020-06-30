@@ -69,7 +69,7 @@ function FormRicerca(props) {
             toggleVisibile(false); // Viene chiuso il form
         }
 
-    }, [path, setDestinazione, query]);
+    }, []);
 
     // Controllo destinazione
     const controlloDestinazione = () => {

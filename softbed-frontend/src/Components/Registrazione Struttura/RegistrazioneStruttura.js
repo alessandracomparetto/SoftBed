@@ -56,6 +56,13 @@ function RegistrazioneStruttura () {
         printObject(tmp);
     }
 
+    function correzione (nome, valore){
+        console.log("aggiorno "+nome+ " a "+valore);
+        let tmp = info;
+        tmp[nome]=valore;
+        setInfo(tmp);
+    }
+
     const handleSubmit=()=>{
         try {
            let dati = info;
@@ -103,7 +110,7 @@ function RegistrazioneStruttura () {
                     :
                     <InserimentoCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             }
-            <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
+            <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} correzione={correzione} />
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             <SchermataRiepilogoRegistrazione currentStep={step} struttura={info} handleSubmit={handleSubmit}  goBack={_prev}/>
     </div>

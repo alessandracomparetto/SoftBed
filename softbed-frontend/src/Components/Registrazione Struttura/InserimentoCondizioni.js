@@ -43,7 +43,7 @@ function InserimentoCondizioni(props) {
     return (
         <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox}
               onChange={props.handleChange}>
-            <FormCondizioni dati={props.dati}></FormCondizioni>
+            <FormCondizioni dati={props.dati} correzione={props.correzione}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua
                 </button>

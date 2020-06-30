@@ -143,7 +143,7 @@ module.exports= {
                     throw err;
                 });
                 for (let i = 0; i < prenotazioni.length; i++) {
-                    array.push(prenotazioni[i].);
+                    array.push(prenotazioni[i]);
                 }
                 infoStruttura[0]["prenotazioni"] = array;
                 console.log(array);
@@ -197,6 +197,152 @@ module.exports= {
             console.log(err);
         }
     },
+    carica: async function(idStruttura, callback) {
+
+        const db = await makeDb(config);
+        let struttura = {};
+
+        let query = `SELECT struttura.nomeStruttura, struttura.descrizione, struttura.tipologiaStruttura \ 
+            FROM struttura \
+            WHERE struttura.idStruttura = ?`
+
+        let queryFoto = `SELECT fotografie.percorso \
+            FROM fotografie \ 
+            WHERE fotografie.refStruttura = ?`
+
+        try {
+            await withTransaction(db, async () => {
+
+                let risultato = await db.query(query, [idStruttura]).catch((err) => console.log(err));
+
+                struttura = risultato[0];
+
+                let fotografie = await db.query(queryFoto, idStruttura).catch((err) => console.log(err));
+
+                struttura.foto = fotografie.map((oggetto) => {return oggetto.percorso});
+                return callback(struttura);
+            })
+        } catch(err) {
+            console.log(err);
+        }
+    },
+
+    cerca: async function(datiRicerca, callback) {
+
+        const db = await makeDb(config);
+
+        // Strutture che si trovano nella zona cercata
+        // (?, ?, ?) -> (destinazione, destinazione, destinazione)
+        let queryDestinazione = `SELECT comuni.idComune \
+        FROM comuni, province, regioni \
+        WHERE \
+        comuni.refProvincia = province.idProvincia AND \
+        province.refRegione = regioni.idRegione AND (\
+        comuni.nomeComune = ? OR \
+        province.nomeProvincia = ? OR \
+        regioni.nomeRegione = ?)`
+
+        // Strutture disponibili nel periodo cercato
+        // (?, ?, ?, ?) -> (dataArrivo, dataPartenza, dataArrivo, dataPartenza)
+        let queryData = `SELECT struttura.idStruttura \ 
+        FROM struttura \ 
+        WHERE struttura.idStruttura NOT IN (
+            SELECT DISTINCT indisponibilita.refStruttura \ 
+            FROM indisponibilita \ 
+            WHERE \ 
+            (? BETWEEN indisponibilita.dataInizio AND indisponibilita.dataFine) OR \ 
+            (? BETWEEN indisponibilita.dataInizio AND indisponibilita.dataFine) OR \
+            (? < indisponibilita.dataInizio AND ? > indisponibilita.dataFine)
+        )`
+
+        // Strutture disponibili nel periodo e nella zona cercata
+        let queryDestinazioneData = `SELECT struttura.idStruttura \
+        FROM struttura, indirizzo \
+        WHERE \
+        struttura.refIndirizzo = indirizzo.idIndirizzo AND \
+        indirizzo.refComune IN (${queryDestinazione}) AND \
+        struttura.idStruttura IN (${queryData})`;
+
+        // CV: Controllo che la CV non abbia prenotazioni nel periodo selezionato e che abbia abbastanza letti
+        let queryPrenotazioniCV = `SELECT CV.refStruttura \ 
+        FROM casaVacanze as CV \ 
+        WHERE \
+        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND \
+        CV.refStruttura NOT IN ( \ 
+            SELECT prenotazione.refStruttura \ 
+            FROM prenotazione \ 
+            WHERE \ 
+            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \ 
+            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \ 
+            ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut)`
+
+        // B&B: Strutture con almeno una camera disponibile che abbia abbastanza letti
+        let queryPrenotazioneBB = `SELECT DISTINCT CBB1.refStruttura \ 
+        FROM \`cameraB&B\` as CBB1
+        WHERE \ 
+        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND \
+        (CBB1.refStruttura, CBB1.idCamera) NOT IN ( \
+            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera \ 
+            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione \ 
+            WHERE \ 
+            CBB2.idCamera = prenotazioneCamera.refCamera AND \ 
+            CBB2.refStruttura = prenotazioneCamera.refStruttura AND \ 
+            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND \ 
+            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( \
+                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \
+                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \
+                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut) \
+            )
+        )`
+
+        // Query per B&B
+        let queryBB = `SELECT BB.refStruttura \ 
+        FROM \`B&B\` as BB \ 
+        WHERE BB.refStruttura IN (${queryPrenotazioneBB})`
+
+        // Query per CasaVacanze
+        let queryCV = `SELECT CV.refStruttura \ 
+        FROM casaVacanze as CV \ 
+        WHERE CV.refStruttura IN (${queryPrenotazioniCV})`
+
+        let query;
+        // Solo case vacanze
+        if (datiRicerca.bedAndBreakfast !== "true") {
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
+            FROM struttura \
+            WHERE \ 
+            struttura.idStruttura IN (${queryDestinazioneData}) AND \ 
+            struttura.idStruttura IN (${queryCV})`
+        }
+
+        // Solo bed and breakfast
+        else if (datiRicerca.casaVacanze !== "true") {
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
+            FROM struttura \
+            WHERE \ 
+            struttura.idStruttura IN (${queryDestinazioneData}) AND \ 
+            struttura.idStruttura IN (${queryBB})`
+        }
+
+        // Sia case vacanze che B&B
+        else {
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
+            FROM struttura \
+            WHERE struttura.idStruttura IN (${queryDestinazioneData})`;
+        }
+
+        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.arrivo, datiRicerca.partenza];
+
+        try {
+            await withTransaction(db, async () => {
+                let risultato = await db.query(query, parametri).catch((err) => console.log(err));
+                return callback(risultato);
+            })
+
+        } catch (err) { console.log(err) }
+    }
+
+}
 
     modificaCaratteristicheB: async function (struttura, callback) {
         const db = await makeDb(config);

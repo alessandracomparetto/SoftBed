@@ -1,43 +1,56 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {abilitazione} from "../../Actions/abilitazione"
 
 function FormCondizioni(props) {
 
     function verificaMinDurata(e) {
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
-        if (document.getElementById("maxSoggiorno").value !== "" && (e.target.value) > document.getElementById("maxSoggiorno").value) {
+        if (document.getElementById("maxSoggiorno").value !== "" && (document.getElementById("minSoggiorno").value > document.getElementById("maxSoggiorno").value)){
             document.getElementById("maxSoggiorno").value = e.target.value;
+            props.correzione("maxSoggiorno", e.target.value);
         }
     }
 
     function verificaMaxDurata(e) {
         /* se la durata massima è minore della minima, imposta la minima uguale alla massima*/
-        if (document.getElementById("minSoggiorno").value !== "" && (e.target.value) < document.getElementById("minSoggiorno").value) {
+        if (document.getElementById("minSoggiorno").value !== "" && (document.getElementById("maxSoggiorno").value < document.getElementById("minSoggiorno").value)){
             document.getElementById("minSoggiorno").value = e.target.value;
+            props.correzione("minSoggiorno", e.target.value);
         }
     }
 
     function verificaInizioCheckIn(e) {
         if (document.getElementById("oraFineCheckIn").value !== "" && (e.target.value) > document.getElementById("oraFineCheckIn").value) {
             document.getElementById("oraFineCheckIn").value = e.target.value;
+            props.correzione("oraFineCheckIn", e.target.value);
         }
     }
 
     function verificaFineCheckIn(e) {
         if (document.getElementById("oraInizioCheckIn").value !== "" && (e.target.value) < document.getElementById("oraInizioCheckIn").value) {
             document.getElementById("oraInizioCheckIn").value = e.target.value;
+            props.correzione("oraInizioCheckIn", e.target.value);
         }
     }
 
     function verificaInizioCheckOut(e) {
         if (document.getElementById("oraFineCheckOut").value !== "" && (e.target.value) > document.getElementById("oraFineCheckOut").value) {
             document.getElementById("oraFineCheckOut").value = e.target.value;
+            props.correzione("oraFineCheckOut", e.target.value);
         }
     }
 
     function verificaFineCheckOut(e) {
         if (document.getElementById("oraInizioCheckOut").value !== "" && (e.target.value) < document.getElementById("oraInizioCheckOut").value) {
             document.getElementById("oraInizioCheckOut").value = e.target.value;
+            props.correzione("oraInizioCheckOut", e.target.value);
+        }
+    }
+
+    function abilita(){
+        if(abilitazione() === 0){
+            props.correzione("penaleCancellazione", null);
+            props.correzione("preavvisoDisdetta", null);
         }
     }
 
@@ -77,7 +90,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMin"
                            className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                     <select id="anticipoPrenotazioneMin" className="custom-select mr-2" name="anticipoPrenotazioneMin"
-                            defaultValue={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
+                            value={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={2}>2 giorni</option>
                         <option value={3}>3 giorni</option>
@@ -91,7 +104,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMax"
                            className="mt-3 mr-3 border-bottom border-primary">Massimo</label>
                     <select id="anticipoPrenotazioneMax" className="custom-select" name="anticipoPrenotazioneMax"
-                            defaultValue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
+                            value={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={14}>2 settimane</option>
                         <option value={21}>3 settimane</option>
@@ -162,16 +175,16 @@ function FormCondizioni(props) {
                 </div>
                 <p id="feedback" className=" text-danger collapse small">Selezionare almeno una delle due checkbox</p>
                 <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
-                <div className="form-check"  onChange={abilitazione}>
+                <div className="form-check"  onChange={abilita}>
                     <div className="radio">
                         <label className="form-check-label">
-                            <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="gratuita"} required/>
+                            <input type="radio" className="form-check-input" id="cancellazioneGratuita" value="gratuita" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione && props.dati.politicaCancellazione === 'gratuita'} required/>
                             Cancellazione gratuita</label>
                     </div>
                     <div className="form-row">
                         <div className="radio">
                             <label htmlFor="pagamento" className="ml-1 mr-3">
-                                <input type="radio" className="form-check-input" id="pagamento" value="pagamento" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione==="pagamento"} required/>
+                                <input type="radio" className="form-check-input" id="pagamento" value="pagamento" name="politicaCancellazione" defaultChecked={props.dati.politicaCancellazione && props.dati.politicaCancellazione === 'pagamento'} required/>
                                 Penale di cancellazione</label>
                         </div>
                         <div className="form-group">
@@ -183,18 +196,18 @@ function FormCondizioni(props) {
                                        className="form-control currency mr-3" min={1} step={0.5} max={1000}
                                        defaultValue={props.dati.penaleCancellazione}
                                        required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
-                                       style={{maxWidth: 100 + 'px'}} disabled="false"/>
+                                       style={{maxWidth: 100 + 'px'}} disabled={(props.dati.politicaCancellazione === "pagamento") ? false: true}/>
                                 <div className="invalid-feedback">1€-1000€</div>
                             </div>
                         </div>
                         <div className="form-group">
                             <div className="input-group">
-                                <label htmlFor="preavvisoDisdetta" className="pr-2 text-muted" id="preavvisoTesto">Preavviso
+                                <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":"text-muted")} id="preavvisoTesto">Preavviso
                                     minimo disdetta</label>
                                 <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"
-                                        defaultValue={props.dati.preavvisoDisdetta}
+                                        value={props.dati.preavvisoDisdetta}
                                         required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
-                                        disabled={((props.dati.politicaCancellazione === "gratuita") ? "true" : "false")}>
+                                        disabled={((props.dati.politicaCancellazione === "gratuita") ? true : false)}>
                                     <option value=""/>
                                     <option value={14}>2 settimane</option>
                                     <option value={21}>3 settimane</option>
