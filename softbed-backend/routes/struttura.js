@@ -5,12 +5,28 @@ let router = express.Router();
 const { makeDb, withTransaction } = require('../db/dbmiddleware');*/
 let strutturaModel = require('../models/Struttura');
 
+router.post('/', function (req, res) {
+    strutturaModel.inserisciStruttura(req.body, function(data){
+        console.log(data);
+        res.send(data);
+    })
+});
 
-router.get('/', function(req, res, next) {
-    // console.log("sono qui");
-    strutturaModel.fetch(function(data){
-        // console.log(data);
-        res.json(data);
+router.post('/gestioneStruttura/:id', function(req, res) {
+     console.log("/gestioneStruttura/:id");
+     console.log(req.params)
+     console.log(req.body)
+    strutturaModel.fetch(req.params.id, req.body , function(data) {
+        console.log(data);
+        res.send(data);
+    })
+});
+
+router.get('/listaStruttureGestore', function (req, res) {
+    console.log("richiesta arrivata");
+    strutturaModel.listaStrutture(function(data){
+        console.log(data);
+        res.send(data);
     })
 });
 
@@ -18,7 +34,7 @@ router.get('/calcoloGuadagno', function(req, res, next) {
     console.log("sono qui");
     strutturaModel.calcoloGuadagno(function(data){
         console.log(data);
-        res.json(data);
+        res.send(data);
     })
 });
 
@@ -27,17 +43,7 @@ router.get('/:idStruttura', function(req, res) {
     strutturaModel.carica(req.params.idStruttura, function(data) {
         res.send(data);
     })
-})
-
-
-
-router.post('/', function (req, res) {
-    strutturaModel.inserisciStruttura(req.body, function(data){
-        console.log(data);
-        res.send(data);
-    })
 });
-
 
 //ma se si verifica un errore?
 router.post('/modificaCondizioni', function (req, res) {
@@ -69,13 +75,7 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
         console.log(err);
     })
 });
-router.get('/listaStruttureGestore', function (req, res) {
-    console.log("richiesta arrivata");
-    strutturaModel.listaStrutture(req.body, function(data){
-        console.log(data);
-        res.send(data);
-    })
-});
+
 
 
 module.exports = router;

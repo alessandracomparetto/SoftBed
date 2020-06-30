@@ -5,16 +5,27 @@ import axios from 'axios';
 
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
+import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
 import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 
-function SchermataGestioneStruttura() {
-const [struttura,setStruttura]=useState([]);
+function SchermataGestioneStruttura(){
+    let {id} = useParams();
+
+    const [struttura,setStruttura]=useState([]);
     useEffect(() => {
-        axios
-            .get("/struttura")
+        console.log(id);
+        let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
+        let dati;
+        for(let i = 0; i<lista.length; i++){
+            if(lista[i].idStruttura == id){
+                dati=lista[i];
+            }
+        }
+        console.log(dati);
+        axios.post(`/struttura/gestioneStruttura/${id}`, dati)
             .then(res => {
                 setStruttura(res.data);
                 console.log("Strutturaaa:");
@@ -67,7 +78,7 @@ const [struttura,setStruttura]=useState([]);
 
     function handleChange(event){
         const{name,value}=event.target;
-        let tmp=struttura
+        let tmp=struttura;
         tmp[name]=value;
         setStruttura(tmp);
         printObject(tmp);
@@ -79,6 +90,7 @@ const [struttura,setStruttura]=useState([]);
         tmp[nome]=valore;
         setStruttura(tmp);
     }
+
 
     return (
         <div className="d-flex justify-content-center">
@@ -95,19 +107,19 @@ const [struttura,setStruttura]=useState([]);
                             <ul className="navbar-nav ml-auto text-right">
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
+                                        <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
+                                        <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning"onClick={calcoloGuadagno}>Calcolo guadagno</button>
+                                        <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>Calcolo guadagno</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
@@ -120,6 +132,12 @@ const [struttura,setStruttura]=useState([]);
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
+                                    </li>
+                                    <div className="dropdown-divider"/>
+                                </Fragment>
+                                <Fragment>
+                                    <li className="nav-item text-center text-md-right">
+                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
@@ -149,6 +167,7 @@ const [struttura,setStruttura]=useState([]);
                 <div id="condizioni" className="collapse col-12 col-md-9">
                     <ModificaCondizioni dati={struttura} handleChange={handleChange} correzione={correzione}/>
                 </div>
+
             </div>
         </div>
     )
