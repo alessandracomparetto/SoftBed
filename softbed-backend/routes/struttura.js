@@ -16,17 +16,18 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/:idStruttura', function(req, res) {
-    strutturaModel.carica(req.params.idStruttura, function(data) {
+    strutturaModel.inserisciStruttura(req.body,function(data){
+        console.log(data);
         res.send(data);
     })
-})
+});
 
 
 router.post('/', function (req, res) {
-    strutturaModel.create(req.body,function(data){
+    strutturaModel.inserisciStruttura(req.body, function(data){
         console.log(data);
         res.send(data);
-    });
+    })
 });
 
 
@@ -35,7 +36,7 @@ router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
         console.log(data);
         res.send(data);
-    });
+    })
 });
 
 module.exports = router;

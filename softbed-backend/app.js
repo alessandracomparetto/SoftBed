@@ -2,7 +2,12 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+var cookieParser = require('cookie-parser');
 var cors = require('cors');
+const { config } = require('./db/config');
+const { makeDb, withTransaction } = require('./db/dbmiddleware');
+db = makeDb(config);
+
 
 const uploadRouter = require('./routes/upload');
 const prenotazioneRouter = require('./routes/prenotazione');
@@ -22,6 +27,7 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/search', ricercaRouter);

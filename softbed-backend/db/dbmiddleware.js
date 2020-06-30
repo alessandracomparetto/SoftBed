@@ -1,14 +1,18 @@
-/*
 
- *
- * Middleware asincrono per la gestione del db
- *
- *
+const mysql = require('mysql');
+const util = require('util');
+config = {
+    connectionLimit: 10,
+    host: 'localhost',
+    user: 'softAdmin',
+    password: 'softEngineers',
+    database: 'softbed',
+    multipleStatements: true
+};
 // carichiamo il modulo mysql
 // e il modulo util per generare Promise
 // da funzioni che non generano promise
-const mysql = require('mysql');
-const util = require('util');
+
 
 
 // Creiamo una funzione "factory"
@@ -16,8 +20,9 @@ const util = require('util');
 // creare oggetti già istanziati con tutte le loro proprietà
 // makeDb creerà un database che svolge tutte le transazioni
 // in modo asincrono
+console.log("CREO IL DB");
 exports.makeDb = async function(config) {
-
+console.log("ok");
     // creiamo il pool di connessione
     // per gestire efficientemente le richieste concorrenti
     // per una singola connessione si può usare createConnection
@@ -41,7 +46,6 @@ exports.makeDb = async function(config) {
     // del nostro middleware
     const connection = await getConnection();
     console.log('connessione creata: ');
-    console.log(connection);
 
     return {
         query(sql, args) {
@@ -83,19 +87,4 @@ exports.withTransaction = async function(db, callback) {
     } finally {
         db.end();
     }
-}*/
-var mysql = require('mysql');
-
-var conn = mysql.createConnection({
-    host: 'localhost',
-    user: 'softAdmin',
-    password: 'softEngineers',
-    database: 'softbed'
-});
-
-conn.connect(function(err) {
-    if (err) throw err;
-    console.log('Database is connected successfully !');
-});
-
-module.exports = conn;
+}

@@ -1,16 +1,101 @@
 /*Model della struttura*/
-// const { config } = require('../db/config');
-// const { makeDb, withTransaction } = require('../db/dbmiddleware');
-// const db = makeDb(config);
-var db = require('../db/dbmiddleware');
+const { config } = require('../db/config');
+const { makeDb, withTransaction } = require('../db/dbmiddleware');
+
+
 
 module.exports= {
 
-    create: async function (datiStruttura, callback) {
+      inserisciStruttura: async function(datiStruttura, res, callback) {
+          console.log("qui forse si");
+        const db = await makeDb(config);
+        let results = {};
         let refIndirizzo;
         console.log("qui ci sono");
-        let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES (?,?,?,?)');
-        let datiQuery = [datiStruttura.via, datiStruttura.numeroCivico, datiStruttura.cap, datiStruttura.nomeComune];
+        try {
+            await withTransaction(db, async () => {
+                //inserimento into indirizzo
+                let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
+                let datiQuery = [datiStruttura.via, datiStruttura.numeroCivico, datiStruttura.cap, datiStruttura.nomeComune];
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
+                    throw err
+                });
+                //se tutto va bene, trovo id indirizzo e inserisco nella struttura
+                refIndirizzo = results.insertId;
+                let giorno = new Date().toLocaleDateString();
+                sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
+                //TODO: REF GESTORE
+                datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
+                    throw err;
+                });
+                console.log('Inserimento tabella struttura');
+                console.log(results);
+                refStruttura = results.insertId;
+                sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES ?');
+                if (datiStruttura.foto) {
+                    for (foto of datiStruttura.foto) {
+                        datiQuery = [refStruttura, foto];
+                        results = await db.query(sql, [[datiQuery]]).catch(err => {
+                            throw err;
+                        }); //chiusura query foto
+                    }
+                    console.log("inserite foto");
+                }//end for
+
+                sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
+                            oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
+                            politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES ?');
+                datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
+                    datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.pagamentoLoco, datiStruttura.pagamentoOnline, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeRiduzione, datiStruttura.nPersoneRiduzione,
+                    datiStruttura.esclusioneSoggiorni, datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta];
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
+                    throw err;
+                });
+                console.log("inserite condizioni");
+
+
+                if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
+                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
+                            cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES ?');
+                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                        datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.tv, datiStruttura.cucinaCeliaci,
+                        datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
+                    results = await db.query(sql, [[datiQuery]]).catch(err => {
+                        throw err;
+                    });
+                    console.log("inserite caratteristiche");
+                    for (camera of datiStruttura.camere) {
+                        sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                                nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
+                        datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
+                        results = await db.query(sql, [[datiQuery]]).catch(err => {
+                            throw err;
+                        });
+                    }
+                    console.log("camere");
+                } else if (datiStruttura.tipologiaStruttura === "cv") {
+                    sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
+                            festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
+                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                        datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
+                        datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
+                        results = await db.query(sql, [[datiQuery]]).catch(err => {
+                        throw err;
+                        });
+                        console.log("inserita cv");
+                    } //chiusura query cv
+
+            });
+        } //chiuusura tray
+        catch (err) {
+            console.log(err);
+            next(createError(500));
+        }
+    }//chiusura if
+}
+/*
+
         db.query(sql, datiQuery, function (err, risultato1) {  //INSERIMENTO IN INDIRIZZO
             if (err) throw err;
 
@@ -84,7 +169,7 @@ module.exports= {
             return callback("OK");
         }); //chiusura query inidirizzo
     }, //end create
-    search: async function(datiRicerca, callback) {
+    /!*search: async function(datiRicerca, callback) {
 
         console.log('search');
         // Strutture che si trovano nella zona cercata
@@ -139,8 +224,8 @@ module.exports= {
     },
 
     fetch: async function (callback) {
-        /*TODO CAMBIARE refGestore
-        *  TODO sistemare per casa vacanze*/
+
+        *  TODO sistemare per casa vacanze*!/
         let camere;
         let foto;
         let array = [];
@@ -190,5 +275,5 @@ module.exports= {
             console.log("ho modificato!");
             return callback(data);
         });
-    }
-};
+    }*!/
+*/
