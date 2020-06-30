@@ -4,15 +4,21 @@ const nodemailer = require('nodemailer');
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.post('/', (req, res) => {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'softengineers44@gmail.com',
-            pass: 'softAdmin'
-        }
-    });
+const softbed = {
+    email: 'softengineers44@gmail.com',
+    pass: 'softAdmin',
+    site: 'http://localhost:3000/'
+}
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: softbed.email,
+        pass: softbed.pass
+    }
+});
+
+router.post('/', (req, res) => {
 
     let mailOptions = {
         from: req.body.email,
@@ -39,6 +45,99 @@ router.post('/', (req, res) => {
     });
 });
 
+router.post('/richiesta-prenotazione', (req, res) => {
+    const mailOspite = {
+        from: softbed.email,
+        to: req.body.emailOspite,
+        subject: "Riepilogo richiesta di prenotazione",
+        html:
+            `<p>
+                Ti ringraziamo per aver utilizzato <strong><a href="${softbed.site}">softbed</a></strong> per la scelta del tuo alloggio!
+                <br />
+                Il gestore ha 48 ore per accettare o declinare la tua richiesta.
+                <br />
+                <br />
+                In allegato trovi il riepilogo della tua richiesta.
+            </p>`,
+        attachments: [
+            {
+            filename: `riepilogo-prenotazione-${req.body.id}.pdf`,
+            path: req.body.allegato,
+            contentType: 'application/pdf',
+            encoding: 'base64'
+            }
+        ]
+    }
 
+    const mailGestore = {
+        from: softbed.email,
+        to: req.body.emailGestore,
+        subject: "Ricezione richiesta di prenotazione",
+        html:
+            `<p>
+                Hai appena ricevuto una nuova richiesta di prenotazione su softbed! Accedi alla tua 
+                <a href="${softbed.site}/profilo">area personale</a> per accettarla o rifiutarla.
+                <br />
+                <br />
+                Ti ricordiamo che hai a disposizione 48 ore di tempo per prendere una decisione.
+            </p>`
+    };
+
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {
+            res.send(err);
+        }
+    });
+
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.send(err);
+        }
+    });
+
+    res.send();
+})
+
+router.post('/annullamento-prenotazione', (req, res) => {
+    const mailOspite = {
+        from: softbed.email,
+        to: req.body.emailOspite,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                La tua prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} è stata annullata, come da te richiesto!
+            </p>`
+    };
+
+    const mailGestore = {
+        from: softbed.email,
+        to: req.body.emailGestore,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                Purtroppo l'ospite che aveva effettuato la prenotazione (ID: ${req.body.id}) per la struttura 
+                ${req.body.struttura} il cui check-in era previsto in data ${req.body.data} ha cambiato idea ed ha 
+                annullato la sua prenotazione.
+                <br />
+                <br />
+                La tua struttura è stata nuovamente resa disponibile per le date interessate dalla prenotazione appena
+                rimossa, salvo diversamente indicato dal tuo calendario di indisponibilità.
+            </p>`
+    };
+
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.send(err);
+        }
+    });
+
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {
+            res.send(err);
+        }
+    });
+
+    res.send();
+})
 
 module.exports = router;

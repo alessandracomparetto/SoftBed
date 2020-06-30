@@ -3,7 +3,7 @@ import ButtonForm from "../ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 
-function FormDocumenti(){
+function FormDocumenti(props){
     const [file, setFile] = useState([]); //lista file prima di essere caricati
     const [numero, setNumero] = useState(0); //numero totale dei file caricati
     const [filename, setFilename] = useState([]); //lista dei nomi dei file
@@ -53,7 +53,11 @@ function FormDocumenti(){
                 }
                 setFile([]);
                 setFilename(nomi);
-            })
+            }).then( res =>{
+            for(let i = 0; i<numero; i++) {
+                let nomeFile = filename[i];
+                props.handleFoto(nomeFile.name);
+            }})
 
     };
 

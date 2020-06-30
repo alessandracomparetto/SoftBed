@@ -3,6 +3,8 @@ import $ from "jquery";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
 
+const crypto = require('crypto');
+
 function Registrazione() {
     const[redirect, setRedirect] = useState(false);
 
@@ -13,16 +15,16 @@ function Registrazione() {
 
         if(form.checkValidity()){
             let pass = document.getElementById("pass").value;
-          /*  let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
+            let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
             passhash.update(pass); // cifriamo la password
             let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
-*/
+
             const utenteRegistrato = {
                 nome: document.getElementById("name").value,
                 cognome: document.getElementById("surname").value,
                 dataNascita: document.getElementById("dataNascita").value,
                 email: document.getElementById("email").value ,
-                pass: pass,
+                pass: encpass,
                 gestore: $( "input:checked" ).val(),
             }
             try{

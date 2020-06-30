@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
 router.post('/richiesta', function (req, res) {
 
     prenotazioneModel.create(req.body, function (data) {
-        console.log(data.insertId); // todo: to remove
         res.send(`${data.insertId}`);
     }).catch(err => res.send(err));
 });

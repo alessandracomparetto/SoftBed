@@ -1,7 +1,6 @@
 /*TODO: gestire gli errori del login e fare apparire messaggi diversi in base all'errore:
 *  password sbagliato o email non corretta*/
 
-const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -28,64 +27,49 @@ router.use(session({
     }
 }))
 
-/* La rotta /users è vietata */
-router.get('/', function(req, res, next) {
-    next(createError(403));
-});
-
-
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
     console.log("REQ.BODY ====")
     console.log(req.body);
-    utenteModel.create(req.body,function(data){
+    utenteModel.inserisciUtente(req.body,function(data){
+
         console.log(data);
         res.send(data);
     });
 });
 
+/* Login Utente */
+router.post('/login', function (req, res) {
+    console.log("REQ.BODY ====")
+    console.log(req.body);
+    utenteModel.login(req.body,function(data){
+        console.log(data);
+        req.session.session_uid = data;
+        console.log('Utente autenticato');
+        console.log(req.sessionID);
+        res.send(data);
+    });
+});
 
-/* Login Utente con sequelize*/
-router.post('/login', autenticazione);
+//recupero delle informazioni dell'utente
+router.get('/', function(req, res) {
+    utenteModel.fetch(function(data){
+        console.log(data);
+        res.json(data);
+    });
+});
 
-
-// middleware di autenticazione
-async function autenticazione(req, res, next) {
-    // istanziamo il middleware
-    const db = await makeDb(config);
-    let results = {};
-    try {
-        await withTransaction(db, async() => {
-            // inserimento utente
-            results = await db.query('SELECT * FROM `autenticazione`\
-            WHERE email = ?', [req.body.email])
-                .catch(err => {
-                    throw err;
-                });
-            if (!results[0]) {
-                console.log('Utente non trovato!');
-                next(createError(404, 'Utente non trovato'));
-            } else {
-
-                if (req.body.pass != results[0].password) {
-                    // password non coincidenti
-                    console.log('Password errata!');
-                    next(createError(403, 'Password errata'));
-                } else {
-                    //creo id della sessione
-                    req.session.session_uid = results[0].refUtente;
-                    console.log('Utente autenticato');
-                    console.log(req.sessionID);
-                    res.send();
-                }
-            }
-        });
-    } catch (err) {
+//modifica dati personali dell'utente
+router.post('/modificaDatiAggiuntivi', function (req, res) {
+    utenteModel.modificaDatiAggiuntivi(req.body,function(data){
+        console.log(data.message);
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
         console.log(err);
-        next(createError(500));
-    }
-}
+    })
+});
 
 /*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
 /*router.post('/logout', (req,res) => {
@@ -115,64 +99,4 @@ module.exports = router;
     }
 })*/
 
-
-
-/* Registrazione Utente con sequelize
-router.post('/utenteRegistrato', (req, res) => {
-    Utente.create(req.body);
-    req.session.uid = req.body.nome;
-    console.log(req.sessionID);
-    res.send("finito")
-});
-    async function registrazione(req, res, next)   {
-    const db = await makeDb(config);
-    let results = {};
-    try {
-        await withTransaction(db, async() => {
-            // inserimento utente
-            results = await db.query('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) \
-        SELECT ? AS nome, ? AS cognome, ? AS dataNascita, ? AS gestore',[
-                req.body.nome,
-                req.body.cognome,
-                req.body.data_nascita,
-                req.body.gestore == 'gestore' ? '1' : '0',
-            ]).catch(err => {
-                throw err;
-            });
-            console.log('Inserimento tabella utente');
-            // recupero dello user id
-            let id_utente = results.insertId;
-            // generazione della password cifrata con SHA512
-            results = await db.query('SELECT sha2(?,512) AS encpwd', [req.body.pass])
-                .catch(err => {
-                    throw err;
-                });
-            let encpwd = results[0].encpwd;
-            console.log('Password cifrata');
-            console.log(results);
-
-            results = await db.query('INSERT INTO `autenticazione` \
-            (refUtente, email, password) VALUES ?', [
-                [
-                    [
-                        id_utente,
-                        req.body.email,
-                        encpwd
-                    ]
-                ]
-            ])
-                .catch(err => {
-                    throw err;
-                });
-            console.log(`Utente ${req.body.email} inserito!`);
-            req.session.session_uid = id_utente;
-            console.log(req.session)
-            res.send();
-        });
-    } catch (err) {
-        console.log(err);
-        next(createError(500));
-
-    }
-}*/
 
