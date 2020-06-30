@@ -3,7 +3,7 @@ let express = require('express');
 let router = express.Router();
 /* const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');*/
-let strutturaModel = require('../models/Struttura')
+let strutturaModel = require('../models/Struttura');
 
 
 router.get('/', function(req, res, next) {
@@ -13,6 +13,15 @@ router.get('/', function(req, res, next) {
         res.json(data);
     })
 });
+
+router.get('/calcoloGuadagno', function(req, res, next) {
+    console.log("sono qui");
+    strutturaModel.calcoloGuadagno(function(data){
+        console.log(data);
+        res.json(data);
+    })
+});
+
 
 
 router.get('/:idStruttura', function(req, res) {
@@ -30,14 +39,18 @@ router.post('/', function (req, res) {
     })
 });
 
-
+//ma se si verifica un errore?
 router.post('/modificaCondizioni', function (req, res) {
-    console.log("REQ.BODY ====")
     strutturaModel.modificaCondizioni(req.body,function(data){
-        console.log(data);
-        res.send(data);
+        console.log(data.message);
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
+        console.log(err);
     })
 });
+
+
 
 module.exports = router;
 

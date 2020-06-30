@@ -5,9 +5,8 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 
 
 module.exports= {
-
-      inserisciStruttura: async function(datiStruttura, res, callback) {
-          console.log("qui forse si");
+    inserisciStruttura: async function (datiStruttura, callback) {
+        console.log("qui forse si");
         const db = await makeDb(config);
         let results = {};
         let refIndirizzo;
@@ -43,7 +42,7 @@ module.exports= {
                     console.log("inserite foto");
                 }//end for
 
-                sql = ('INSERT INTO `condizioni` (refIdStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
+                sql = ('INSERT INTO `condizioni` (refStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
                             oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
                             politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES ?');
                 datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
@@ -56,9 +55,9 @@ module.exports= {
 
 
                 if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
-                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
+                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES ?');
-                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.tv, datiStruttura.cucinaCeliaci,
                         datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
                     results = await db.query(sql, [[datiQuery]]).catch(err => {
@@ -75,26 +74,115 @@ module.exports= {
                     }
                     console.log("camere");
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
-                    sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
+                    sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
-                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
+                    datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
                         datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
-                        results = await db.query(sql, [[datiQuery]]).catch(err => {
-                        throw err;
+                    results = await db.query(sql, [[datiQuery]])
+                        .then(() => {
+                            return callback("ok");
+                        })
+                        .catch(err => {
+                            throw err;
                         });
-                        console.log("inserita cv");
-                    } //chiusura query cv
-
+                    console.log("inserita cv");
+                } //chiusura query cv
+                return (callback("ok"));
             });
         } //chiuusura tray
         catch (err) {
             console.log(err);
-            next(createError(500));
         }
-    }//chiusura if
+    },
+
+    fetch: async function (callback) {
+        let camere;
+        let array = [];
+        let idStruttura = 1;
+        let tipologiaStruttura = "B&B";
+        let infoStruttura;
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                //recupero le informazioni generali della struttura
+                if (tipologiaStruttura === "cv") {
+                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze` \
+                                WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
+                                AND `casaVacanze`.refStruttura=`struttura`.idStruttura', [[[idStruttura]]]).catch(err => {
+                        throw err;
+                    });
+                } else if (tipologiaStruttura === "B&B") {
+                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `B&B`\
+                WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
+                AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
+                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {
+                        throw err;
+                    });
+                    camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
+                        throw  err;
+                    });
+                    for (let i = 0; i < camere.length; i++) {
+                        array.push(camere[i]);
+                    }
+                    console.log("CAMERE")
+                    console.log(array)
+                    infoStruttura[0]["camere"] = array;
+
+                }
+                foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
+                    throw err;
+                });
+                array = [];
+                for (let i = 0; i < foto.length; i++) {
+                    array.push(foto[i].percorso);
+                }
+                console.log(array);
+                infoStruttura[0]["foto"] = array;
+                console.log("INFO STRUTTURA ===");
+                console.log(infoStruttura[0]);
+                return callback(infoStruttura[0]);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    modificaCondizioni: async function (struttura, callback) {
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                console.log("sto per modificare!");
+                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                         WHERE refstruttura = ?', [`condizioni`, "condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
+                            "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
+                            "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,"condizioni.percentualeRiduzione", struttura.percentualeRiduzione,
+                            "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPernotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPernotazioneMax", struttura.anticipoPrenotazioneMax,
+                            "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
+                    1]).catch(err => {throw err;});
+                console.log("ho modificato!");
+                console.log(results);
+                return callback(results);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
+        /*results = await db.query('UPDATE ?? SET\
+                            ?? = ? WHERE id_utente = ?', [record[2], record[3], record[4], id_utente])
+            .catch(err => { console.log(err); });
+*/
+    }
 }
+
+/*, maxSoggiorno=?, oraInizioCheckIn=?, oraInizioCheckOut=?, oraFineCheckIn=?, oraFineCheckOut=?,
+                 pagamentoLoco=?, pagamentoOnline=?, prezzoBambini=?, prezzoAdulti=?, percentualeRiduzione=?, nPersoneRiduzione=?, esclusioneSoggiorni=?, anticipoPrenotazioneMin=?,
+                 anticipoPrenotazioneMax=?, politicaCancellazione=?, penaleCancellazione=?, preavvisoDisdetta=? */
 /*
+, struttura.oraInizioCheckIn, struttura.oraFineCheckOut, struttura.pagamentoLoco, struttura.pagamentoOnLine, struttura.prezzoBambini, struttura.prezzoAdulti, struttura.percentualeRiduzione, struttura.nPersoneRiduzione,
+                    struttura.esclusioneSoggiorni, struttura.anticipoPrenotazioneMin, struttura.anticipoPrenotazioneMax, struttura.politicaCancellazione, struttura.penaleCancellazione, struttura.preavvisoDisdetta*/
+
+    /*
 
         db.query(sql, datiQuery, function (err, risultato1) {  //INSERIMENTO IN INDIRIZZO
             if (err) throw err;
@@ -169,7 +257,7 @@ module.exports= {
             return callback("OK");
         }); //chiusura query inidirizzo
     }, //end create
-    /!*search: async function(datiRicerca, callback) {
+    /*search: async function(datiRicerca, callback) {
 
         console.log('search');
         // Strutture che si trovano nella zona cercata
@@ -261,19 +349,4 @@ module.exports= {
         )
     },
 
-    modificaCondizioni : async function ( struttura, callback){
-
-        let query = ('UPDATE `condizioni` SET minSoggiorno=?, maxSoggiorno=?, oraInizioCheckIn=?, oraInizioCheckOut=?, oraFineCheckIn=?, oraFineCheckOut=?, \
-             pagamentoLoco=?, pagamentoOnline=?, prezzoBambini=?, prezzoAdulti=?, percentualeRiduzione=?, nPersoneRiduzione=?, esclusioneSoggiorni=?, anticipoPrenotazioneMin=?, \
-             anticipoPrenotazioneMax=?, politicaCancellazione=?, penaleCancellazione=?, preavvisoDisdetta=? WHERE (idCondizioni=4)');
-        console.log(query);
-        let datiQuery = [struttura.minSoggiorno, struttura.maxSoggiorno, struttura.oraInizioCheckIn,struttura.oraFineCheckOut, struttura.pagamentoLoco, struttura.pagamentoOnLine, parseInt(struttura.prezzoBambini), parseInt(struttura.prezzoAdulti), struttura.percentualeRiduzione, struttura.nPersoneRiduzione,
-            struttura.esclusioneSoggiorni, struttura.anticipoPrenotazioneMin, struttura.anticipoPrenotazioneMax, struttura.politicaCancellazione, struttura.penaleCancellazione, struttura.preavvisoDisdetta];
-        console.log("sto per modificare!");
-        db.query=(query, datiQuery, function (err, data) {
-            if(err) throw err;
-            console.log("ho modificato!");
-            return callback(data);
-        });
-    }*!/
-*/
+    */

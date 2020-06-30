@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import $ from 'jquery';
+import axios from 'axios';
 
-function CalcoloGuadagno(){
+function CalcoloGuadagno(props){
     const [dataInizio, setDataInizio] = useState("");
     const [dataFine, setDataFine] = useState("");
+    const [guadagno, setGuadagno] = useState("");
     const GIORNO = 86400000;
 
-    function visualizza(event) {
+    function calcola(event) {
         let form = $(event.target).parent().parent().parent()
         $(form).addClass("was-validated");
         let dataInizioDIV = $(form).children().children().first()
@@ -15,6 +17,15 @@ function CalcoloGuadagno(){
         let dataFine = $(dataFineDIV).children("input")
 
         if($(dataInizio).val() && $(dataFine).val()){
+            try{
+                axios.get('/struttura/calcoloGaudagno', props.idStruttura)
+                    .then ( res =>{
+                        setGuadagno(res.body)
+                    })
+
+            }catch (err) {
+                console.log(err);
+            }
             let calcolo = $(form).children().children().last();
             $(calcolo).toggleClass("collapse");
         }
@@ -61,10 +72,10 @@ function CalcoloGuadagno(){
                    <input className="form-control" type="date" id="dataFine" name="dataFine" value={dataFine} onChange={aggiornaDataInizio} required/>
                </div>
                <div className="col-12 col-md-4 col-lg-3 mt-auto mb-2 ml-lg-auto">
-                   <button type="button" className="btn btn-warning btn-block" onClick={visualizza}>Calcola</button>
+                   <button type="button" className="btn btn-warning btn-block" onClick={calcola}>Calcola</button>
                </div>
                <div className="col-12 row text-center pt-3 collapse">
-                   <h3 className="col-12 col-md-6 mx-auto">Guadagno totalizzato €12,50</h3>
+                   <h3 className="col-12 col-md-6 mx-auto">Guadagno totalizzato ${guadagno}€</h3>
                </div>
            </div>
         </form>
