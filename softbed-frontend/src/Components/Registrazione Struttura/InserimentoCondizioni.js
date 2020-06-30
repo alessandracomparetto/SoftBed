@@ -15,7 +15,6 @@ function InserimentoCondizioni(props) {
         if (document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked) {
             document.getElementById("feedback").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
-                console.log(document.getElementById("form").checkValidity());
                 props.go();
             }
         } else {
@@ -28,21 +27,13 @@ function InserimentoCondizioni(props) {
         props.goBack();
     }
 
-    function verificaCheckBox(event) {
-        if (document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked) {
-            document.getElementById("feedback").classList.add("collapse");
-        } else {
-            document.getElementById("feedback").classList.remove("collapse");
-            event.preventDefault();
-        }
-    }
+
 
     if (props.currentStep !== 5) {
         return null;
     }
     return (
-        <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox}
-              onChange={props.handleChange}>
+        <form id="form" className="p-3 needs-validation" noValidate onChange={props.handleChange}>
             <FormCondizioni dati={props.dati} correzione={props.correzione}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua

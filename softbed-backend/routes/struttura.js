@@ -30,14 +30,14 @@ router.get('/:idStruttura', function(req, res) {
 })
 
 
-/*
+
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
         console.log(data);
         res.send(data);
     })
 });
-*/
+
 
 //ma se si verifica un errore?
 router.post('/modificaCondizioni', function (req, res) {

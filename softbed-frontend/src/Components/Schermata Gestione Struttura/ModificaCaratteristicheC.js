@@ -5,7 +5,7 @@ function ModificaCaratteristicheC(props){
     function modificaCaratteristiche(event) {
         event.preventDefault()
         try {
-            let dato = props.dati;
+            let dato = props.props;
             console.log("DATI======= ");
             console.log(dato);
             axios.post('/struttura/modificaCaratteristicheCasaVacanze', dato)

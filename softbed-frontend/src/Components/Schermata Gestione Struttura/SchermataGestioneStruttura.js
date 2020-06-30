@@ -5,7 +5,6 @@ import axios from 'axios';
 
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
-import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
@@ -28,7 +27,6 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("InformazioniPricipali").classList.remove("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
@@ -37,27 +35,17 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
         console.log(struttura);
     }
     function modificaCondizioni(){
         document.getElementById("condizioni").classList.remove("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-    }
-    function modificaDisponibilità(){
-        document.getElementById("disponibilità").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
@@ -68,7 +56,6 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
     function printObject(o) {
@@ -92,7 +79,6 @@ const [struttura,setStruttura]=useState([]);
         tmp[nome]=valore;
         setStruttura(tmp);
     }
-
 
     return (
         <div className="d-flex justify-content-center">
@@ -137,12 +123,6 @@ const [struttura,setStruttura]=useState([]);
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
-                                <Fragment>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </Fragment>
                             </ul>
                         </div>
                     </nav>
@@ -168,9 +148,6 @@ const [struttura,setStruttura]=useState([]);
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
                     <ModificaCondizioni dati={struttura} handleChange={handleChange} correzione={correzione}/>
-                </div>
-                <div id="disponibilità" className="collapse col-12 col-md-9">
-                    <ModificaDisponibilita props={struttura}/>
                 </div>
             </div>
         </div>

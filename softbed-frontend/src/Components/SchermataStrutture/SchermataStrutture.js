@@ -3,7 +3,6 @@ import CalcoloGuadagno from "./CalcoloGuadagno"
 import $ from 'jquery';
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
-import SchermataStruttura from "../Schermata Struttura/SchermataStruttura";
 
 function SchermataStrutture(){
     const [listaStrutture,setLista]=useState([]);
