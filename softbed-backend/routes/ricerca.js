@@ -13,13 +13,15 @@ router.get('/', function(req, res) {
     const query = JSON.stringify(req.query);
 
     cacheRicerche.get(query, function(err, result) {
+        // Se la ricerca è salvata in cache viene inviato il risultato memorizzato
         if (result) {
             console.log("Cache hit!");
             res.send(result);
         }
 
+        // Altrimenti viene effettuata la query al db
         else {
-            strutturaModel.search(req.query, function(data) {
+            strutturaModel.cerca(req.query, function(data) {
                 console.log("Cache miss!");
 
                 // Inserimento in cache
@@ -29,7 +31,6 @@ router.get('/', function(req, res) {
 
                 res.send(data);
             }).catch(err => console.log(err));
-
 
         }
     });

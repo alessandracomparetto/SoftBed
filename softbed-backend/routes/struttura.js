@@ -23,13 +23,11 @@ router.get('/calcoloGuadagno', function(req, res, next) {
 });
 
 
-
 router.get('/:idStruttura', function(req, res) {
-    strutturaModel.inserisciStruttura(req.body,function(data){
-        console.log(data);
+    strutturaModel.carica(req.params.idStruttura, function(data) {
         res.send(data);
     })
-});
+})
 
 
 router.post('/', function (req, res) {
