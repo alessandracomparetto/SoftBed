@@ -1,10 +1,22 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CalcoloGuadagno from "./CalcoloGuadagno"
 import $ from 'jquery';
-import {Link} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
+import axios from "axios";
+import SchermataStruttura from "../Schermata Struttura/SchermataStruttura";
 
 function SchermataStrutture(){
-    const [listaStrutture] = useState([
+    const [listaStrutture,setLista]=useState([]);
+    useEffect(() => {
+        console.log("get");
+        axios.get('/struttura/listaStruttureGestore',listaStrutture).then(res => {
+                setLista(res.data);
+                console.log("Strutturaaa:");
+                console.log(res.data)})
+            .catch(err => console.log(err));
+    }, []);
+
+   /* const [listaStrutture] = useState([
         {   idStruttura: "3333",
             nomeStruttura: "Struttura 1",
             refGestore: "5555",
@@ -48,12 +60,11 @@ function SchermataStrutture(){
             tipologia: "Casa vacanze"
         }
     ]);
-
+*/
     function apri(event) {
         let calcolo = event.target.closest("li").lastChild;
         $(calcolo).toggleClass("collapse")
     }
-
     return(
         <div className="container">
             <h4>Strutture registrare</h4>
@@ -73,7 +84,7 @@ function SchermataStrutture(){
                                         <strong>{struttura.tipologia}</strong>
                                     </div>
                                     <div  className=" col-12 col-lg-3">
-                                        <button type="button" className="btn btn-block btn-primary mt-2 mr-2 "><Link className="text-light" to="/gestioneStruttura">Visualizza</Link></button>
+                                        <button type="button" className="btn btn-block btn-primary mt-2 mr-2 "><Link className="text-light" to="/gestioneStruttura/key">Visualizza</Link></button>
                                         <button type="button" className="btn btn-block btn-outline-primary mt-2 mr-2" onClick={apri}>Calcolo Guadagni</button>
                                     </div>
                                 </div>

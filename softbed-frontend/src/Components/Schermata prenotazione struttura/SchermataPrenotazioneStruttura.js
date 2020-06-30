@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import RichiesteInAttesa from "./Schermata prenotazione struttura/RichiesteInAttesa";
-import RichiesteConfermate from "./Schermata prenotazione struttura/RichiesteConfermate";
+import RichiesteInAttesa from "./RichiesteInAttesa";
+import RichiesteConfermate from "./RichiesteConfermate";
 function SchermataPrenotazioneStruttura(){
 const [prenotazioniNonConfermate, aggiornaPrenotazioniNonConfermate] = useState([{idPrenotazione: "3333",
         nome: "Struttura 1",

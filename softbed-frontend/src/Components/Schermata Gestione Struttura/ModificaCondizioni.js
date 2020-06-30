@@ -15,16 +15,17 @@ function ModificaCondizioni(props) {
 
     function modificaCondizioni(event) {
         event.preventDefault()
-
         try {
             let dato = props.dati;
             console.log("DATI======= ");
             console.log(dato);
             axios.post('/struttura/modificaCondizioni', dato)
                 .then(res => { // then print response status
-                    console.log(res.data);
-                    console.log("finito");
-                });
+                    if(res.status===200){
+                        console.log(res.data);
+                        console.log("OK");
+                    }
+                }).catch(()=> console.log("Nesssuna riga modificata"))
         } catch (e) {
             console.log(e);
         }

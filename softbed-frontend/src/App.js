@@ -21,6 +21,7 @@ import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagame
 import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
 
 
+
 function App() {
 
     return (
@@ -83,13 +84,15 @@ function App() {
                             <SchermataStruttura />
                         </Route>
 
+                        <Route exact path="/struttureGestore">
+                            <SchermataStrutture />
+                        </Route>
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                         <Route path="*">
                             <PaginaNonTrovata />
                             <FormRicerca />
                         </Route>
                     </Switch>
-
                     <Footer />
                 </Route>
             </Switch>

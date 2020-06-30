@@ -32,12 +32,14 @@ router.get('/:idStruttura', function(req, res) {
 });
 
 
+/*
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
         console.log(data);
         res.send(data);
     })
 });
+*/
 
 //ma se si verifica un errore?
 router.post('/modificaCondizioni', function (req, res) {
@@ -49,7 +51,31 @@ router.post('/modificaCondizioni', function (req, res) {
         console.log(err);
     })
 });
-
+router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
+    strutturaModel.modificaCaratteristicheC(req.body,function(data){
+        console.log(data.message);
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
+        console.log(err);
+    })
+});
+router.post('/modificaCaratteristicheB&B', function (req, res) {
+    strutturaModel.modificaCaratteristicheB(req.body,function(data){
+        console.log(data.message);
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
+        console.log(err);
+    })
+});
+router.get('/listaStruttureGestore', function (req, res) {
+    console.log("richiesta arrivata");
+    strutturaModel.listaStrutture(req.body, function(data){
+        console.log(data);
+        res.send(data);
+    })
+});
 
 
 module.exports = router;

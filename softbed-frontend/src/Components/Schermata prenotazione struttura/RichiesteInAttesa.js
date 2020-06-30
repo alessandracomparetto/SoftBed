@@ -1,4 +1,4 @@
-import PrenotazioneGestore from "./PrenotazioneGestore";
+import Prenotazione from "./Prenotazione";
 import React, {useState} from "react";
 
 function RichiesteInAttesa(props){
@@ -7,22 +7,22 @@ function RichiesteInAttesa(props){
     return(
         <div >
             <div className="row  d-flex justify-content-center">
-                <div className="col-4 col-md-3  mt-lg-4">
+                <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>check-in: </strong>{props.dataCheckIn}
                 </div >
-                <div className="col-4 col-md-3  mt-lg-4">
+                <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>check-out: </strong>{props.dataCheckOut}
                 </div>
-                <div className="col-4 col-md-3  mt-lg-4">
+                <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>scadenza: </strong>{props.dataScadenza}
                 </div>
-                <div className=" col-12 col-lg-3 d-flex justify-content-around">
+                <div className=" col-12 col-lg-6 d-flex justify-content-around">
                     <button id="dichiaraOspiti" type="button" className="btn btn-primary mt-2 mr-2 disabled" style={{width: 170 + 'px',minWidth:130+'px'}}>Dichiarazione ospiti</button>
                     <button type="button" className="btn btn-primary mt-2 mr-2 " style={{width: 170 + 'px', minWidth:130+'px'}} onClick={toggleContenuto}>{mostraContenuto ? "Mostra meno" : "Visualizza"}</button>
                 </div>
             </div>
             <div className={"col-12 my-3 py-3 border-top border-dark" + ((mostraContenuto) ? "" : " collapse")}>
-                <PrenotazioneGestore dataCheckIn={props.checkIn} dataCheckOut={props.checkOut} dataConferma={props.dataConferma} idPrenotazione={props.idPrenotazione} nAdulti={props.nAdulti} nBambini={props.nBambini} nEsenti={props.nEsenti} costo={props.costo} metodoPagamento={props.metodoPagamento} utente={props.refUtente}></PrenotazioneGestore>
+                <Prenotazione dataCheckIn={props.checkIn} dataCheckOut={props.checkOut} dataConferma={props.dataConferma} idPrenotazione={props.idPrenotazione} nAdulti={props.nAdulti} nBambini={props.nBambini} nEsenti={props.nEsenti} costo={props.costo} metodoPagamento={props.metodoPagamento} utente={props.refUtente}></Prenotazione>
                 <div id="buttonRemove" className="btn-group d-flex justify-content-between">
                     <button type="button " className="btn  btn-success mr-2" style={{maxWidth : 170+'px'}} onClick={() => props.confermaPrenotazione(props.indiceElemento)}>Conferma</button>
                     <button type="button " className="btn btn-danger mr-2" style={{maxWidth : 170+'px'}} onClick={() => props.rifiutaPrenotazione(props.indiceElemento)}>Rifiuta</button>

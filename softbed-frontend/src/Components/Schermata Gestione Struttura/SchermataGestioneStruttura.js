@@ -9,6 +9,7 @@ import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità"
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
+import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 
 function SchermataGestioneStruttura() {
 const [struttura,setStruttura]=useState([]);
@@ -27,13 +28,23 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
+        document.getElementById("prenotazioni").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
     }
-
+    function visualizzaPrenotazioni(){
+        document.getElementById("prenotazioni").classList.remove("collapse");
+        document.getElementById("caratteristiche").classList.add("collapse");
+        document.getElementById("InformazioniPricipali").classList.add("collapse");
+        document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("disponibilità").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
+    }
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
+        document.getElementById("prenotazioni").classList.add("collapse");
         console.log(struttura);
     }
     function modificaCondizioni(){
@@ -41,19 +52,23 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
+        document.getElementById("prenotazioni").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
     }
     function modificaDisponibilità(){
         document.getElementById("disponibilità").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("prenotazioni").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
     }
     function calcoloGuadagno(){
         document.getElementById("guadagno").classList.remove("collapse");
-       /* document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
+        document.getElementById("InformazioniPricipali").classList.add("collapse");
+        document.getElementById("prenotazioni").classList.add("collapse");
         document.getElementById("disponibilità").classList.add("collapse");
-        console.log(struttura);*/
+        document.getElementById("guadagno").classList.add("collapse");
     }
 
     function handleChange(event){
@@ -78,37 +93,37 @@ const [struttura,setStruttura]=useState([]);
                             <ul className="navbar-nav ml-auto text-right">
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={informazioniStruttura}>Informazioni sulla struttura</a>
+                                        <button type="button" className="btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={""}>Prenotazioni</a>
+                                        <button type="button" className="btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={calcoloGuadagno}>Calcolo guadagno</a>
+                                        <button type="button" className="btn-warning"onClick={calcoloGuadagno}>Calcolo guadagno</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica caratteristiche</a>
+                                        <button type="button" className="btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={modificaCondizioni}>Modifica condizioni</a>
+                                        <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <a className="nav-link text-dark" onClick={modificaDisponibilità}>Modifica disponibilità</a>
+                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
@@ -121,12 +136,15 @@ const [struttura,setStruttura]=useState([]);
                     {/* Contenitore principale */}
                     <InformazioniStruttura struttura={struttura}  />
                 </div>
+                <div id="prenotazioni" className="collapse col-12 col-md-9">
+                    <SchermataPrenotazioneStruttura/>
+                </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
-                            <ModificaCaratteristicheC props={struttura}/>
+                            <ModificaCaratteristicheC props={struttura} handleChange={handleChange}/>
                             :
-                            <ModificaCaratteristicheB props={struttura}/>
+                            <ModificaCaratteristicheB props={struttura} handleChange={handleChange}/>
                     }
                 </div>
                 <div id="guadagno" className="collapse col-12 col-md-9">
