@@ -22,17 +22,21 @@ function ModificaCondizioni(props) {
             console.log(dato);
             axios.post('/struttura/modificaCondizioni', dato)
                 .then(res => { // then print response status
-                    console.log(res.data);
-                    console.log("finito");
-                });
-        } catch (e) {
-            console.log(e);
+                    if(res.status === 200){
+                        console.log("Ok");
+                    }
+                })
+                .catch(()=>
+                    console.log("Nessuna riga modificata")
+                )
+            }catch (err) {
+            console.log(err);
         }
     }
 
     return (
         <form id="form" className="p-3 needs-validation" noValidate onSubmit={verificaCheckBox} onChange={props.handleChange}>
-            <FormCondizioni dati={props.dati}></FormCondizioni>
+            <FormCondizioni dati={props.dati} correzione={props.correzione}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px">Annulla</button>

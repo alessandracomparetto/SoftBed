@@ -18,7 +18,8 @@ const [struttura,setStruttura]=useState([]);
             .then(res => {
                 setStruttura(res.data);
                 console.log("Strutturaaa:");
-                console.log(res.data)})
+                console.log(res.data)
+            })
             .catch(err => console.log(err));
     }, []);
 
@@ -55,13 +56,28 @@ const [struttura,setStruttura]=useState([]);
         document.getElementById("disponibilità").classList.add("collapse");
         console.log(struttura);*/
     }
+    function printObject(o) {
+        let out = '';
+        for (let p in o) {
+            out += p + ': ' + o[p] + '\n';
+        } console.log(out);
+    }
 
     function handleChange(event){
         const{name,value}=event.target;
         let tmp=struttura
         tmp[name]=value;
         setStruttura(tmp);
+        printObject(tmp);
     }
+
+    function correzione (nome, valore){
+        console.log("aggiorno "+nome+ " a "+valore);
+        let tmp = struttura;
+        tmp[nome]=valore;
+        setStruttura(tmp);
+    }
+
 
     return (
         <div className="d-flex justify-content-center">
@@ -133,7 +149,7 @@ const [struttura,setStruttura]=useState([]);
                     <CalcoloGuadagno dati={struttura}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} handleChange={handleChange}/>
+                    <ModificaCondizioni dati={struttura} handleChange={handleChange} correzione={correzione}/>
                 </div>
                 <div id="disponibilità" className="collapse col-12 col-md-9">
                     <ModificaDisponibilita props={struttura}/>

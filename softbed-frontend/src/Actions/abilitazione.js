@@ -8,7 +8,7 @@ function abilitazione(){
         preavvisoDisdetta.removeAttribute("disabled");
         preavvisoDisdetta.setAttribute("required", "required");
         preavvisoTesto.classList.remove("text-muted");
-
+        return 1;
     }else{
         prezzoCancellazione.setAttribute("disabled", "disabled");
         prezzoCancellazione.classList.remove("required");
@@ -17,6 +17,7 @@ function abilitazione(){
         preavvisoTesto.classList.add("text-muted");
         prezzoCancellazione.value = null;
         preavvisoDisdetta.value = null;
+        return 0;
     }
 }
 export {abilitazione};

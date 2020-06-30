@@ -44,9 +44,11 @@ router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
         console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
-        res.sendStatus( status);
+        res.status(status);
+        res.send();
     }).catch( (err) =>{
         console.log(err);
+
     })
 });
 

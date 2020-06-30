@@ -17,8 +17,6 @@ function InformazioneLineare(props) {
 
 function InformazioniStruttura (props){
     function converti(giorni){
-        console.log(giorni);
-        console.log(typeof giorni);
         let x;
         switch (parseInt(giorni)) {
             case 2 :
@@ -126,7 +124,7 @@ function InformazioniStruttura (props){
                                 <ul>
                                     { props.struttura.camere.map((camera, indice) => {
                                         return (
-                                            <li>{`Camera ${indice+1} : ${props.struttura.camere[indice].tipologiaCamera}, letti matrimoniali: ${props.struttura.camere[indice].nLettiMatrimoniali}, letti singoli: ${props.struttura.camere[indice].nLettiSingoli}, 
+                                            <li key={indice}>{`Camera ${indice+1} : ${props.struttura.camere[indice].tipologiaCamera}, letti matrimoniali: ${props.struttura.camere[indice].nLettiMatrimoniali}, letti singoli: ${props.struttura.camere[indice].nLettiSingoli}, 
                                     prezzo base a notte: ${props.struttura.camere[indice].prezzoBaseANotte}€`}</li>
                                         )
                                     })}
