@@ -5,9 +5,7 @@ function FormCondizioni(props) {
 
     function verificaMinDurata(e) {
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
-        console.log(document.getElementById("maxSoggiorno").value);
-        console.log((e.target.value) > document.getElementById("maxSoggiorno").value);
-        if (document.getElementById("maxSoggiorno").value !== "" && (e.target.value) > document.getElementById("maxSoggiorno").value) {
+        if (document.getElementById("maxSoggiorno").value !== "" && (document.getElementById("minSoggiorno").value > document.getElementById("maxSoggiorno").value)){
             document.getElementById("maxSoggiorno").value = e.target.value;
             props.correzione("maxSoggiorno", e.target.value);
         }
@@ -15,7 +13,7 @@ function FormCondizioni(props) {
 
     function verificaMaxDurata(e) {
         /* se la durata massima è minore della minima, imposta la minima uguale alla massima*/
-        if (document.getElementById("minSoggiorno").value !== "" && (e.target.value) < document.getElementById("minSoggiorno").value) {
+        if (document.getElementById("minSoggiorno").value !== "" && (document.getElementById("maxSoggiorno").value < document.getElementById("minSoggiorno").value)){
             document.getElementById("minSoggiorno").value = e.target.value;
             props.correzione("minSoggiorno", e.target.value);
         }
@@ -24,24 +22,28 @@ function FormCondizioni(props) {
     function verificaInizioCheckIn(e) {
         if (document.getElementById("oraFineCheckIn").value !== "" && (e.target.value) > document.getElementById("oraFineCheckIn").value) {
             document.getElementById("oraFineCheckIn").value = e.target.value;
+            props.correzione("oraFineCheckIn", e.target.value);
         }
     }
 
     function verificaFineCheckIn(e) {
         if (document.getElementById("oraInizioCheckIn").value !== "" && (e.target.value) < document.getElementById("oraInizioCheckIn").value) {
             document.getElementById("oraInizioCheckIn").value = e.target.value;
+            props.correzione("oraInizioCheckIn", e.target.value);
         }
     }
 
     function verificaInizioCheckOut(e) {
         if (document.getElementById("oraFineCheckOut").value !== "" && (e.target.value) > document.getElementById("oraFineCheckOut").value) {
             document.getElementById("oraFineCheckOut").value = e.target.value;
+            props.correzione("oraFineCheckOut", e.target.value);
         }
     }
 
     function verificaFineCheckOut(e) {
         if (document.getElementById("oraInizioCheckOut").value !== "" && (e.target.value) < document.getElementById("oraInizioCheckOut").value) {
             document.getElementById("oraInizioCheckOut").value = e.target.value;
+            props.correzione("oraInizioCheckOut", e.target.value);
         }
     }
 
