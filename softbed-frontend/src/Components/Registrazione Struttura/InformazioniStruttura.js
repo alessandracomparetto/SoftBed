@@ -1,7 +1,6 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 import Breadcrumb from "../Breadcrumb";
 import ImmaginiStruttura from "../Schermata Struttura/ImmaginiStruttura";
-
 
 function InformazioneLineare(props) {
     return (
@@ -77,6 +76,7 @@ function InformazioniStruttura (props){
             </div>
 
             {/* Immagini */}
+            {/*TODO idStruttura={props.struttura.idStruttura}*/}
             <ImmaginiStruttura struttura={props.struttura} idStruttura={""}/>
 
             {/* Informazioni e caratteristiche struttura */}

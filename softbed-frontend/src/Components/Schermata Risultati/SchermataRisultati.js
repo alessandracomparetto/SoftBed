@@ -5,7 +5,7 @@ import Paginazione from "./Paginazione";
 import Mappa from "./Mappa";
 import FormFiltri from "./FormFiltri/FormFiltri";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import $ from "jquery";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
@@ -13,14 +13,26 @@ function SchermataRisultati() {
     const [destinazione, setDestinazione] = useState("");
     const [listaStrutture, setListaStrutture] = useState([]);
 
-    const valoriRicerca = useLocation().search;
-
     useEffect(() => {
+
+        // Genero manualmente la GET a partire dai campi del form di ricerca
+        // (sempre validi al caricamento del componente)
+        const parametri = {
+            destinazione: $("#destinazione").val(),
+            arrivo: $("#arrivo").val(),
+            partenza: $("#partenza").val(),
+            ospiti: $("#ospiti").val(),
+            bedAndBreakfast: $("#bedAndBreakfast")[0].checked,
+            casaVacanze: $("#casaVacanze")[0].checked
+        }
+
+        const valoriRicerca = $.param(parametri);
+
         axios
-            .get(valoriRicerca)
+            .get("search?" + valoriRicerca)
             .then(res => setListaStrutture(res.data))
             .catch(err => console.log(err));
-    }, [valoriRicerca]);
+    }, []);
 
     // TODO: da rimuovere, solo per test
 

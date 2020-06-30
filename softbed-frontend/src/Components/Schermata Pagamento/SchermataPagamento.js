@@ -1,4 +1,5 @@
 import React, {useState, Fragment, useEffect} from "react";
+import {useLocation, useHistory} from "react-router-dom"
 import Breadcrumb from "../Breadcrumb";
 import $ from "jquery"
 import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
@@ -15,38 +16,64 @@ function SchermataPagamento() {
         {id: 3725, nome: "Poste", numero: "3333 4444 5555 6666"}
     ]
 
-    const richiesta = {
-        struttura: "Nome struttura",
-        checkIn: "29-05-2020",
-        checkOut: "30-05-2020",
-        camere: [
-            {tipologia: "singola", numero: 1},
-            {tipologia: "doppia", numero: 1}
-        ],
-        adulti: 2,
-        bambini: 1,
-        esenti: 1,
-        prezzo: 42.00
-    }
-
     const [onLineAttivo, setStatoOnline] = useState(false);
     const [nuovoMetodo, setNuovoMetodo] = useState(false);
 
-    const datiPrenotazione = {
-        dataCheckIn: "2020-12-20",
-        oraCheckIn: "17:00",
-        dataCheckOut: "2020-12-31",
-        oraCheckOut: "12:00",
-        costo: 42,
-        nAdulti: 3,
-        nBambini: 1,
-        nEsenti: 2,
-        refMetodoPagamento: 1,
-        refUtente: 1,
-        refStruttura: 1
-    }
+    // metodoPagamento e refUtente
+
+    const query = new URLSearchParams(useLocation().search);
+    const history = useHistory();
+    const [datiRichiesta, setDatiRichiesta] = useState({});
 
     useEffect(() => {
+        // L'utente deve aver effettuato il login
+
+
+        // GESTIONE DEI PARAMETRI URL
+        // Se uno dei parametri richiesti non è inserito si viene reindirizzati alla pagina della struttura / home
+        if (
+            !query.get("idStruttura") ||
+            !query.get("dataCheckIn") ||
+            !query.get("dataCheckOut") ||
+            !query.get("adulti") ||
+            !query.get("bambini") ||
+            !query.get("esenti")
+        ) {
+            if (!query.get("idStruttura")) history.push("/");
+            else history.push(`/struttura/${query.get("idStruttura")}`);
+        }
+
+        // Aggiorna i valori dello stato
+        const valori = {
+            dataCheckIn: query.get("dataCheckIn"),
+            orarioCheckIn: query.get("orarioCheckIn"),
+            dataCheckOut: query.get("dataCheckOut"),
+            orarioCheckOut: query.get("orarioCheckOut"),
+            adulti: query.get("adulti"),
+            bambini: query.get("bambini"),
+            esenti: query.get("esenti"),
+            idStruttura: query.get("idStruttura"),
+            struttura: "Casa dolce vista mare",
+            camere: [
+                {tipologia: "singola", numero: 1},
+                {tipologia: "doppia", numero: 1}
+            ],
+            prezzo: 42.00
+        }
+
+        // TODO: Verificare validità e disponibilità dati inseriti
+        // nomeStruttura, prezzo per notte, etc.., modalità di pagamento accettate...
+        // fetch("/struttura")
+        //     .then((res) => {
+        //         // TODO: Aggiorna i dati (prezzo)
+        //     })
+        //     .catch((err) => {
+        //         // TODO: Mostra messaggio di errore
+        //     })
+
+        setDatiRichiesta(valori);
+
+        // GESTIONE DELLA SELEZIONE DELAL MODALITÀ DI PAGAMENTO
         const modPagamento = $("input[name='modPagamento']");
         const modPagamentoOnline = $("#online");
 
@@ -63,7 +90,7 @@ function SchermataPagamento() {
                     setNuovoMetodo(false);
                 }
             }
-        }, []);
+        });
 
         // Gestione della selezione sul metodo di pagamento online (vecchio o nuovo)
         metodoPagamentoOnline.on('change', () => {
@@ -72,19 +99,24 @@ function SchermataPagamento() {
                 setNuovoMetodo(stato);
             }
         })
-    })
+    }, [])
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        axios.post('/prenotazione/richiesta', datiPrenotazione)
+        // TODO
+        let tmp = datiRichiesta;
+        tmp["idUtente"] = 5;
+        tmp["metodoPagamento"] = null; // null per pagamenti in loco
+        setDatiRichiesta(tmp);
+
+        axios.post('/prenotazione/richiesta', datiRichiesta)
             .then(res => {
-                // Azione da compiere se la post va a buon fine
-                console.log("res:", res);
+                console.log("La prenotazione è stata inserita con ID ", res.data);
+                history.push("/operazione-completata");
             })
             .catch(err => {
-                // Azione da compiere in caso di errore
-                console.log("err", err);
+                // TODO: mostrare schermata di errore
             });
     }
 
@@ -105,19 +137,22 @@ function SchermataPagamento() {
 
                         <div className="mb-3">
                             <h5 className="mb-0">Struttura</h5>
-                            <span className="text-90">{richiesta.struttura}</span>
+                            <span className="text-90">{datiRichiesta.struttura}</span>
                         </div>
 
                         <div className="mb-3">
                             <h5 className="mb-0">Periodo</h5>
-                            <span className="text-90">dal <strong>{richiesta.checkIn}</strong> al <strong>{richiesta.checkOut}</strong></span>
+                            <span className="text-90">
+                                dal <strong>{new Date(datiRichiesta.dataCheckIn).toLocaleDateString()}</strong> ({datiRichiesta.orarioCheckIn})
+                                al <strong>{new Date(datiRichiesta.dataCheckOut).toLocaleDateString()}</strong> ({datiRichiesta.orarioCheckOut})
+                            </span>
                         </div>
 
-                        { richiesta.camere[0] && (
+                        { datiRichiesta.camere && datiRichiesta.camere[0] && (
                             <div className="mb-3">
                                 <h5 className="mb-0">Camere selezionate</h5>
                                 {
-                                    richiesta.camere.map((camera, indice) => {
+                                    datiRichiesta.camere.map((camera, indice) => {
                                         return (
                                             <Fragment key={indice}>
                                                 <span className="text-90">{camera.numero}x {camera.tipologia}</span>
@@ -131,15 +166,15 @@ function SchermataPagamento() {
 
                         <div className="mb-3">
                             <h5 className="mb-0">Persone</h5>
-                            <span className="text-90">{richiesta.adulti}x adulto</span>
-                            { richiesta.esenti && richiesta.esenti > 0 && (
-                                <span className="text-90">&nbsp;({richiesta.esenti} esent{richiesta.esenti === 1 ? "e" : "i"} da tasse)</span>
+                            <span className="text-90">{datiRichiesta.adulti}x adulto</span>
+                            { datiRichiesta.esenti && datiRichiesta.esenti > 0 && (
+                                <span className="text-90">&nbsp;({datiRichiesta.esenti} esent{parseInt(datiRichiesta.esenti) === 1 ? "e" : "i"} da tasse)</span>
                             )}
 
-                            { richiesta.bambini && richiesta.bambini > 0 && (
+                            { datiRichiesta.bambini && datiRichiesta.bambini > 0 && (
                                 <Fragment>
                                     <br/>
-                                    <span className="text-90">{richiesta.bambini}x bambino</span>
+                                    <span className="text-90">{datiRichiesta.bambini}x bambino</span>
                                 </Fragment>
                             )}
                         </div>
@@ -148,7 +183,7 @@ function SchermataPagamento() {
 
                     {/* Prezzo */}
                     <div className="text-right">
-                        <span className="display-4 d-inline-block border-top border-warning w-100">{richiesta.prezzo}€</span>
+                        <span className="display-4 d-inline-block border-top border-warning w-100">{datiRichiesta.prezzo}€</span>
                     </div>
                 </div>
 

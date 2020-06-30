@@ -13,9 +13,6 @@ function ImmagineSecondaria(props) {
 }
 
 function ImmaginiStruttura(props) {
-    useEffect(()=>{
-        console.log(props.struttura.foto);
-    });
 
     return (
         <div className="m-3 row">

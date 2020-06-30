@@ -2,10 +2,6 @@ import React, {useEffect} from "react";
 import data from "../../regioni_province_comuni.js";
 import $ from 'jquery';
 
-
-/* TODO sistemare cap, rimuovere spunta quando non validato*/
-
-
 function FormStruttura (props) {
 
     useEffect(() => {

@@ -7,17 +7,22 @@ let strutturaModel = require('../models/Struttura')
 
 
 router.get('/', function(req, res, next) {
-    console.log("sono qui");
+    // console.log("sono qui");
     strutturaModel.fetch(function(data){
-        console.log(data);
+        // console.log(data);
         res.json(data);
     })
 });
 
 
+router.get('/:idStruttura', function(req, res) {
+    strutturaModel.carica(req.params.idStruttura, function(data) {
+        res.send(data);
+    })
+})
+
+
 router.post('/', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     strutturaModel.create(req.body,function(data){
         console.log(data);
         res.send(data);
@@ -25,12 +30,20 @@ router.post('/', function (req, res) {
 });
 
 
+router.post('/modificaCondizioni', function (req, res) {
+    console.log("REQ.BODY ====")
+    strutturaModel.modificaCondizioni(req.body,function(data){
+        console.log(data);
+        res.send(data);
+    });
+});
+
 module.exports = router;
 
 
 
 
-
+// TODO: Da rimuovere
 /*async function registrazioneStruttura(req, res, next){
     console.log(req.body);
     console.log("mondos");

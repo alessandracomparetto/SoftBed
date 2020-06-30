@@ -53,7 +53,7 @@ function UtenteAutenticato(props) {
                         </Link>
                         <div className="dropdown-menu dropdown-menu-right">
                             <Link className="dropdown-item" to="#">Modifica profilo</Link>
-                            <Link className="dropdown-item" to="#">Gestione strutture</Link>
+                            <Link className="dropdown-item" to="/gestioneStrutture/">Gestione strutture</Link>
                             <Link className="dropdown-item" to="#">Le mie prenotazioni</Link>
                             <div className="dropdown-divider"/>
                             <Link className="dropdown-item" to="#">Esci</Link>
@@ -67,7 +67,7 @@ function UtenteAutenticato(props) {
 
 
 function Navbar() {
-    const accessoEffettuato = false;
+    const accessoEffettuato = true;
     const utente = {nome: "SoftEngineers"}
 
     return (

@@ -38,8 +38,8 @@ function FormRicerca(props) {
     useEffect(() => {
         if (path === "/search") {
             const destinazione = query.get("destinazione");
-            const bb = query.get("b&b");
-            const cv = query.get("casa vacanze");
+            const bb = query.get("bedAndBreakfast");
+            const cv = query.get("casaVacanze");
             const arrivo = query.get("arrivo");
             const partenza = query.get("partenza");
             const ospiti = query.get("ospiti");
@@ -49,11 +49,13 @@ function FormRicerca(props) {
                 $("#destinazione").val(destinazione);
             }
 
-            if (!bb || bb !== "true")
-                $("#b\\&b").prop("checked", false);
+            // Se solamente bb è false
+            if ((!bb || bb !== "true") && !(!cv || cv !== "true"))
+                $("#bedAndBreakfast").prop("checked", false);
 
-            if (!cv || cv !== "true")
-                $("#cv").prop("checked", false);
+            // Se solamente cv è false
+            if ((!cv || cv !== "true") && !(!bb || bb !== "true"))
+                $("#casaVacanze").prop("checked", false);
 
             if (arrivo)
                 $("#arrivo").val(arrivo);
@@ -146,8 +148,8 @@ function FormRicerca(props) {
     const controlloTipologia = () => {
         const selezionati = $("#checkboxes :checkbox:checked").length;
         const tipologiaAiuto = $("#tipologiaAiuto");
-        const bb = $("#b\\&b");
-        const cv = $("#cv");
+        const bb = $("#bedAndBreakfast");
+        const cv = $("#casaVacanze");
 
         if (selezionati === 0) {
             bb.addClass("outline-error");
@@ -191,15 +193,15 @@ function FormRicerca(props) {
 
                         <div className="d-flex d-lg-block justify-content-around">
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input my-0" type="checkbox" name="b&b" id="b&b"
+                                <input className="form-check-input my-0" type="checkbox" name="bedAndBreakfast" id="bedAndBreakfast"
                                        value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                                <label className="form-check-label" htmlFor="b&b">Bed and breakfast</label>
+                                <label className="form-check-label" htmlFor="bedAndBreakfast">Bed and breakfast</label>
                             </div>
 
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input my-0" type="checkbox" name="casa vacanze" id="cv"
+                                <input className="form-check-input my-0" type="checkbox" name="casaVacanze" id="casaVacanze"
                                        value={true} defaultChecked={true} onChange={controlloTipologia}/>
-                                <label className="form-check-label" htmlFor="cv">Casa vacanze</label>
+                                <label className="form-check-label" htmlFor="casaVacanze">Casa vacanze</label>
                             </div>
                         </div>
                     </div>
@@ -253,4 +255,4 @@ function FormRicerca(props) {
     );
 }
 
-export default FormRicerca
+export default FormRicerca;

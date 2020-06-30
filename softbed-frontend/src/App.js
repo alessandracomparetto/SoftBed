@@ -15,35 +15,13 @@ import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Osp
 import Footer from "./Components/Footer";
 import StruttureRecenti from "./Components/StruttureRecenti";
 import Immagine from "./Components/Immagine";
+import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
+import SchermataStrutture from "./Components/SchermataStrutture/SchermataStrutture";
+import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
+import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
 
 
 function App() {
-
-    // TODO: da rimuovere, solo per test
-    const descrizione = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac eleifend lacus." +
-        " In sed interdum augue. Aliquam lacinia lectus pulvinar lacus feugiat commodo. Praesent suscipit quam a" +
-        " ipsum luctus congue. Sed quis nibh mauris. Vivamus massa elit, rhoncus a velit non, suscipit elementum sem." +
-        " Sed commodo lacus nulla, non placerat libero gravida a. Orci varius natoque penatibus et magnis dis" +
-        " parturient montes, nascetur ridiculus mus. Aliquam nec justo at felis posuere laoreet."
-
-    const struttura = {
-        nome: "Nome della struttura",
-        id: "1",
-        regione: "Sicilia",
-        provincia: "Palermo",
-        comune: "Trabia",
-        tipologia: "b&b",
-        descrizione: descrizione,
-        servizi: [
-            {servizio: "Aria condizionata", icona: "snowflake"},
-            {servizio: "Riscaldamento", icona: "fire"},
-            {servizio: "TV", icona: "tv"},
-            {servizio: "Wi-Fi", icona: "wifi"},
-            {servizio: "Piscina", icona: "water"},
-            {servizio: "Idonea per bambini", icona: "child"},
-            {servizio: "Animali ammessi", icona: "paw"}
-        ]
-    }
 
     return (
         <Router>
@@ -56,7 +34,6 @@ function App() {
                 <Route path="*">
                     {/* La navbar è presente in ogni caso */}
                     <Navbar />
-
                     <Switch>
                         {/* Schermata principale */}
                         <Route exact path="/">
@@ -69,6 +46,26 @@ function App() {
                             <Login />
                         </Route>
 
+                        <Route path="/gestioneStruttura/">
+                            <SchermataGestioneStruttura />
+                        </Route>
+
+                        <Route path="/gestioneStrutture/">
+                            <SchermataStrutture />
+                        </Route>
+
+                        <Route exact path="/operazione-completata">
+                            <SchermataOperazioneCompletata />
+                        </Route>
+
+                        <Route exact path="/pagamento/informazioni">
+                            <SchermataPagamento />
+                        </Route>
+
+                        <Route exact path="/profilo/prenotazioni-effettuate/">
+                            <SchermataPrenotazioniOspite />
+                        </Route>
+
                         <Route exact path="/registrati/">
                             <Registrazione />
                         </Route>
@@ -77,29 +74,18 @@ function App() {
                             <RegistrazioneStruttura />
                         </Route>
 
-                        {/* Schermata dei risultati di ricerca */}
                         <Route exact path="/search">
-                            <SchermataRisultati/>
+                            <SchermataRisultati />
                         </Route>
 
                         {/* Schermata della struttura */}
                         <Route exact path="/struttura/:id">
-                            <SchermataStruttura struttura={struttura} />
-                        </Route>
-
-                        <Route path="/registrazioneStruttura">
-                            <RegistrazioneStruttura/>
-                        </Route>
-
-                        <Route path="/profilo/:id">
-                            <Route path="*/prenotazioni-effettuate/">
-                                <SchermataPrenotazioniOspite />
-                            </Route>
+                            <SchermataStruttura />
                         </Route>
 
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                         <Route path="*">
-                            <PaginaNonTrovata/>
+                            <PaginaNonTrovata />
                             <FormRicerca />
                         </Route>
                     </Switch>
