@@ -99,29 +99,24 @@ module.exports= {
     fetch: async function (callback) {
         let camere;
         let array = [];
-        let idStruttura = 1;
-        let tipologiaStruttura = "B&B";
+        let idStruttura = 2;
+        let tipologiaStruttura = "cv";
         let infoStruttura;
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
                 //recupero le informazioni generali della struttura
                 if (tipologiaStruttura === "cv") {
-                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `condizioni` JOIN `casaVacanze` \
-                                WHERE `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
-                                AND `casaVacanze`.refStruttura=`struttura`.idStruttura', [[[idStruttura]]]).catch(err => {
-                        throw err;
-                    });
+                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `casaVacanze` \
+                        WHERE `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
+                        AND `casaVacanze`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune AND `comuni`.refProvincia=`province`.`idProvincia` \
+                        AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {throw err;});
                 } else if (tipologiaStruttura === "B&B") {
                     infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `B&B`\
                 WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
                 AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
-                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {
-                        throw err;
-                    });
-                    camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
-                        throw  err;
-                    });
+                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {throw err;});
+                    camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {throw  err;});
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
@@ -137,15 +132,15 @@ module.exports= {
                 for (let i = 0; i < foto.length; i++) {
                     array.push(foto[i].percorso);
                 }
-                console.log(array);
+                infoStruttura[0]["foto"] = array
                 array = [];
-                let prenotazioni= await db.query(('SELECT * FROM `prenotazione` WHERE  `prenotazione`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
+                /*let prenotazioni= await db.query(('SELECT * FROM `prenotazione` WHERE  `prenotazione`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
                     throw err;
                 });
                 for (let i = 0; i < prenotazioni.length; i++) {
                     array.push(prenotazioni[i]);
                 }
-                infoStruttura[0]["prenotazioni"] = array;
+                infoStruttura[0]["prenotazioni"] = array;*/
                 console.log(array);
                 console.log("INFO STRUTTURA ===");
                 console.log(infoStruttura[0]);
@@ -167,7 +162,7 @@ module.exports= {
                             "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,"condizioni.percentualeRiduzione", struttura.percentualeRiduzione,
                             "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
                             "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
-                    1]).catch(err => {throw err;});
+                    2]).catch(err => {throw err;});
                 console.log("ho modificato!");
                 console.log(results);
                 return callback(results);
@@ -182,13 +177,10 @@ module.exports= {
         try {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
-                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE refstruttura = ?', [`casavacanze`, "casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata", struttura.ariaCondizionata, "casavacanze.Wifi", struttura.Wifi,
+                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                         WHERE refstruttura = ?', [`casavacanze`, "casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
-                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV,"casavacanze.salotto", struttura.salotto,"casavacanze.giardino", struttura.giardino,
-                    "casavacanze.terrazza", struttura.terrazza,"casavacanze.piscina", struttura.piscina,"casavacanze.nBagni", struttura.nBagni,"casavacanze.nCamere", struttura.nCamere,
-                    "casavacanze.nlettiSingoli", struttura.nlettiSingoli,"casavacanze.nlettiMatrimoniali", struttura.nlettiMatrimoniali,"casavacanze.prezzoNotte", struttura.prezzoNotte,"casavacanze.descrizione", struttura.descrizione,
-                    1]).catch(err => {throw err;});
+                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, 2]).catch(err => {throw err;});
                 console.log("ho modificato!");
                 console.log(results);
                 return callback(results);

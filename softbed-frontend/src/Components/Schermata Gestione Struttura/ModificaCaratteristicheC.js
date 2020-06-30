@@ -5,7 +5,7 @@ function ModificaCaratteristicheC(props){
     function modificaCaratteristiche(event) {
         event.preventDefault()
         try {
-            let dato = props.dati;
+            let dato = props.props;
             console.log("DATI======= ");
             console.log(dato);
             axios.post('/struttura/modificaCaratteristicheCasaVacanze', dato)
@@ -21,7 +21,7 @@ function ModificaCaratteristicheC(props){
     }
     return(
         <form id="form" className="p-3 needs-validation" onChange={props.handleChange} noValidate>
-            <FormCaratteristicheC dati={props}/>
+            <FormCaratteristicheC dati={props.props}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={modificaCaratteristiche} >Conferma</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px" >Annulla</button>

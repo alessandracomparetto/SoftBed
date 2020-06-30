@@ -1,5 +1,3 @@
-
-
 import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
 
@@ -80,7 +78,7 @@ const [struttura,setStruttura]=useState([]);
 
     function handleChange(event){
         const{name,value}=event.target;
-        let tmp=struttura
+        let tmp=struttura;
         tmp[name]=value;
         setStruttura(tmp);
         printObject(tmp);
@@ -109,37 +107,37 @@ const [struttura,setStruttura]=useState([]);
                             <ul className="navbar-nav ml-auto text-right">
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
+                                        <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
+                                        <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning"onClick={calcoloGuadagno}>Calcolo guadagno</button>
+                                        <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>Calcolo guadagno</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
+                                        <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
+                                        <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
+                                        <button type="button" className="btn btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
