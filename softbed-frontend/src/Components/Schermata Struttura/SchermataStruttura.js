@@ -24,7 +24,6 @@ function SchermataStruttura(props) {
             {servizio: "Idonea per bambini", icona: "child"},
             {servizio: "Animali ammessi", icona: "paw"}
         ],
-        foto: ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"],
         localita: {
             regione: "Sicilia",
             provincia: "Palermo",
@@ -79,6 +78,7 @@ function SchermataStruttura(props) {
                 Object.assign(tmp, struttura);
                 tmp.nome = res.data.nomeStruttura;
                 tmp.descrizione = res.data.descrizione;
+                tmp.foto = res.data.foto;
                 setStruttura(tmp);
             })
     }, []);
@@ -86,7 +86,10 @@ function SchermataStruttura(props) {
     useEffect(() => {
         let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
 
-        const nuovaStruttura = {id: id, nome: struttura.nome, img: struttura.foto[0]}
+        let nuovaStruttura = {id: id, nome: struttura.nome}
+        if (struttura.foto) {
+            nuovaStruttura.img = struttura.foto[0];
+        }
         const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 
         if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente

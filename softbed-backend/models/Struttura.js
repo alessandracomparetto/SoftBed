@@ -194,13 +194,28 @@ module.exports= {
 
     carica: async function(idStruttura, callback) {
 
+        let struttura = {};
+
         let query = `SELECT struttura.nomeStruttura, struttura.descrizione, struttura.tipologiaStruttura \
         FROM struttura \
         WHERE struttura.idStruttura = ?`
 
+        let queryFoto = `SELECT fotografie.percorso \
+        FROM fotografie \ 
+        WHERE fotografie.refStruttura = ?`
+
         db.query(query, idStruttura, function(err, risultato) {
             if (err) return callback(err);
-            else return callback(risultato);
+            else {
+                struttura = risultato[0];
+                db.query(queryFoto, idStruttura, function(err, risultato) {
+                    if (err) return callback(err);
+                    else {
+                        struttura.foto = risultato.map((oggetto) => {return oggetto.percorso});
+                        return callback(struttura);
+                    }
+                })
+            }
         })
 
     }
