@@ -47,7 +47,7 @@ function App() {
                             <Login />
                         </Route>
 
-                        <Route path="/gestioneStruttura/">
+                       <Route path="/struttura/gestioneStruttura/:id">
                             <SchermataGestioneStruttura />
                         </Route>
 
@@ -84,9 +84,6 @@ function App() {
                             <SchermataStruttura />
                         </Route>
 
-                        <Route exact path="/struttureGestore">
-                            <SchermataStrutture />
-                        </Route>
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                         <Route path="*">
                             <PaginaNonTrovata />

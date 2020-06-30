@@ -25,11 +25,10 @@ module.exports= {
                 sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
                 //TODO: REF GESTORE
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
-                results = await db.query(sql, [[datiQuery]]).catch(err => {
+                let infoPrincipali = await db.query(sql, [[datiQuery]]).catch(err => {
                     throw err;
                 });
                 console.log('Inserimento tabella struttura');
-                console.log(results);
                 refStruttura = results.insertId;
                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES ?');
                 if (datiStruttura.foto) {
@@ -79,16 +78,10 @@ module.exports= {
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
                         datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
-                    results = await db.query(sql, [[datiQuery]])
-                        .then(() => {
-                            return callback("ok");
-                        })
-                        .catch(err => {
-                            throw err;
-                        });
+                    results = await db.query(sql, [[datiQuery]]).catch(err => {throw err;});
                     console.log("inserita cv");
                 } //chiusura query cv
-                return (callback("ok"));
+                return (callback({"refStruttura":refStruttura, "refIndirizzo":refIndirizzo}));
             });
         } //chiuusura tray
         catch (err) {
@@ -96,11 +89,12 @@ module.exports= {
         }
     },
 
-    fetch: async function (callback) {
+    fetch: async function (ID, dati, callback) {
         let camere;
         let array = [];
-        let idStruttura = 2;
-        let tipologiaStruttura = "cv";
+        let idStruttura = ID;
+        let tipologiaStruttura = dati.tipologiaStruttura;
+        let refGestore = dati.refGestore;
         let infoStruttura;
         const db = await makeDb(config);
         try {
@@ -108,14 +102,15 @@ module.exports= {
                 //recupero le informazioni generali della struttura
                 if (tipologiaStruttura === "cv") {
                     infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `casaVacanze` \
-                        WHERE `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
+                        WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
                         AND `casaVacanze`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune AND `comuni`.refProvincia=`province`.`idProvincia` \
-                        AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {throw err;});
+                        AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch(err => {throw err;});
                 } else if (tipologiaStruttura === "B&B") {
                     infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `B&B`\
-                WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=3 AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
+                WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
                 AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
-                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [[[idStruttura]]]).catch(err => {throw err;});
+                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch(err => {throw err;});
+
                     camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {throw  err;});
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
@@ -189,6 +184,8 @@ module.exports= {
             console.log(err);
         }
     },
+
+
     carica: async function(idStruttura, callback) {
 
         const db = await makeDb(config);
@@ -218,6 +215,8 @@ module.exports= {
             console.log(err);
         }
     },
+
+
 
     cerca: async function(datiRicerca, callback) {
 
@@ -364,11 +363,12 @@ module.exports= {
             console.log(err);
         }
     },
-    listaStrutture:async function(){
-        const db = await makeDb(config);
-        let result={};
-        let idGestore=3;
+
+    listaStrutture:async function(callback){
         console.log("lista strutture");
+        const db = await makeDb(config);
+        let idGestore=3;
+
         try {
             await withTransaction(db, async () => {
                 let results=await db.query(('SELECT * FROM struttura WHERE  struttura.refGestore = ?'),[[[idGestore]]]).catch(err => {

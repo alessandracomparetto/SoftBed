@@ -1,5 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
+import {useParams, useHistory} from "react-router-dom";
 
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
@@ -9,11 +10,21 @@ import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
 import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 
-function SchermataGestioneStruttura() {
-const [struttura,setStruttura]=useState([]);
+function SchermataGestioneStruttura(){
+    let {id} = useParams();
+
+    const [struttura,setStruttura]=useState([]);
     useEffect(() => {
-        axios
-            .get("/struttura")
+        console.log(id);
+        let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
+        let dati;
+        for(let i = 0; i<lista.length; i++){
+            if(lista[i].idStruttura == id){
+                dati=lista[i];
+            }
+        }
+        console.log(dati);
+        axios.post(`/struttura/gestioneStruttura/${id}`, dati)
             .then(res => {
                 setStruttura(res.data);
                 console.log("Strutturaaa:");

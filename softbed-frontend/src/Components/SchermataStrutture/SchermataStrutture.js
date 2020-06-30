@@ -7,60 +7,20 @@ import SchermataStruttura from "../Schermata Struttura/SchermataStruttura";
 
 function SchermataStrutture(){
     const [listaStrutture,setLista]=useState([]);
+    const [lunghezza, setLunghezza] = useState("");
     useEffect(() => {
-        console.log("get");
-        axios.get('/struttura/listaStruttureGestore',listaStrutture).then(res => {
+        if(!window.sessionStorage.getItem("strutture")){
+            axios.get('/struttura/listaStruttureGestore') //prendo la lista delle strutture se non è presente il session storage
+            .then(res => {
+                console.log(res.data);
                 setLista(res.data);
-                console.log("Strutturaaa:");
-                console.log(res.data)})
-            .catch(err => console.log(err));
+                window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
+            }).catch(err => console.log(err));
+        } else{
+            setLista(JSON.parse(window.sessionStorage.getItem("strutture")));
+        }
     }, []);
 
-   /* const [listaStrutture] = useState([
-        {   idStruttura: "3333",
-            nomeStruttura: "Struttura 1",
-            refGestore: "5555",
-            refIndirizzo: "1",
-            renditontoEffettuato: "true",
-            idIndirizzo :"1",
-            via : "Carlo Magno",
-            cap : "90011",
-            refComune : "5",
-            idComune :"5",
-            nomeComune : "Comune1",
-            refProvincia : "90",
-            tipologia: "B&B"
-        },
-        {    idStruttura: "4444",
-            nomeStruttura: "Struttura 2",
-            refGestore: "6666",
-            refIndirizzo: "2",
-            renditontoEffettuato: "true",
-            idIndirizzo :"2",
-            via : "Carlo Magno",
-            cap : "90011",
-            refComune : "6",
-            idComune :"6",
-            nomeComune : "Comune 2",
-            refProvincia : "81",
-            tipologia: "Casa vacanze"
-        },
-        {   idStruttura: "3999",
-            nomeStruttura: "Struttura 3",
-            refGestore: "7777",
-            refIndirizzo: "3",
-            renditontoEffettuato: "true",
-            idIndirizzo :"3",
-            via : "Anacleto",
-            cap : "90011",
-            refComune : "7",
-            idComune :"7",
-            nomeComune : "Comune3",
-            refProvincia : "6",
-            tipologia: "Casa vacanze"
-        }
-    ]);
-*/
     function apri(event) {
         let calcolo = event.target.closest("li").lastChild;
         $(calcolo).toggleClass("collapse")
@@ -84,8 +44,7 @@ function SchermataStrutture(){
                                         <strong>{struttura.tipologia}</strong>
                                     </div>
                                     <div  className=" col-12 col-lg-3">
-                                        <button type="button" className="btn btn-block btn-primary mt-2 mr-2 "><Link className="text-light" to="/gestioneStruttura/key">Visualizza</Link></button>
-                                        <button type="button" className="btn btn-block btn-outline-primary mt-2 mr-2" onClick={apri}>Calcolo Guadagni</button>
+                                        <Link className="text-light" to={`/struttura/gestioneStruttura/${listaStrutture[indice].idStruttura}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
                                     </div>
                                 </div>
                                 <div className="collapse">
