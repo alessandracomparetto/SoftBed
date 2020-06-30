@@ -26,7 +26,7 @@ function SchermataPrenotazioniOspite() {
             prezzo: "42.00",
         },
         {
-            id: 2,
+            id: 1,
             struttura: {
                 nome: "Nome struttura 2",
                 tipologia: "casa vacanze"

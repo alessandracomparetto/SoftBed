@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import mostraDialogErrore from "../../Actions/errore";
 
 function RichiestaPrenotazioneOspite(props) {
     const [mostraContenuto, setMostraContenuto] = useState(false);
@@ -31,25 +32,23 @@ function RichiestaPrenotazioneOspite(props) {
         })
     }
 
-    const mostraDialogErrore = () => {
-        confirmAlert({
-            customUI: ({ onClose }) => {
-                return (
-                    <div className="custom-ui text-center">
-                        <h1>Si è verificato un problema, ti invitiamo a riprovare!</h1>
-                        <button className="btn btn-warning px-3 py-2 m-2 minw-200px" onClick={onClose}>OK</button>
-                    </div>
-                )
-            }
-        })
-    }
-
     const annullaPrenotazione = () => {
         axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.id})
             .then(() => {
-                props.rimuovi(props.prenotazione.id);
 
-                // TODO: Inviare e-mail a gestore [e ospite]
+                // TODO: Prendere informazioni dinamiche
+                const informazioni = {
+                    id: props.prenotazione.id,
+                    struttura: props.prenotazione.struttura.nome,
+                    data: props.prenotazione.checkIn,
+                    emailOspite: "slcxx98@gmail.com",
+                    emailGestore: "slcxx98@gmail.com"
+                }
+
+                axios.post('/mail/annullamento-prenotazione', informazioni)
+                    .catch(err => console.log(err));
+
+                props.rimuovi(props.prenotazione.id);
             })
             .catch(() => {
                 mostraDialogErrore();

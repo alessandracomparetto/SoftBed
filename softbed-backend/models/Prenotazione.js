@@ -1,8 +1,10 @@
-var db = require('../db/dbmiddleware');
+const {makeDb, withTransaction} = require('../db/dbmiddleware');
+const {config} = require("../db/config");
 
 module.exports = {
 
     create: async function (datiPrenotazione, callback) {
+        const db = await makeDb(config);
 
         let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsenti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
@@ -18,10 +20,14 @@ module.exports = {
             datiPrenotazione.idStruttura
         ];
 
-        db.query(query, datiQuery, function (err, risultato) {
-            if (err) callback(err);
-            else callback(risultato);
-        });
+        try {
+            await withTransaction(db, async () => {
+                let risultato = await db.query(query, datiQuery).catch(err => console.log(err));
+                return callback(risultato);
+            })
+        } catch(err) {
+            console.log(err)
+        }
     },
 
     delete: async function (idPrenotazione, callback) {

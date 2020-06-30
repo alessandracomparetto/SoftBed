@@ -4,6 +4,8 @@ import Breadcrumb from "../Breadcrumb";
 import $ from "jquery"
 import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
 import axios from "axios";
+import RiepilogoPrenotazionePDF from "./RiepilogoPrenotazionePDF";
+import mostraDialogErrore from "../../Actions/errore";
 
 function SchermataPagamento() {
 
@@ -63,7 +65,7 @@ function SchermataPagamento() {
 
         // TODO: Verificare validità e disponibilità dati inseriti
         // nomeStruttura, prezzo per notte, etc.., modalità di pagamento accettate...
-        // fetch("/struttura")
+        // axios.get("/struttura")
         //     .then((res) => {
         //         // TODO: Aggiorna i dati (prezzo)
         //     })
@@ -104,7 +106,7 @@ function SchermataPagamento() {
     const onSubmit = (event) => {
         event.preventDefault();
 
-        // TODO
+        // TODO: Ottenere id Utente e i metodi di pagamento
         let tmp = datiRichiesta;
         tmp["idUtente"] = 5;
         tmp["metodoPagamento"] = null; // null per pagamenti in loco
@@ -112,11 +114,20 @@ function SchermataPagamento() {
 
         axios.post('/prenotazione/richiesta', datiRichiesta)
             .then(res => {
-                console.log("La prenotazione è stata inserita con ID ", res.data);
+                const informazioni = {
+                    id: res.data,
+                    emailGestore: 'slcxx98@gmail.com',
+                    emailOspite: 'slcxx98@gmail.com',
+                    allegato: RiepilogoPrenotazionePDF(datiRichiesta, res.data)
+                }
+
+                axios.post('/mail/richiesta-prenotazione', informazioni)
+                    .catch((err) => (console.log(err)));
+
                 history.push("/operazione-completata");
             })
             .catch(err => {
-                // TODO: mostrare schermata di errore
+                mostraDialogErrore();
             });
     }
 
@@ -229,7 +240,7 @@ function SchermataPagamento() {
                             )}
 
                             <div className="text-right">
-                                <button className="btn btn-primary" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
+                                <button className="btn btn-warning" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
                             </div>
                         </form>
                     </div>
