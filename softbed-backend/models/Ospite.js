@@ -19,9 +19,9 @@ module.exports={
                 refOspite = risultato2.insertId;
 
                 sql = ('INSERT INTO `documenti` (refOspite, percorso) VALUES (?,?)');
-                if(datiOspite.foto) {
-                    for(foto of datiOspite.foto){
-                        datiQuery = [refOspite, foto];
+                if(datiOspite.documenti) {
+                    for(documento of datiOspite.documenti){
+                        datiQuery = [refOspite, documento];
                         db.query(sql, datiQuery, function (err) { //INSERIMENTO IN DOCUMENTI
                             if(err) throw err;
                             console.log("inseriti documenti");

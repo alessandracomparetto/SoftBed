@@ -34,6 +34,16 @@ function FormDatiOspite(props){
         permanenza:""
     });
 
+    function handleFoto(fileName) {
+        let tmp = ospite;
+        if(!tmp["documenti"]){
+            tmp["documenti"]=[];
+        }
+        let temp = tmp["documenti"];
+        temp.push(fileName);
+        tmp["documenti"]=temp;
+        setOspite(tmp);
+    }
 
     //onSubmit
     function onSubmit(e) {
@@ -192,7 +202,7 @@ function FormDatiOspite(props){
 
 
     return(
-        <form id="form" className="container p-3 w-75" noValidate onSubmit={onSubmit}>
+        <form id="form" className="container p-3 w-75" noValidate >
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>
             <h6 className="mt-3 ">Inserisci i dati dell'ospite:</h6>
             <div className="form-row">
@@ -360,13 +370,13 @@ function FormDatiOspite(props){
 
             </div>
 
-            <button name="ok" id="ok" type="submit" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" }>Aggiungi ospite</button>
+            <button name="ok" id="ok" type="submit" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" } onClick={onSubmit}>Aggiungi ospite</button>
 
                 <button name="ok" id="ok" type="button" className="btn btn-warning mt-3 float-left" onClick={toggleContenuto}>Aggiungi documento</button>
                 <br/><br/>
 
                 <div className={(mostraContenuto) ? "" : "collapse"}>
-                    <FormDocumenti/>
+                    <FormDocumenti handleFoto={handleFoto}/>
                 </div>
 
         </form>

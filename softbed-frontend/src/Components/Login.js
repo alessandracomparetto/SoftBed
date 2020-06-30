@@ -1,55 +1,48 @@
-import React from 'react';
-import $ from "jquery";
+import React, {useState} from 'react';
 import axios from "axios";
+import {Redirect} from "react-router-dom";
+
 const crypto = require('crypto');
 
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-})();
+
 
 function Login(){
+    const[redirect, setRedirect] = useState(false);
     function onSubmit(e){
         e.preventDefault();
-        let email =  document.getElementById("email").value;
-        let pass = document.getElementById("pass").value;
 
-        let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
-        passhash.update(pass); // cifriamo la password
-        let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
+        let form = document.getElementById("form");
+        form.classList.add('was-validated');
 
-        const utenteLogin= {
-            email: email,
-            pass: encpass,
-        }
+        if(form.checkValidity()) {
+            let email = document.getElementById("email").value;
+            let pass = document.getElementById("pass").value;
 
-        console.log(utenteLogin);
-        {/*
-        TODO: Aggiungere i controlli per inserimento nel db
-        */}
-        try{
-            axios.post("/utente/login", utenteLogin);
-        }
-        catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
+            let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
+            passhash.update(pass); // cifriamo la password
+            let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
+
+            const utenteLogin = {
+                email: email,
+                pass: encpass,
+            }
+            console.log(utenteLogin);
+
+            try {
+                axios.post("/utente/login", utenteLogin)
+                    .then(() => setRedirect(true));
+            } catch (err) {
+                if (err.response.status === 400) {
+                    console.log('There was a problem with the server');
+                } else {
+                    console.log(err.response.data.msg);
+                }
             }
         }
+    }
+
+    if (redirect){
+        return <Redirect to='/'/>;
     }
     return(
             <div className="container text-center">
@@ -61,7 +54,7 @@ function Login(){
                         </div>
                     </div>
                     <div className="text-center mt-5 pt-3"><h3>Accedi</h3></div>
-                    <form className="needs-validation" onSubmit={onSubmit} noValidate action="/">
+                    <form id="form" onSubmit={onSubmit} noValidate action="/">
                         <div className="form-group" >
                             <div className="input-group pt-2 mt-4 pb-2">
                                 <label className="sr-only" htmlFor="email"/>
