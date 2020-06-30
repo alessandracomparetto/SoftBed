@@ -1,21 +1,20 @@
 import React, {useEffect, useState} from "react";
 import $ from "jquery";
-import { useParams } from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 
 import Breadcrumb from "../Breadcrumb";
 import Servizio from "../Schermata Risultati/Servizio";
 import Mappa from "../Schermata Risultati/Mappa";
 import ImmaginiStruttura from "./ImmaginiStruttura";
-import { convertiData } from "../../Actions/gestioneDate";
+import {convertiData} from "../../Actions/gestioneDate";
+import axios from "axios";
 
 
 function SchermataStruttura(props) {
     let { id } = useParams();
 
-    const struttura = {
+    const [struttura, setStruttura] = useState({
         idStruttura: id,
-        nome: "Dolce Risveglio",
-        descrizione: "Questa struttura è bella, ma mai quanto te che stai leggendo ^-^",
         servizi: [
             {servizio: "Aria condizionata", icona: "snowflake"},
             {servizio: "Riscaldamento", icona: "fire"},
@@ -71,32 +70,42 @@ function SchermataStruttura(props) {
                 numeroPersone: 10
             }
         }
-    }
+    });
+
+    useEffect(() => {
+        axios.get(`/struttura/${id}`)
+            .then((res) => {
+                let tmp ={};
+                Object.assign(tmp, struttura);
+                tmp.nome = res.data.nomeStruttura;
+                tmp.descrizione = res.data.descrizione;
+                setStruttura(tmp);
+            })
+    }, []);
 
     useEffect(() => {
         let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
 
-        const nuovaStruttura = {id: id, nome: struttura.nome}
-
+        const nuovaStruttura = {id: id, nome: struttura.nome, img: struttura.foto[0]}
         const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 
-        if (pos !== -1) {
-            LS.splice(pos, 1);
-        }
+        if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente
 
-        const nuovoLS = [...LS, nuovaStruttura];
-
+        // Aggiunta della struttura
+        let nuovoLS = [...LS, nuovaStruttura];
+        nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
         localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
 
-        // Gestione stato numeroAdulti
+
+        // GESTIONE STATO NUMEROADULTI
         const adulti = $('#adulti');
 
         adulti.on('change', () => {
             setNumeroAdulti(adulti.val());
         })
-    }, [id, struttura.nome])
+    }, [struttura]);
 
-    // Gestione delle date
+    // GESTIONE DELLE DATE
     const oggi = new Date();
     const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
@@ -112,6 +121,37 @@ function SchermataStruttura(props) {
         controlloDate();
     }
 
+    const history = useHistory();
+    const controlloAccesso = (event) => {
+        const token = localStorage.getItem("token");
+        event.preventDefault();
+
+        if (token) {
+            // Se l'utente non risulta loggato, viene rimandato alla pagina di login
+            // TODO: Sarebbe carino spiegargli il perché...
+            console.log("L'utente non è loggato!");
+            history.push('/accedi');
+        }
+
+        else {
+            // Mi genero un URL personalizzato interpretabile dalla pagina di pagamento
+            const parametri = {
+                idStruttura: id,
+                dataCheckIn: $("#dataCheckIn").val(),
+                orarioCheckIn: $("#orarioCheckIn").val(),
+                dataCheckOut: $("#dataCheckOut").val(),
+                orarioCheckOut: $("#orarioCheckOut").val(),
+                adulti: $("#adulti").val(),
+                bambini: $("#bambini").val(),
+                esenti: $("#esenti").val()
+            }
+
+            const stringaParametri = $.param(parametri);
+            history.push("/pagamento/informazioni?" + stringaParametri);
+        }
+
+    }
+
     const controlloForm = (event) => {
         if (struttura.tipologia && struttura.tipologia === "b&b") {
             const singole = $("#singole");
@@ -121,6 +161,8 @@ function SchermataStruttura(props) {
             if (singole.val() + doppie.val() < 1)
                 event.preventDefault();
         }
+
+        else controlloAccesso(event);
     }
 
     const controlloCamere = () => {
@@ -305,7 +347,7 @@ function SchermataStruttura(props) {
                             <div className="form-group row">
                                 <label className="col-sm-3 col-form-label" htmlFor="bambini">Bambini</label>
                                 <div className="col-sm-3">
-                                    <input name="bambini" type="number" className="form-control" id="numeroSingole"
+                                    <input name="bambini" type="number" className="form-control" id="bambini"
                                            aria-describedby="Numero di bambini" min={0} max={100}
                                            defaultValue={0} required/>
                                 </div>

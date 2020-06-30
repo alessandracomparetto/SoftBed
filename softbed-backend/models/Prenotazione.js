@@ -7,15 +7,16 @@ module.exports = {
         let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsenti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
         let datiQuery = [
-            datiPrenotazione.dataCheckIn + " " + datiPrenotazione.oraCheckIn,
-            datiPrenotazione.dataCheckOut + " " + datiPrenotazione.oraCheckOut,
-            datiPrenotazione.costo,
-            datiPrenotazione.nAdulti,
-            datiPrenotazione.nBambini,
-            datiPrenotazione.nEsenti,
-            datiPrenotazione.refMetodoPagamento,
-            datiPrenotazione.refUtente,
-            datiPrenotazione.refStruttura];
+            datiPrenotazione.dataCheckIn + " " + datiPrenotazione.orarioCheckIn,
+            datiPrenotazione.dataCheckOut + " " + datiPrenotazione.orarioCheckOut,
+            datiPrenotazione.prezzo,
+            datiPrenotazione.adulti,
+            datiPrenotazione.bambini,
+            datiPrenotazione.esenti,
+            datiPrenotazione.metodoPagamento,
+            datiPrenotazione.idUtente,
+            datiPrenotazione.idStruttura
+        ];
 
         db.query(query, datiQuery, function (err, risultato) {
             if (err) callback(err);

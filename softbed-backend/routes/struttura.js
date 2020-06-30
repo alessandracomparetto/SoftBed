@@ -15,12 +15,20 @@ router.get('/', function(req, res, next) {
 });
 
 
+router.get('/:idStruttura', function(req, res) {
+    strutturaModel.carica(req.params.idStruttura, function(data) {
+        res.send(data[0]);
+    })
+})
+
+
 router.post('/', function (req, res) {
     strutturaModel.create(req.body,function(data){
         console.log(data);
         res.send(data);
     });
 });
+
 
 router.post('/modificaCondizioni', function (req, res) {
     console.log("REQ.BODY ====")
@@ -35,7 +43,7 @@ module.exports = router;
 
 
 
-
+// TODO: Da rimuovere
 /*async function registrazioneStruttura(req, res, next){
     console.log(req.body);
     console.log("mondos");

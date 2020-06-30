@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import RichiestaPrenotazioneOspite from "./RichiestaPrenotazioneOspite";
 import PrenotazioneOspite from "./PrenotazioneOspite";
 
 function SchermataPrenotazioniOspite() {
 
-    // TODO: da rimuovere
-    const [inAttesa, setInAttesa] = useState([
+    // TODO: rimuovere lo stato iniziale
+    const [richieste, setRichieste] = useState([
         {
             id: 75,
             struttura: {
@@ -39,7 +39,7 @@ function SchermataPrenotazioniOspite() {
             prezzo: "123.70"
         }
     ]);
-    const [precedenti, setPrecedenti] = useState([
+    const [prenotazioni, setPrenotazioni] = useState([
         {
             id: 3,
             struttura: {
@@ -87,29 +87,32 @@ function SchermataPrenotazioniOspite() {
         }
     ]);
 
-    const rimuoviRichiesta = (id) => {
-        let tmp = [...inAttesa];
-        const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
-        tmp.splice(index, 1);
-        setInAttesa(tmp);
-    }
+    useEffect(() => {
+        // TODO: caricare le prenotazioni
+    }, [])
 
-    const rimuoviPrenotazione = (id) => {
-        let tmp = [...precedenti];
+    const rimuoviRichiesta = (id) => {
+        let tmp = [...richieste];
         const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
         tmp.splice(index, 1);
-        setPrecedenti(tmp);
+        setRichieste(tmp);
+    }
+    const rimuoviPrenotazione = (id) => {
+        let tmp = [...prenotazioni];
+        const index = tmp.map((richiesta) => { return richiesta.id }).indexOf(id);
+        tmp.splice(index, 1);
+        setPrenotazioni(tmp);
     }
 
     return (
         <div className="container my-3">
             {/* Richieste in attesa */}
-            { inAttesa[0] && (
+            { richieste[0] && (
                 <div className="my-3">
                     <h3>Richieste in attesa</h3>
                     <ul className="list-group list-group-flush">
 
-                        { inAttesa.map((richiesta, indice) => {
+                        { richieste.map((richiesta, indice) => {
                             return (
                                 <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviRichiesta}/>
                             )
@@ -119,16 +122,16 @@ function SchermataPrenotazioniOspite() {
                 </div>
             )}
 
-            {/* Prenotazioni precedenti */}
-            { precedenti[0] && (
+            {/* Prenotazioni prenotazioni */}
+            { prenotazioni[0] && (
                 <div className="my-3">
                     <h3>Prenotazioni precedenti</h3>
                     <ul className="list-group list-group-flush">
 
-                        { precedenti.map((prenotazione, indice) => {
+                        { prenotazioni.map((prenotazione, indice) => {
                             return (
-                                // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (non passate)
-                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0} rimuovi={rimuoviPrenotazione()}/>
+                                // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (ma non passate)
+                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0} rimuovi={rimuoviPrenotazione}/>
                             )
                         })}
 

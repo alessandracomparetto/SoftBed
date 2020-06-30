@@ -56,7 +56,7 @@ module.exports= {
 
                             console.log("inserito b&b");
                             for(camera of datiStruttura.camere) {
-                                sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                                sql = 'INSERT INTO `cameraB&B` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES (?,?,?,?,?)';
                                 datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
                                 db.query(sql, datiQuery, function (err) {
@@ -84,19 +84,19 @@ module.exports= {
             return callback("OK");
         }); //chiusura query inidirizzo
     }, //end create
+
     search: async function(datiRicerca, callback) {
 
-        console.log('search');
         // Strutture che si trovano nella zona cercata
         // (?, ?, ?) -> (destinazione, destinazione, destinazione)
         let queryDestinazione = `SELECT comuni.idComune \
-            FROM comuni, province, regioni \
-            WHERE \
-            comuni.refProvincia = province.idProvincia AND \
-            province.refRegione = regioni.idRegione AND (\
-            comuni.nomeComune = ? OR \
-            province.nomeProvincia = ? OR \
-            regioni.nomeRegione = ?)`
+        FROM comuni, province, regioni \
+        WHERE \
+        comuni.refProvincia = province.idProvincia AND \
+        province.refRegione = regioni.idRegione AND (\
+        comuni.nomeComune = ? OR \
+        province.nomeProvincia = ? OR \
+        regioni.nomeRegione = ?)`
 
         // Strutture NON disponibili nel periodo cercato
         // (?, ?) -> (dataArrivo, dataPartenza)
@@ -130,7 +130,7 @@ module.exports= {
         FROM struttura \
         WHERE struttura.idStruttura IN (${queryID})`;
 
-        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.dataArrivo, datiRicerca.dataPartenza]
+        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza];
 
         db.query(queryTMP, parametri, function(err, risultato) {
             if (err) return callback(err);
@@ -190,6 +190,19 @@ module.exports= {
             console.log("ho modificato!");
             return callback(data);
         });
+    },
+
+    carica: async function(idStruttura, callback) {
+
+        let query = `SELECT struttura.nomeStruttura, struttura.descrizione, struttura.tipologiaStruttura \
+        FROM struttura \
+        WHERE struttura.idStruttura = ?`
+
+        db.query(query, idStruttura, function(err, risultato) {
+            if (err) return callback(err);
+            else return callback(risultato);
+        })
+
     }
 };
 
