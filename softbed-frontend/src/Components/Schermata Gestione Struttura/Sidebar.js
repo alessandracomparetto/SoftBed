@@ -9,9 +9,7 @@ function Sidebar() {
     function modificaCondizioni(){
         console.log("modificaCondizioni");
     }
-    function modificaDisponibilità(){
-        console.log("modificaDisponibilità");
-    }
+
     return (
         <nav className="navbar bg-warning">
             <button className="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
@@ -23,7 +21,7 @@ function Sidebar() {
                     <Fragment>
                         <a className="nav-link text-dark" onClick={modificaCaratteristiche}>Modifica Caratteristiche</a>
                         <a className="nav-link text-dark" onClick={modificaCondizioni}>Modifica condizioni</a>
-                        <a className="nav-link text-dark" onClick={modificaDisponibilità}>Mdifica dispomibilità</a>
+
                         <div className="dropdown-divider"/>
                     </Fragment>
                 </ul>

@@ -1,6 +1,7 @@
+
+
 import React, {Fragment, useEffect, useState} from "react";
 import axios from 'axios';
-import {useParams, useHistory} from "react-router-dom";
 
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
@@ -37,7 +38,6 @@ function SchermataGestioneStruttura(){
         document.getElementById("InformazioniPricipali").classList.remove("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
@@ -46,27 +46,17 @@ function SchermataGestioneStruttura(){
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
         console.log(struttura);
     }
     function modificaCondizioni(){
         document.getElementById("condizioni").classList.remove("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-    }
-    function modificaDisponibilità(){
-        document.getElementById("disponibilità").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
@@ -77,7 +67,6 @@ function SchermataGestioneStruttura(){
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("disponibilità").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
     }
     function printObject(o) {
@@ -136,19 +125,19 @@ function SchermataGestioneStruttura(){
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
+                                        <button type="button" className="btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
+                                        <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
                                 <Fragment>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
+                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </Fragment>
@@ -178,9 +167,7 @@ function SchermataGestioneStruttura(){
                 <div id="condizioni" className="collapse col-12 col-md-9">
                     <ModificaCondizioni dati={struttura} handleChange={handleChange} correzione={correzione}/>
                 </div>
-                <div id="disponibilità" className="collapse col-12 col-md-9">
-                    <ModificaDisponibilita props={struttura}/>
-                </div>
+
             </div>
         </div>
     )

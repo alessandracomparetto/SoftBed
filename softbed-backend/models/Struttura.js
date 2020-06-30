@@ -25,7 +25,7 @@ module.exports= {
                 sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
                 //TODO: REF GESTORE
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
-                let infoPrincipali = await db.query(sql, [[datiQuery]]).catch(err => {
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
                     throw err;
                 });
                 console.log('Inserimento tabella struttura');
@@ -216,8 +216,6 @@ module.exports= {
         }
     },
 
-
-
     cerca: async function(datiRicerca, callback) {
 
         const db = await makeDb(config);
@@ -351,21 +349,7 @@ module.exports= {
         }
     },
 
-    modificaDisponibilità:async function (struttura, callback){
-        //inserisco nel db i periodi in cui la struttura non è disponibile
-        const db = await makeDb(config);
-        try {
-            await withTransaction(db, async () => {
-
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
-    },
-
-    listaStrutture:async function(callback){
-        console.log("lista strutture");
+    listaStrutture:async function(){
         const db = await makeDb(config);
         let idGestore=3;
 

@@ -90,7 +90,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMin"
                            className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                     <select id="anticipoPrenotazioneMin" className="custom-select mr-2" name="anticipoPrenotazioneMin"
-                            value={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
+                            onSelect={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={2}>2 giorni</option>
                         <option value={3}>3 giorni</option>
@@ -104,7 +104,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMax"
                            className="mt-3 mr-3 border-bottom border-primary">Massimo</label>
                     <select id="anticipoPrenotazioneMax" className="custom-select" name="anticipoPrenotazioneMax"
-                            value={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
+                            selectValue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={14}>2 settimane</option>
                         <option value={21}>3 settimane</option>
@@ -205,7 +205,7 @@ function FormCondizioni(props) {
                                 <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":"text-muted")} id="preavvisoTesto">Preavviso
                                     minimo disdetta</label>
                                 <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"
-                                        value={props.dati.preavvisoDisdetta}
+                                        selectValue={props.dati.preavvisoDisdetta}
                                         required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
                                         disabled={((props.dati.politicaCancellazione === "gratuita") ? true : false)}>
                                     <option value=""/>
