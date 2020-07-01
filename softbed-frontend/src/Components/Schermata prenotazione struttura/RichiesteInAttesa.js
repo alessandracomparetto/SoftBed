@@ -1,9 +1,53 @@
 import Prenotazione from "./Prenotazione";
 import React, {useState} from "react";
+import axios from "axios";
 
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+    function rifiutaPrenotazione(){
+        console.log("sto per inviare la richiesta di cancellazione");
+        console.log(props);
+        axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
+            console.log("dATA"+res.data);
+            const informazioni={
+                id:props.prenotazione.idPrenotazione,
+                struttura:props.prenotazione.refStruttura,
+                data:props.prenotazione.checkIn,
+                emailOspite:props.prenotazione.email,
+                emailGestore:"mary_pal@live.it", /*TODO:modificare*/
+            }
+            axios.post('/mail/rifiuta-prenotazione',informazioni)
+                .catch(err=> console.log(err));
+            /*//aggiorno lo stato
+            let tmp=[...prenotazioni];
+            tmp.splice(props.indiceElemento,1);
+            aggiornaPrenotazioni(tmp);*/
+        })
+            .catch(err => console.log(err));
+    }
+    function confermaPrenotazione () {
+        console.log("sto per inviare la conferma di prenotazione");
+        axios.post(`/prenotazione/confermaPrenotazione`, {idPrenotazione:props.prenotazione.idPrenotazione}).then(res => {
+            console.log(res.data);
+            const informazioni={
+                id:props.prenotazione.idPrenotazione,
+                struttura:props.prenotazione.refStruttura,
+                data:props.prenotazione.checkIn,
+                emailOspite:props.prenotazione.email,
+                emailGestore:"mary_pal@live.it", /*TODO:modificare*/
+            }
+            console.log("qui ci sono!");
+            axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
+                .catch(err=> console.log(err));
+            /*//aggiorno lo stato
+            let tmp=[...prenotazioni];
+            tmp.splice(props.indiceElemento,1);
+            aggiornaPrenotazioni(tmp);*/
+            /*TODO:DOVREI AGGIORNARE LO STATO*/
+        })
+            .catch(err => console.log(err));
+    }
     return(
         <div >
             <div className="row  d-flex justify-content-center">
@@ -24,8 +68,8 @@ function RichiesteInAttesa(props){
             <div className={"col-12 my-3 py-3 border-top border-dark" + ((mostraContenuto) ? "" : " collapse")}>
                 <Prenotazione dati={props.prenotazione}></Prenotazione>
                 <div id="buttonRemove" className="mt-3 btn-group d-flex justify-content-between">
-                    <button type="button " className="btn  btn-success mr-2" style={{maxWidth : 170+'px'}} onClick={() => props.confermaPrenotazione( props.prenotazione.idPrenotazione)}>Conferma </button>
-                    <button type="button " className="btn btn-danger mr-2" style={{maxWidth : 170+'px'}} onClick={() => props.rifiutaPrenotazione( props.prenotazione.idPrenotazione)}>Rifiuta</button>
+                    <button type="button " className="btn  btn-success mr-2" style={{maxWidth : 170+'px'}} onClick={confermaPrenotazione}>Conferma </button>
+                    <button type="button " className="btn btn-danger mr-2" style={{maxWidth : 170+'px'}} onClick={rifiutaPrenotazione}>Rifiuta</button>
                 </div>
             </div>
         </div>

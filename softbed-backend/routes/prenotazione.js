@@ -10,18 +10,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/listaPrenotazioni', function (req, res) {
-    console.log(req.body);
     prenotazioneModel.getPrenotazioni(req.body,function (data){
-        console.log(data);
         res.send(data);
     }).catch((err) => {
         res.status(err.status).send(err.message);
     });
 });
 router.post('/rifiutaPrenotazione', function (req, res) {
-    console.log("richiesta di rifiuto arrivataAAAAAA");
-    console.log(req.body);
-    console.log(req.body.idPrenotazione);
     prenotazioneModel.rifiutaPrenotazione(req.body,function (data){
         res.send("OK"); })
         .catch((err) => {
@@ -30,9 +25,6 @@ router.post('/rifiutaPrenotazione', function (req, res) {
     });
 
 router.post('/confermaPrenotazione', function (req, res) {
-    console.log("richiesta di prenotazione arrivataAAAAAA");
-    console.log(req.body);
-    console.log(req.body.idPrenotazione);
     prenotazioneModel.confermaPrenotazione(req.body,function (data){
         res.send("OK"); })
         .catch((err) => {

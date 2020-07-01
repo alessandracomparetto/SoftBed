@@ -10,11 +10,11 @@ function SchermataStrutture(){
     useEffect(() => {
         if(!window.sessionStorage.getItem("strutture")){
             axios.get('/struttura/listaStruttureGestore') //prendo la lista delle strutture se non è presente il session storage
-            .then(res => {
-                console.log(res.data);
-                setLista(res.data);
-                window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
-            }).catch(err => console.log(err));
+                .then(res => {
+                    console.log(res.data);
+                    setLista(res.data);
+                    window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
+                }).catch(err => console.log(err));
         } else{
             setLista(JSON.parse(window.sessionStorage.getItem("strutture")));
         }
@@ -26,6 +26,7 @@ function SchermataStrutture(){
             <ul className="list-group list-group-flush ">
                 {
                     listaStrutture.map((struttura, indice) => {
+                        {console.log(struttura)}
                         return(
                             <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key={indice}>
                                 <div className="row d-flex justify-content-center">
@@ -33,10 +34,10 @@ function SchermataStrutture(){
                                         <strong>{struttura.nomeStruttura}</strong>
                                     </div>
                                     <div className="col-4 col-md-3 my-auto text-center">
-                                        <strong>{struttura.nomeComune} </strong>
+                                        <strong>{struttura.via} {struttura.numeroCivico} </strong>
                                     </div>
                                     <div className="col-4 col-md-3 my-auto text-center">
-                                        <strong>{struttura.tipologia}</strong>
+                                        <strong>{struttura.tipologiaStruttura}</strong>
                                     </div>
                                     <div  className=" col-12 col-lg-3">
                                         <Link className="text-light" to={`/struttura/gestioneStruttura/${listaStrutture[indice].idStruttura}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>

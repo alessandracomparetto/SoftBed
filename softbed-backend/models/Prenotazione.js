@@ -111,6 +111,8 @@ module.exports = {
             await withTransaction(db, async () => {
                 let result = await db.query('UPDATE prenotazione SET prenotazione.confermata=1 , prenotazione.dataScadenza=null , prenotazione.dataConferma=? WHERE idPrenotazione = ?', [dataConferma,data.idPrenotazione]).catch((err) => {throw err});
                 console.log(result);
+                if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
+                else return res(result);
             })
         } catch(err) {
             throw err;
