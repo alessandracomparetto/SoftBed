@@ -51,19 +51,29 @@ module.exports = {
     },
 
     getPrenotazioni: async function(dati, callback){
-        console.log("IDStruttura"+dati.idStruttura);
         idStruttura=dati.idStruttura;
         /*TODO:aggiungere camere*/
         const db=await makeDb(config);
-        let result={};
         try{
            await withTransaction(db,async()=> {
-               results=await db.query('SELECT * FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente', [[[idStruttura]]]).catch(err=>{
+               let listaPrenotazioni = await db.query('SELECT * FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente', [[[idStruttura]]]).catch(err => {
                    throw err;
                });
-               console.log("RESULT");
-               console.log(results);
-               return callback(results);
+               if (dati.tipologiaStruttura == "B&B"){
+                   for (let i = 0; i < listaPrenotazioni.length; i++) {
+                       let indice = listaPrenotazioni[i].idPrenotazione;
+                       console.log(indice);
+                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera JOIN prenotazione WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=prenotazione.idPrenotazione \
+                                                        AND prenotazione.idPrenotazione=?', [indice]).catch(err=>{throw err});
+                       let array=[];
+                       for (let i = 0; i < camere.length; i++) {
+                           array.push(camere[i]);
+                       }
+                       console.log("CAMERE",array);
+                       listaPrenotazioni[i]["camere"] = array;
+                   }
+               }
+               return callback(listaPrenotazioni);
            });
         }
         catch(err){

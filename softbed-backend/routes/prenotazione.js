@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/listaPrenotazioni', function (req, res) {
+    console.log(req.body);
     prenotazioneModel.getPrenotazioni(req.body,function (data){
         console.log(data);
         res.send(data);

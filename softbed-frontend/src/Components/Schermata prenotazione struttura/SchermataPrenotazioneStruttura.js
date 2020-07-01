@@ -5,15 +5,15 @@ import {abilitazione} from "../../Actions/abilitazione";
 import axios from "axios";
 function SchermataPrenotazioneStruttura(props){
     const [prenotazioni, aggiornaPrenotazioni]=useState([]);
+
     useEffect(() => {
-        console.log("PROPS")
-        console.log(props);
-        axios.post(`/prenotazione/listaPrenotazioni`, props).then(res => {
+        let data = {"idStruttura":props.idStruttura, "tipologiaStruttura":props.tipologiaStruttura};
+        axios.post(`/prenotazione/listaPrenotazioni`, data).then(res => {
             aggiornaPrenotazioni(res.data);
         })
-            .catch(err => console.log(err));
+        .catch(err => console.log(err));
+    }, [props.tipologiaStruttura]);
 
-    }, []);
     const rifiutaPrenotazione = (idPrenotazione) => {
             console.log("sto per inviare la richiesta di cancellazione");
             console.log("idp"+idPrenotazione)
@@ -55,7 +55,7 @@ function SchermataPrenotazioneStruttura(props){
                 {
                     prenotazioni.map((prenotazione, indice) => {
                             if (prenotazione.confermata == 0) {
-                                return (<li className="list-group-item list-group-item-warning">
+                                return (<li key={indice} className="list-group-item list-group-item-warning">
                                     <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} confermaPrenotazione={confermaPrenotazione} rifiutaPrenotazione={rifiutaPrenotazione} /></li>)
                             }
                     })
@@ -66,7 +66,7 @@ function SchermataPrenotazioneStruttura(props){
                 {
                     prenotazioni.map((prenotazione, indice) => {
                         if (prenotazione.confermata == 1) {
-                            return (<li className="list-group-item list-group-item-warning">
+                            return (<li key={indice} className="list-group-item list-group-item-warning">
                                 <RichiesteConfermate key={indice}  indiceElemento={indice} prenotazione={prenotazione}/></li>)
                         }
                     })

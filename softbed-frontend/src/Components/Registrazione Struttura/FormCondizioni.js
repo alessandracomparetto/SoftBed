@@ -110,7 +110,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMax"
                            className="mt-3 mr-3 border-bottom border-primary">Massimo</label>
                     <select id="anticipoPrenotazioneMax" className="custom-select" name="anticipoPrenotazioneMax"
-                            defaultvalue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
+                            defaultValue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={14}>2 settimane</option>
                         <option value={21}>3 settimane</option>

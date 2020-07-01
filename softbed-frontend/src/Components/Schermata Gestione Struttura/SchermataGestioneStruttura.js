@@ -25,7 +25,7 @@ function SchermataGestioneStruttura(){
             .then(res => {
                 setStruttura(res.data);
                 console.log("Strutturaaa:");
-                console.log(res.data)
+                console.log(res.data);
             })
             .catch(err => console.log(err));
     }, []);

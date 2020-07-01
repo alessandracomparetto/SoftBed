@@ -115,8 +115,8 @@ module.exports= {
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
-                    console.log("CAMERE")
-                    console.log(array);
+                    /*console.log("CAMERE")
+                    console.log(array);*/
                     infoStruttura[0]["camere"] = array;
                 }
                 foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
@@ -311,12 +311,12 @@ module.exports= {
 
     listaStrutture:async function(callback){
         const db = await makeDb(config);
-        let idGestore=1;
+        let idGestore=3;
         console.log("sono qui,ciao");
         try {
             await withTransaction(db, async () => {
                 let results=await db.query(('SELECT * FROM struttura WHERE  struttura.refGestore = ?'),[[[idGestore]]]).catch(err => {
-                    console.log(results);
+                    // console.log(results);
                     throw err;
                 });
                 return callback(results);
