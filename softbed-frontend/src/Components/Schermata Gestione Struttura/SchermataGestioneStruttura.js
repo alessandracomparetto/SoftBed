@@ -10,8 +10,8 @@ import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/
 
 function SchermataGestioneStruttura(){
     let {id} = useParams();
-
     const [struttura,setStruttura]=useState([]);
+
     useEffect(() => {
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
         let dati;
@@ -68,6 +68,7 @@ function SchermataGestioneStruttura(){
         document.getElementById("condizioni").classList.add("collapse");
 
     }
+
     function printObject(o) {
         let out = '';
         for (let p in o) {
@@ -78,10 +79,19 @@ function SchermataGestioneStruttura(){
     function handleChange(event){
         const{name,value}=event.target;
         let tmp=struttura;
-        tmp[name]=value;
+        if(event.target.type === "checkbox"){
+            if(event.target.checked === true){
+                tmp[name]=1;
+            }
+            if(event.target.checked ===false){
+                tmp[name]=0;
+            }
+        }else{
+            tmp[name]=value;
+        }
         setStruttura(tmp);
-        printObject(tmp);
     }
+
 
     function correzione (nome, valore){
         console.log("aggiorno "+nome+ " a "+valore);
@@ -148,16 +158,16 @@ function SchermataGestioneStruttura(){
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
-                            <ModificaCaratteristicheC props={struttura} handleChange={handleChange}/>
+                            <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange}/>
                             :
-                            <ModificaCaratteristicheB props={struttura} handleChange={handleChange}/>
+                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange} />
                     }
                 </div>
                 <div id="guadagno" className="collapse col-12 col-md-9">
-                    <CalcoloGuadagno dati={struttura}/>
+                    <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} handleChange={handleChange} correzione={correzione}/>
+                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} correzione={correzione}/>
                 </div>
 
             </div>

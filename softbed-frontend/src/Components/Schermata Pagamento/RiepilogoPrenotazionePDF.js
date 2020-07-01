@@ -4,9 +4,6 @@ function RiepilogoPrenotazionePDF(dati, id) {
     let doc = new jsPDF();
     let y = 2;
 
-    console.log(dati);
-    console.log(id);
-
     doc.setFontSize(20);
     doc.setFontType("bold");
     doc.text(20, 10 * y++ - 2, 'Riepilogo prenotazione');
@@ -18,8 +15,6 @@ function RiepilogoPrenotazionePDF(dati, id) {
 
     doc.setFontType("normal");
     doc.text(80, 10 * y++, `${id}`);
-
-    console.log("Ciao", y);
 
     doc.setFontType("bold");
     doc.text(25, 10 * y, 'Struttura: ');
@@ -50,10 +45,10 @@ function RiepilogoPrenotazionePDF(dati, id) {
     doc.text(25, 10 * y, 'Persone: ');
 
     doc.setFontType("normal");
-    doc.text(80, 10 * y++, `${dati.adulti}x adulto ${(parseInt(dati.esenti) !== 0) ? "(di cui " + dati.esenti + " esenti)" : ""}`);
+    doc.text(80, 10 * y++, `${dati.adulti}x adulto ${(parseInt(dati.adultiEsenti) !== 0) ? "(di cui " + dati.adultiEsenti + " esenti)" : ""}`);
 
     if (parseInt(dati.bambini) !== 0) {
-        doc.text(80, 10 * y++, `${dati.bambini}x bambino`);
+        doc.text(80, 10 * y++, `${dati.bambini}x bambino ${(parseInt(dati.bambiniEsenti) !== 0) ? "(di cui " + dati.bambiniEsenti + " esenti)" : ""}`);
     }
 
     doc.line(20, 10 * y - 5, 190, 10 * y - 5);

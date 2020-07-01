@@ -141,13 +141,13 @@ module.exports= {
         try {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
-                let results = await db.query('UPDATE condizioni SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE refStruttura = ?', ["condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
-                    "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
-                    "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,"condizioni.percentualeRiduzione", struttura.percentualeRiduzione,
-                    "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
-                    "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
-                    2]).catch(err => {throw err;});
+                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                         WHERE refStruttura = ?', [`condizioni`, "condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
+                            "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
+                            "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,
+                            "condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
+                            "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
+                    struttura.idStruttura]).catch(err => {throw err;});
                 return callback(results);
             });
         } catch (err) {
@@ -191,7 +191,7 @@ module.exports= {
         let queryFoto = `SELECT fotografie.percorso
             FROM fotografie
             WHERE fotografie.refStruttura = ?`
-
+        
         // B&B
         let queryPrezzoBB = `SELECT CBB.tipologiaCamera, MIN(CBB.prezzoBaseANotte) as prezzo
             FROM \`cameraB&B\` as CBB, \`B&B\` as BB
@@ -199,9 +199,13 @@ module.exports= {
                 AND BB.refStruttura = CBB.refStruttura
             GROUP BY CBB.tipologiaCamera`
 
+        let queryDescrizioneBB = `SELECT BB.descrizione
+                                  FROM \`B&B\` as BB
+                                  WHERE BB.refStruttura = ?`
+
         let queryServiziBB = `SELECT BB.bambini, BB.ariaCondizionata, BB.wifi, BB.riscaldamento, BB.parcheggio, 
                 BB.strutturaDisabili, BB.animaliAmmessi, BB.permessoFumare, BB.TV, BB.cucinaCeliaci,
-                BB.navettaAeroportuale, BB.servizioInCamera, BB.descrizione
+                BB.navettaAeroportuale, BB.servizioInCamera
             FROM \`B&B\` as BB
             WHERE BB.refStruttura = ?`
 
@@ -209,6 +213,10 @@ module.exports= {
         let queryPrezzoCV = `SELECT CV.prezzoNotte
             FROM casaVacanze as CV
             WHERE CV.refStruttura = ?`
+
+        let queryDescrizioneCV = `SELECT CV.descrizione
+                                  FROM casaVacanze as CV
+                                  WHERE CV.refStruttura = ?`
 
         let queryServiziCV = `SELECT CV.bambini, CV.riscaldamento, CV.ariaCondizionata, CV.wifi, CV.parcheggio,
                 CV.strutturaDisabili, CV.animaliAmmessi, CV.permessoFumare, CV.festeAmmesse, CV.TV
@@ -236,19 +244,22 @@ module.exports= {
                 let prezzoBB = await db.query(queryPrezzoBB, idStruttura).catch(() => {throw createError(500)});
                 let prezzoCV = await db.query(queryPrezzoCV, idStruttura).catch(() => {throw createError(500)});
 
+                let descrizione = "";
                 let servizi = [];
 
-                console.log("Prezzo BB", prezzoBB);
                 // Caso B&B
                 if (prezzoBB[0]) {
+                    descrizione = await db.query(queryDescrizioneBB, idStruttura).catch(() => {throw createError(500)});
                     servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
-
+                    
                     // Aggiunta a struttura
                     struttura.prezzo = prezzoBB // array di oggetti {tipologiaStanza, prezzo}
                 }
 
                 // Caso CV
                 else if (prezzoCV[0]) {
+                    descrizione = await db.query(queryDescrizioneCV, idStruttura).catch(() => {throw createError(500)});
+
                     servizi = await db.query(queryServiziCV, idStruttura).catch(() => {throw createError(500)});
                     let ambienti = await db.query(queryAmbientiCV, idStruttura).catch(() => {throw createError(500)});
                     let bagniCamereLetti = await db.query(queryBagniCamereLetti, idStruttura).catch(() => {throw createError(500)});
@@ -275,6 +286,8 @@ module.exports= {
                 else throw createError(404);
 
                 // Aggiunta di informazioni dello stesso tipo
+                struttura.descrizione = descrizione[0].descrizione;
+
                 struttura.servizi = Object.keys(servizi[0])
                     .reduce(function(risultato, servizio) {
                         if (servizi[0][servizio] === 1) {
@@ -398,8 +411,8 @@ module.exports= {
                 let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
                          WHERE refStruttura= ?', [`b&b`, "b&b.bambini", struttura.bambini, "b&b.ariaCondizionata", struttura.ariaCondizionata, "b&b.wifi", struttura.wifi,
                     "b&b.parcheggio", struttura.parcheggio,"b&b.strutturaDisabili", struttura.strutturaDisabili,"b&b.animaliAmmessi", struttura.animaliAmmessi,"b&b.permessoFumare", struttura.permessoFumare,
-                    "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAereportuale", struttura.navettaAereportuale,
-                    "b&b.servizioInCamera", struttura.servizioInCamera,"b&b.descrizione", struttura.descrizione,1]).catch(err => {throw err;});
+                    "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAeroportuale", struttura.navettaAeroportuale,
+                    "b&b.servizioInCamera", struttura.servizioInCamera,"b&b.descrizione", struttura.descrizione,struttura.idStruttura]).catch(err => {throw err;});
                 return callback(results);
             });
         } catch (err) {
@@ -645,7 +658,7 @@ module.exports= {
                 AND BB.refStruttura = CBB.refStruttura
             GROUP BY CBB.tipologiaCamera`
 
-        let queryServiziBB = `SELECT BB.bambini, BB.ariaCondizionata, BB.wifi, BB.riscaldamento, BB.parcheggio, 
+        let queryServiziBB = `SELECT BB.bambini, BB.ariaCondizionata, BB.wifi, BB.riscaldamento, BB.parcheggio,
                 BB.strutturaDisabili, BB.animaliAmmessi, BB.permessoFumare, BB.TV, BB.cucinaCeliaci,
                 BB.navettaAeroportuale, BB.servizioInCamera, BB.descrizione
             FROM \`B&B\` as BB
@@ -746,52 +759,52 @@ module.exports= {
         const db = await makeDb(config);
 
         // Strutture che si trovano nella zona cercata
-        let queryDestinazione = `SELECT struttura.idStruttura 
-        FROM struttura, indirizzo 
-        WHERE 
-        struttura.refIndirizzo = indirizzo.idIndirizzo AND 
+        let queryDestinazione = `SELECT struttura.idStruttura
+        FROM struttura, indirizzo
+        WHERE
+        struttura.refIndirizzo = indirizzo.idIndirizzo AND
         indirizzo.refComune IN (
             SELECT comuni.idComune
-            FROM comuni, province, regioni 
-            WHERE 
-            comuni.refProvincia = province.idProvincia AND 
-            province.refRegione = regioni.idRegione AND ( 
-                comuni.nomeComune = "${datiRicerca.destinazione}" OR 
-                province.nomeProvincia = "${datiRicerca.destinazione}" OR 
-                regioni.nomeRegione = "${datiRicerca.destinazione}" 
+            FROM comuni, province, regioni
+            WHERE
+            comuni.refProvincia = province.idProvincia AND
+            province.refRegione = regioni.idRegione AND (
+                comuni.nomeComune = "${datiRicerca.destinazione}" OR
+                province.nomeProvincia = "${datiRicerca.destinazione}" OR
+                regioni.nomeRegione = "${datiRicerca.destinazione}"
             )
         )`;
 
         // CV: CV che non abbiano prenotazioni nel periodo selezionato e con abbastanza letti
         let queryPrenotazioniCV = `SELECT CV.refStruttura
-        FROM casaVacanze as CV 
-        WHERE 
-        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
-        CV.refStruttura NOT IN ( 
-            SELECT prenotazione.refStruttura 
-            FROM prenotazione 
-            WHERE 
-            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
+        FROM casaVacanze as CV
+        WHERE
+        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND
+        CV.refStruttura NOT IN (
+            SELECT prenotazione.refStruttura
+            FROM prenotazione
+            WHERE
+            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR
+            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR
             ("${datiRicerca.arrivo}" <= prenotazione.checkIn AND "${datiRicerca.partenza}" >= prenotazione.checkOut)
         )`
 
         // B&B: B&B con almeno una camera disponibile che abbia abbastanza letti
         let queryPrenotazioniBB = `SELECT DISTINCT CBB1.refStruttura
         FROM \`cameraB&B\` as CBB1
-        WHERE 
-        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
-        (CBB1.refStruttura, CBB1.idCamera) NOT IN ( 
-            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera 
-            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione 
-            WHERE 
-            CBB2.idCamera = prenotazioneCamera.refCamera AND 
-            CBB2.refStruttura = prenotazioneCamera.refStruttura AND 
-            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND 
-            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( 
-                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut) 
+        WHERE
+        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND
+        (CBB1.refStruttura, CBB1.idCamera) NOT IN (
+            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera
+            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione
+            WHERE
+            CBB2.idCamera = prenotazioneCamera.refCamera AND
+            CBB2.refStruttura = prenotazioneCamera.refStruttura AND
+            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND
+            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND (
+                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR
+                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR
+                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut)
             )
         )`
 
@@ -799,18 +812,18 @@ module.exports= {
         // Solo case vacanze
         if (datiRicerca.bedAndBreakfast !== "true") {
             query = `SELECT struttura.idStruttura, struttura.nomeStruttura
-            FROM struttura 
-            WHERE 
-            struttura.idStruttura IN (${queryDestinazione}) AND 
+            FROM struttura
+            WHERE
+            struttura.idStruttura IN (${queryDestinazione}) AND
             struttura.idStruttura IN (${queryPrenotazioniCV})`
         }
 
         // Solo bed and breakfast
         else if (datiRicerca.casaVacanze !== "true") {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura 
-            FROM struttura 
-            WHERE 
-            struttura.idStruttura IN (${queryDestinazione}) AND  
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura
+            FROM struttura
+            WHERE
+            struttura.idStruttura IN (${queryDestinazione}) AND
             struttura.idStruttura IN (${queryPrenotazioniBB})`
         }
 
@@ -820,7 +833,7 @@ module.exports= {
             FROM struttura
             WHERE
                 struttura.idStruttura IN (${queryDestinazione}) AND (
-                    (struttura.idStruttura IN (${queryPrenotazioniBB})) OR 
+                    (struttura.idStruttura IN (${queryPrenotazioniBB})) OR
                     (struttura.idStruttura IN (${queryPrenotazioniCV}))
             )`
         }
@@ -886,4 +899,3 @@ module.exports= {
         }
     }
 };
-*/

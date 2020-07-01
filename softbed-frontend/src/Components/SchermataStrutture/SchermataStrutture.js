@@ -20,11 +20,6 @@ function SchermataStrutture(){
         }
     }, []);
 
-
-    function apri(event) {
-        let calcolo = event.target.closest("li").lastChild;
-        $(calcolo).toggleClass("collapse")
-    }
     return(
         <div className="container">
             <h4>Strutture registrate</h4>

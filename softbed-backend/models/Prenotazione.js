@@ -8,7 +8,7 @@ module.exports = {
         const db = await makeDb(config);
 
         // TODO: Aggiungere esenti bambini
-        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
         let datiQuery = [
             datiPrenotazione.dataCheckIn + " " + datiPrenotazione.orarioCheckIn,
@@ -16,7 +16,8 @@ module.exports = {
             datiPrenotazione.prezzo,
             datiPrenotazione.adulti,
             datiPrenotazione.bambini,
-            datiPrenotazione.esenti,
+            datiPrenotazione.adultiEsenti,
+            datiPrenotazione.bambiniEsenti,
             datiPrenotazione.metodoPagamento,
             datiPrenotazione.idUtente,
             datiPrenotazione.idStruttura

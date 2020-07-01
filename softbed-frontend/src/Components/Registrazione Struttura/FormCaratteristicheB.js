@@ -3,6 +3,7 @@ import React from "react";
 function FormCaratteristicheB(props){
 
     function verificaLunghezza(event){
+        props.handleChange(event);
         if(event.target.value.length>=200){
             document.getElementById("feedback").classList.remove("collapse");
             event.target.classList.add("border-warning");
@@ -15,9 +16,10 @@ function FormCaratteristicheB(props){
     return(
         <div>
             <h6 className="mt-3 border-bottom border-primary">Servizi disponibili</h6>
+            <div onClick={props.handleChange}>
             <div className="form-row-group text-center offset-1">
                 <div className="form-check-inline col-12  col-sm-5  col-lg-3">
-                    <input type="checkbox" className="form-check-input " id="wifi" value={1} name="wifi" defaultChecked={props.dati.wifi}/>
+                    <input type="checkbox" className="form-check-input " id="wifi" name="wifi"  value={1} defaultChecked={props.dati.wifi}/>
                     <label className="form-check-label" htmlFor="wifi">Connessione Wi-fi</label>
                 </div>
                 <div className="form-check-inline col-12  col-sm-5 col-lg-3">
@@ -68,6 +70,7 @@ function FormCaratteristicheB(props){
                     <input type="checkbox" className="form-check-input" id="bambini" name="bambini" value={1} defaultChecked={props.dati.bambini}/>
                     <label className="form-check-label" htmlFor="bambini" style={{minWidth : 300+'px'}}>Idoneità ad ospitare bambini </label>
                 </div>
+            </div>
             </div>
             <h6 className="mt-3 border-bottom border-primary">Descrizione</h6>
             <div className="md-form amber-textarea active-amber-textarea">

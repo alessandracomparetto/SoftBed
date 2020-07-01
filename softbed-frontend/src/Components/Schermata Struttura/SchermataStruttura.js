@@ -67,9 +67,9 @@ function SchermataStruttura(props) {
     });
 
     useEffect(() => {
+        let tmp = {};
         axios.get(`/struttura/${id}`)
             .then((res) => {
-                let tmp ={};
                 Object.assign(tmp, struttura);
                 tmp.nome = res.data.nomeStruttura;
                 tmp.descrizione = res.data.descrizione;
@@ -79,34 +79,39 @@ function SchermataStruttura(props) {
                 tmp.prezzo = res.data.prezzo;
                 tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });
                 setStruttura(tmp);
+            }).then(() => {
+                // Aggiunta della struttura alla lista annunciRecenti della local storage
+                let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
+
+                let nuovaStruttura = {id: id, nome: tmp.nome}
+                if (tmp.foto) {
+                    nuovaStruttura.img = tmp.foto[0];
+                }
+                const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
+
+                if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente
+
+                // Aggiunta della struttura
+                let nuovoLS = [...LS, nuovaStruttura];
+                nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
+                localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
             })
             .catch(() => history.push("/"));
     }, []);
 
+    // GESTIONE STATO NUMERO ADULTI
     useEffect(() => {
-        let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
-
-        let nuovaStruttura = {id: id, nome: struttura.nome}
-        if (struttura.foto) {
-            nuovaStruttura.img = struttura.foto[0];
-        }
-        const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
-
-        if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente
-
-        // Aggiunta della struttura
-        let nuovoLS = [...LS, nuovaStruttura];
-        nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
-        localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
-
-
-        // GESTIONE STATO NUMEROADULTI
-        const adulti = $('#adulti');
+        const adulti = $("#adulti");
+        const bambini = $("#bambini")
 
         adulti.on('change', () => {
             setNumeroAdulti(adulti.val());
         })
-    }, [struttura]);
+
+        bambini.on('change', () => {
+            setNumeroBambini(bambini.val());
+        })
+    }, []);
 
     // GESTIONE DELLE DATE
     const oggi = new Date();
@@ -114,6 +119,7 @@ function SchermataStruttura(props) {
     const maxData = convertiData(oggi, 0, 0, 1);
 
     const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2);
+    const [numeroBambini, setNumeroBambini] = useState(0);
     const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
 
     // Aggiorna il valore minimo per la data di partenza in base alla data di arrivo inserita
@@ -127,9 +133,9 @@ function SchermataStruttura(props) {
     const history = useHistory();
     const controlloAccesso = (event) => {
         const token = localStorage.getItem("token");
-        event.preventDefault();
 
-        if (token) {
+        // TODO: Decommentare
+        if (/*!*/token) {
             // Se l'utente non risulta loggato, viene rimandato alla pagina di login
             // TODO: Sarebbe carino spiegargli il perché...
             console.log("L'utente non è loggato!");
@@ -146,7 +152,8 @@ function SchermataStruttura(props) {
                 orarioCheckOut: $("#orarioCheckOut").val(),
                 adulti: $("#adulti").val(),
                 bambini: $("#bambini").val(),
-                esenti: $("#esenti").val()
+                adultiEsenti: $("#adultiEsenti").val(),
+                bambiniEsenti: $("#bambiniEsenti").val()
             }
 
             const stringaParametri = $.param(parametri);
@@ -223,10 +230,13 @@ function SchermataStruttura(props) {
     }
 
     const controlloOspiti = () => {
-        const esenti = $("#esenti");
+        const adultiEsenti = $("#adultiEsenti");
+        const bambiniEsenti = $("#bambiniEsenti");
         const adulti = $("#adulti");
+        const bambini = $("#bambini");
         const adultiAiuto = $("#adultiAiuto");
-        const esentiAiuto = $("#esentiAiuto");
+        const esentiAdultiAiuto = $("#esentiAdultiAiuto");
+        const esentiBambiniAiuto = $("#esentiBambiniAiuto");
 
         // Controllo numero adulti
         if (adulti.val() < 1) {
@@ -237,13 +247,22 @@ function SchermataStruttura(props) {
             adultiAiuto.addClass("d-none");
         }
 
-        // Controllo numero esenti
-        if (esenti.val() > adulti.val()) {
-            esentiAiuto.removeClass("d-none");
+        // Controllo numero adulti esenti
+        if (adultiEsenti.val() > adulti.val()) {
+            esentiAdultiAiuto.removeClass("d-none");
         }
 
         else {
-            esentiAiuto.addClass("d-none");
+            esentiAdultiAiuto.addClass("d-none");
+        }
+
+        // Controllo numero bambini esenti
+        if (bambiniEsenti.val() > bambini.val()) {
+            esentiBambiniAiuto.removeClass("d-none");
+        }
+
+        else {
+            esentiBambiniAiuto.addClass("d-none");
         }
     }
 
@@ -271,7 +290,7 @@ function SchermataStruttura(props) {
                             <h5>Calendario</h5>
 
                             <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" htmlFor="dataCheckIn">Check-in</label>
+                                <label className="col-sm-4 col-form-label" htmlFor="dataCheckIn">Check-in</label>
                                 <div className="col-sm-4">
                                     <input name="dataCheckIn" type="date" className="form-control" id="dataCheckIn"
                                            aria-describedby="Data check-in" min={minDataA} defaultValue={minDataA}
@@ -285,7 +304,7 @@ function SchermataStruttura(props) {
                             </div>
 
                             <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" htmlFor="dataCheckOut">Check-out</label>
+                                <label className="col-sm-4 col-form-label" htmlFor="dataCheckOut">Check-out</label>
                                 <div className="col-sm-4">
                                     <input name="dataCheckIn" type="date" className="form-control" id="dataCheckOut"
                                            aria-describedby="Data check-out" min={minDataP} defaultValue={minDataP}
@@ -312,7 +331,7 @@ function SchermataStruttura(props) {
                                 <h5>Seleziona camere</h5>
 
                                 <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label" htmlFor="singole">Singole</label>
+                                    <label className="col-sm-4 col-form-label" htmlFor="singole">Singole</label>
                                     <div className="col-sm-3">
                                         <input name="singole" type="number" className="form-control" id="singole"
                                                aria-describedby="Numero camere singole" min={0} max={10}
@@ -321,7 +340,7 @@ function SchermataStruttura(props) {
 
                                 </div>
                                 <div className="form-group row">
-                                    <label className="col-sm-3 col-form-label" htmlFor="doppie">Doppie</label>
+                                    <label className="col-sm-4 col-form-label" htmlFor="doppie">Doppie</label>
                                     <div className="col-sm-3">
                                         <input name="doppie" type="number" className="form-control" id="doppie"
                                                aria-describedby="Numero camere doppie" min={0} max={10}
@@ -340,7 +359,7 @@ function SchermataStruttura(props) {
                             <h5>Ospiti</h5>
 
                             <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" htmlFor="adulti">Adulti</label>
+                                <label className="col-sm-4 col-form-label" htmlFor="adulti">Adulti</label>
                                 <div className="col-sm-3">
                                     <input name="adulti" type="number" className="form-control" id="adulti"
                                            aria-describedby="Numero di adulti" min={1} max={100}
@@ -349,19 +368,28 @@ function SchermataStruttura(props) {
                             </div>
 
                             <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" htmlFor="bambini">Bambini</label>
+                                <label className="col-sm-4 col-form-label" htmlFor="bambini">Bambini</label>
                                 <div className="col-sm-3">
                                     <input name="bambini" type="number" className="form-control" id="bambini"
                                            aria-describedby="Numero di bambini" min={0} max={100}
-                                           defaultValue={0} required/>
+                                           defaultValue={0} onChange={controlloOspiti} required/>
                                 </div>
                             </div>
 
                             <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" htmlFor="esenti">Esenti</label>
+                                <label className="col-sm-4 col-form-label" htmlFor="adultiEsenti">Adulti esenti</label>
                                 <div className="col-sm-3">
-                                    <input name="esenti" type="number" className="form-control" id="esenti"
-                                           aria-describedby="esentiHelp" min={0} max={numeroAdulti}
+                                    <input name="adultiEsenti" type="number" className="form-control" id="adultiEsenti"
+                                           aria-describedby="adultiEsentiHelp" min={0} max={numeroAdulti}
+                                           defaultValue={0} onChange={controlloOspiti}/>
+                                </div>
+                            </div>
+
+                            <div className="form-group row">
+                                <label className="col-sm-4 col-form-label" htmlFor="bambiniEsenti">Bambini esenti</label>
+                                <div className="col-sm-3">
+                                    <input name="bambiniEsenti" type="number" className="form-control" id="bambiniEsenti"
+                                           aria-describedby="bambiniEsentiHelp" min={0} max={numeroBambini}
                                            defaultValue={0} onChange={controlloOspiti}/>
                                 </div>
                             </div>
@@ -370,8 +398,12 @@ function SchermataStruttura(props) {
                                 Deve essere presente almeno un adulto.
                             </small>
 
-                            <small id="esentiAiuto" className="form-text text-warning d-none">
-                                Il numero di esenti non può essere superiore al numero di adulti.
+                            <small id="esentiAdultiAiuto" className="form-text text-warning d-none">
+                                Il numero di adulti esenti non può essere superiore al numero totale di adulti.
+                            </small>
+
+                            <small id="esentiBambiniAiuto" className="form-text text-warning d-none">
+                                Il numero di bambini esenti non può essere superiore al numero totale di bambini.
                             </small>
                         </div>
 
