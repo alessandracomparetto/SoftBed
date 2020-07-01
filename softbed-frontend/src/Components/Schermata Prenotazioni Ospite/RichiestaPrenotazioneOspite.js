@@ -96,25 +96,36 @@ function RichiestaPrenotazioneOspite(props) {
                                 <div>
                                     <h5>Ospiti</h5>
                                     <div className="row mx-auto mb-3">
-                                        <div className="col-4">
-                                            <strong>Adulti</strong>
-                                            <strong className="d-none d-md-inline">: </strong>
-                                            <br className="d-md-none" />
-                                            <span>{props.prenotazione.ospiti.adulti}</span>
+                                        <div className="row col-12">
+                                            <div className="col-12 col-md-4">
+                                                <strong>Adulti</strong>
+                                                <strong className="d-none d-md-inline">: </strong>
+                                                <br className="d-md-none" />
+                                                <span>{props.prenotazione.ospiti.adulti}</span>
+                                            </div>
+
+                                            <div className="col-12 col-md-4">
+                                                <strong>Bambini</strong>
+                                                <strong className="d-none d-md-inline">: </strong>
+                                                <br className="d-md-none" />
+                                                <span>{props.prenotazione.ospiti.bambini}</span>
+                                            </div>
                                         </div>
 
-                                        <div className="col-4">
-                                            <strong>Bambini</strong>
-                                            <strong className="d-none d-md-inline">: </strong>
-                                            <br className="d-md-none" />
-                                            <span>{props.prenotazione.ospiti.bambini}</span>
-                                        </div>
+                                        <div className="row col-12 mt-2 mt-md-0">
+                                            <div className="col-12 col-md-4">
+                                                <strong>Adulti esenti da tasse</strong>
+                                                <strong className="d-none d-md-inline">: </strong>
+                                                <br className="d-md-none" />
+                                                <span>{props.prenotazione.ospiti.adultiEsenti}</span>
+                                            </div>
 
-                                        <div className="col-4">
-                                            <strong>Esenti da tasse</strong>
-                                            <strong className="d-none d-md-inline">: </strong>
-                                            <br className="d-md-none" />
-                                            <span>{props.prenotazione.ospiti.esenti}</span>
+                                            <div className="col-12 col-md-4">
+                                                <strong>Bambini esenti da tasse</strong>
+                                                <strong className="d-none d-md-inline">: </strong>
+                                                <br className="d-md-none" />
+                                                <span>{props.prenotazione.ospiti.bambiniEsenti}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

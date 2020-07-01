@@ -42,7 +42,8 @@ function SchermataPagamento() {
             !query.get("dataCheckOut") ||
             !query.get("adulti") ||
             !query.get("bambini") ||
-            !query.get("esenti")
+            !query.get("adultiEsenti") ||
+            !query.get("bambiniEsenti")
         ) {
             if (!query.get("idStruttura")) history.push("/");
             else history.push(`/struttura/${query.get("idStruttura")}`);
@@ -56,7 +57,8 @@ function SchermataPagamento() {
             orarioCheckOut: query.get("orarioCheckOut"),
             adulti: query.get("adulti"),
             bambini: query.get("bambini"),
-            esenti: query.get("esenti"),
+            adultiEsenti: query.get("adultiEsenti"),
+            bambiniEsenti: query.get("bambiniEsenti"),
             idStruttura: query.get("idStruttura"),
             struttura: "Casa dolce vista mare",
             camere: [
@@ -163,14 +165,17 @@ function SchermataPagamento() {
                         <div className="mb-3">
                             <h5 className="mb-0">Persone</h5>
                             <span className="text-90">{datiRichiesta.adulti}x adulto</span>
-                            { datiRichiesta.esenti && datiRichiesta.esenti > 0 && (
-                                <span className="text-90">&nbsp;({datiRichiesta.esenti} esent{parseInt(datiRichiesta.esenti) === 1 ? "e" : "i"} da tasse)</span>
+                            { datiRichiesta.adultiEsenti && datiRichiesta.adultiEsenti > 0 && (
+                                <span className="text-90">&nbsp;({datiRichiesta.adultiEsenti} esent{parseInt(datiRichiesta.adultiEsenti) === 1 ? "e" : "i"} da tasse)</span>
                             )}
 
                             { datiRichiesta.bambini && datiRichiesta.bambini > 0 && (
                                 <Fragment>
                                     <br/>
                                     <span className="text-90">{datiRichiesta.bambini}x bambino</span>
+                                    { datiRichiesta.bambiniEsenti && datiRichiesta.bambiniEsenti > 0 && (
+                                        <span className="text-90">&nbsp;({datiRichiesta.bambiniEsenti} esent{parseInt(datiRichiesta.bambiniEsenti) === 1 ? "e" : "i"} da tasse)</span>
+                                    )}
                                 </Fragment>
                             )}
                         </div>
