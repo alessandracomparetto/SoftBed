@@ -1,33 +1,33 @@
 import React, {useState} from "react";
 import $ from 'jquery';
 import axios from 'axios';
+import {useParams} from "react-router-dom"
 
 function CalcoloGuadagno(props){
     const [dataInizio, setDataInizio] = useState("");
     const [dataFine, setDataFine] = useState("");
-    const [guadagno, setGuadagno] = useState("");
-    const GIORNO = 86400000;
+    const [guadagno, setGuadagno] = useState(""); //il risultato della query
+    const GIORNO = 86400000; //constante in millisecondi
+    let {id} = useParams();
 
     function calcola(event) {
-        let form = $(event.target).parent().parent().parent()
-        $(form).addClass("was-validated");
-        let dataInizioDIV = $(form).children().children().first()
-        let dataInizio = $(dataInizioDIV).children("input");
-        let dataFineDIV= $(dataInizioDIV).next();
-        let dataFine = $(dataFineDIV).children("input")
-
-        if($(dataInizio).val() && $(dataFine).val()){
+        $("#formCalcoloGuadagno").addClass("was-validated");
+        if($("#dataInizio").val() && $("#dataFine").val()){
             try{
-                axios.get('/struttura/calcoloGaudagno', props.idStruttura)
+                //TODO prendere ref gesttore da session storage
+                let data = {"idStruttura":id, "dataInizio": new Date(dataInizio).toISOString().slice(0, 10), "dataFine": new Date(dataFine).toISOString().slice(0, 10), "refGestore":3};
+                axios.post('/struttura/calcoloGuadagno', data)
                     .then ( res =>{
-                        setGuadagno(res.body)
+                        setGuadagno(res.data);
+                        $("#mostra").removeClass("collapse");
+                    })
+                    .catch(err=>{
+                        console.log(err);
                     })
 
             }catch (err) {
                 console.log(err);
             }
-            let calcolo = $(form).children().children().last();
-            $(calcolo).toggleClass("collapse");
         }
     }
     function aggiornaDataFine(event) {
@@ -61,7 +61,8 @@ function CalcoloGuadagno(props){
     }
 
     return(
-        <form className="d-block mt-2 border-top border-warning">
+        <form id="formCalcoloGuadagno" className="d-block mt-3">
+            <h3>Calcola il tuo guadagno!</h3>
            <div className="form-group row my-auto pt-2">
                <div className="pb-2 col-12 col-md-4">
                    <label htmlFor="example-date-input" className="col-8 col-form-label">Data inzio</label>
@@ -74,8 +75,8 @@ function CalcoloGuadagno(props){
                <div className="col-12 col-md-4 col-lg-3 mt-auto mb-2 ml-lg-auto">
                    <button type="button" className="btn btn-warning btn-block" onClick={calcola}>Calcola</button>
                </div>
-               <div className="col-12 row text-center pt-3 collapse">
-                   <h3 className="col-12 col-md-6 mx-auto">Guadagno totalizzato ${guadagno}€</h3>
+               <div id="mostra" className="col-12 row text-center pt-3 collapse">
+                   <h3 className="col-12 col-md-6 mx-auto">Guadagno totalizzato {guadagno}€</h3>
                </div>
            </div>
         </form>

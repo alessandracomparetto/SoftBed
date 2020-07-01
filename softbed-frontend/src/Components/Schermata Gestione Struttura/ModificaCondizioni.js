@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import FormCondizioni from "../Registrazione Struttura/FormCondizioni";
 import axios from "axios";
 
@@ -7,10 +7,14 @@ function ModificaCondizioni(props) {
     function modificaCondizioni(event) {
         event.preventDefault();
         try {
-            document.getElementById("form").classList.add("was-validated");
+            document.getElementById("formCondizioni").classList.add("was-validated");
+            console.log("ciao");
             if (document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked) {
-                document.getElementById("feedback").classList.add("collapse");
-                if (document.getElementById("form").checkValidity()) {
+                console.log("dentro primo if");
+                document.getElementById("feedbackPagamento").classList.add("collapse");
+                console.log(document.getElementById("formCondizioni"));
+                if (document.getElementById("formCondizioni").checkValidity) {
+                    console.log("dentro secondo if");
                     let dato = props.dati;
                     console.log("DATI======= ");
                     console.log(dato);
@@ -24,19 +28,18 @@ function ModificaCondizioni(props) {
                 }
             }
             else{
-                document.getElementById("feedback").classList.remove("collapse");
+                document.getElementById("feedbackPagamento").classList.remove("collapse");
             }
-
         } catch (e) {
             console.log(e);
         }
     }
 
     return (
-        <form id="form" className="p-3 needs-validation" noValidate onChange={props.handleChange}>
+        <form id="formCondizioni" className="p-3" noValidate onChange={props.handleChange}>
             <FormCondizioni dati={props.dati} correzione={props.correzione}></FormCondizioni>
             <div className="d-flex flex-row-reverse justify-content-around">
-                <button id="ok" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
+                <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px">Annulla</button>
             </div>
         </form>

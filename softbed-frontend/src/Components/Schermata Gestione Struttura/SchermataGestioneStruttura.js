@@ -1,5 +1,3 @@
-
-
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import {useParams} from "react-router-dom"
@@ -7,7 +5,7 @@ import InformazioniStruttura from "../Registrazione Struttura/InformazioniStrutt
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
-import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
+import CalcoloGuadagno from "./CalcoloGuadagno";
 import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 
 function SchermataGestioneStruttura(){
@@ -15,7 +13,6 @@ function SchermataGestioneStruttura(){
 
     const [struttura,setStruttura]=useState([]);
     useEffect(() => {
-        console.log(id);
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
         let dati;
         for(let i = 0; i<lista.length; i++){
@@ -46,12 +43,14 @@ function SchermataGestioneStruttura(){
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("guadagno").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
     }
     function modificaCaratteristiche(){
         document.getElementById("caratteristiche").classList.remove("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
         document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
+        document.getElementById("guadagno").classList.add("collapse");
         console.log(struttura);
     }
     function modificaCondizioni(){
@@ -63,10 +62,11 @@ function SchermataGestioneStruttura(){
     }
     function calcoloGuadagno(){
         document.getElementById("guadagno").classList.remove("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
         document.getElementById("InformazioniPricipali").classList.add("collapse");
+        document.getElementById("caratteristiche").classList.add("collapse");
         document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
+        document.getElementById("condizioni").classList.add("collapse");
+
     }
     function printObject(o) {
         let out = '';
@@ -89,7 +89,6 @@ function SchermataGestioneStruttura(){
         tmp[nome]=valore;
         setStruttura(tmp);
     }
-
 
     return (
         <div className="d-flex justify-content-center">
@@ -124,13 +123,13 @@ function SchermataGestioneStruttura(){
                                 </div>
                                 <div>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
+                                        <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </div>
                                 <div>
                                     <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
+                                        <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
                                 </div>

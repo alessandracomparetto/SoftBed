@@ -3,6 +3,12 @@ import {abilitazione} from "../../Actions/abilitazione"
 
 function FormCondizioni(props) {
 
+    useEffect(()=>{
+        document.getElementById("anticipoPrenotazioneMin").value=props.dati.anticipoPrenotazioneMin;
+        document.getElementById("anticipoPrenotazioneMax").value=props.dati.anticipoPrenotazioneMax;
+        document.getElementById("preavvisoDisdetta").value=props.dati.preavvisoDisdetta;
+    });
+
     function verificaMinDurata(e) {
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
         if (document.getElementById("maxSoggiorno").value !== "" && (document.getElementById("minSoggiorno").value > document.getElementById("maxSoggiorno").value)){
@@ -90,7 +96,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMin"
                            className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                     <select id="anticipoPrenotazioneMin" className="custom-select mr-2" name="anticipoPrenotazioneMin"
-                            onSelect={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
+                            defaultValue={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={2}>2 giorni</option>
                         <option value={3}>3 giorni</option>
@@ -104,7 +110,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMax"
                            className="mt-3 mr-3 border-bottom border-primary">Massimo</label>
                     <select id="anticipoPrenotazioneMax" className="custom-select" name="anticipoPrenotazioneMax"
-                            selectValue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
+                            defaultvalue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={14}>2 settimane</option>
                         <option value={21}>3 settimane</option>
@@ -173,7 +179,7 @@ function FormCondizioni(props) {
                         <label htmlFor="pagamentoLoco" className=" form-check-label pl-2">Pagamento in loco</label>
                     </div>
                 </div>
-                <p id="feedback" className=" text-danger collapse small">Selezionare almeno una delle due checkbox</p>
+                <p id="feedbackPagamento" className=" text-danger collapse small">Selezionare almeno una delle due checkbox</p>
                 <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
                 <div className="form-check"  onChange={abilita}>
                     <div className="radio">
@@ -195,7 +201,7 @@ function FormCondizioni(props) {
                                 <input name="penaleCancellazione" id="penaleCancellazione" type="number"
                                        className="form-control currency mr-3" min={1} step={0.5} max={1000}
                                        defaultValue={props.dati.penaleCancellazione}
-                                       required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
+                                       required={(props.dati.politicaCancellazione === "pagamento")}
                                        style={{maxWidth: 100 + 'px'}} disabled={(props.dati.politicaCancellazione === "pagamento") ? false: true}/>
                                 <div className="invalid-feedback">1€-1000€</div>
                             </div>
@@ -205,8 +211,8 @@ function FormCondizioni(props) {
                                 <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":"text-muted")} id="preavvisoTesto">Preavviso
                                     minimo disdetta</label>
                                 <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"
-                                        selectValue={props.dati.preavvisoDisdetta}
-                                        required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
+                                        defaultValue={props.dati.preavvisoDisdetta}
+                                        required={props.dati.politicaCancellazione === "pagamento"}
                                         disabled={((props.dati.politicaCancellazione === "gratuita") ? true : false)}>
                                     <option value=""/>
                                     <option value={14}>2 settimane</option>
@@ -245,45 +251,6 @@ function FormCondizioni(props) {
                                min={0} step={0.5} max={10} required style={{maxWidth: 100 + 'px'}}
                                defaultValue={props.dati.prezzoAdulti}/>
                         <div className="invalid-feedback text-center">1€-10€</div>
-                    </div>
-                </div>
-                <div className="d-flex justify-content-center">
-                    <div className="input-group d-flex justify-content-center">
-                        <label htmlFor="esclusioneSoggiorni" className="pr-1 pr-lg-3 pt-2">Esclusione per soggiorni
-                            superiori a</label>
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">giorni</span>
-                        </div>
-                        <input name="esclusioneSoggiorni" id="esclusioneSoggiorni" type="number"
-                               className="form-control" min={2} maxLength="2"
-                               defaultValue={props.dati.esclusioneSoggiorni} required style={{maxWidth: 80 + 'px'}}/>
-                    </div>
-                </div>
-
-                <div className="container d-flex justify-content-around pt-2 pb-3">
-                    <div className="form-row">
-                        <div className=" col-sm-12 col-md-5 pt-3">
-                            <div className="input-group ">
-                                <label htmlFor="percentualeRiduzione" className=" pr-1 pr-md-3">Riduzione del</label>
-                                <div className="input-group-prepend">
-                                    <span className="input-group-text">%</span>
-                                </div>
-                                <input name="percentualeRiduzione" id="percentualeRiduzione" type="number"
-                                       className="form-control currency  " min={0} step={0.1} max={100}
-                                       defaultValue={props.dati.percentualeRiduzione} required
-                                       style={{maxWidth: 100 + 'px'}}/>
-                            </div>
-                        </div>
-
-                        <div className=" col-sm-12 col-md-8 col-lg-7 pt-3">
-                            <div className="input-group ">
-                                <label htmlFor="nPersoneRiduzione" className="pr-2">per prenotazioni superiori a n°
-                                    persone</label>
-                                <input name="nPersoneRiduzione" id="nPersoneRiduzione" type="number"
-                                       className="form-control currency  " min="1" step="1" max="100" required
-                                       style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.nPersoneRiduzione}/>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

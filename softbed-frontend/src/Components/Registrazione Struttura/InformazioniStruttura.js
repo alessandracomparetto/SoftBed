@@ -216,8 +216,6 @@ function InformazioniStruttura (props){
                             <h6><strong>Tasse di soggiorno</strong></h6>
                             <InformazioneLineare nome="Prezzo base adulti" valore={`${props.struttura.prezzoAdulti} €`}/>
                             <InformazioneLineare nome="Prezzo base bambini" valore={`${props.struttura.prezzoBambini} €`}/>
-                            <InformazioneLineare nome="Esclusione per soggiorni superiori a" valore={`${props.struttura.esclusioneSoggiorni} giorni`} />
-                            <InformazioneLineare nome="Riduzioni per gruppi composti da almeno" valore={`${props.struttura.nPersoneRiduzione} persone pari ad una percentuale di ${props.struttura.percentualeRiduzione}%`} />
                         </div>
                     </div>
                 </div>
