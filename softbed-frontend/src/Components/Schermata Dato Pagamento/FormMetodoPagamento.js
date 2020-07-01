@@ -31,7 +31,6 @@ function FormMetodoPagamento(props) {
             document.getElementById("ncarta").value="";
             document.getElementById("cvv").value="";
             document.getElementById("data").value="";
-
         }
     }
 
@@ -43,7 +42,7 @@ function FormMetodoPagamento(props) {
     }
 
     return (
-        <form id="form" className="container p-3" oValidate onSubmit={onSubmit}>
+        <form id="form" className="container p-3" noValidate onSubmit={onSubmit}>
             <h6 className="mt-3">Inserisci una nuova carta:</h6>
             <div className="form-row">
                 <div className="form-group col-12 col-md-5 ">
@@ -72,7 +71,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-5 col-md-2">
                     <label htmlFor="cvv">CVV</label>
-                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$"className="form-control" placeholder="###" onChange={handleChange} required/>
+                    <input id="cvv" name="cvv" type="tel" pattern="^[0-9]{3}$" className="form-control" placeholder="###" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire CVV
                     </div>

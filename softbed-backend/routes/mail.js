@@ -76,7 +76,7 @@ router.post('/richiesta-prenotazione', (req, res) => {
         html:
             `<p>
                 Hai appena ricevuto una nuova richiesta di prenotazione su softbed! Accedi alla tua 
-                <a href="${softbed.site}/profilo">area personale</a> per accettarla o rifiutarla.
+                <a href="${softbed.site}struttura/gestioneStrutture/">area personale</a> per accettarla o rifiutarla.
                 <br />
                 <br />
                 Ti ricordiamo che hai a disposizione 48 ore di tempo per prendere una decisione.

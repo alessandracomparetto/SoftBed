@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 
 function ImmagineSecondaria(props) {
     return (
@@ -15,6 +15,7 @@ function ImmagineSecondaria(props) {
 function ImmaginiStruttura(props) {
 
     return (
+        // TODO: Se non sono presenti altre foto, la foto principale deve essere centrata
         <div className="m-3 row">
             {/* Immagine principale */}
             <div className="col-12 col-md-7 pr-md-0">

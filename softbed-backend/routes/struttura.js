@@ -1,8 +1,5 @@
-let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-/* const { config } = require('../db/config');
-const { makeDb, withTransaction } = require('../db/dbmiddleware');*/
 let strutturaModel = require('../models/Struttura');
 
 router.post('/', function (req, res) {
@@ -42,6 +39,8 @@ router.post('/calcoloGuadagno/', function(req, res, next) {
 router.get('/:idStruttura', function(req, res) {
     strutturaModel.carica(req.params.idStruttura, function(data) {
         res.send(data);
+    }).catch((err) =>{
+        res.status(err.status).send();
     })
 });
 
