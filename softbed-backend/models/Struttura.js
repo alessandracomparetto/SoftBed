@@ -238,7 +238,6 @@ module.exports= {
 
                 let servizi = [];
 
-                console.log("Prezzo BB", prezzoBB);
                 // Caso B&B
                 if (prezzoBB[0]) {
                     servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
@@ -287,7 +286,6 @@ module.exports= {
                 struttura.foto = fotografie.map((oggetto) => {return oggetto.percorso});
                 struttura.localita = localita[0];
 
-                console.log(struttura);
                 return callback(struttura);
             })
         } catch(err) {
