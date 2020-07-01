@@ -85,13 +85,13 @@ router.post('/richiesta-prenotazione', (req, res) => {
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.send(err);
+            res.status(err.status).send(err);
         }
     });
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.send(err);
+            res.status(err.status).send(err);
         }
     });
 
@@ -120,20 +120,19 @@ router.post('/annullamento-prenotazione', (req, res) => {
                 annullato la sua prenotazione.
                 <br />
                 <br />
-                La tua struttura è stata nuovamente resa disponibile per le date interessate dalla prenotazione appena
-                rimossa, salvo diversamente indicato dal tuo calendario di indisponibilità.
+                La tua struttura è stata nuovamente resa disponibile nel periodo interessato.
             </p>`
     };
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.send(err);
+            res.status(err.status).send(err);
         }
     });
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.send(err);
+            res.status(err.status).send(err);
         }
     });
 

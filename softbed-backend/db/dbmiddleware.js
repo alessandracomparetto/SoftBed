@@ -22,7 +22,6 @@ config = {
 // in modo asincrono
 console.log("CREO IL DB");
 exports.makeDb = async function(config) {
-console.log("ok");
     // creiamo il pool di connessione
     // per gestire efficientemente le richieste concorrenti
     // per una singola connessione si può usare createConnection

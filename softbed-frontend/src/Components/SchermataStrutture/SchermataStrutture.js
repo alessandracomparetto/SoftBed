@@ -26,7 +26,7 @@ function SchermataStrutture(){
     }
     return(
         <div className="container">
-            <h4>Strutture registrare</h4>
+            <h4>Strutture registrate</h4>
             <ul className="list-group list-group-flush ">
                 {
                     listaStrutture.map((struttura, indice) => {

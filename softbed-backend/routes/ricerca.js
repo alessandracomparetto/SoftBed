@@ -30,7 +30,10 @@ router.get('/', function(req, res) {
                 })
 
                 res.send(data);
-            }).catch(err => console.log(err));
+            })
+                .catch((err) => {
+                    res.status(500).send(err);
+                });
 
         }
     });

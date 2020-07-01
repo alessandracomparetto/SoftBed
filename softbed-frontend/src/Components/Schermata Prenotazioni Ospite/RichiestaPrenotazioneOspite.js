@@ -17,7 +17,7 @@ function RichiestaPrenotazioneOspite(props) {
             customUI: ({ onClose }) => {
             return (
                 <div className="custom-ui">
-                    <h1>Sei sicuro di voler annullare la prenotazione?</h1>
+                    <h3>Sei sicuro di voler annullare la prenotazione?</h3>
                     <div className="text-right">
                         <button className="btn btn-secondary px-3 py-2 m-2" onClick={onClose}>No, torna indietro</button>
                         <button className="btn btn-danger px-3 py-2 m-2" onClick={() => {

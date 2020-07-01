@@ -6,7 +6,7 @@ const mostraDialogErrore = () => {
         customUI: ({ onClose }) => {
             return (
                 <div className="custom-ui text-center">
-                    <h1>Si è verificato un problema, ti invitiamo a riprovare!</h1>
+                    <h3>Si è verificato un problema, ti invitiamo a riprovare!</h3>
                     <button className="btn btn-warning px-3 py-2 m-2 minw-200px" onClick={onClose}>OK</button>
                 </div>
             )

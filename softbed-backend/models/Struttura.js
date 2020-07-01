@@ -54,7 +54,7 @@ module.exports= {
 
 
                 if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
-                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
+                    sql = ('INSERT INTO `B&B` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaaereportuale, servizioincamera, descrizione) VALUES ?');
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.tv, datiStruttura.cucinaCeliaci,
@@ -64,7 +64,7 @@ module.exports= {
                     });
                     console.log("inserite caratteristiche");
                     for (camera of datiStruttura.camere) {
-                        sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                        sql = 'INSERT INTO `cameraB&B` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
                         datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
                         results = await db.query(sql, [[datiQuery]]).catch(err => {
@@ -73,7 +73,7 @@ module.exports= {
                     }
                     console.log("camere");
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
-                    sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
+                    sql = ('INSERT INTO `casaVacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
@@ -111,7 +111,7 @@ module.exports= {
                 AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
                 AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch(err => {throw err;});
 
-                    camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {throw  err;});
+                    camere = await db.query(('SELECT * FROM `cameraB&B` WHERE `cameraB&B`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {throw  err;});
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
@@ -152,7 +152,7 @@ module.exports= {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
                 let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE refstruttura = ?', [`condizioni`, "condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
+                         WHERE reftruttura = ?', [`condizioni`, "condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
                             "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
                             "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,"condizioni.percentualeRiduzione", struttura.percentualeRiduzione,
                             "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
@@ -221,113 +221,90 @@ module.exports= {
         const db = await makeDb(config);
 
         // Strutture che si trovano nella zona cercata
-        // (?, ?, ?) -> (destinazione, destinazione, destinazione)
-        let queryDestinazione = `SELECT comuni.idComune \
-        FROM comuni, province, regioni \
-        WHERE \
-        comuni.refProvincia = province.idProvincia AND \
-        province.refRegione = regioni.idRegione AND (\
-        comuni.nomeComune = ? OR \
-        province.nomeProvincia = ? OR \
-        regioni.nomeRegione = ?)`
+        let queryDestinazione = `SELECT struttura.idStruttura 
+        FROM struttura, indirizzo 
+        WHERE 
+        struttura.refIndirizzo = indirizzo.idIndirizzo AND 
+        indirizzo.refComune IN (
+            SELECT comuni.idComune
+            FROM comuni, province, regioni 
+            WHERE 
+            comuni.refProvincia = province.idProvincia AND 
+            province.refRegione = regioni.idRegione AND ( 
+                comuni.nomeComune = "${datiRicerca.destinazione}" OR 
+                province.nomeProvincia = "${datiRicerca.destinazione}" OR 
+                regioni.nomeRegione = "${datiRicerca.destinazione}" 
+            )
+        )`;
 
-        // Strutture disponibili nel periodo cercato
-        // (?, ?, ?, ?) -> (dataArrivo, dataPartenza, dataArrivo, dataPartenza)
-        let queryData = `SELECT struttura.idStruttura \ 
-        FROM struttura \ 
-        WHERE struttura.idStruttura NOT IN (
-            SELECT DISTINCT indisponibilita.refStruttura \ 
-            FROM indisponibilita \ 
-            WHERE \ 
-            (? BETWEEN indisponibilita.dataInizio AND indisponibilita.dataFine) OR \ 
-            (? BETWEEN indisponibilita.dataInizio AND indisponibilita.dataFine) OR \
-            (? < indisponibilita.dataInizio AND ? > indisponibilita.dataFine)
+        // CV: CV che non abbiano prenotazioni nel periodo selezionato e con abbastanza letti
+        let queryPrenotazioniCV = `SELECT CV.refStruttura
+        FROM casaVacanze as CV 
+        WHERE 
+        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
+        CV.refStruttura NOT IN ( 
+            SELECT prenotazione.refStruttura 
+            FROM prenotazione 
+            WHERE 
+            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
+            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
+            ("${datiRicerca.arrivo}" <= prenotazione.checkIn AND "${datiRicerca.partenza}" >= prenotazione.checkOut)
         )`
 
-        // Strutture disponibili nel periodo e nella zona cercata
-        let queryDestinazioneData = `SELECT struttura.idStruttura \
-        FROM struttura, indirizzo \
-        WHERE \
-        struttura.refIndirizzo = indirizzo.idIndirizzo AND \
-        indirizzo.refComune IN (${queryDestinazione}) AND \
-        struttura.idStruttura IN (${queryData})`;
-
-        // CV: Controllo che la CV non abbia prenotazioni nel periodo selezionato e che abbia abbastanza letti
-        let queryPrenotazioniCV = `SELECT CV.refStruttura \ 
-        FROM casaVacanze as CV \ 
-        WHERE \
-        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND \
-        CV.refStruttura NOT IN ( \ 
-            SELECT prenotazione.refStruttura \ 
-            FROM prenotazione \ 
-            WHERE \ 
-            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \ 
-            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \ 
-            ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut)`
-
-        // B&B: Strutture con almeno una camera disponibile che abbia abbastanza letti
-        let queryPrenotazioneBB = `SELECT DISTINCT CBB1.refStruttura \ 
+        // B&B: B&B con almeno una camera disponibile che abbia abbastanza letti
+        let queryPrenotazioniBB = `SELECT DISTINCT CBB1.refStruttura
         FROM \`cameraB&B\` as CBB1
-        WHERE \ 
-        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND \
-        (CBB1.refStruttura, CBB1.idCamera) NOT IN ( \
-            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera \ 
-            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione \ 
-            WHERE \ 
-            CBB2.idCamera = prenotazioneCamera.refCamera AND \ 
-            CBB2.refStruttura = prenotazioneCamera.refStruttura AND \ 
-            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND \ 
-            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( \
-                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \
-                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR \
-                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut) \
+        WHERE 
+        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
+        (CBB1.refStruttura, CBB1.idCamera) NOT IN ( 
+            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera 
+            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione 
+            WHERE 
+            CBB2.idCamera = prenotazioneCamera.refCamera AND 
+            CBB2.refStruttura = prenotazioneCamera.refStruttura AND 
+            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND 
+            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( 
+                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
+                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
+                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut) 
             )
         )`
-
-        // Query per B&B
-        let queryBB = `SELECT BB.refStruttura \ 
-        FROM \`B&B\` as BB \ 
-        WHERE BB.refStruttura IN (${queryPrenotazioneBB})`
-
-        // Query per CasaVacanze
-        let queryCV = `SELECT CV.refStruttura \ 
-        FROM casaVacanze as CV \ 
-        WHERE CV.refStruttura IN (${queryPrenotazioniCV})`
 
         let query;
         // Solo case vacanze
         if (datiRicerca.bedAndBreakfast !== "true") {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
-            FROM struttura \
-            WHERE \ 
-            struttura.idStruttura IN (${queryDestinazioneData}) AND \ 
-            struttura.idStruttura IN (${queryCV})`
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione 
+            FROM struttura 
+            WHERE 
+            struttura.idStruttura IN (${queryDestinazione}) AND 
+            struttura.idStruttura IN (${queryPrenotazioniCV})`
         }
 
         // Solo bed and breakfast
         else if (datiRicerca.casaVacanze !== "true") {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
-            FROM struttura \
-            WHERE \ 
-            struttura.idStruttura IN (${queryDestinazioneData}) AND \ 
-            struttura.idStruttura IN (${queryBB})`
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione 
+            FROM struttura 
+            WHERE 
+            struttura.idStruttura IN (${queryDestinazione}) AND  
+            struttura.idStruttura IN (${queryPrenotazioniBB})`
         }
 
         // Sia case vacanze che B&B
         else {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione \
-            FROM struttura \
-            WHERE struttura.idStruttura IN (${queryDestinazioneData})`;
+            query = `SELECT struttura.idStruttura, struttura.nomeStruttura, struttura.descrizione
+            FROM struttura
+            WHERE
+                struttura.idStruttura IN (${queryDestinazione}) AND (
+                    (struttura.idStruttura IN (${queryPrenotazioniBB})) OR 
+                    (struttura.idStruttura IN (${queryPrenotazioniCV}))
+            )`
         }
-
-        let parametri = [datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.arrivo, datiRicerca.partenza];
 
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(query, parametri).catch((err) => console.log(err));
+                let risultato = await db.query(query, []).catch((err) => console.log(err));
                 return callback(risultato);
             })
-
         } catch (err) { console.log(err) }
     },
 

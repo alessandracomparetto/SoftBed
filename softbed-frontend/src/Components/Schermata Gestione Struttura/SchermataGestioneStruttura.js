@@ -1,11 +1,10 @@
 
 
-import React, {Fragment, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
-
+import {useParams} from "react-router-dom"
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
-import ModificaDisponibilita from "../SchermataStrutture/ModificaDisponibilità";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "../SchermataStrutture/CalcoloGuadagno";
@@ -105,42 +104,36 @@ function SchermataGestioneStruttura(){
                         </button>
                         <div className="collapse navbar-collapse" id="menu">
                             <ul className="navbar-nav ml-auto text-right">
-                                <Fragment>
+                                <div>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
                                     </li>
                                     <div className="dropdown-divider"/>
-                                </Fragment>
-                                <Fragment>
+                                </div>
+                                <div>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
-                                </Fragment>
-                                <Fragment>
+                                </div>
+                                <div>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>Calcolo guadagno</button>
                                     </li>
                                     <div className="dropdown-divider"/>
-                                </Fragment>
-                                <Fragment>
+                                </div>
+                                <div>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
                                     </li>
                                     <div className="dropdown-divider"/>
-                                </Fragment>
-                                <Fragment>
+                                </div>
+                                <div>
                                     <li className="nav-item text-center text-md-right">
                                         <button type="button" className="btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
                                     </li>
                                     <div className="dropdown-divider"/>
-                                </Fragment>
-                                <Fragment>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn-warning" onClick={modificaDisponibilità}>Modifica disponibilità</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </Fragment>
+                                </div>
                             </ul>
                         </div>
                     </nav>
