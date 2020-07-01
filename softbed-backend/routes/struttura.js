@@ -13,19 +13,16 @@ router.post('/', function (req, res) {
 });
 
 router.post('/gestioneStruttura/:id', function(req, res) {
-     console.log("/gestioneStruttura/:id");
+    /* console.log("/gestioneStruttura/:id");
      console.log(req.params)
-     console.log(req.body)
+     console.log(req.body)*/
     strutturaModel.fetch(req.params.id, req.body , function(data) {
-        console.log(data);
         res.send(data);
     })
 });
 
 router.get('/listaStruttureGestore', function (req, res) {
-    console.log("richiesta arrivata");
     strutturaModel.listaStrutture(function(data){
-        console.log(data);
         res.send(data);
     })
 });

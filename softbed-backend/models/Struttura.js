@@ -116,9 +116,8 @@ module.exports= {
                         array.push(camere[i]);
                     }
                     console.log("CAMERE")
-                    console.log(array)
+                    console.log(array);
                     infoStruttura[0]["camere"] = array;
-
                 }
                 foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
                     throw err;
@@ -129,16 +128,6 @@ module.exports= {
                 }
                 infoStruttura[0]["foto"] = array
                 array = [];
-                /*let prenotazioni= await db.query(('SELECT * FROM `prenotazione` WHERE  `prenotazione`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
-                    throw err;
-                });
-                for (let i = 0; i < prenotazioni.length; i++) {
-                    array.push(prenotazioni[i]);
-                }
-                infoStruttura[0]["prenotazioni"] = array;*/
-                console.log(array);
-                console.log("INFO STRUTTURA ===");
-                console.log(infoStruttura[0]);
                 return callback(infoStruttura[0]);
             });
         } catch (err) {
@@ -158,8 +147,6 @@ module.exports= {
                             "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
                             "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
                     2]).catch(err => {throw err;});
-                console.log("ho modificato!");
-                console.log(results);
                 return callback(results);
             });
         } catch (err) {
@@ -171,13 +158,10 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                console.log("sto per modificare!");
                 let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
                          WHERE refstruttura = ?', [`casavacanze`, "casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
                     "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, 2]).catch(err => {throw err;});
-                console.log("ho modificato!");
-                console.log(results);
                 return callback(results);
             });
         } catch (err) {
@@ -318,7 +302,6 @@ module.exports= {
                     "b&b.parcheggio", struttura.parcheggio,"b&b.strutturaDisabili", struttura.strutturaDisabili,"b&b.animaliAmmessi", struttura.animaliAmmessi,"b&b.permessoFumare", struttura.permessoFumare,
                     "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAereportuale", struttura.navettaAereportuale,
                     "b&b.servizioInCamera", struttura.servizioInCamera,"b&b.descrizione", struttura.descrizione,1]).catch(err => {throw err;});
-                console.log(results);
                 return callback(results);
             });
         } catch (err) {
@@ -326,13 +309,14 @@ module.exports= {
         }
     },
 
-    listaStrutture:async function(){
+    listaStrutture:async function(callback){
         const db = await makeDb(config);
-        let idGestore=3;
-
+        let idGestore=1;
+        console.log("sono qui,ciao");
         try {
             await withTransaction(db, async () => {
                 let results=await db.query(('SELECT * FROM struttura WHERE  struttura.refGestore = ?'),[[[idGestore]]]).catch(err => {
+                    console.log(results);
                     throw err;
                 });
                 return callback(results);

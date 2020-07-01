@@ -144,7 +144,7 @@ function SchermataGestioneStruttura(){
                     <InformazioniStruttura struttura={struttura}  />
                 </div>
                 <div id="prenotazioni" className="collapse col-12 col-md-9">
-                    <SchermataPrenotazioneStruttura/>
+                    <SchermataPrenotazioneStruttura idStruttura={id} tipologiaStruttura={struttura.tipologiaStruttura}/>
                 </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {

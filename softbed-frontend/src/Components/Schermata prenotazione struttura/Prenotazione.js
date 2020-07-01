@@ -1,29 +1,39 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 function Prenotazione(props){
 return(
     <div className="container">
         <h4>Informazioni prenotazione</h4>
         <h5>Richiesta effettuata da:</h5>
-        <div className="mr-1">
-            <div className="row">
-                <p className="col"><strong>Nome:   </strong> Mario</p>
-                <p className="col"><strong>Cognome: </strong> Rossi</p>
+        <div className=" row">
+            <div className="col">
+                <strong>Nome:   </strong>
+                <span>{props.dati.nome}</span>
             </div>
-            <div className="row">
-                <p className="col"><strong>Email:    </strong> example@email.com</p>
-                <p className="col"><strong>Telefono: </strong> +(00)123456789</p>
+            <div className="col">
+                <strong>Cognome: </strong>
+                <span>{props.dati.cognome}</span>
             </div>
         </div>
-        <h5>Riepilogo:</h5>
+        <div className="row">
+            <div className="col">
+                <strong>Email:    </strong>
+                <span>{props.dati.email}</span>
+            </div>
+            <div className="col">
+                <strong>Telefono:</strong>
+                <span>{props.dati.telefono}</span>
+            </div>
+        </div>
+        <h5 className="mt-2 ">Riepilogo dati prenotazioni:</h5>
        <div className="mr-1 mt-1">
-           <h8 className="border-bottom">Ospiti</h8>
            <div className="row">
                <div className="col">
-                   <strong>Check-in: </strong> <span>{props.dataCheckIn} ore 15:00</span>
+                   <strong>Check-in: </strong> <span>{new Date(props.dati.checkIn).toLocaleString()}</span>
                </div>
                <div className="col">
                    <strong>Check-out: </strong>
-                   <span> {props.dataCheckOut} ore 15:00</span>
+                   <span> {new Date(props.dati.checkOut).toLocaleString()}</span>
                </div>
            </div>
                { props.tipologia=="B&B" && (
@@ -39,36 +49,42 @@ return(
                                    </div>
                                );
                            }
-
                        })}
                        </div>
                    </div>
                )
            }
-           <h8 className="border-bottom">Altre informazioni</h8>
            <div className="row mt-1">
                <div className="col">
                    <strong>Ospiti:</strong>
-                   <span> {props.nAdulti+props.nBambini} ({props.nAdulti} adulti e {props.nBambini} bambini) </span>
+                   <span> {props.dati.nAdulti+props.dati.nBambini} ({props.dati.nAdulti} adulti e {props.dati.nBambini} bambini) </span>
                </div>
                <div className="col">
                    <strong>Esenti:</strong>
-                   <span> {props.nEsenti}</span>
+                   <span> {props.dati.nEsenti}</span>
                </div>
            </div>
            <div className="row ">
                <div className="col">
                    <strong>Pagamento:</strong>
-                   <span> {props.metodoPagamento}</span>
+                   {props.dati.metodoPagamento ?
+                       <span> online </span>   :
+                       <span> in loco</span>
+                    }
                </div>
                <div className="col">
                    <strong>Prezzo: </strong>
-                   <span>{props.costo} € </span>
+                   <span>{props.dati.costo} € </span>
                </div>
            </div>
-           <div >
-               <strong>Stato:</strong>
-               <span> confermata il {props.dataConferma}</span>
+           <div>
+               <strong>Stato:</strong>{
+               props.dati.confermata==1 ?
+                   <span> confermata il {new Date(props.dati.dataConferma).toLocaleDateString()}</span>
+                   :
+                   <span> scade il {new Date(props.dati.dataScadenza).toLocaleString()}</span>
+
+                }
            </div>
        </div>
     </div>
