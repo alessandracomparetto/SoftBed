@@ -14,16 +14,15 @@ function SchermataPrenotazioneStruttura(props){
         .catch(err => console.log(err));
     }, [props.tipologiaStruttura]);
 
-    const rifiutaPrenotazione = (idPrenotazione) => {
+/*    const rifiutaPrenotazione = (idPrenotazione) => {
             console.log("sto per inviare la richiesta di cancellazione");
             console.log("idp"+idPrenotazione)
             axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: idPrenotazione}).then(res => {
-                console.log("Risposta rifiuta prenotazione:");
                 console.log(res.data)
-                /*//aggiorno lo stato
+                /!*!//aggiorno lo stato
                 let tmp=[...prenotazioni];
                 tmp.splice(props.indiceElemento,1);
-                aggiornaPrenotazioni(tmp);*/
+                aggiornaPrenotazioni(tmp);*!/
             })
                 .catch(err => console.log(err));
     }
@@ -32,10 +31,10 @@ function SchermataPrenotazioneStruttura(props){
         axios.post(`/prenotazione/confermaPrenotazione`, {idPrenotazione:idPrenotazione}).then(res => {
             console.log("Risposta conferma prenotazione:");
             console.log(res.data)
-            /*TODO:DOVREI AGGIORNARE LO STATO*/
+            /!*TODO:DOVREI AGGIORNARE LO STATO*!/
         })
             .catch(err => console.log(err));
-    }
+    }*/
 
    /* const confermaPrenotazione = (indice) => {
         // Aggiungere alla lista confermate
@@ -56,7 +55,7 @@ function SchermataPrenotazioneStruttura(props){
                     prenotazioni.map((prenotazione, indice) => {
                             if (prenotazione.confermata == 0) {
                                 return (<li key={indice} className="list-group-item list-group-item-warning">
-                                    <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} confermaPrenotazione={confermaPrenotazione} rifiutaPrenotazione={rifiutaPrenotazione} /></li>)
+                                    <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} /></li>)
                             }
                     })
                 }

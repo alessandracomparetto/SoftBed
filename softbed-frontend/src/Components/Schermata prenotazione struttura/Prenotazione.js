@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
+import React, from "react";
+
 function Prenotazione(props){
 return(
     <div className="container">
@@ -38,6 +38,7 @@ return(
            </div>
                { props.dati.tipologia=="B&B" && (
                    <div className="mt-1">
+                       {console.log("sono qui ihihi")}
                        <h8 className="border-bottom">Camere</h8>
                        <div className="row">
                            { props.dati.camere.map((camera, indice) => {

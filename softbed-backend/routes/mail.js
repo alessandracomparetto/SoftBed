@@ -139,4 +139,84 @@ router.post('/annullamento-prenotazione', (req, res) => {
     res.send();
 })
 
+router.post('/rifiuta-prenotazione', (req, res) => {
+    const mailOspite = {
+        from: softbed.email,
+        to: req.body.emailOspite,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                Purtroppo il gestore della struttura ${req.body.struttura} che avevi prenotato (ID: ${req.body.id})
+                il cui check-in era previsto in data ${req.body.data} ha rifutato la prenotazione.
+                <br />
+                <br />
+            </p>`
+    };
+
+    const mailGestore = {
+        from: softbed.email,
+        to: req.body.emailGestore,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                La prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} è stata annullata, come da te richiesto!
+            </p>`
+    };
+
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    res.send();
+})
+
+router.post('/conferma-prenotazione', (req, res) => {
+    console.log("sono qui");
+    const mailOspite = {
+        from: softbed.email,
+        to: req.body.emailOspite,
+        subject: "Conferma prenotazione",
+        html:
+            `<p>
+                Il gestore della struttura ${req.body.struttura} che hai prenotato (ID: ${req.body.id})
+                il cui check-in è previsto in data ${req.body.data} ha accettato la prenotazione.
+                <br />
+                <br />
+            </p>`
+    };
+
+    const mailGestore = {
+        from: softbed.email,
+        to: req.body.emailGestore,
+        subject: "Conferma prenotazione",
+        html:
+            `<p>
+                La prenotazione (ID: ${req.body.id}) per la tua struttura ${req.body.struttura} è stata confermata, come da te richiesto!
+            </p>`
+    };
+
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    res.send();
+})
+
+
 module.exports = router;
