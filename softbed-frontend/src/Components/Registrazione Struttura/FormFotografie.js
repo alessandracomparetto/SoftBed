@@ -82,7 +82,12 @@ function FormFotografie(props){
 
     function vaiAvanti(event) {
         event.preventDefault();
-        props.go();
+        if(numero===0){
+            $("#vuoto").removeClass("collapse");
+        }
+        else{
+            props.go();
+        }
     }
 
     function  vaiIndietro() {
