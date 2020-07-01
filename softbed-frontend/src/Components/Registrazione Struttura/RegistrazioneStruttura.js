@@ -8,12 +8,11 @@ import InserimentoCondizioni from "./InserimentoCondizioni";
 import FormFotografie from "./FormFotografie";
 import FormStruttura from "./FormStruttura";
 import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
+import OperazioneCompletataRegistrazioneStruttura from "./OperazioneCompletataRegistrazioneStruttura";
 import axios from 'axios';
 
 
 function RegistrazioneStruttura () {
-    /* const [tipologia, setTipologia] = useState("");
-    const [URL, setURL] = useState(""); */
     const [step, setStep]= useState(1);
     const [info, setInfo]= useState({});
 
@@ -77,7 +76,7 @@ function RegistrazioneStruttura () {
                    let lista = (JSON.parse(window.sessionStorage.getItem("strutture")) || []);
                    lista.push(tmp);
                    window.sessionStorage.setItem("strutture", JSON.stringify(lista));
-
+                    _next();
                });
        } catch (e) {
             console.log(e);
@@ -119,6 +118,7 @@ function RegistrazioneStruttura () {
             <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} correzione={correzione} />
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             <SchermataRiepilogoRegistrazione currentStep={step} struttura={info} handleSubmit={handleSubmit}  goBack={_prev}/>
+            <OperazioneCompletataRegistrazioneStruttura currentStep={step}/>
     </div>
     )
 }
