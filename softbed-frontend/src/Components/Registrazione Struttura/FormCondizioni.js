@@ -169,7 +169,7 @@ function FormCondizioni(props) {
 
                 </div>
             </div>
-            <div className="border p-3">
+            <div className="border p-3" onClick={props.handleChange}>
                 <h6 className="mt-3 border-bottom border-primary ">Modalità di pagamento</h6>
                 <div className="form-row-group d-flex justify-content-around">
                     <div className="form-check-inline ">

@@ -1,21 +1,19 @@
 import React, {useState} from "react";
 import $ from 'jquery';
 import axios from 'axios';
-import {useParams} from "react-router-dom"
 
 function CalcoloGuadagno(props){
     const [dataInizio, setDataInizio] = useState("");
     const [dataFine, setDataFine] = useState("");
     const [guadagno, setGuadagno] = useState(""); //il risultato della query
     const GIORNO = 86400000; //constante in millisecondi
-    let {id} = useParams();
 
-    function calcola(event) {
+    function calcola() {
         $("#formCalcoloGuadagno").addClass("was-validated");
         if($("#dataInizio").val() && $("#dataFine").val()){
             try{
                 //TODO prendere ref gesttore da session storage
-                let data = {"idStruttura":id, "dataInizio": new Date(dataInizio).toISOString().slice(0, 10), "dataFine": new Date(dataFine).toISOString().slice(0, 10), "refGestore":3};
+                let data = {"idStruttura":props.idStruttura, "dataInizio": new Date(dataInizio).toISOString().slice(0, 10), "dataFine": new Date(dataFine).toISOString().slice(0, 10), "refGestore":3};
                 axios.post('/struttura/calcoloGuadagno', data)
                     .then ( res =>{
                         setGuadagno(res.data);
@@ -24,7 +22,6 @@ function CalcoloGuadagno(props){
                     .catch(err=>{
                         console.log(err);
                     })
-
             }catch (err) {
                 console.log(err);
             }

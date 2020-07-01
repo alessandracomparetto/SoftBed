@@ -26,9 +26,17 @@ function RegistrazioneStruttura () {
     function handleChange(event){
         const{name,value}=event.target;
         let tmp=info;
-        tmp[name]=value;
+        if(event.target.type === "checkbox"){
+            if(event.target.checked === true){
+                tmp[name]=1;
+            }
+            if(event.target.checked ===false){
+                tmp[name]=0;
+            }
+        }else{
+            tmp[name]=value;
+        }
         setInfo(tmp);
-        printObject(tmp);
     }
 
     function handleCamere(camera) {
@@ -40,7 +48,6 @@ function RegistrazioneStruttura () {
         temp.push(camera);
         tmp["camere"]=temp;
         setInfo(tmp);
-        printObject(tmp);
     }
 
     function handleFoto(fileName) {
@@ -52,7 +59,6 @@ function RegistrazioneStruttura () {
         temp.push(fileName);
         tmp["foto"]=temp;
         setInfo(tmp);
-        printObject(tmp);
     }
 
     function correzione (nome, valore){

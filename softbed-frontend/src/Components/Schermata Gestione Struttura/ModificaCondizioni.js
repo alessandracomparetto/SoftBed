@@ -32,7 +32,7 @@ function ModificaCondizioni(props) {
 
     return (
         <form id="formCondizioni" className="p-3" noValidate onChange={props.handleChange}>
-            <FormCondizioni dati={props.dati} correzione={props.correzione}></FormCondizioni>
+            <FormCondizioni dati={props.dati} correzione={props.correzione} handleChange={props.handleChange}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px">Annulla</button>
