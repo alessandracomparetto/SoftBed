@@ -253,45 +253,6 @@ function FormCondizioni(props) {
                         <div className="invalid-feedback text-center">1€-10€</div>
                     </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <div className="input-group d-flex justify-content-center">
-                        <label htmlFor="esclusioneSoggiorni" className="pr-1 pr-lg-3 pt-2">Esclusione per soggiorni
-                            superiori a</label>
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">giorni</span>
-                        </div>
-                        <input name="esclusioneSoggiorni" id="esclusioneSoggiorni" type="number"
-                               className="form-control" min={2} maxLength="2"
-                               defaultValue={props.dati.esclusioneSoggiorni} required style={{maxWidth: 80 + 'px'}}/>
-                    </div>
-                </div>
-
-                <div className="container d-flex justify-content-around pt-2 pb-3">
-                    <div className="form-row">
-                        <div className=" col-sm-12 col-md-5 pt-3">
-                            <div className="input-group ">
-                                <label htmlFor="percentualeRiduzione" className=" pr-1 pr-md-3">Riduzione del</label>
-                                <div className="input-group-prepend">
-                                    <span className="input-group-text">%</span>
-                                </div>
-                                <input name="percentualeRiduzione" id="percentualeRiduzione" type="number"
-                                       className="form-control currency  " min={0} step={0.1} max={100}
-                                       defaultValue={props.dati.percentualeRiduzione} required
-                                       style={{maxWidth: 100 + 'px'}}/>
-                            </div>
-                        </div>
-
-                        <div className=" col-sm-12 col-md-8 col-lg-7 pt-3">
-                            <div className="input-group ">
-                                <label htmlFor="nPersoneRiduzione" className="pr-2">per prenotazioni superiori a n°
-                                    persone</label>
-                                <input name="nPersoneRiduzione" id="nPersoneRiduzione" type="number"
-                                       className="form-control currency  " min="1" step="1" max="100" required
-                                       style={{maxWidth: 100 + 'px'}} defaultValue={props.dati.nPersoneRiduzione}/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     )

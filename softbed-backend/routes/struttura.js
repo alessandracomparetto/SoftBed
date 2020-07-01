@@ -7,17 +7,12 @@ let strutturaModel = require('../models/Struttura');
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
-        console.log(data);
         res.send(data);
     })
 });
 
 router.post('/gestioneStruttura/:id', function(req, res) {
-     console.log("/gestioneStruttura/:id");
-     console.log(req.params)
-     console.log(req.body)
     strutturaModel.fetch(req.params.id, req.body , function(data) {
-        console.log(data);
         res.send(data);
     })
 });
@@ -25,16 +20,23 @@ router.post('/gestioneStruttura/:id', function(req, res) {
 router.get('/listaStruttureGestore', function (req, res) {
     console.log("richiesta arrivata");
     strutturaModel.listaStrutture(function(data){
-        console.log(data);
+        console.log("AIUTO", data);
         res.send(data);
     })
 });
 
-router.get('/calcoloGuadagno', function(req, res, next) {
-    console.log("sono qui");
-    strutturaModel.calcoloGuadagno(function(data){
-        console.log(data);
-        res.send(data);
+router.post('/calcoloGuadagno/', function(req, res, next) {
+    console.log(req.body);
+    strutturaModel.calcoloGuadagno(req.body, function(data){
+        let guadagno = 0;
+        let x; //prende il prezzo associato alla prenotazione e da questo tolgo le tasse
+        for(let i=0; i<data.length; i++){
+            x=data[i].costo;
+            x-= ((data[i].nAdulti-data[i].nEsentiBambini) * data[i].prezzoAdulti); //levo tasse adulti
+            x-= ((data[i].nBambini-data[i].nEsentiBambini) * data[i].prezzoBambini); //levo tasse bambini
+            guadagno+=x;
+        }
+        res.send(guadagno+"");
     })
 });
 

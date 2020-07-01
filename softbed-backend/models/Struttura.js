@@ -6,11 +6,9 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
-        console.log("qui forse si");
         const db = await makeDb(config);
         let results = {};
         let refIndirizzo;
-        console.log("qui ci sono");
         try {
             await withTransaction(db, async () => {
                 //inserimento into indirizzo
@@ -42,16 +40,15 @@ module.exports= {
                 }//end for
 
                 sql = ('INSERT INTO `condizioni` (refStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
-                            oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, percentualeRiduzione, nPersoneRiduzione, esclusioneSoggiorni, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
+                            oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
                             politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES ?');
                 datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
-                    datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.pagamentoLoco, datiStruttura.pagamentoOnline, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti, datiStruttura.percentualeRiduzione, datiStruttura.nPersoneRiduzione,
-                    datiStruttura.esclusioneSoggiorni, datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta];
+                    datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.pagamentoLoco, datiStruttura.pagamentoOnline, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti,
+                     datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta];
                 results = await db.query(sql, [[datiQuery]]).catch(err => {
                     throw err;
                 });
                 console.log("inserite condizioni");
-
 
                 if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
                     sql = ('INSERT INTO `B&B` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
@@ -121,7 +118,6 @@ module.exports= {
                     console.log("CAMERE")
                     console.log(array)
                     infoStruttura[0]["camere"] = array;
-
                 }
                 foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
                     throw err;
@@ -344,5 +340,22 @@ module.exports= {
         catch (err) {
             console.log(err);
         }
+    },
+
+    calcoloGuadagno: async function(dati, callback){
+        const db = await makeDb(config);
+        let idGestore=dati.refGestore;
+        let dataInizio=dati.dataInizio;
+        let dataFine= dati.dataFine;
+        let idStruttura = dati.idStruttura;
+        try {
+            risultato = await db.query(('SELECT * FROM prenotazione JOIN condizioni WHERE `prenotazione`.refStruttura=? AND `prenotazione`.refStruttura = `condizioni`.refStruttura \
+            AND prenotazione.confermata=1 AND (prenotazione.checkIn >= ? AND prenotazione.checkIn<=?) AND (prenotazione.checkOut >= ? AND prenotazione.checkOut<=?)'),
+                [idStruttura, dataInizio, dataFine, dataInizio, dataFine]).catch(err=>{throw err});
+            return callback(risultato);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
-}
+};

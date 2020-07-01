@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import CalcoloGuadagno from "./CalcoloGuadagno"
+import CalcoloGuadagno from "../Schermata Gestione Struttura/CalcoloGuadagno"
 import $ from 'jquery';
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
