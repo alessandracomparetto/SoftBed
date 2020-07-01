@@ -9,19 +9,23 @@ function FormCondizioni(props) {
         document.getElementById("preavvisoDisdetta").value=props.dati.preavvisoDisdetta;
     });
 
-    function verificaMinDurata(e) {
+    function verificaMinDurata() {
+        let max = document.getElementById("maxSoggiorno");
+        let min = document.getElementById("minSoggiorno");
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
-        if (document.getElementById("maxSoggiorno").value !== "" && (document.getElementById("minSoggiorno").value > document.getElementById("maxSoggiorno").value)){
-            document.getElementById("maxSoggiorno").value = e.target.value;
-            props.correzione("maxSoggiorno", e.target.value);
+        if (parseInt(max.value) !== "" && (parseInt(min.value) > parseInt(max.value))){
+            max.value = min.value;
+            props.correzione("maxSoggiorno", min.value);
         }
     }
 
     function verificaMaxDurata(e) {
+        let max = document.getElementById("maxSoggiorno");
+        let min = document.getElementById("minSoggiorno");
         /* se la durata massima è minore della minima, imposta la minima uguale alla massima*/
-        if (document.getElementById("minSoggiorno").value !== "" && (document.getElementById("maxSoggiorno").value < document.getElementById("minSoggiorno").value)){
-            document.getElementById("minSoggiorno").value = e.target.value;
-            props.correzione("minSoggiorno", e.target.value);
+        if (parseInt(min.value) !== "" && (parseInt(max.value) < parseInt(min.value))){
+            min.value = max.value;
+            props.correzione("minSoggiorno", max.value);
         }
     }
 
@@ -68,7 +72,7 @@ function FormCondizioni(props) {
                     <div className="input-group">
                         <label htmlFor="minSoggiorno" className="mt-3 mr-4 border-bottom border-primary">Minima</label>
                         <input name="minSoggiorno" id="minSoggiorno" type="number" className="form-control my-auto"
-                               min={1} max={15} size="2" maxLength="2" defaultValue={props.dati.minSoggiorno}
+                               min={1} max={15} defaultValue={props.dati.minSoggiorno}
                                onChange={verificaMinDurata} required/>
                         <div className="input-group-prepend">
                             <span className="input-group-text my-auto">giorni</span>
@@ -81,7 +85,7 @@ function FormCondizioni(props) {
                         <label htmlFor="maxSoggiorno"
                                className="mt-3 mr-3 border-bottom border-primary">Massima </label>
                         <input name="maxSoggiorno" id="maxSoggiorno" type="number" className="form-control my-auto"
-                               min={1} max={28} size="2" maxLength="2" defaultValue={props.dati.maxSoggiorno}
+                               min={1} max={28} defaultValue={props.dati.maxSoggiorno}
                                onChange={verificaMaxDurata} required/>
                         <div className="input-group-prepend">
                             <span className="input-group-text my-auto">giorni</span>
