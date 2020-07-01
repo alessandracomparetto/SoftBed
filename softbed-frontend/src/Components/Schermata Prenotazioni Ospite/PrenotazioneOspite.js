@@ -84,7 +84,7 @@ function RichiestaPrenotazioneOspite(props) {
                                 </div>
 
                                 <div className="row mx-auto">
-                                    { props.prenotazione.struttura.tipologia && props.prenotazione.struttura.tipologia === "b&b" && (
+                                    { props.prenotazione.struttura.tipologia && props.prenotazione.struttura.tipologia === "B&B" && (
                                         <div className="col-12 col-md-4">
                                             <h5 style={{marginLeft: -15 + "px"}}>Camere</h5>
                                             <div  className="mb-3">

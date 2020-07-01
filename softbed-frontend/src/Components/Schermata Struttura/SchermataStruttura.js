@@ -67,9 +67,9 @@ function SchermataStruttura(props) {
     });
 
     useEffect(() => {
+        let tmp = {};
         axios.get(`/struttura/${id}`)
             .then((res) => {
-                let tmp ={};
                 Object.assign(tmp, struttura);
                 tmp.nome = res.data.nomeStruttura;
                 tmp.descrizione = res.data.descrizione;
@@ -83,9 +83,9 @@ function SchermataStruttura(props) {
                 // Aggiunta della struttura alla lista annunciRecenti della local storage
                 let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
 
-                let nuovaStruttura = {id: id, nome: struttura.nome}
-                if (struttura.foto) {
-                    nuovaStruttura.img = struttura.foto[0];
+                let nuovaStruttura = {id: id, nome: tmp.nome}
+                if (tmp.foto) {
+                    nuovaStruttura.img = tmp.foto[0];
                 }
                 const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 

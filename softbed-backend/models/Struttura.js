@@ -199,9 +199,13 @@ module.exports= {
                 AND BB.refStruttura = CBB.refStruttura
             GROUP BY CBB.tipologiaCamera`
 
+        let queryDescrizioneBB = `SELECT BB.descrizione
+                                  FROM \`B&B\` as BB
+                                  WHERE BB.refStruttura = ?`
+
         let queryServiziBB = `SELECT BB.bambini, BB.ariaCondizionata, BB.wifi, BB.riscaldamento, BB.parcheggio, 
                 BB.strutturaDisabili, BB.animaliAmmessi, BB.permessoFumare, BB.TV, BB.cucinaCeliaci,
-                BB.navettaAeroportuale, BB.servizioInCamera, BB.descrizione
+                BB.navettaAeroportuale, BB.servizioInCamera
             FROM \`B&B\` as BB
             WHERE BB.refStruttura = ?`
 
@@ -209,6 +213,10 @@ module.exports= {
         let queryPrezzoCV = `SELECT CV.prezzoNotte
             FROM casaVacanze as CV
             WHERE CV.refStruttura = ?`
+
+        let queryDescrizioneCV = `SELECT CV.descrizione
+                                  FROM casaVacanze as CV
+                                  WHERE CV.refStruttura = ?`
 
         let queryServiziCV = `SELECT CV.bambini, CV.riscaldamento, CV.ariaCondizionata, CV.wifi, CV.parcheggio,
                 CV.strutturaDisabili, CV.animaliAmmessi, CV.permessoFumare, CV.festeAmmesse, CV.TV
@@ -236,10 +244,12 @@ module.exports= {
                 let prezzoBB = await db.query(queryPrezzoBB, idStruttura).catch(() => {throw createError(500)});
                 let prezzoCV = await db.query(queryPrezzoCV, idStruttura).catch(() => {throw createError(500)});
 
+                let descrizione = "";
                 let servizi = [];
 
                 // Caso B&B
                 if (prezzoBB[0]) {
+                    descrizione = await db.query(queryDescrizioneBB, idStruttura).catch(() => {throw createError(500)});
                     servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
                     
                     // Aggiunta a struttura
@@ -248,6 +258,8 @@ module.exports= {
 
                 // Caso CV
                 else if (prezzoCV[0]) {
+                    descrizione = await db.query(queryDescrizioneCV, idStruttura).catch(() => {throw createError(500)});
+
                     servizi = await db.query(queryServiziCV, idStruttura).catch(() => {throw createError(500)});
                     let ambienti = await db.query(queryAmbientiCV, idStruttura).catch(() => {throw createError(500)});
                     let bagniCamereLetti = await db.query(queryBagniCamereLetti, idStruttura).catch(() => {throw createError(500)});
@@ -274,6 +286,8 @@ module.exports= {
                 else throw createError(404);
 
                 // Aggiunta di informazioni dello stesso tipo
+                struttura.descrizione = descrizione[0].descrizione;
+
                 struttura.servizi = Object.keys(servizi[0])
                     .reduce(function(risultato, servizio) {
                         if (servizi[0][servizio] === 1) {
