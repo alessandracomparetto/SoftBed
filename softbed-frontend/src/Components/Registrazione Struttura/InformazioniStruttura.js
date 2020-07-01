@@ -16,6 +16,7 @@ function InformazioneLineare(props) {
 }
 
 function InformazioniStruttura (props){
+
     function converti(giorni){
         let x;
         switch (parseInt(giorni)) {
@@ -60,6 +61,10 @@ function InformazioniStruttura (props){
         }
         return x;
     }
+
+    useEffect(()=>{
+
+    }, [props.struttura]);
 
     return(
         <Fragment>
