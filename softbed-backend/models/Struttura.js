@@ -81,9 +81,12 @@ module.exports= {
                     results = await db.query(sql, [[datiQuery]]).catch(err => {throw err;});
                     console.log("inserita cv");
                 } //chiusura query cv
-                return (callback({"refStruttura":refStruttura, "refIndirizzo":refIndirizzo}));
+
+                await this.listaStrutture(function (data) {
+                    return (callback(data));
+                })
             });
-        } //chiuusura tray
+        } //chiusura try
         catch (err) {
             console.log(err);
         }
@@ -151,8 +154,8 @@ module.exports= {
         try {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
-                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE reftruttura = ?', [`condizioni`, "condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
+                let results = await db.query('UPDATE condizioni SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                         WHERE refStruttura = ?', ["condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
                             "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
                             "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,"condizioni.percentualeRiduzione", struttura.percentualeRiduzione,
                             "condizioni.nPersoneRiduzione", struttura.nPersoneRiduzione,"condizioni.esclusioneSoggiorni", struttura.esclusioneSoggiorni,"condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
@@ -326,7 +329,7 @@ module.exports= {
         }
     },
 
-    listaStrutture:async function(){
+    listaStrutture:async function(callback){
         const db = await makeDb(config);
         let idGestore=3;
 

@@ -1,6 +1,7 @@
 import React from "react";
 import FormCaratteristicheB from "./FormCaratteristicheB";
 function InserimentoCaratteristicheB(props){
+
     function vaiAvanti(event) {
         event.preventDefault();
         document.getElementById("form").classList.add("was-validated");

@@ -6,7 +6,7 @@ import axios from "axios";
 
 function SchermataStrutture(){
     const [listaStrutture,setLista]=useState([]);
-    const [lunghezza, setLunghezza] = useState("");
+
     useEffect(() => {
         if(!window.sessionStorage.getItem("strutture")){
             axios.get('/struttura/listaStruttureGestore') //prendo la lista delle strutture se non è presente il session storage

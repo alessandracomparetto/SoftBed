@@ -13,12 +13,12 @@ function InserimentoCondizioni(props) {
         event.preventDefault();
         document.getElementById("form").classList.add("was-validated");
         if (document.getElementById("pagamentoLoco").checked || document.getElementById("pagamentoOnline").checked) {
-            document.getElementById("feedback").classList.add("collapse");
+            document.getElementById("feedbackPagamento").classList.add("collapse");
             if (document.getElementById("form").checkValidity()) {
                 props.go();
             }
         } else {
-            document.getElementById("feedback").classList.remove("collapse");
+            document.getElementById("feedbackPagamento").classList.remove("collapse");
             event.preventDefault();
         }
     }
@@ -27,11 +27,10 @@ function InserimentoCondizioni(props) {
         props.goBack();
     }
 
-
-
     if (props.currentStep !== 5) {
         return null;
     }
+
     return (
         <form id="form" className="p-3 needs-validation" noValidate onChange={props.handleChange}>
             <FormCondizioni dati={props.dati} correzione={props.correzione}/>

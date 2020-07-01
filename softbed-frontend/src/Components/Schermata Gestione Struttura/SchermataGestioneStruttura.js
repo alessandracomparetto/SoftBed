@@ -15,7 +15,6 @@ function SchermataGestioneStruttura(){
 
     const [struttura,setStruttura]=useState([]);
     useEffect(() => {
-        console.log(id);
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
         let dati;
         for(let i = 0; i<lista.length; i++){

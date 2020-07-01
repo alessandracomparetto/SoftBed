@@ -72,11 +72,8 @@ function RegistrazioneStruttura () {
                    console.log(res.data);
                    console.log("hai finito");
                    //TODO PRENDO REF GESTORE DA SESSION STORAGE
-                   let tmp = {idStruttura:res.data.refStruttura, nomeStruttura:info.nomeStruttura, tipologiaStruttura:info.tipologiaStruttura, refGestore:3, refIndirizzo:res.data.refIndirizzo, rendicontoEffettuato:  new Date().toISOString().slice(0,9)}
-                   let lista = (JSON.parse(window.sessionStorage.getItem("strutture")) || []);
-                   lista.push(tmp);
-                   window.sessionStorage.setItem("strutture", JSON.stringify(lista));
-                    _next();
+                   window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
+                   _next()
                });
        } catch (e) {
             console.log(e);

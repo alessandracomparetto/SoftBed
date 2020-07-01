@@ -3,6 +3,12 @@ import {abilitazione} from "../../Actions/abilitazione"
 
 function FormCondizioni(props) {
 
+    useEffect(()=>{
+        document.getElementById("anticipoPrenotazioneMin").value=props.dati.anticipoPrenotazioneMin;
+        document.getElementById("anticipoPrenotazioneMax").value=props.dati.anticipoPrenotazioneMax;
+        document.getElementById("preavvisoDisdetta").value=props.dati.preavvisoDisdetta;
+    });
+
     function verificaMinDurata(e) {
         /* se la durata minima è maggiore della massima, imposta la massima uguale alla minima*/
         if (document.getElementById("maxSoggiorno").value !== "" && (document.getElementById("minSoggiorno").value > document.getElementById("maxSoggiorno").value)){
@@ -90,7 +96,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMin"
                            className="mt-3 mr-4 border-bottom border-primary">Minimo </label>
                     <select id="anticipoPrenotazioneMin" className="custom-select mr-2" name="anticipoPrenotazioneMin"
-                            onSelect={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
+                            defaultValue={props.dati.anticipoPrenotazioneMin} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={2}>2 giorni</option>
                         <option value={3}>3 giorni</option>
@@ -104,7 +110,7 @@ function FormCondizioni(props) {
                     <label htmlFor="anticipoPrenotazioneMax"
                            className="mt-3 mr-3 border-bottom border-primary">Massimo</label>
                     <select id="anticipoPrenotazioneMax" className="custom-select" name="anticipoPrenotazioneMax"
-                            selectValue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
+                            defaultvalue={props.dati.anticipoPrenotazioneMax} style={{minWidth: 160 + 'px'}} required>
                         <option value=""/>
                         <option value={14}>2 settimane</option>
                         <option value={21}>3 settimane</option>
@@ -173,7 +179,7 @@ function FormCondizioni(props) {
                         <label htmlFor="pagamentoLoco" className=" form-check-label pl-2">Pagamento in loco</label>
                     </div>
                 </div>
-                <p id="feedback" className=" text-danger collapse small">Selezionare almeno una delle due checkbox</p>
+                <p id="feedbackPagamento" className=" text-danger collapse small">Selezionare almeno una delle due checkbox</p>
                 <p className="mt-3 border-bottom border-primary">Politica di cancellazione</p>
                 <div className="form-check"  onChange={abilita}>
                     <div className="radio">
@@ -195,7 +201,7 @@ function FormCondizioni(props) {
                                 <input name="penaleCancellazione" id="penaleCancellazione" type="number"
                                        className="form-control currency mr-3" min={1} step={0.5} max={1000}
                                        defaultValue={props.dati.penaleCancellazione}
-                                       required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
+                                       required={(props.dati.politicaCancellazione === "pagamento")}
                                        style={{maxWidth: 100 + 'px'}} disabled={(props.dati.politicaCancellazione === "pagamento") ? false: true}/>
                                 <div className="invalid-feedback">1€-1000€</div>
                             </div>
@@ -205,8 +211,8 @@ function FormCondizioni(props) {
                                 <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":"text-muted")} id="preavvisoTesto">Preavviso
                                     minimo disdetta</label>
                                 <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"
-                                        selectValue={props.dati.preavvisoDisdetta}
-                                        required={((props.dati.politicaCancellazione === "pagamento") ? "" : "none")}
+                                        defaultValue={props.dati.preavvisoDisdetta}
+                                        required={props.dati.politicaCancellazione === "pagamento"}
                                         disabled={((props.dati.politicaCancellazione === "gratuita") ? true : false)}>
                                     <option value=""/>
                                     <option value={14}>2 settimane</option>
