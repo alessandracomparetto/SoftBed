@@ -160,7 +160,7 @@ function SchermataGestioneStruttura(){
                         (struttura.tipologiaStruttura==="cv")?
                             <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange}/>
                             :
-                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange} />
+                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange}/>
                     }
                 </div>
                 <div id="guadagno" className="collapse col-12 col-md-9">

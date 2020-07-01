@@ -77,10 +77,16 @@ function RegistrazioneStruttura () {
                .then(res => { // then print response status
                    console.log(res.data);
                    console.log("hai finito");
+               }).then( ()=>{
                    //TODO PRENDO REF GESTORE DA SESSION STORAGE
-                   window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
-                   _next()
-               });
+                    axios.get('/struttura/listaStruttureGestore') //prendo la lista delle strutture se non è presente il session storage
+                        .then(res => {
+                                console.log(res.data);
+                                let ok = res.data;
+                               window.sessionStorage.setItem("strutture", JSON.stringify(ok));
+                                _next()
+                   });
+               }).catch(err => console.log(err));
        } catch (e) {
             console.log(e);
        }

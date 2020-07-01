@@ -18,7 +18,7 @@ function InserimentoCaratteristicheC(props){
 
     return(
         <form id="form" className="p-3 needs-validation" onChange={props.handleChange} noValidate>
-            <FormCaratteristicheC dati={props.dati}/>
+            <FormCaratteristicheC dati={props.dati} handleChange={props.handleChange}/>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua</button>
                 <button id="indietro" className="btn btn-secondary mt-3 w-200px" onClick={vaiIndietro}>Indietro</button>

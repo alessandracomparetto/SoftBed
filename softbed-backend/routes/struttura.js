@@ -4,8 +4,10 @@ let strutturaModel = require('../models/Struttura');
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
+        console.log(data);
+    }).then(strutturaModel.listaStrutture(function (data) {
         res.send(data);
-    })
+    }))
 });
 
 router.post('/gestioneStruttura/:id', function(req, res) {
@@ -21,7 +23,6 @@ router.get('/listaStruttureGestore', function (req, res) {
 });
 
 router.post('/calcoloGuadagno/', function(req, res, next) {
-    console.log(req.body);
     strutturaModel.calcoloGuadagno(req.body, function(data){
         let guadagno = 0;
         let x; //prende il prezzo associato alla prenotazione e da questo tolgo le tasse
@@ -44,7 +45,6 @@ router.get('/:idStruttura', function(req, res) {
     })
 });
 
-//ma se si verifica un errore?
 router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
         console.log(data.message);
@@ -53,9 +53,9 @@ router.post('/modificaCondizioni', function (req, res) {
         res.send();
     }).catch( (err) =>{
         console.log(err);
-
     })
 });
+
 router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
     strutturaModel.modificaCaratteristicheC(req.body,function(data){
         console.log(data.message);

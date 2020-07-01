@@ -3,8 +3,6 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
-
-
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
         const db = await makeDb(config);
@@ -19,6 +17,7 @@ module.exports= {
                     throw err
                 });
                 //se tutto va bene, trovo id indirizzo e inserisco nella struttura
+                console.log("Inserito in indirizzo")
                 refIndirizzo = results.insertId;
                 let giorno = new Date().toLocaleDateString();
                 sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
@@ -27,7 +26,7 @@ module.exports= {
                 results = await db.query(sql, [[datiQuery]]).catch(err => {
                     throw err;
                 });
-                console.log('Inserimento tabella struttura');
+                console.log('Inserito nella tabella struttura');
                 refStruttura = results.insertId;
                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES ?');
                 if (datiStruttura.foto) {
@@ -37,7 +36,7 @@ module.exports= {
                             throw err;
                         }); //chiusura query foto
                     }
-                    console.log("inserite foto");
+                    console.log("Inserite foto");
                 }//end for
 
                 sql = ('INSERT INTO `condizioni` (refStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
@@ -60,7 +59,7 @@ module.exports= {
                     results = await db.query(sql, [[datiQuery]]).catch(err => {
                         throw err;
                     });
-                    console.log("inserite caratteristiche");
+                    console.log("Inserito B&B");
                     for (camera of datiStruttura.camere) {
                         sql = 'INSERT INTO `cameraB&B` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
@@ -69,7 +68,7 @@ module.exports= {
                             throw err;
                         });
                     }
-                    console.log("camere");
+                    console.log("Inserite camere");
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
                     sql = ('INSERT INTO `casaVacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
@@ -77,12 +76,11 @@ module.exports= {
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
                         datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
                     results = await db.query(sql, [[datiQuery]]).catch(err => {throw err;});
-                    console.log("inserita cv");
+
+                    console.log("Inserita CV");
                 } //chiusura query cv
 
-                await this.listaStrutture(function (data) {
-                    return (callback(data));
-                })
+                return callback("OK");
             });
         } //chiusura try
         catch (err) {
@@ -140,7 +138,6 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                console.log("sto per modificare!");
                 let results = await db.query('UPDATE `condizioni` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
                          WHERE refStruttura = ?', ["condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
                             "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
@@ -171,22 +168,20 @@ module.exports= {
         }
     },
 
-
     modificaCaratteristicheC: async function (struttura, callback) {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE refstruttura = ?', [`casavacanze`, "casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
+                let results = await db.query('UPDATE `casavacanze` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                         WHERE refstruttura = ?', ["casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
-                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, 2]).catch(err => {throw err;});
+                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, struttura.idStruttura]).catch(err => {throw err;});
                 return callback(results);
             });
         } catch (err) {
             console.log(err);
         }
     },
-
 
     carica: async function(idStruttura, callback) {
 
@@ -418,8 +413,6 @@ module.exports= {
         }
 
     },
-
-
 
     listaStrutture:async function(callback){
         const db = await makeDb(config);
