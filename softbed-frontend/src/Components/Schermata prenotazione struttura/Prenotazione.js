@@ -36,16 +36,18 @@ return(
                    <span> {new Date(props.dati.checkOut).toLocaleString()}</span>
                </div>
            </div>
-               { props.tipologia=="B&B" && (
+               { props.dati.tipologia=="B&B" && (
                    <div className="mt-1">
                        <h8 className="border-bottom">Camere</h8>
                        <div className="row">
-                           { props.camere.map((camera, indice) => {
+                           { props.dati.camere.map((camera, indice) => {
+                               console.log("Camera"+indice+" "+camera);
                            if (camera.numero !== 0) {
                                return (
                                    <div key={indice} className="col-6">
                                        <strong className="text-capitalize">{camera.tipologia}:</strong>
-                                       <span>{camera.nCamerePerTipologia}</span>
+                                       <span> {camera.nLettiSingoli} letti singoli</span>
+                                       <span> {camera.nLettiMatrimoniali} letti matrimoniali</span>
                                    </div>
                                );
                            }
