@@ -10,16 +10,20 @@ import mostraDialogErrore from "../../Actions/errore";
 function SchermataPagamento() {
 
     // TODO: utilizzate per test, da rimuovere
-    const pagamentoOnLine = true;
-    const pagamentoInLoco = true;
+    const [pagamentoOnline, setPagamentoOnline] = useState(true);
+    const [pagamentoInLoco, setPagamentoInLoco] = useState(true);
+    const [listaDatiPagamento, setDatiPagamento] = useState([
+        {id: 2751, nomeIntestatario: "Mario", cognomeIntestatario: "Rossi", numeroCarta: "0000 1111 2222 3333"},
+        {id: 3725, nomeIntestatario: "Chiara", cognomeIntestatario: "Verdi", numeroCarta: "3333 4444 5555 6666"}
+    ]);
 
-    const metodiUtente = [
-        {id: 2751, nome: "Mastercard", numero: "0000 1111 2222 3333"},
-        {id: 3725, nome: "Poste", numero: "3333 4444 5555 6666"}
-    ]
+    const aggiungiDatoPagamento = (dato) => {
+        let tmp = [...listaDatiPagamento];
+        tmp.push(dato);
+        setDatiPagamento(tmp);
+    }
 
-    const [onLineAttivo, setStatoOnline] = useState(false);
-    const [nuovoMetodo, setNuovoMetodo] = useState(false);
+    const [online, setStatoOnline] = useState(false);
 
     // metodoPagamento e refUtente
 
@@ -28,8 +32,7 @@ function SchermataPagamento() {
     const [datiRichiesta, setDatiRichiesta] = useState({});
 
     useEffect(() => {
-        // L'utente deve aver effettuato il login
-
+        // TODO: L'utente deve aver effettuato il login
 
         // GESTIONE DEI PARAMETRI URL
         // Se uno dei parametri richiesti non è inserito si viene reindirizzati alla pagina della struttura / home
@@ -75,38 +78,19 @@ function SchermataPagamento() {
 
         setDatiRichiesta(valori);
 
-        // GESTIONE DELLA SELEZIONE DELAL MODALITÀ DI PAGAMENTO
-        const modPagamento = $("input[name='modPagamento']");
-        const modPagamentoOnline = $("#online");
-
-        const metodoPagamentoOnline = $("input[name='pagOnline']");
-        const nuovoMetodoPagamento = $('#nuovoMetodo');
-
         // Gestione della selezione sulla tipologia di pagamento (in loco o online)
-        modPagamento.on('change', () => {
+        const modPagamentoOnline = $("#online");
+        $("input[name='modPagamento']").on('change', () => {
             if (modPagamentoOnline[0]) {
-                const stato = modPagamentoOnline[0].checked
-                setStatoOnline(stato);
-
-                if (!stato) {
-                    setNuovoMetodo(false);
-                }
+                setStatoOnline(modPagamentoOnline[0].checked);
             }
         });
-
-        // Gestione della selezione sul metodo di pagamento online (vecchio o nuovo)
-        metodoPagamentoOnline.on('change', () => {
-            if (nuovoMetodoPagamento[0]) {
-                const stato = nuovoMetodoPagamento[0].checked;
-                setNuovoMetodo(stato);
-            }
-        })
-    }, [])
+    }, []);
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        // TODO: Ottenere id Utente e i metodi di pagamento
+        // TODO: Ottenere ID Utente e il metodo di pagamento selezionato
         let tmp = datiRichiesta;
         tmp["idUtente"] = 5;
         tmp["metodoPagamento"] = null; // null per pagamenti in loco
@@ -126,7 +110,7 @@ function SchermataPagamento() {
 
                 history.push("/operazione-completata");
             })
-            .catch(err => {
+            .catch(() => {
                 mostraDialogErrore();
             });
     }
@@ -135,6 +119,7 @@ function SchermataPagamento() {
         <div className="container my-3">
             <div className="py-2">
                 <Breadcrumb gerarchia={[
+                    {url: `/struttura/${datiRichiesta.idStruttura}`, testo: "Struttura"},
                     {testo: "Richiesta di prenotazione", stato: "active"},
                     {testo: "Pagamento", stato: "active"}
                 ]} icona="bed"/>
@@ -142,7 +127,7 @@ function SchermataPagamento() {
 
             <div className="d-lg-flex flex-row-reverse">
                 {/* Riepilogo richiesta */}
-                <div className="card col-12 col-lg-4 bg-dark text-light py-3 h-100">
+                <div className="card shadow col-12 col-lg-4 bg-dark text-light py-3 h-100">
                     <h3 className="card-title">Riepilogo richiesta</h3>
                     <div className="ml-2">
 
@@ -203,32 +188,20 @@ function SchermataPagamento() {
                     <h2>Seleziona il metodo di pagamento</h2>
                     <div className="form">
                         <form onSubmit={onSubmit}>
-                            { pagamentoOnLine && (
+                            { pagamentoOnline && (
                                 <div className="radio">
                                     <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
 
-                                    { onLineAttivo && (
-                                        <Fragment>
-                                            <div className="ml-3">
-                                                { metodiUtente.map((metodo, indice) => {
-                                                    return (
-                                                        <div key={indice} className="radio">
-                                                            <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nome} (termina con {metodo.numero.substr(metodo.numero.length - 4, 4)})</label>
-                                                        </div>
-                                                    )
-                                                })}
-                                                <div>
-                                                    <div className="radio">
-                                                        <label><input id="nuovoMetodo" className="mr-2" type="radio" name="pagOnline" value="nuovo" required/>Aggiungi nuovo metodo di pagamento</label>
+                                    { online && (
+                                        <div className="ml-3">
+                                            { listaDatiPagamento.map((metodo, indice) => {
+                                                return (
+                                                    <div key={indice} className="radio">
+                                                        <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>
                                                     </div>
-
-                                                    { nuovoMetodo && (
-                                                        <FormMetodoPagamento/>
-                                                    )}
-
-                                                </div>
-                                            </div>
-                                        </Fragment>
+                                                )
+                                            })}
+                                        </div>
                                     )}
                                 </div>
                             )}
@@ -240,11 +213,23 @@ function SchermataPagamento() {
                             )}
 
                             <div className="text-right">
-                                <button className="btn btn-warning" type="submit" disabled={nuovoMetodo}>Effettua richiesta</button>
+                                <button className="btn btn-warning" type="submit">Effettua richiesta</button>
                             </div>
                         </form>
                     </div>
 
+                    { pagamentoOnline && (
+                        <div className="form mt-3 card shadow">
+                            <h5 className="mb-0">
+                                <button className="btn btn-link collapsed" data-toggle="collapse" data-target="#formNuovoMetodo" aria-expanded="false" aria-controls="formNuovoMetodo">
+                                    Aggiungi un nuovo metodo di pagamento
+                                </button>
+                            </h5>
+                            <div id="formNuovoMetodo" className="collapse">
+                                <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
             </div>

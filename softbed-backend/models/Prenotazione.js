@@ -7,7 +7,8 @@ module.exports = {
     create: async function (datiPrenotazione, res) {
         const db = await makeDb(config);
 
-        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsenti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        // TODO: Aggiungere esenti bambini
+        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
         let datiQuery = [
             datiPrenotazione.dataCheckIn + " " + datiPrenotazione.orarioCheckIn,
@@ -24,7 +25,6 @@ module.exports = {
         try {
             await withTransaction(db, async () => {
                 let risultato = await db.query(query, datiQuery).catch(() => {throw createError(500)});
-
                 if (risultato && risultato.insertId) return res(risultato.insertId);
                 else throw createError(400);
             })
@@ -40,7 +40,7 @@ module.exports = {
 
         try {
             await withTransaction(db, async () => {
-                let result = await db.query(query, req).catch(() => {throw createError(500)});
+                let result = await db.query(query, idPrenotazione).catch(() => {throw createError(500)});
 
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
                 else return res(result);

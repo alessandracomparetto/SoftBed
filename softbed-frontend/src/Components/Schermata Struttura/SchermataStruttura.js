@@ -9,27 +9,22 @@ import ImmaginiStruttura from "./ImmaginiStruttura";
 import {convertiData} from "../../Actions/gestioneDate";
 import axios from "axios";
 
+import servizi from "../../servizi";
+
 
 function SchermataStruttura(props) {
     let { id } = useParams();
 
     const [struttura, setStruttura] = useState({
         idStruttura: id,
+        nome: "",
+        descrizione: "",
+        tipologia: "",
+        foto: [],
+        localita: {},
+        prezzo: [],
         servizi: [
-            {servizio: "Aria condizionata", icona: "snowflake"},
-            {servizio: "Riscaldamento", icona: "fire"},
-            {servizio: "TV", icona: "tv"},
-            {servizio: "Wi-Fi", icona: "wifi"},
-            {servizio: "Piscina", icona: "water"},
-            {servizio: "Idonea per bambini", icona: "child"},
-            {servizio: "Animali ammessi", icona: "paw"}
         ],
-        localita: {
-            regione: "Sicilia",
-            provincia: "Palermo",
-            comune: "Trabia"
-        },
-        prezzo: 40, // in casa vacanze
         ambienti: ["Giardino", "Terrazza", "Piscina"],
         bagni: 4,
         camere: [
@@ -78,9 +73,14 @@ function SchermataStruttura(props) {
                 Object.assign(tmp, struttura);
                 tmp.nome = res.data.nomeStruttura;
                 tmp.descrizione = res.data.descrizione;
+                tmp.tipologia = res.data.tipologiaStruttura;
                 tmp.foto = res.data.foto;
+                tmp.localita = res.data.localita;
+                tmp.prezzo = res.data.prezzo;
+                tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });
                 setStruttura(tmp);
             })
+            .catch(() => history.push("/"));
     }, []);
 
     useEffect(() => {
@@ -255,7 +255,8 @@ function SchermataStruttura(props) {
                 <Breadcrumb gerarchia={[
                     {url: "/search?destinazione=" + struttura.localita.regione, testo: struttura.localita.regione},
                     {url: "/search?destinazione=" + struttura.localita.provincia, testo: struttura.localita.provincia},
-                    {url: "/search?destinazione=" + struttura.localita.comune, testo: struttura.localita.comune}
+                    {url: "/search?destinazione=" + struttura.localita.comune, testo: struttura.localita.comune},
+                    {testo: `via ${struttura.localita.via}, ${struttura.localita.numeroCivico}`, stato: "active"}
                 ]} icona="map"/>
             </div>
 
@@ -306,7 +307,7 @@ function SchermataStruttura(props) {
                             </small>
                         </div>
 
-                        { struttura.tipologia && struttura.tipologia === "b&b" && (
+                        { struttura.tipologia && struttura.tipologia === "B&B" && (
                             <div className="my-3">
                                 <h5>Seleziona camere</h5>
 
@@ -374,8 +375,16 @@ function SchermataStruttura(props) {
                             </small>
                         </div>
 
-                        <div className="text-right">
-                            <button type="submit" className="btn btn-warning">Richiedi prenotazione</button>
+                        <div className="d-flex flex-row">
+                            <div>
+                                {/* TODO: Da calcolare */}
+                                { struttura.prezzo && struttura.prezzo[0] && (
+                                    <span className="h2">{struttura.prezzo[0].prezzo}€</span>
+                                )}
+                            </div>
+                            <div className="ml-auto">
+                                <button type="submit" className="btn btn-warning">Richiedi prenotazione</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -389,13 +398,11 @@ function SchermataStruttura(props) {
                     <div>
                         <h6>Servizi</h6>
                         <div className="row mx-auto">
-                            {
-                                struttura.servizi && struttura.servizi.map((servizio) => {
-                                    return (
-                                        <Servizio key={servizio.servizio} servizio={servizio.servizio} icona={servizio.icona}/>
-                                    )
-                                })
-                            }
+                            { struttura.servizi && struttura.servizi[0] && struttura.servizi.map((servizio) => {
+                                return (
+                                    <Servizio key={servizio.nome} servizio={servizio.nome} icona={servizio.icona}/>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
@@ -405,7 +412,7 @@ function SchermataStruttura(props) {
             <div className="shadow mt-3 card bg-white p-3">
                 <h6>Esplora la zona</h6>
                 <div className="shadow-sm w-100" style={{height: 250 + "px"}}>
-                    <Mappa destinazione={struttura.comune}/>
+                    <Mappa destinazione={struttura.localita.comune}/>
                 </div>
             </div>
 
