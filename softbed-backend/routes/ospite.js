@@ -10,32 +10,26 @@ router.get('/', function(req, res, next) {
 
 //aggiungi ospite
 router.post('/aggiungi', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     ospiteModel.aggiungi(req.body,function(data){
-        console.log(data);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //elimina ospite
 router.post('/elimina', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     ospiteModel.elimina(req.body,function(data){
-        console.log(data);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //recupero ospiti
 router.post('/fetch', function (req, res) {
-    console.log(req.body);
     ospiteModel.fetch(req.body,function (data){
         res.send(data);
     }).catch((err) => {
-        res.status(err.status).send(err.message);
-    });
+        res.status(err.status).send(err.message)})
 });
 
 module.exports = router;

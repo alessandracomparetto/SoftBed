@@ -48,14 +48,11 @@ module.exports= {
                         throw createError(500);
                     });
                 if (!results[0]) {
-                    console.log('Utente non trovato!');
-                    next(createError(404, 'Utente non trovato'));
+                    throw createError(404, "Utente non trovato");
                 } else {
 
                     if (datiUtente.pass != results[0].password) {
-                        // password non coincidenti
-                        console.log('Password errata!');
-                        next(createError(403, 'Password errata'));
+                        throw createError(404, "Password errata");
                     } else {
                         //creo id della sessione
                         return callback(results.refUtente);
