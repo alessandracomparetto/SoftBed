@@ -93,6 +93,7 @@ function SchermataStruttura() {
     const maxData = convertiData(oggi, 0, 0, 1);
 
     const [numeroAdulti, setNumeroAdulti] = useState( 2);
+    const [maxOspiti, setMaxOspiti] = useState(100);
     const [numeroBambini, setNumeroBambini] = useState(0);
     const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
 
@@ -146,9 +147,11 @@ function SchermataStruttura() {
         if (struttura.tipologia && struttura.tipologia === "b&b") {
             const singole = $("#singole");
             const doppie = $("#doppie");
+            const adulti = parseInt($("#adulti").val());
+            const bambini = parseInt($("#bambini").val());
 
-            // Camere > 0
-            if (singole.val() + doppie.val() < 1)
+            // Camere >= 1 - Ospiti <= MaxOspiti
+            if ((singole + doppie < 1) || (adulti + bambini > maxOspiti))
                 event.preventDefault();
         }
 
@@ -273,6 +276,7 @@ function SchermataStruttura() {
         const adultiAiuto = $("#adultiAiuto");
         const adultiEsentiAiuto = $("#adultiEsentiAiuto");
         const bambiniEsentiAiuto = $("#bambiniEsentiAiuto");
+        const totaleOspitiAiuto = $("#totaleOspitiAiuto");
 
         // Controllo numero adulti
         if (adulti.val() < 1) {
@@ -299,6 +303,15 @@ function SchermataStruttura() {
 
         else {
             bambiniEsentiAiuto.addClass("d-none");
+        }
+
+        // Controllo numero totale di ospiti
+        if (parseInt(adulti.val()) + parseInt(bambini.val()) > maxOspiti) {
+            totaleOspitiAiuto.removeClass("d-none");
+        }
+
+        else {
+            totaleOspitiAiuto.addClass("d-none");
         }
 
         aggiornaPrezzo();
@@ -341,7 +354,34 @@ function SchermataStruttura() {
 
         setPrezzo(Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100);
     }
-    useEffect(aggiornaPrezzo, [struttura]); // Aggiornamento del prezzo al caricamento della struttura
+    useEffect(() => {
+        aggiornaPrezzo(); // Aggiornamento del prezzo al caricamento della struttura
+
+        let totale;
+
+        if (struttura.tipologia === "cv") {
+            totale = parseInt(struttura.altro.singoli) + 2 * parseInt(struttura.altro.matrimoniali);
+        }
+
+        else {
+            let singole, doppie, triple, quadruple;
+
+            struttura.camere.map((camera) => {
+                if (camera.tipologiaCamera === "singola")
+                    singole = camera.numero || 0;
+                else if (camera.tipologiaCamera === "doppia")
+                    doppie = camera.numero || 0;
+                else if (camera.tipologiaCamera === "tripla")
+                    triple = camera.numero || 0;
+                else
+                    quadruple = camera.numero || 0;
+
+                totale = singole + (2 * doppie) + (3 * triple) + (4 * quadruple)
+            })
+
+            if (totale) setMaxOspiti(totale);
+        }
+    }, [struttura]);
 
     return (
         <div className="container px-3 mt-3">
@@ -453,7 +493,7 @@ function SchermataStruttura() {
                                 <label className="col-sm-4 col-form-label" htmlFor="adulti">Adulti</label>
                                 <div className="col-sm-3">
                                     <input name="adulti" type="number" className="form-control" id="adulti"
-                                           aria-describedby="Numero di adulti" min={1} max={100}
+                                           aria-describedby="Numero di adulti" min={1} max={maxOspiti}
                                            defaultValue={2} onChange={controlloOspiti} required/>
                                 </div>
                             </div>
@@ -462,7 +502,7 @@ function SchermataStruttura() {
                                 <label className="col-sm-4 col-form-label" htmlFor="bambini">Bambini</label>
                                 <div className="col-sm-3">
                                     <input name="bambini" type="number" className="form-control" id="bambini"
-                                           aria-describedby="Numero di bambini" min={0} max={100}
+                                           aria-describedby="Numero di bambini" min={0} max={maxOspiti}
                                            defaultValue={0} onChange={controlloOspiti} required/>
                                 </div>
                             </div>
@@ -487,6 +527,10 @@ function SchermataStruttura() {
 
                             <small id="adultiAiuto" className="form-text text-warning d-none">
                                 Deve essere presente almeno un adulto.
+                            </small>
+
+                            <small id="totaleOspitiAiuto" className="form-text text-warning d-none">
+                                Con le attuali impostazioni la struttura può ospitare al più {maxOspiti} persone.
                             </small>
 
                             <small id="adultiEsentiAiuto" className="form-text text-warning d-none">

@@ -35,7 +35,6 @@ function SchermataRisultati() {
     }, []);
 
     // TODO: da rimuovere, solo per test
-
     const servizi = [
             {servizio: "Aria condizionata", icona: "snowflake"},
             {servizio: "Riscaldamento", icona: "fire"},
@@ -46,7 +45,7 @@ function SchermataRisultati() {
         ]
 
     return (
-        <React.Fragment>
+        <Fragment>
             <FormRicerca setDestinazione={setDestinazione}/>
             <div className="container">
                 <div className="row">
@@ -63,7 +62,7 @@ function SchermataRisultati() {
                         { listaStrutture[0] ? (
                             <Fragment>
                                 { listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
-                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.idStruttura} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi}/>
+                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi} foto={struttura.foto}/>
                                 })}
                                 <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
                             </Fragment>
@@ -76,7 +75,7 @@ function SchermataRisultati() {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </Fragment>
     )
 }
 

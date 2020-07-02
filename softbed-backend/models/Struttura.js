@@ -358,7 +358,7 @@ module.exports= {
             ("${datiRicerca.arrivo}" <= prenotazione.checkIn AND "${datiRicerca.partenza}" >= prenotazione.checkOut)
         )`
 
-        // B&B: B&B con almeno una camera disponibile che abbia abbastanza letti
+        // B&B: B&B con almeno una camera disponibile e con abbastanza letti
         let queryPrenotazioniBB = `SELECT DISTINCT CBB1.refStruttura
         FROM \`cameraB&B\` as CBB1
         WHERE 
@@ -380,40 +380,88 @@ module.exports= {
         let query;
         // Solo case vacanze
         if (datiRicerca.bedAndBreakfast !== "true") {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura
-            FROM struttura 
+            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
+            FROM struttura, fotografie
             WHERE 
-            struttura.idStruttura IN (${queryDestinazione}) AND 
-            struttura.idStruttura IN (${queryPrenotazioniCV})`
+                struttura.idStruttura IN (${queryDestinazione}) AND 
+                struttura.idStruttura IN (${queryPrenotazioniCV}) AND 
+                struttura.idStruttura = fotografie.refStruttura AND
+                fotografie.idFoto = ( 
+                    SELECT F2.idFoto
+                    FROM fotografie as F2
+                    WHERE F2.refStruttura = struttura.idStruttura
+                    LIMIT 1
+                )`
         }
 
         // Solo bed and breakfast
         else if (datiRicerca.casaVacanze !== "true") {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura 
-            FROM struttura 
+            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
+            FROM struttura, fotografie
             WHERE 
-            struttura.idStruttura IN (${queryDestinazione}) AND  
-            struttura.idStruttura IN (${queryPrenotazioniBB})`
+                struttura.idStruttura IN (${queryDestinazione}) AND  
+                struttura.idStruttura IN (${queryPrenotazioniBB}) AND 
+                struttura.idStruttura = fotografie.refStruttura AND
+                fotografie.idFoto = ( 
+                    SELECT F2.idFoto
+                    FROM fotografie as F2
+                    WHERE F2.refStruttura = struttura.idStruttura
+                    LIMIT 1
+                )
+            `
         }
 
-        // Sia case vacanze che B&B
+        // Sia case vacanze che B&B : id, nome, foto
         else {
-            query = `SELECT struttura.idStruttura, struttura.nomeStruttura
-            FROM struttura
+            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
+            FROM struttura, fotografie
             WHERE
                 struttura.idStruttura IN (${queryDestinazione}) AND (
                     (struttura.idStruttura IN (${queryPrenotazioniBB})) OR 
                     (struttura.idStruttura IN (${queryPrenotazioniCV}))
-            )`
+                ) AND 
+                struttura.idStruttura = fotografie.refStruttura AND
+                fotografie.idFoto = ( 
+                    SELECT F2.idFoto
+                    FROM fotografie as F2
+                    WHERE F2.refStruttura = struttura.idStruttura
+                    LIMIT 1
+                )`
         }
+
+        let queryDescrizioneBB = `SELECT BB.descrizione
+            FROM \`B&B\` as BB
+            WHERE BB.refStruttura = ?`
+
+        let queryDescrizioneCV = `SELECT CV.descrizione
+            FROM casaVacanze as CV
+            WHERE CV.refStruttura = ?`
+
+        let risultato = [];
 
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(query, []).catch((err) => {throw createError(500)});
-                return callback(risultato);
+                let informazioni = await db.query(query, []).catch((err) => {console.log(err)});
+
+                let descrizione;
+
+                console.log("Informazioni:", informazioni);
+                informazioni.map(async (infoStruttura, indice) => {
+                    risultato[indice] = {id: infoStruttura.id, nome: infoStruttura.nome, foto: infoStruttura.foto};
+                    descrizione = await db.query(queryDescrizioneCV, [infoStruttura.id]).catch((err) => console.log(err));
+
+                    console.log("Descrizione:", descrizione);
+                    if (descrizione[0]) {
+                        risultato[indice].descrizione = descrizione[0].descrizione;
+                    }
+
+                    console.log("Risultato:", risultato);
+                    console.log("Informazioni:", informazioni);
+                    return callback(risultato);
+                });
             })
         } catch (err) {
-            throw err;
+            console.log(err);
         }
 
     },
