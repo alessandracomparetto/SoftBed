@@ -15,7 +15,7 @@ module.exports={
                 let datiQuery = [datiOspite.via, datiOspite.numero, datiOspite.cap, datiOspite.refComuneResidenza];
 
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
-                    throw err
+                    throw createError(500);
                 });
 
                 refIndirizzo = results.insertId;
@@ -24,7 +24,7 @@ module.exports={
                 sql = ('INSERT INTO `ospite` (nome, cognome, codiceFiscale, dataNascita, refindirizzo, refComuneNascita, refPrenotazione, tassa, dataArrivo, permanenza) VALUES ?');
                 datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, refIndirizzo, datiOspite.refComuneNascita, refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN OSPITE
-                    throw err;
+                    throw createError(500);
                 });
 
                 refOspite = results.insertId;
@@ -34,7 +34,7 @@ module.exports={
                     for(documento of datiOspite.documenti){
                         datiQuery = [refOspite, documento];
                         results2 = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw err;
+                            throw createError(500);
                         });
                     }
                     console.log("Inseriti documenti");
@@ -43,9 +43,9 @@ module.exports={
                 return callback(results);
 
             });
-        } //chiusura try
+        }
         catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -94,13 +94,13 @@ module.exports={
                     AND `CR`.refProvincia = `PR`.idProvincia AND `PR`.refRegione = `RR`.idRegione AND O.refComuneNascita = `CN`.idComune\
                     AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[refPrenotazione])
                     .catch(err => {
-                        throw err;
+                        throw createError(500);
                     });
                     console.log(infoOspite);
                     return callback(infoOspite);
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
