@@ -7,13 +7,15 @@ function SchermataPrenotazioneStruttura(props){
     const [prenotazioni, aggiornaPrenotazioni]=useState([]);
     const  [flag, aggiornaFlag]=useState(0); //utilizzo dello stato per indicare quando aggiornare la lista della prenotazioni
 
-    useEffect(() => {
+     useEffect(() => {
         let data = {"idStruttura":props.idStruttura, "tipologiaStruttura":props.tipologiaStruttura};
+        console.log(data);
         axios.post(`/prenotazione/listaPrenotazioni`, data).then(res => {
+            console.log("prenotazioni", res.data);
             aggiornaPrenotazioni(res.data);
         })
         .catch(err => console.log(err));
-    }, [flag]);
+    }, [flag, props.tipologiaStruttura]);
 
     return(
         <div className="container">

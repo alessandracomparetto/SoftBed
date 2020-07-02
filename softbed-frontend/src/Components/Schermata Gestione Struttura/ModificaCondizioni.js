@@ -13,8 +13,7 @@ function ModificaCondizioni(props) {
     }
 
    useEffect(()=>{
-
-        /*/!*copia["minSoggiorno"]=props.dati.minSoggiorno;
+       copia["minSoggiorno"]=props.dati.minSoggiorno;
         copia["maxSoggiorno"]=props.dati.maxSoggiorno;
         copia["anticipoPrenotazioneMin"]=props.dati.anticipoPrenotazioneMin;
         copia["anticipoPrenotazioneMax"]=props.dati.anticipoPrenotazioneMax;
@@ -28,9 +27,10 @@ function ModificaCondizioni(props) {
         copia["penaleCancellazione"]=props.dati.penaleCancellazione;
         copia["preavvisoDisdetta"]=props.dati.preavvisoDisdetta;
         copia["prezzoAdulti"]=props.dati.prezzoAdulti;
-        copia["prezzoBambini"]=props.dati.prezzoBambini;*!/*/
+        copia["prezzoBambini"]=props.dati.prezzoBambini;
         printObject(copia);
-    }, [props.struttura]);
+        console.log("sono entrato");
+    });
 
     function modificaCondizioni(event) {
         event.preventDefault();
@@ -64,8 +64,11 @@ function ModificaCondizioni(props) {
 
     function ripristinaCondizioni(e) {
         e.preventDefault();
-        console.log("annullo!")
-        props.setStruttura(copia);
+        console.log("annullo!");
+        for (const [key, value] of Object.entries(copia)) {
+            props.correzione(key, value);
+        }
+        console.log(props.dati);
     }
 
     return (

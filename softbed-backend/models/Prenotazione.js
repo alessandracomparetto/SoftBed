@@ -54,6 +54,7 @@ module.exports = {
         idStruttura=dati.idStruttura;
         /*TODO:aggiungere camere*/
         const db=await makeDb(config);
+        console.log(dati);
         try{
            await withTransaction(db,async()=> {
                let listaPrenotazioni = await db.query('SELECT * FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente', [[[idStruttura]]]).catch(err => {
@@ -63,14 +64,14 @@ module.exports = {
                    for (let i = 0; i < listaPrenotazioni.length; i++) {
                        let indice = listaPrenotazioni[i].idPrenotazione;
                        console.log(indice);
-                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera JOIN prenotazione WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=prenotazione.idPrenotazione \
-                                                        AND prenotazione.idPrenotazione=?', [indice]).catch(err=>{throw err});
+                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?  \
+                                                       ', [indice]).catch(err=>{throw err});
                        let array=[];
                        for (let i = 0; i < camere.length; i++) {
                            array.push(camere[i]);
                        }
-                       console.log("CAMERE",array);
                        listaPrenotazioni[i]["camere"] = array;
+                       console.log(listaPrenotazioni[i]);
                    }
                }
                return callback(listaPrenotazioni);
