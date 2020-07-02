@@ -1,4 +1,4 @@
-import React, from "react";
+import React from "react";
 
 function Prenotazione(props){
 return(
@@ -82,7 +82,7 @@ return(
            </div>
            <div>
                <strong>Stato:</strong>{
-               props.dati.confermata==1 ?
+               props.dati.confermata===1 ?
                    <span> confermata il {new Date(props.dati.dataConferma).toLocaleDateString()}</span>
                    :
                    <span> scade il {new Date(props.dati.dataScadenza).toLocaleString()}</span>
