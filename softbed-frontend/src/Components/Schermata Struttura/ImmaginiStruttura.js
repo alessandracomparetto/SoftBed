@@ -15,7 +15,7 @@ function ImmagineSecondaria(props) {
 function ImmaginiStruttura(props) {
 
     return (
-        <div className="m-3 row">
+        <div className="m-3 d-md-flex justify-content-center">
             {/* Immagine principale */}
             <div className="col-12 col-md-7 pr-md-0">
                 {props.struttura.foto && props.struttura.foto[0] && (
@@ -26,19 +26,16 @@ function ImmaginiStruttura(props) {
                         </figure>
                     </a>
                 )}
-
             </div>
 
             {/* Altre immagini */}
-           <div className="col-12 col-md-5 mt-3 mt-md-0">
-               {props.struttura.foto &&
-               props.struttura.foto.map((immagine, indice) => {
-                    if (indice === 0 || indice > 4) {
-                        return null;
-                    }
-                    return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome} nomeImmagine={props.struttura.foto[indice]}/>
-                })}
-            </div>
+            { props.struttura.foto && props.struttura.foto[1] && (
+                <div className="col-12 col-md-5 mt-3 mt-md-0">
+                    {props.struttura.foto.slice(1, Math.min(5, props.struttura.foto.length)).map((immagine, indice) => {
+                        return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome} nomeImmagine={props.struttura.foto[indice]}/>
+                    })}
+                </div>
+            )}
         </div>
     )
 }

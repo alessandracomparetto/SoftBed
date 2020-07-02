@@ -1,7 +1,8 @@
 import React from 'react';
 import SliderPrezzo from "./SliderPrezzo";
+import {servizi, ambienti} from "../../../caratteristiche";
 
-function FormFiltri(props) {
+function FormFiltri() {
     return (
         <form className="form form-row p-3">
             <div className="col-12 mt-3">
@@ -11,24 +12,28 @@ function FormFiltri(props) {
                 </div>
             </div>
             <div className="col-12 mt-3">
-                { props.servizi && (
-                    <React.Fragment>
-                        <h4>Servizi</h4>
+                <h4>Servizi</h4>
 
-                        {
-                            props.servizi.map((servizio, indice) => {
-                                return (
-                                    <div className="form-check mx-2" key={indice}>
-                                        <input className="form-check-input" id={servizio.id} name={servizio.id} type="checkbox"/>
-                                        <label className="form-check-label" htmlFor={servizio.id}>{servizio.nome}</label>
-                                    </div>
-                                );
-                            })
-                        }
+                { Object.keys(servizi).map((servizio) => {
+                    return (
+                        <div key={servizi[servizio].nome} className="form-check mx-2">
+                            <input className="form-check-input" id={servizi[servizio].nome} name={servizi[servizio].nome} type="checkbox"/>
+                            <label className="form-check-label" htmlFor={servizi[servizio].nome}>{servizi[servizio].nome}</label>
+                        </div>
+                    );
+                })}
+            </div>
+            <div className="col-12 mt-3">
+                <h4>Ambienti</h4>
 
-                    </React.Fragment>
-                    )
-                }
+                { Object.keys(ambienti).map((ambiente) => {
+                    return (
+                        <div key={ambienti[ambiente].nome} className="form-check mx-2">
+                            <input className="form-check-input" id={ambienti[ambiente].nome} name={ambienti[ambiente].nome} type="checkbox"/>
+                            <label className="form-check-label" htmlFor={ambienti[ambiente].nome}>{ambienti[ambiente].nome}</label>
+                        </div>
+                    );
+                })}
             </div>
             <button className="btn btn-secondary btn-block mt-3" type="submit">Applica filtri</button>
         </form>

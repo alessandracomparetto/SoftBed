@@ -2,6 +2,10 @@ let express = require('express');
 let router = express.Router();
 let strutturaModel = require('../models/Struttura');
 
+// Cache
+let cacheManager = require('cache-manager');
+let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300}) // 5 minuti
+
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
        res.send(data);
@@ -35,10 +39,31 @@ router.post('/calcoloGuadagno/', function(req, res, next) {
 });
 
 router.get('/:idStruttura', function(req, res) {
-    strutturaModel.carica(req.params.idStruttura, function(data) {
-        res.send(data);
-    }).catch((err) =>{
-        res.status(err.status).send();
+    const id = req.params.idStruttura;
+
+    cacheStrutture.get(id, function(err, result) {
+        // Se la ricerca è salvata in cache viene inviato il risultato memorizzato
+        if (result) {
+            console.log("Cache hit!");
+            res.send(result);
+        }
+
+        // Altrimenti viene effettuata la query al db
+        else {
+            strutturaModel.carica(id, function(data) {
+                console.log("Cache miss!");
+
+                res.send(data);
+
+                // Inserimento in cache
+                cacheStrutture.set(id, JSON.stringify(data), function(err) {
+                    if (err) throw err;
+                })
+            })
+                .catch((err) =>{
+                    res.status(err.status).send();
+                })
+        }
     })
 });
 
@@ -76,7 +101,7 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
 module.exports = router;
 
 
-// TODO: Da rimuovere
+// TODO: Da rimuovere ???
 /*async function registrazioneStruttura(req, res, next){
     console.log(req.body);
     console.log("mondos");

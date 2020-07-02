@@ -108,10 +108,10 @@ function SchermataStruttura() {
     const location = useLocation();
     const controlloAccesso = (event) => {
         event.preventDefault();
-        // TODO: Gestire controllo accesso
-        const token = localStorage.getItem("token");
+        // TODO: Verificare correttezza della chiave
+        const accesso = sessionStorage.getItem("idUtente");
 
-        if (!token) {
+        if (!accesso) {
             // Se l'utente non risulta loggato, viene rimandato alla pagina di login
             reindirizza(history, {
                 pathname: '/accedi',
@@ -192,11 +192,26 @@ function SchermataStruttura() {
         const dataCO = $("#dataCheckOut");
         const dateAiuto = $("#dateAiuto");
         const passatoAiuto = $("#passatoAiuto");
+        const intervalloDateAiuto = $("#intervalloDateAiuto");
 
         const CI = new Date(dataCI.val());
         const CO = new Date(dataCO.val());
 
-        if (CI.getTime() <=  oggi.getTime()) {
+        const differenzaMS = new Date(new Date(CO).getTime() - new Date(CI).getTime());
+        const differenzaGiorni = Math.ceil(differenzaMS.getTime() / GIORNO);
+
+        if (struttura.condizioni) {
+            if ((differenzaGiorni < struttura.condizioni.minSoggiorno) ||
+                (differenzaGiorni > struttura.condizioni.maxSoggiorno)) {
+                intervalloDateAiuto.removeClass("d-none");
+            }
+
+            else {
+                intervalloDateAiuto.addClass("d-none");
+            }
+        }
+
+        if (CI.getTime() <= oggi.getTime()) {
             passatoAiuto.removeClass("d-none");
             dataCI.addClass("border border-danger");
         }
@@ -212,9 +227,41 @@ function SchermataStruttura() {
         }
 
         else {
-            aggiornaPrezzo();
             dateAiuto.addClass("d-none");
             dataCO.removeClass("border border-danger");
+        }
+
+        aggiornaPrezzo();
+    }
+
+    const controlloOrari = () => {
+        const orarioCheckIn = $("#orarioCheckIn");
+        const orarioCheckOut = $("#orarioCheckOut");
+        const orarioCheckInAiuto = $("#orarioCheckInAiuto");
+        const orarioCheckOutAiuto = $("#orarioCheckOutAiuto");
+
+        if (struttura.condizioni) {
+            if ((orarioCheckIn.val() < struttura.condizioni.oraInizioCheckIn.slice(0, 5)) ||
+                (orarioCheckIn.val() > struttura.condizioni.oraFineCheckIn.slice(0, 5))) {
+                orarioCheckIn.addClass("border border-danger");
+                orarioCheckInAiuto.removeClass("d-none");
+            }
+
+            else {
+                orarioCheckIn.removeClass("border border-danger");
+                orarioCheckInAiuto.addClass("d-none")
+            }
+
+            if ((orarioCheckOut.val() < struttura.condizioni.oraInizioCheckOut.slice(0, 5)) ||
+                (orarioCheckOut.val() > struttura.condizioni.oraFineCheckOut.slice(0, 5))) {
+                orarioCheckOut.addClass("border border-danger");
+                orarioCheckOutAiuto.removeClass("d-none");
+            }
+
+            else {
+                orarioCheckOut.removeClass("border border-danger");
+                orarioCheckOutAiuto.addClass("d-none")
+            }
         }
     }
 
@@ -284,8 +331,13 @@ function SchermataStruttura() {
             prezzoBase = prezzoTMP * differenzaGiorni;
         }
 
-        const tasseAdulti = (adulti - adultiEsenti) * struttura.tasse.prezzoAdulti;
-        const tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.prezzoBambini;
+        let tasseAdulti = 0;
+        let tasseBambini = 0;
+
+        if (struttura.tasse) {
+            tasseAdulti = (adulti - adultiEsenti) * struttura.tasse.prezzoAdulti;
+            tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.prezzoBambini;
+        }
 
         setPrezzo(Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100);
     }
@@ -324,7 +376,10 @@ function SchermataStruttura() {
                                 <label className="sr-only" htmlFor="orarioCheckIn">Orario</label>
                                 <div className="col-sm-4">
                                     <input name="orarioCheckIn" type="time" className="form-control" id="orarioCheckIn"
-                                           defaultValue="11:00" min="06:00" max="15:00" required/>
+                                           defaultValue={struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)}
+                                           min={struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)}
+                                           max={struttura.condizioni && struttura.condizioni.oraFineCheckIn.slice(0, 5)}
+                                           required onChange={controlloOrari}/>
                                 </div>
                             </div>
 
@@ -338,7 +393,10 @@ function SchermataStruttura() {
                                 <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
                                 <div className="col-sm-4">
                                     <input name="orarioCheckOut" type="time" className="form-control" id="orarioCheckOut"
-                                           defaultValue="11:00" min="06:00" max="15:00" required/>
+                                           defaultValue={struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)}
+                                           min={struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)}
+                                           max={struttura.condizioni && struttura.condizioni.oraFineCheckOut.slice(0, 5)}
+                                           required onChange={controlloOrari}/>
                                 </div>
                             </div>
 
@@ -349,13 +407,24 @@ function SchermataStruttura() {
                             <small id="dateAiuto" className="form-text text-warning d-none">
                                 La data di check-out deve essere posteriore alla data di check-in.
                             </small>
+
+                            <small id="intervalloDateAiuto" className="form-text text-warning d-none">
+                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioni && struttura.condizioni.minSoggiorno} e {struttura.condizioni && struttura.condizioni.maxSoggiorno}
+                            </small>
+
+                            <small id="orarioCheckInAiuto" className="form-text text-warning d-none">
+                                Per questa struttura l'orario di check-in deve essere compreso fra le {struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)} e le {struttura.condizioni && struttura.condizioni.oraFineCheckIn.slice(0, 5)}
+                            </small>
+
+                            <small id="orarioCheckOutAiuto" className="form-text text-warning d-none">
+                                Per questa struttura l'orario di check-out deve essere compreso fra le {struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)} e le {struttura.condizioni && struttura.condizioni.oraFineCheckOut.slice(0, 5)}
+                            </small>
                         </div>
 
                         { struttura.tipologia && struttura.tipologia === "B&B" && struttura.camere && (
                             <div className="my-3">
                                 <h5>Seleziona camere</h5>
 
-                                {/*TODO: Gestire ordine tipologia camera*/}
                                 { struttura.camere.map((camera) => {
                                     return (
                                         <div key={camera.tipologiaCamera} className="form-group row">
