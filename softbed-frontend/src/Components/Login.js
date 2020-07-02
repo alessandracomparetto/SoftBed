@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from "axios";
-import {Redirect} from "react-router-dom";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
 
 const crypto = require('crypto');
 
@@ -8,6 +8,9 @@ const crypto = require('crypto');
 
 function Login(){
     const[redirect, setRedirect] = useState(false);
+    const history = useHistory();
+    const location = useLocation();
+
     function onSubmit(e){
         e.preventDefault();
 
@@ -30,7 +33,10 @@ function Login(){
 
             try {
                 axios.post("/utente/login", utenteLogin)
-                    .then(() => setRedirect(true));
+                    .then(() => {
+                        if (location.state && location.state.urlProvenienza) history.push(location.state.urlProvenienza)
+                        else setRedirect(true);
+                    });
             } catch (err) {
                 if (err.response.status === 400) {
                     console.log('There was a problem with the server');

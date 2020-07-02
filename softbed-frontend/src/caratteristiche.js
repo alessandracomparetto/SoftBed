@@ -1,3 +1,10 @@
+const ambienti = {
+    giardino: {nome: "Giardino", icona: "leaf"},
+    piscina: {nome: "Piscina", icona: "water"},
+    salotto: {nome: "Salotto", icona: "couch"},
+    terrazza: {nome: "Terrazza", icona: "wind"}
+}
+
 const servizi = {
     animaliAmmessi: {nome: "Animali ammessi", icona: "paw"},
     ariaCondizionata: {nome: "Aria condizionata", icona: "snowflake"},
@@ -14,4 +21,11 @@ const servizi = {
     wifi: {nome: "Wi-Fi", icona: "wifi"},
 }
 
-export default servizi;
+const generali = {
+    bagni: {nome: "Bagno", icona: "toilet"},
+    camere: {nome: "Camera", icona: "door-closed"},
+    singoli: {nome: "Letto singolo", icona: "bed"},
+    matrimoniali: {nome: "Letto matrimoniale", icona: "bed"}
+}
+
+export {ambienti, generali, servizi};

@@ -1,71 +1,33 @@
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
+import axios from "axios";
 import $ from "jquery";
-import {useParams, useHistory} from "react-router-dom";
+import {useParams, useHistory, useLocation} from "react-router-dom";
 
 import Breadcrumb from "../Breadcrumb";
-import Servizio from "../Schermata Risultati/Servizio";
+import Caratteristica from "../Schermata Risultati/Caratteristica";
 import Mappa from "../Schermata Risultati/Mappa";
 import ImmaginiStruttura from "./ImmaginiStruttura";
-import {convertiData} from "../../Actions/gestioneDate";
-import axios from "axios";
 
-import servizi from "../../servizi";
+import {ambienti, generali, servizi} from "../../caratteristiche";
+import reindirizza from "../../Actions/reindirizzamento";
+import {GIORNO, convertiData} from "../../Actions/gestioneDate";
 
 
-function SchermataStruttura(props) {
+function SchermataStruttura() {
     let { id } = useParams();
 
+    const [prezzo, setPrezzo] = useState(0);
     const [struttura, setStruttura] = useState({
+        camere: [],
         idStruttura: id,
-        nome: "",
-        descrizione: "",
-        tipologia: "",
-        foto: [],
         localita: {},
-        prezzo: [],
-        servizi: [
-        ],
-        ambienti: ["Giardino", "Terrazza", "Piscina"],
-        bagni: 4,
-        camere: [
-            {matrimoniali: 2, singoli: 3, prezzo: 65},
-            {matrimoniali: 2, singoli: 0, prezzo: 42},
-            {matrimoniali: 0, singoli: 3, prezzo: 30},
-        ], // in B&B
-        prenotazione: {
-            durata: {
-                min: 4,
-                max: 28
-            },
-            anticipo: {
-                min: 3,
-                max: 90,
-            },
-            checkIn: {
-                inizio: "13:00",
-                fine: "17:00"
-            },
-            checkOut: {
-                inizio: "09:00",
-                fine: "13:00"
-            }
-        },
-        pagamento: {
-            inLoco: true,
-            online: false,
-            cancellazione: true,
-            preavviso: true
-        },
-        tasse: {
-            adulti: 10,
-            bambini: 5,
-            bonus: {
-                durataSoggiorno: 3,
-                numeroPersone: 10
-            }
-        }
+        pagamento: {},
+        prenotazione: {durata: {}, anticipo: {}, checkIn: {}, checkOut: {}},
+        prezzo: 0,
+        tasse: {}
     });
 
+    // CARICAMENTO DELLA STRUTTURA
     useEffect(() => {
         let tmp = {};
         axios.get(`/struttura/${id}`)
@@ -76,8 +38,20 @@ function SchermataStruttura(props) {
                 tmp.tipologia = res.data.tipologiaStruttura;
                 tmp.foto = res.data.foto;
                 tmp.localita = res.data.localita;
+                tmp.condizioni = res.data.condizioni;
+                tmp.tasse = res.data.tasse;
                 tmp.prezzo = res.data.prezzo;
                 tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });
+
+                if (res.data.camere) // Solo per B&B
+                    tmp.camere = res.data.camere;
+
+                if (res.data.ambienti) // Solo per CV
+                    tmp.ambienti = res.data.ambienti.map((ambiente) => { return ambienti[ambiente] });
+
+                if (res.data.altro) // Solo per CV
+                    tmp.altro = res.data.altro;
+
                 setStruttura(tmp);
             }).then(() => {
                 // Aggiunta della struttura alla lista annunciRecenti della local storage
@@ -96,7 +70,7 @@ function SchermataStruttura(props) {
                 nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
                 localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
             })
-            .catch(() => history.push("/"));
+            .catch(() => reindirizza(history, "/", 4000, "Si è verificato un problema col caricamento della struttura."));
     }, []);
 
     // GESTIONE STATO NUMERO ADULTI
@@ -118,7 +92,7 @@ function SchermataStruttura(props) {
     const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
 
-    const [numeroAdulti, setNumeroAdulti] = useState(props.ospiti || 2);
+    const [numeroAdulti, setNumeroAdulti] = useState( 2);
     const [numeroBambini, setNumeroBambini] = useState(0);
     const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
 
@@ -131,15 +105,21 @@ function SchermataStruttura(props) {
     }
 
     const history = useHistory();
+    const location = useLocation();
     const controlloAccesso = (event) => {
+        event.preventDefault();
+        // TODO: Gestire controllo accesso
         const token = localStorage.getItem("token");
 
-        // TODO: Decommentare
-        if (/*!*/token) {
+        if (!token) {
             // Se l'utente non risulta loggato, viene rimandato alla pagina di login
-            // TODO: Sarebbe carino spiegargli il perché...
-            console.log("L'utente non è loggato!");
-            history.push('/accedi');
+            reindirizza(history, {
+                pathname: '/accedi',
+                state: {
+                    provenienza: 'Schermata struttura',
+                    urlProvenienza: location.pathname
+                }
+            }, 3000, "Devi effettuare l'accesso per poter effettuare una richiesta di prenotazione.");
         }
 
         else {
@@ -176,27 +156,35 @@ function SchermataStruttura(props) {
     }
 
     const controlloCamere = () => {
-        const singole = $("#singole");
-        const doppie = $("#doppie");
+        let somma = 0;
         const camereAiuto = $("#camereAiuto");
 
-        if (singole.val() < 0)
-            singole.val(0);
+        // Controllo che il numero di camere sia positivo per ciascuna tipologia e ne calcolo la somma
+        struttura.camere.map((camera) => {
+            const elemento = $(`#${camera.tipologiaCamera}`)
 
-        if (doppie.val() < 0)
-            doppie.val(0);
+            if (elemento.val() < 0) {
+                elemento.val(0);
+            }
 
-        if (! (singole.val() + doppie.val() > 1)) {
+            somma += elemento.val();
+        })
+
+        if (! (somma >= 1)) {
             camereAiuto.removeClass("d-none");
-            singole.addClass("border border-danger");
-            doppie.addClass("border border-danger");
+            struttura.camere.map((camera) => {
+                $(`#${camera.tipologiaCamera}`).addClass("border border-danger");
+            })
         }
 
         else {
             camereAiuto.addClass("d-none");
-            singole.removeClass("border border-danger");
-            doppie.removeClass("border border-danger");
+            struttura.camere.map((camera) => {
+                $(`#${camera.tipologiaCamera}`).removeClass("border border-danger");
+            })
         }
+
+        aggiornaPrezzo();
     }
 
     const controlloDate = () => {
@@ -224,6 +212,7 @@ function SchermataStruttura(props) {
         }
 
         else {
+            aggiornaPrezzo();
             dateAiuto.addClass("d-none");
             dataCO.removeClass("border border-danger");
         }
@@ -235,8 +224,8 @@ function SchermataStruttura(props) {
         const adulti = $("#adulti");
         const bambini = $("#bambini");
         const adultiAiuto = $("#adultiAiuto");
-        const esentiAdultiAiuto = $("#esentiAdultiAiuto");
-        const esentiBambiniAiuto = $("#esentiBambiniAiuto");
+        const adultiEsentiAiuto = $("#adultiEsentiAiuto");
+        const bambiniEsentiAiuto = $("#bambiniEsentiAiuto");
 
         // Controllo numero adulti
         if (adulti.val() < 1) {
@@ -249,22 +238,58 @@ function SchermataStruttura(props) {
 
         // Controllo numero adulti esenti
         if (adultiEsenti.val() > adulti.val()) {
-            esentiAdultiAiuto.removeClass("d-none");
+            adultiEsentiAiuto.removeClass("d-none");
         }
 
         else {
-            esentiAdultiAiuto.addClass("d-none");
+            adultiEsentiAiuto.addClass("d-none");
         }
 
         // Controllo numero bambini esenti
         if (bambiniEsenti.val() > bambini.val()) {
-            esentiBambiniAiuto.removeClass("d-none");
+            bambiniEsentiAiuto.removeClass("d-none");
         }
 
         else {
-            esentiBambiniAiuto.addClass("d-none");
+            bambiniEsentiAiuto.addClass("d-none");
         }
+
+        aggiornaPrezzo();
     }
+
+    const aggiornaPrezzo = () => {
+        const adulti = parseInt($("#adulti").val());
+        const bambini = parseInt($("#bambini").val());
+        const adultiEsenti = parseInt($("#adultiEsenti").val());
+        const bambiniEsenti = parseInt($("#bambiniEsenti").val());
+        const dataCheckIn = $("#dataCheckIn").val();
+        const dataCheckOut = $("#dataCheckOut").val();
+
+        const differenzaMS = new Date(new Date(dataCheckOut).getTime() - new Date(dataCheckIn).getTime());
+        const differenzaGiorni = Math.ceil(differenzaMS.getTime() / GIORNO);
+
+        let prezzoBase;
+
+        if (struttura.tipologia === "cv") { //CV
+            prezzoBase = (adulti + bambini) * struttura.prezzo * differenzaGiorni;
+        }
+
+        else { // B&B
+            let prezzoTMP = 0;
+
+            struttura.camere.map((camera) => {
+                prezzoTMP += parseInt($(`#${camera.tipologiaCamera}`).val()) * camera.prezzo;
+            })
+
+            prezzoBase = prezzoTMP * differenzaGiorni;
+        }
+
+        const tasseAdulti = (adulti - adultiEsenti) * struttura.tasse.prezzoAdulti;
+        const tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.prezzoBambini;
+
+        setPrezzo(Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100);
+    }
+    useEffect(aggiornaPrezzo, [struttura]); // Aggiornamento del prezzo al caricamento della struttura
 
     return (
         <div className="container px-3 mt-3">
@@ -284,7 +309,7 @@ function SchermataStruttura(props) {
 
             <div className="d-lg-flex flex-lg-row-reverse">
                 {/* Form dati di soggiorno */}
-                <div className="shadow mt-3 card bg-dark text-light p-3 col-12 col-lg-6">
+                <div className="shadow mt-3 card bg-dark text-light p-3 col-12 col-lg-6 h-100">
                     <form className="form" id="formRichiestaPrenotazione" onSubmit={controlloForm}>
                         <div className="my-3">
                             <h5>Calendario</h5>
@@ -326,28 +351,25 @@ function SchermataStruttura(props) {
                             </small>
                         </div>
 
-                        { struttura.tipologia && struttura.tipologia === "B&B" && (
+                        { struttura.tipologia && struttura.tipologia === "B&B" && struttura.camere && (
                             <div className="my-3">
                                 <h5>Seleziona camere</h5>
 
-                                <div className="form-group row">
-                                    <label className="col-sm-4 col-form-label" htmlFor="singole">Singole</label>
-                                    <div className="col-sm-3">
-                                        <input name="singole" type="number" className="form-control" id="singole"
-                                               aria-describedby="Numero camere singole" min={0} max={10}
-                                               defaultValue={0} onChange={controlloCamere}/>
-                                    </div>
-
-                                </div>
-                                <div className="form-group row">
-                                    <label className="col-sm-4 col-form-label" htmlFor="doppie">Doppie</label>
-                                    <div className="col-sm-3">
-                                        <input name="doppie" type="number" className="form-control" id="doppie"
-                                               aria-describedby="Numero camere doppie" min={0} max={10}
-                                               defaultValue={1} onChange={controlloCamere}/>
-                                    </div>
-                                </div>
-
+                                {/*TODO: Gestire ordine tipologia camera*/}
+                                { struttura.camere.map((camera) => {
+                                    return (
+                                        <div key={camera.tipologiaCamera} className="form-group row">
+                                            <label className="col-sm-4 col-form-label" htmlFor={camera.tipologiaCamera}>
+                                                {camera.tipologiaCamera.charAt(0).toUpperCase() + camera.tipologiaCamera.slice(1)}
+                                            </label>
+                                            <div className="col-sm-3">
+                                                <input name={camera.tipologiaCamera} type="number" className="form-control" id={camera.tipologiaCamera}
+                                                       aria-describedby={`Numero camere di tipo ${camera.tipologiaCamera}`} min={0} max={camera.numero}
+                                                       defaultValue={0} onChange={controlloCamere}/>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
 
                                 <small id="camereAiuto" className="form-text text-warning d-none">
                                     Devi selezionare almeno una camera.
@@ -363,7 +385,7 @@ function SchermataStruttura(props) {
                                 <div className="col-sm-3">
                                     <input name="adulti" type="number" className="form-control" id="adulti"
                                            aria-describedby="Numero di adulti" min={1} max={100}
-                                           defaultValue={props.ospiti || 2} onChange={controlloOspiti} required/>
+                                           defaultValue={2} onChange={controlloOspiti} required/>
                                 </div>
                             </div>
 
@@ -398,21 +420,18 @@ function SchermataStruttura(props) {
                                 Deve essere presente almeno un adulto.
                             </small>
 
-                            <small id="esentiAdultiAiuto" className="form-text text-warning d-none">
+                            <small id="adultiEsentiAiuto" className="form-text text-warning d-none">
                                 Il numero di adulti esenti non può essere superiore al numero totale di adulti.
                             </small>
 
-                            <small id="esentiBambiniAiuto" className="form-text text-warning d-none">
+                            <small id="bambiniEsentiAiuto" className="form-text text-warning d-none">
                                 Il numero di bambini esenti non può essere superiore al numero totale di bambini.
                             </small>
                         </div>
 
                         <div className="d-flex flex-row">
-                            <div>
-                                {/* TODO: Da calcolare */}
-                                { struttura.prezzo && struttura.prezzo[0] && (
-                                    <span className="h2">{struttura.prezzo[0].prezzo}€</span>
-                                )}
+                            <div className="d-flex">
+                                <span className="h3 mt-auto mb-1">{prezzo}€</span>
                             </div>
                             <div className="ml-auto">
                                 <button type="submit" className="btn btn-warning">Richiedi prenotazione</button>
@@ -423,20 +442,51 @@ function SchermataStruttura(props) {
 
                 {/* Informazioni struttura */}
                 <div className="shadow mt-3 card bg-white p-3 col-12 col-lg-6">
-                    <div>
+                    <div className="mb-4">
                         <h6>Informazioni sulla struttura</h6>
-                        <p>{struttura.descrizione}</p>
+                        <p className="mb-0">{struttura.descrizione}</p>
                     </div>
-                    <div>
+
+                    <div className="mb-4">
                         <h6>Servizi</h6>
                         <div className="row mx-auto">
                             { struttura.servizi && struttura.servizi[0] && struttura.servizi.map((servizio) => {
                                 return (
-                                    <Servizio key={servizio.nome} servizio={servizio.nome} icona={servizio.icona}/>
+                                    <Caratteristica key={servizio.nome} caratteristica={servizio.nome} icona={servizio.icona} esteso={true}/>
                                 )
                             })}
                         </div>
                     </div>
+
+                    { struttura.tipologia && struttura.tipologia === "cv" && (
+                        <Fragment>
+                            <div className="mb-4">
+                                <h6>Ambienti</h6>
+                                <div className="row mx-auto">
+                                    { struttura.ambienti && struttura.ambienti[0] && struttura.ambienti.map((ambiente) => {
+                                        return (
+                                            <Caratteristica key={ambiente.nome} caratteristica={ambiente.nome} icona={ambiente.icona} esteso={true}/>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div>
+                                <h6>Camere e letti</h6>
+                                <div className="row mx-auto">
+                                    { struttura.altro && Object.keys(struttura.altro)[0] && Object.keys(struttura.altro).map((elemento) => {
+                                        return (
+                                            <Caratteristica key={elemento}
+                                                            caratteristica={
+                                                                `${struttura.altro[elemento]}x ${generali[elemento].nome}`
+                                                            }
+                                                            icona={generali[elemento].icona}
+                                                            esteso={true}/>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </Fragment>
+                    )}
                 </div>
             </div>
 

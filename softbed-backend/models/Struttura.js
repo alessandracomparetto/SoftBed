@@ -1,4 +1,3 @@
-/*Model della struttura*/
 const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
@@ -195,7 +194,8 @@ module.exports= {
             FROM struttura
             WHERE struttura.idStruttura = ?`
 
-        let queryLocalita = `SELECT R.nomeRegione as regione, P.nomeProvincia as provincia, C.nomeComune as comune, I.via, I.numeroCivico, I.numeroCivico
+        let queryLocalita = `SELECT R.nomeRegione as regione, P.nomeProvincia as provincia, C.nomeComune as comune, 
+                I.via, I.numeroCivico, I.numeroCivico
             FROM regioni as R, province as P, comuni as C, indirizzo as I, struttura as S
             WHERE S.idStruttura = ?
                 AND S.refIndirizzo = I.idIndirizzo
@@ -206,9 +206,19 @@ module.exports= {
         let queryFoto = `SELECT fotografie.percorso
             FROM fotografie
             WHERE fotografie.refStruttura = ?`
-        
-        // B&B
-        let queryPrezzoBB = `SELECT CBB.tipologiaCamera, MIN(CBB.prezzoBaseANotte) as prezzo
+
+        let queryCondizioni = `SELECT C.minSoggiorno, C.maxSoggiorno, C.oraInizioCheckIn, C.oraFineCheckIn, 
+                C.oraInizioCheckOut, C.oraFineCheckOut
+            FROM condizioni as C
+            WHERE C.refStruttura = ?`
+
+        let queryTasse = `SELECT C.prezzoAdulti, C.prezzoBambini
+            FROM condizioni as C
+            WHERE C.refStruttura = ?`
+
+        // TODO: B&B, si assume che il prezzo corrisponda al minimo per la tipologia di stanza
+        //  e che le stanze siano tutte disponibili.
+        let queryCamereBB = `SELECT CBB.tipologiaCamera, COUNT(*) as numero, MIN(CBB.prezzoBaseANotte) as prezzo
             FROM \`cameraB&B\` as CBB, \`B&B\` as BB
             WHERE BB.refStruttura = ?
                 AND BB.refStruttura = CBB.refStruttura
@@ -242,7 +252,7 @@ module.exports= {
             FROM casaVacanze as CV
             WHERE CV.refStruttura = ?`
 
-        let queryBagniCamereLetti = `SELECT CV.nBagni as bagni, CV.nCamere as camere, CV.nLettiSingoli as singoli, CV.nLettiMatrimoniali as matrimoniali
+        let queryBagniCamereLettiCV = `SELECT CV.nCamere as camere, CV.nBagni as bagni, CV.nLettiSingoli as singoli, CV.nLettiMatrimoniali as matrimoniali
             FROM casaVacanze as CV
             WHERE CV.refStruttura = ?`
 
@@ -255,20 +265,22 @@ module.exports= {
 
                 let fotografie = await db.query(queryFoto, idStruttura).catch(() => {throw createError(500)});
                 let localita = await db.query(queryLocalita, idStruttura).catch(() => {throw createError(500)});
+                let condizioni = await db.query(queryCondizioni, idStruttura).catch(() => {throw createError(500)});
+                let tasse = await db.query(queryTasse, idStruttura).catch(() => {throw createError(500)});
 
-                let prezzoBB = await db.query(queryPrezzoBB, idStruttura).catch(() => {throw createError(500)});
+                let camereBB = await db.query(queryCamereBB, idStruttura).catch(() => {throw createError(500)});
                 let prezzoCV = await db.query(queryPrezzoCV, idStruttura).catch(() => {throw createError(500)});
 
                 let descrizione = "";
                 let servizi = [];
 
                 // Caso B&B
-                if (prezzoBB[0]) {
+                if (camereBB[0]) {
                     descrizione = await db.query(queryDescrizioneBB, idStruttura).catch(() => {throw createError(500)});
                     servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
                     
                     // Aggiunta a struttura
-                    struttura.prezzo = prezzoBB // array di oggetti {tipologiaStanza, prezzo}
+                    struttura.camere = camereBB // array di oggetti {tipologiaStanza, prezzo}
                 }
 
                 // Caso CV
@@ -277,10 +289,10 @@ module.exports= {
 
                     servizi = await db.query(queryServiziCV, idStruttura).catch(() => {throw createError(500)});
                     let ambienti = await db.query(queryAmbientiCV, idStruttura).catch(() => {throw createError(500)});
-                    let bagniCamereLetti = await db.query(queryBagniCamereLetti, idStruttura).catch(() => {throw createError(500)});
+                    let bagniCamereLetti = await db.query(queryBagniCamereLettiCV, idStruttura).catch(() => {throw createError(500)});
 
                     // Aggiunta a struttura
-                    struttura.prezzo = prezzoCV[0]; // number
+                    struttura.prezzo = prezzoCV[0].prezzoNotte; // number
 
                     struttura.ambienti = Object.keys(ambienti[0])
                         .reduce(function(risultato, ambiente) {
@@ -291,10 +303,7 @@ module.exports= {
                             return risultato;
                         }, []);
 
-                    struttura.bagni = bagniCamereLetti[0].bagni;
-                    struttura.camere = bagniCamereLetti[0].camere;
-                    struttura.lettiSingoli = bagniCamereLetti[0].singoli;
-                    struttura.lettiMatrimoniali = bagniCamereLetti[0].matrimoniali;
+                    struttura.altro = bagniCamereLetti[0];
                 }
 
                 // Struttura non trovata o informazioni obbligatorie mancanti
@@ -314,8 +323,10 @@ module.exports= {
 
                 struttura.foto = fotografie.map((oggetto) => {return oggetto.percorso});
                 struttura.localita = localita[0];
+                struttura.condizioni = condizioni[0];
+                struttura.tasse = tasse[0];
 
-                console.log(struttura);
+                console.log(struttura); // TODO: Rimuovere console.log
                 return callback(struttura);
             })
         } catch(err) {

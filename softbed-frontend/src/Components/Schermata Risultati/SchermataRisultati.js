@@ -18,7 +18,7 @@ function SchermataRisultati() {
         // Genero manualmente la GET a partire dai campi del form di ricerca
         // (sempre validi al caricamento del componente)
         const parametri = {
-            destinazione: $("#destinazione").val(),
+            destinazione: $("#destinazione").val().trim(),
             arrivo: $("#arrivo").val(),
             partenza: $("#partenza").val(),
             ospiti: $("#ospiti").val(),

@@ -6,22 +6,17 @@ import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento
 import axios from "axios";
 import RiepilogoPrenotazionePDF from "./RiepilogoPrenotazionePDF";
 import mostraDialogErrore from "../../Actions/errore";
+import reindirizza from "../../Actions/reindirizzamento";
 
 function SchermataPagamento() {
 
-    // TODO: utilizzate per test, da rimuovere
-    const [pagamentoOnline, setPagamentoOnline] = useState(true);
-    const [pagamentoInLoco, setPagamentoInLoco] = useState(true);
+    // TODO: utilizzate per test, da rimuovere, ottenere in altro modo e settare tramite le setter
+    const [pagamentoOnline, setPagamentoOnline] = useState(false);
+    const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
     const [listaDatiPagamento, setDatiPagamento] = useState([
         {id: 2751, nomeIntestatario: "Mario", cognomeIntestatario: "Rossi", numeroCarta: "0000 1111 2222 3333"},
         {id: 3725, nomeIntestatario: "Chiara", cognomeIntestatario: "Verdi", numeroCarta: "3333 4444 5555 6666"}
     ]);
-
-    const aggiungiDatoPagamento = (dato) => {
-        let tmp = [...listaDatiPagamento];
-        tmp.push(dato);
-        setDatiPagamento(tmp);
-    }
 
     const [online, setStatoOnline] = useState(false);
 
@@ -36,6 +31,7 @@ function SchermataPagamento() {
 
         // GESTIONE DEI PARAMETRI URL
         // Se uno dei parametri richiesti non è inserito si viene reindirizzati alla pagina della struttura / home
+        // poiché non vi è la possibilità di selezionare tali parametri dalla schermata di pagamento
         if (
             !query.get("idStruttura") ||
             !query.get("dataCheckIn") ||
@@ -45,8 +41,8 @@ function SchermataPagamento() {
             !query.get("adultiEsenti") ||
             !query.get("bambiniEsenti")
         ) {
-            if (!query.get("idStruttura")) history.push("/");
-            else history.push(`/struttura/${query.get("idStruttura")}`);
+            if (!query.get("idStruttura")) reindirizza(history, "/", 4000);
+            else reindirizza(history, `/struttura/${query.get("idStruttura")}`, 4000);
         }
 
         // Aggiorna i valori dello stato
@@ -89,6 +85,13 @@ function SchermataPagamento() {
         });
     }, []);
 
+
+    const aggiungiDatoPagamento = (dato) => {
+        let tmp = [...listaDatiPagamento];
+        tmp.push(dato);
+        setDatiPagamento(tmp);
+    }
+
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -108,9 +111,12 @@ function SchermataPagamento() {
                 }
 
                 axios.post('/mail/richiesta-prenotazione', informazioni)
-                    .catch((err) => (console.log(err)));
+                    .catch();
 
-                history.push("/operazione-completata");
+                history.push({
+                    pathname: "/operazione-completata",
+                    state: { provenienza: "Schermata pagamento" }
+                });
             })
             .catch(() => {
                 mostraDialogErrore();

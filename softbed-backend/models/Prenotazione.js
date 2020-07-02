@@ -7,7 +7,6 @@ module.exports = {
     create: async function (datiPrenotazione, res) {
         const db = await makeDb(config);
 
-        // TODO: Aggiungere esenti bambini
         let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
         let datiQuery = [

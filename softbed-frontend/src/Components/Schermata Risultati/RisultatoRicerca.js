@@ -1,5 +1,5 @@
 import React from "react";
-import Servizio from "./Servizio";
+import Caratteristica from "./Caratteristica";
 
 function RisultatoRicerca(props) {
     return (
@@ -14,7 +14,7 @@ function RisultatoRicerca(props) {
                 <div className="row p-2 annuncio-box-servizi">
                     {
                         props.servizi.map((servizio) => {
-                            return <Servizio key={servizio.servizio} servizio={servizio.servizio} icona={servizio.icona} />
+                            return <Caratteristica key={servizio.servizio} caratteristica={servizio.servizio} icona={servizio.icona} />
                         })
                     }
                 </div>

@@ -2,24 +2,21 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import './App.css';
+import Footer from "./Components/Footer";
+import Immagine from "./Components/Immagine";
+import Login from "./Components/Login";
 import Navbar from "./Components/Navbar";
-import FormRicerca from "./Components/FormRicerca";
-import Carousel from "./Components/Carousel";
-import PaginaNonTrovata from "./Components/PaginaNonTrovata";
+import Registrazione from "./Components/Registrazione";
+import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
+import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
+import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
+import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
+import SchermataPaginaNonTrovata from "./Components/Pagina Non Trovata/SchermataPaginaNonTrovata";
+import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import SchermataPrincipale from "./Components/SchermataPrincipale";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
-import Registrazione from "./Components/Registrazione";
-import Login from "./Components/Login";
-import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
-import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
-import Footer from "./Components/Footer";
-import StruttureRecenti from "./Components/StruttureRecenti";
-import Immagine from "./Components/Immagine";
-import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
 import SchermataStrutture from "./Components/SchermataStrutture/SchermataStrutture";
-import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
-import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
-
 
 
 function App() {
@@ -33,14 +30,12 @@ function App() {
                 </Route>
 
                 <Route path="*">
-                    {/* La navbar è presente in ogni caso */}
                     <Navbar />
+
                     <Switch>
                         {/* Schermata principale */}
                         <Route exact path="/">
-                            <Carousel />
-                            <FormRicerca />
-                            <StruttureRecenti />
+                            <SchermataPrincipale />
                         </Route>
 
                         <Route exact path="/accedi/">
@@ -79,17 +74,16 @@ function App() {
                             <SchermataRisultati />
                         </Route>
 
-                        {/* Schermata della struttura */}
                         <Route exact path="/struttura/:id">
                             <SchermataStruttura />
                         </Route>
 
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}
                         <Route path="*">
-                            <PaginaNonTrovata />
-                            <FormRicerca />
+                            <SchermataPaginaNonTrovata />
                         </Route>
                     </Switch>
+
                     <Footer />
                 </Route>
             </Switch>
