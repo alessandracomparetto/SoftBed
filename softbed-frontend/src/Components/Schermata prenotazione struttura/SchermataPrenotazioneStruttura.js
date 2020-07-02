@@ -26,7 +26,7 @@ function SchermataPrenotazioneStruttura(props){
                     prenotazioni.map((prenotazione, indice) => {
                         if (prenotazione.confermata === 0) {
                             return (<li key={indice} className="list-group-item list-group-item-warning">
-                                <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag}/></li>)
+                                <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag} nomeStruttura={props.nomeStruttura}/></li>)
                         }
                     })
                 }

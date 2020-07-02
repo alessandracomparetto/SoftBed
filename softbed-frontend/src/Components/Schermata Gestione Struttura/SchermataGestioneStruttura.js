@@ -13,6 +13,8 @@ function SchermataGestioneStruttura(){
     let {id} = useParams();
     const [struttura,setStruttura]=useState([]);
     const [flag, setFlag]=useState(0);
+
+    const[copia, setCopia]= useState("");
     //utilizzo questo stato per aggiornare le informazioni della struttura al modificare delle condizione e delle caratteristiche
 
     useEffect(() => {
@@ -27,6 +29,7 @@ function SchermataGestioneStruttura(){
         axios.post(`/struttura/gestioneStruttura/${id}`, dati)
             .then(res => {
                 setStruttura(res.data);
+                setCopia(res.data);
             })
             .catch(()=>mostraDialogErrore());
     }, []);
@@ -94,12 +97,12 @@ function SchermataGestioneStruttura(){
         printObject(tmp)
     }
 
-
     function correzione (nome, valore){
         let tmp = struttura;
         tmp[nome]=valore;
         setStruttura(tmp);
     }
+
 
     return (
         <div className="d-flex justify-content-center">
@@ -152,7 +155,7 @@ function SchermataGestioneStruttura(){
                 </div>
                     {/* Prenotazioni */}
                 <div id="prenotazioni" className="collapse col-12 col-md-9">
-                    <SchermataPrenotazioneStruttura idStruttura={id} tipologiaStruttura={struttura.tipologiaStruttura}/>
+                    <SchermataPrenotazioneStruttura idStruttura={id} tipologiaStruttura={struttura.tipologiaStruttura} nomeStruttura={struttura.nomeStruttura}/>
                 </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
@@ -166,7 +169,7 @@ function SchermataGestioneStruttura(){
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione}/>
+                    <ModificaCondizioni dati={struttura} setStruttura={setStruttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} copia={copia} setCopia={setCopia}/>
                 </div>
 
             </div>
