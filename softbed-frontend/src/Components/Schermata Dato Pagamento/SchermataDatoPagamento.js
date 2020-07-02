@@ -1,6 +1,8 @@
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
 import FormMetodoPagamento from "./FormMetodoPagamento";
 import DatiPagamento from "./DatiPagamento";
+import axios from "axios";
+import $ from "jquery";
 
 
 /*
@@ -9,28 +11,66 @@ TODO:
 */
 
 function SchermataDatoPagamento(props){
-    const[listaDatiPagamento, setDatiPagamento] = useState([
-        {nomeIntestatario: "Mario", cognomeIntestatario: "Rossi",numeroCarta: "0000000000000011", cvv: "123", dataScadenza: "22-08-20"},
-        {nomeIntestatario: "Luigi", cognomeIntestatario: "Verdi",numeroCarta: "0000000000001111", cvv: "234", dataScadenza: "23-08-20"},
-        {nomeIntestatario: "Paolo", cognomeIntestatario: "Bianchi",numeroCarta: "0000000000000021", cvv: "456", dataScadenza: "22-08-20"}
-        ])
+    const[listaDatiPagamento, setDatiPagamento] = useState([]);
 
-    const eliminaDatoPagamento = (indice) => {
-        {/*TODO inviare richiesta al beckend*/}
-        // Rimuovere dalla lista
-        let tmp = [...listaDatiPagamento];
-        tmp.splice(indice, 1);
-        setDatiPagamento(tmp);
-    }
+  useEffect(() => {
+      //TODO GESTIRE ID UTENTE
+      let data = {"idUtente":1}
+      /*props.idUtente*/
+        axios.post(`/utente/listaPagamenti`, data).then(res => {
+            console.log("DATI PAGAMENTO RECUPERATI=======");
+            console.log(res.data);
+            setDatiPagamento(res.data);
+        })
+            .catch(err => console.log(err));
+    }, []);
+
 
   const aggiungiDatoPagamento = (dato) => {
-        // Aggiungere alla lista
-        console.log(dato);
-        let tmp = [...listaDatiPagamento];
-        tmp.push(dato);
-        console.log(tmp);
-        setDatiPagamento(tmp);
+      //TODO: PASSARE ID UTENTE
+      console.log(dato);
+          try {
+              axios.post("/utente/aggiungiDatoPagamento", dato)
+                  .then(res => { // then print response status
+                      console.log("DATO AGGIUNTO ======= ");
+                      console.log(res.data);
+                      console.log("Dati aggiunti");
+                      let tmp = [...listaDatiPagamento];
+                      tmp.push(dato);
+                      console.log(tmp);
+                      setDatiPagamento(tmp);
+                  });
+          }catch(err){
+              if (err.response.status === 400) {
+                  console.log('There was a problem with the server');
+              } else {
+                  console.log(err.response.data.msg);
+              }
+          }
+
     }
+
+    const eliminaDatoPagamento = (numeroCarta, indice) => {
+        let data = {"numeroCarta":numeroCarta};
+        try {
+            axios.post("/utente/eliminaDatoPagamento", data)
+                .then(res => { // then print response status
+                    console.log("DATO ELIMINATO ======= ");
+                    console.log(res.data);
+                    let tmp = [...listaDatiPagamento];
+                    tmp.splice(indice, 1);
+                    setDatiPagamento(tmp);
+                });
+        }catch(err){
+            if (err.response.status === 400) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
+        }
+
+    }
+
 
     return(
         <div className="container my-3" >

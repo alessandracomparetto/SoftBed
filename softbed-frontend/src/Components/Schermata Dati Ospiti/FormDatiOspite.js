@@ -5,7 +5,7 @@ import FormDocumenti from "./FormDocumenti";
 import {convertiData} from "../../Actions/gestioneDate";
 import axios from "axios";
 
-
+//TODO RIPULIRE IL FORM DOCUMENTI AL SUBMIT
 function FormDatiOspite(props){
     const [mostraContenuto, setMostraContenuto] = useState(false );
     const toggleContenuto = () => setMostraContenuto(true);
@@ -21,29 +21,21 @@ function FormDatiOspite(props){
         codiceFiscale: "",
         dataNascita: "",
         refComuneNascita: "",
-        nomeProvincia: "",
+        comuneNascita:"",
+        provinciaNascita: "",
         refIndirizzo: "",
         via: "",
         numero: "",
         cap: "",
         refComuneResidenza:"",
-        nomeProvinciaResidenza:"",
+        comuneResidenza:"",
+        provinciaResidenza:"",
         refPrenotazione:"",
         tassa:"",
         dataArrivo:"",
         permanenza:""
     });
 
-    function handleFoto(fileName) {
-        let tmp = ospite;
-        if(!tmp["documenti"]){
-            tmp["documenti"]=[];
-        }
-        let temp = tmp["documenti"];
-        temp.push(fileName);
-        tmp["documenti"]=temp;
-        setOspite(tmp);
-    }
 
     //onSubmit
     function onSubmit(e) {
@@ -53,6 +45,8 @@ function FormDatiOspite(props){
 
 
         if(form.checkValidity()){
+            //TODO: CAMBIARE REF PRENOTAZIONE
+            ospite.refPrenotazione=1;
             props.aggiungiOspite(ospite);
 
             form.classList.remove('was-validated');
@@ -71,7 +65,7 @@ function FormDatiOspite(props){
             document.getElementById("cap").value="";
             document.getElementById("arrivo").value="";
             document.getElementById("permanenza").value="";
-
+            setMostraContenuto(false);
         }
     }
 
@@ -81,6 +75,34 @@ function FormDatiOspite(props){
         tmp[name]=value;
         setOspite(tmp);
     }
+
+    function handleComuneNascita(event){
+        const{name,value}=event.target;
+        let tmp=ospite;
+        tmp[name]=value;
+        tmp["comuneNascita"] = event.target.options[event.target.selectedIndex].text;
+        setOspite(tmp);
+    }
+
+    function handleComuneResidenza(event){
+        const{name,value}=event.target;
+        let tmp=ospite;
+        tmp[name]=value;
+        tmp["comuneResidenza"] = event.target.options[event.target.selectedIndex].text;
+        setOspite(tmp);
+    }
+
+    function handleFoto(fileName) {
+        let tmp = ospite;
+        if(!tmp["documenti"]){
+            tmp["documenti"]=[];
+        }
+        let temp = tmp["documenti"];
+        temp.push(fileName);
+        tmp["documenti"]=temp;
+        setOspite(tmp);
+    }
+
 
 
     function controlloCAP(e) {
@@ -146,13 +168,13 @@ function FormDatiOspite(props){
         // rimozione dei precedenti elementi del menu provinca e comune
         if(event.target.id=== "provinciaNascita"){
             let tmp = ospite;
-            tmp.nomeProvincia=event.target.value;
+            tmp.provinciaNascita=event.target.options[event.target.selectedIndex].text;;
             setOspite(tmp);
             document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
         }
         else{
             let tmp = ospite;
-            tmp.nomeProvinciaResidenza=event.target.value;
+            tmp.provinciaResidenza=event.target.options[event.target.selectedIndex].text;;
             setOspite(tmp);
             document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
         }
@@ -274,7 +296,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneNascita" name="refComuneNascita" className="custom-select" onChange={handleChange} required>
+                    <select id="comuneNascita" name="refComuneNascita" className="custom-select" onChange={handleComuneNascita} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -323,7 +345,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneResidenza" name="refComuneResidenza" className="custom-select" onChange={handleChange} required>
+                    <select id="comuneResidenza" name="refComuneResidenza" className="custom-select" onChange={handleComuneResidenza} required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -355,7 +377,7 @@ function FormDatiOspite(props){
 
                 <div className="form-group col-6 col-md-3 col-lg-2">
                     <label htmlFor="permanenza">Permanenza</label>
-                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" defaultValue="1" onChange={handleChange} required/>
+                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group col-12 col-md-4 col-lg-3">

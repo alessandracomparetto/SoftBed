@@ -39,7 +39,7 @@ function DatiPagamento(props){
                     </div>
 
                     <div className="col-6 col-md-3 btn-group d-flex justify-content-around">
-                        <button type="button" className="btn btn-danger" onClick={() => props.eliminaDatoPagamento(props.indiceElemento)}>Elimina</button>
+                        <button type="button" className="btn btn-danger" onClick={() => props.eliminaDatoPagamento(props.numeroCarta, props.indiceElemento)}>Elimina</button>
                     </div>
                 </div>
 
