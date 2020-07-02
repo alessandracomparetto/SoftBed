@@ -63,8 +63,8 @@ function InformazioniStruttura (props){
     }
 
     useEffect(()=>{
-        console.log("qui entro"+props.flag);
-    }, [props.flag]);
+
+    }, [props.struttura]);
 
     return(
         <Fragment>

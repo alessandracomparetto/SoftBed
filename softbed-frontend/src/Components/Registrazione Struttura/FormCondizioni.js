@@ -219,13 +219,13 @@ function FormCondizioni(props) {
                                         required={props.dati.politicaCancellazione === "pagamento"}
                                         disabled={((props.dati.politicaCancellazione === "gratuita") ? true : false)}>
                                     <option value=""/>
+                                    <option value={7}>1 settimana</option>
+                                    <option value={10}>10 giorni</option>
                                     <option value={14}>2 settimane</option>
                                     <option value={21}>3 settimane</option>
                                     <option value={30}>1 mese</option>
                                     <option value={60}>2 mesi</option>
                                     <option value={90}>3 mesi</option>
-                                    <option value={180}>6 mesi</option>
-                                    <option value={365}>1 anno</option>
                                 </select>
                             </div>
                         </div>

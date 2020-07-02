@@ -82,7 +82,8 @@ function FormFotografie(props){
 
     function vaiAvanti(event) {
         event.preventDefault();
-        if(numero===0){
+        let copia = filename.length;
+        if(numero===0 || copia === 0){
             $("#vuoto").removeClass("collapse");
         }
         else{
