@@ -30,50 +30,42 @@ router.use(session({
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     utenteModel.inserisciUtente(req.body,function(data){
-
-        console.log(data);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
+
 
 /* Login Utente */
 router.post('/login', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     utenteModel.login(req.body,function(data){
-        console.log(data);
         req.session.session_uid = data;
-        console.log('Utente autenticato');
         console.log(req.sessionID);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //recupero delle informazioni dell'utente
 router.get('/', function(req, res) {
     utenteModel.fetch(function(data){
-        console.log(data);
         res.json(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //modifica dati personali dell'utente
 router.post('/modificaDatiAggiuntivi', function (req, res) {
     utenteModel.modificaDatiAggiuntivi(req.body,function(data){
-        console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus( status);
-    }).catch( (err) =>{
-        console.log(err);
-    })
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //recupero dati pagamento
 router.post('/listaPagamenti', function (req, res) {
-    console.log(req.body);
     utenteModel.getDatiPagamento(req.body,function (data){
         res.send(data);
     }).catch((err) => {
@@ -83,22 +75,18 @@ router.post('/listaPagamenti', function (req, res) {
 
 //aggiungi dato pagamento
 router.post('/aggiungiDatoPagamento', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     utenteModel.aggiungiDatoPagamento(req.body,function(data){
-        console.log(data);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 //elimina dato pagamento
 router.post('/eliminaDatoPagamento', function (req, res) {
-    console.log("REQ.BODY ====")
-    console.log(req.body);
     utenteModel.eliminaDatoPagamento(req.body,function(data){
-        console.log(data);
         res.send(data);
-    });
+    }).catch((err)=>{
+        res.status(err.status).send(err.message)})
 });
 
 /*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
