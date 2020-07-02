@@ -11,6 +11,8 @@ import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/
 function SchermataGestioneStruttura(){
     let {id} = useParams();
     const [struttura,setStruttura]=useState([]);
+    const [flag, setFlag]=useState(0);
+    //utilizzo questo stato per aggiornare le informazioni della struttura al modificare delle condizione e delle caratteristiche
 
     useEffect(() => {
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
@@ -151,24 +153,25 @@ function SchermataGestioneStruttura(){
 
                  <div id="InformazioniPricipali" className="col-12 col-md-9">
                     {/* Contenitore principale */}
-                    <InformazioniStruttura struttura={struttura}  />
+                    <InformazioniStruttura struttura={struttura}  flag={flag} />
                 </div>
+                    {/* Prenotazioni */}
                 <div id="prenotazioni" className="collapse col-12 col-md-9">
                     <SchermataPrenotazioneStruttura idStruttura={id} tipologiaStruttura={struttura.tipologiaStruttura}/>
                 </div>
                 <div  id="caratteristiche" className="collapse col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
-                            <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange}/>
+                            <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
                             :
-                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange}/>
+                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
                     }
                 </div>
                 <div id="guadagno" className="collapse col-12 col-md-9">
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} correzione={correzione} setStruttura={setStruttura}/>
+                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} setStruttura={setStruttura}/>
                 </div>
 
             </div>

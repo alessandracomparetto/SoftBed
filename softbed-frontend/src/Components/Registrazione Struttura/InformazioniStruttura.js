@@ -63,7 +63,7 @@ function InformazioniStruttura (props){
     }
 
     useEffect(()=>{
-    console.log("ciaone")
+
     }, [props.struttura]);
 
     return(
@@ -85,7 +85,7 @@ function InformazioniStruttura (props){
             {/* Informazioni e caratteristiche struttura */}
             <div className="d-block">
                 <div className="shadow my-3 card bg-white p-3">
-                    <h6>Descrizione</h6>
+                    <h6><strong>Descrizione</strong></h6>
                     <p>{props.struttura.descrizione}</p>
                     <InformazioneLineare nome="Indirizzo" valore={`${props.struttura.via}, numero ${props.struttura.numeroCivico}, CAP ${props.struttura.cap}`} />
 
@@ -213,7 +213,7 @@ function InformazioniStruttura (props){
                                     (
                                         <InformazioneLineare nome="Politica di cancellazione" valore={"gratuita"} />
                                     ):(
-                                        <InformazioneLineare nome="Politica di cancellazione" valore={`Non gratuita con preavviso di ${converti(props.struttura.preavvisoDisdetta)} e penale pari a ${props.struttura.penaleCancellazione} €`} />
+                                        <InformazioneLineare nome="Politica di cancellazione" valore={`Non gratuita con preavviso massimo di disdetta ${converti(props.struttura.preavvisoDisdetta)} e penale pari a ${props.struttura.penaleCancellazione} €`} />
                                     )
                             }
                         </div>

@@ -47,6 +47,9 @@ function ModificaCondizioni(props) {
                         .then(res => { // then print response status
                             if (res.status === 200) {
                                 console.log("OK");
+                                let contatore=props.flag+1;
+                                //aggiorno lo stato flag presente nella Schermata Gestione Struttura
+                                props.setFlag(contatore);
                             }
                         }).catch(() => console.log("Nesssuna riga modificata"))
                 }

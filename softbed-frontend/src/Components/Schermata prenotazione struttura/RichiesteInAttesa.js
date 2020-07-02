@@ -6,10 +6,8 @@ function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
     function rifiutaPrenotazione(){
-        console.log("sto per inviare la richiesta di cancellazione");
-        console.log(props);
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
-            console.log("dATA"+res.data);
+            console.log(res.data);
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
                 struttura:props.prenotazione.refStruttura,
@@ -19,10 +17,9 @@ function RichiesteInAttesa(props){
             }
             axios.post('/mail/rifiuta-prenotazione',informazioni)
                 .catch(err=> console.log(err));
-            /*//aggiorno lo stato
-            let tmp=[...prenotazioni];
-            tmp.splice(props.indiceElemento,1);
-            aggiornaPrenotazioni(tmp);*/
+            //aggiorno la lista delle prenotazioni
+            let contatore=props.flag+1;
+            props.aggiornaFlag(contatore);
         })
             .catch(err => console.log(err));
     }
@@ -37,14 +34,12 @@ function RichiesteInAttesa(props){
                 emailOspite:props.prenotazione.email,
                 emailGestore:"mary_pal@live.it", /*TODO:modificare*/
             }
-            console.log("qui ci sono!");
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));
-            /*//aggiorno lo stato
-            let tmp=[...prenotazioni];
-            tmp.splice(props.indiceElemento,1);
-            aggiornaPrenotazioni(tmp);*/
-            /*TODO:DOVREI AGGIORNARE LO STATO*/
+            console.log("aggiorno lo stato");
+
+            let contatore=props.flag+1;
+            props.aggiornaFlag(contatore);
         })
             .catch(err => console.log(err));
     }
