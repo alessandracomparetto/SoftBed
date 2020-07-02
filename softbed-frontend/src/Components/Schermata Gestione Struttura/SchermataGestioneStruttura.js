@@ -90,6 +90,7 @@ function SchermataGestioneStruttura(){
             tmp[name]=value;
         }
         setStruttura(tmp);
+        printObject(tmp)
     }
 
 
@@ -167,7 +168,7 @@ function SchermataGestioneStruttura(){
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} correzione={correzione}/>
+                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} correzione={correzione} setStruttura={setStruttura}/>
                 </div>
 
             </div>
