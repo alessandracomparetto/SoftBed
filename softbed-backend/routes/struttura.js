@@ -4,10 +4,8 @@ let strutturaModel = require('../models/Struttura');
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
-        console.log(data);
-    }).then(strutturaModel.listaStrutture(function (data) {
-        res.send(data);
-    }))
+       res.send(data);
+    })
 });
 
 router.post('/gestioneStruttura/:id', function(req, res) {
@@ -35,7 +33,6 @@ router.post('/calcoloGuadagno/', function(req, res, next) {
         res.send(guadagno+"");
     })
 });
-
 
 router.get('/:idStruttura', function(req, res) {
     strutturaModel.carica(req.params.idStruttura, function(data) {
@@ -65,6 +62,7 @@ router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
         console.log(err);
     })
 });
+
 router.post('/modificaCaratteristicheB&B', function (req, res) {
     strutturaModel.modificaCaratteristicheB(req.body,function(data){
         console.log(data.message);
@@ -75,11 +73,7 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
     })
 });
 
-
-
 module.exports = router;
-
-
 
 
 // TODO: Da rimuovere

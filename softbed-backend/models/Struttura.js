@@ -6,7 +6,7 @@ const createError = require('http-errors');
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
         const db = await makeDb(config);
-        let results = {};
+        let results={};
         let refIndirizzo;
         try {
             await withTransaction(db, async () => {
@@ -80,7 +80,10 @@ module.exports= {
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                return callback("OK");
+                 results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3]).catch(err => {
+                    throw err;
+                });
+                return callback(results);
             });
         } //chiusura try
         catch (err) {
@@ -417,7 +420,7 @@ module.exports= {
 
     listaStrutture:async function(callback){
         const db = await makeDb(config);
-        let idGestore=1; /*TODO:sistemare gestore*/
+        let idGestore=3; /*TODO:sistemare gestore*/
         try {
             await withTransaction(db, async () => {
                 let results=await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '),[idGestore]).catch(err => {

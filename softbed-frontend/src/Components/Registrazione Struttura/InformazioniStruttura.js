@@ -63,7 +63,7 @@ function InformazioniStruttura (props){
     }
 
     useEffect(()=>{
-
+    console.log("ciaone")
     }, [props.struttura]);
 
     return(

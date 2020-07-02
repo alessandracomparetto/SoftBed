@@ -13,10 +13,6 @@ function OperazioneCompletataRegistrazioneStruttura(props) {
             history.push("/gestioneStrutture");
         }, 5000);
 
-        setTimeout(()=>{
-            let n = contatore-1;
-            setContatore(n)
-        }, 1000);
         return(
             <div className="text-center p-5">
                 <i aria-hidden="true" className="display-4 ml-3 fas fa-check-circle text-success"/>
