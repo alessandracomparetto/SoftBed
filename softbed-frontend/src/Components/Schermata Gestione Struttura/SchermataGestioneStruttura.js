@@ -166,7 +166,7 @@ function SchermataGestioneStruttura(){
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} setStruttura={setStruttura}/>
+                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione}/>
                 </div>
 
             </div>
