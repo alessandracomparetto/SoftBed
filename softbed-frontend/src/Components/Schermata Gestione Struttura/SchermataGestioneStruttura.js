@@ -97,7 +97,9 @@ function SchermataGestioneStruttura(){
 
 
     function correzione (nome, valore){
+/*
         console.log("aggiorno "+nome+ " a "+valore);
+*/
         let tmp = struttura;
         tmp[nome]=valore;
         setStruttura(tmp);
@@ -116,36 +118,33 @@ function SchermataGestioneStruttura(){
                         </button>
                         <div className="collapse navbar-collapse" id="menu">
                             <ul className="navbar-nav ml-auto text-right">
-                                <div>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>Informazioni sulla struttura</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </div>
-                                <div>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>Prenotazioni</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </div>
-                                <div>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>Calcolo guadagno</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </div>
-                                <div>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>Modifica caratteristiche</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </div>
-                                <div>
-                                    <li className="nav-item text-center text-md-right">
-                                        <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>Modifica condizioni</button>
-                                    </li>
-                                    <div className="dropdown-divider"/>
-                                </div>
+                                <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>
+                                    <li className="nav-item text-center text-md-right">Informazioni sulla struttura</li>
+                                </button>
+                                <div className="dropdown-divider"/>
+
+                                <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>
+                                    <li className="nav-item text-center text-md-right">Prenotazioni</li>
+                                </button>
+                                <div className="dropdown-divider"/>
+
+                                <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>
+                                    <li className="nav-item text-center text-md-right">Calcolo guadagno</li>
+                                </button>
+                                <div className="dropdown-divider"/>
+
+
+                                <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>
+                                    <li className="nav-item text-center text-md-right">Modifica caratteristiche</li>
+                                </button>
+                                <div className="dropdown-divider"/>
+
+
+                                <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>
+                                    <li className="nav-item text-center text-md-right">Modifica condizioni</li>
+                                </button>
+                                <div className="dropdown-divider"/>
+
                             </ul>
                         </div>
                     </nav>
