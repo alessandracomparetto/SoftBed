@@ -146,7 +146,7 @@ router.post('/rifiuta-prenotazione', (req, res) => {
         subject: "Annullamento prenotazione",
         html:
             `<p>
-                Purtroppo il gestore della struttura ${req.body.struttura} che avevi prenotato (ID: ${req.body.id})
+                Purtroppo il gestore della struttura ${req.body.struttura} per cui avevi fatto richiesta di prenotazione (ID: ${req.body.id})
                 il cui check-in era previsto in data ${req.body.data} ha rifutato la prenotazione.
                 <br />
                 <br />
