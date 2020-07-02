@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import $ from 'jquery';
 import axios from 'axios';
+import mostraDialogErrore from "../../Actions/errore";
 
 function CalcoloGuadagno(props){
     const [dataInizio, setDataInizio] = useState("");
@@ -19,11 +20,11 @@ function CalcoloGuadagno(props){
                         setGuadagno(res.data);
                         $("#mostra").removeClass("collapse");
                     })
-                    .catch(err=>{
-                        console.log(err);
+                    .catch(()=>{
+                        mostraDialogErrore();
                     })
             }catch (err) {
-                console.log(err);
+                mostraDialogErrore();
             }
         }
     }

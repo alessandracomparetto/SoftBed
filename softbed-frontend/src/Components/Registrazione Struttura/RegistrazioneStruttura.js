@@ -10,6 +10,7 @@ import FormStruttura from "./FormStruttura";
 import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
 import OperazioneCompletataRegistrazioneStruttura from "./OperazioneCompletataRegistrazioneStruttura";
 import axios from 'axios';
+import mostraDialogErrore from "../../Actions/errore";
 
 
 function RegistrazioneStruttura () {
@@ -82,9 +83,10 @@ function RegistrazioneStruttura () {
                    window.sessionStorage.setItem("strutture", JSON.stringify(ok));
                     _next()
 
-               }).catch(err => console.log(err));
+               }).catch(()=>{mostraDialogErrore()});
        } catch (e) {
-            console.log(e);
+            console.log(e)
+            mostraDialogErrore();
        }
     };
 

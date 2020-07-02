@@ -1,6 +1,7 @@
 import React, {Fragment, useState} from 'react'
 import axios from 'axios';
 import $ from 'jquery';
+import mostraDialogErrore from "../../Actions/errore";
 
 function FormFotografie(props){
     const [file, setFile] = useState([]); //lista file prima di essere caricati
@@ -77,7 +78,8 @@ function FormFotografie(props){
                 for(let i = 0; i<numero; i++) {
                     let nomeFile = filename[i];
                     props.handleFoto(nomeFile.name);
-                }})
+            }})
+            .catch(()=>mostraDialogErrore());
     };
 
     function vaiAvanti(event) {

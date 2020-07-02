@@ -1,7 +1,7 @@
 import React from "react"
 import FormCaratteristicheB from "../Registrazione Struttura/FormCaratteristicheB";
 import axios from "axios";
-
+import mostraDialogErrore from "../../Actions/errore";
 
 function ModificaCaratteristicheB(props){
 
@@ -23,7 +23,7 @@ function ModificaCaratteristicheB(props){
                     }
                 }).catch(() => console.log("Nesssuna riga modificata"))
         } catch (e) {
-            console.log(e);
+            mostraDialogErrore()
         }
     }
 

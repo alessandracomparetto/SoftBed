@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import FormCondizioni from "../Registrazione Struttura/FormCondizioni";
 import axios from "axios";
+import mostraDialogErrore from "../../Actions/errore";
 
 function ModificaCondizioni(props) {
     let copia=props.dati;
@@ -58,7 +59,7 @@ function ModificaCondizioni(props) {
                 document.getElementById("feedbackPagamento").classList.remove("collapse");
             }
         } catch (e) {
-            console.log(e);
+            mostraDialogErrore();
         }
     }
 

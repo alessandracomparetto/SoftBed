@@ -1,6 +1,8 @@
 import React from "react";
 import FormCaratteristicheC from "../Registrazione Struttura/FormCaratteristicheC";
 import axios from "axios";
+import mostraDialogErrore from "../../Actions/errore";
+
 function ModificaCaratteristicheC(props){
     function modificaCaratteristiche(event) {
         event.preventDefault()
@@ -19,7 +21,7 @@ function ModificaCaratteristicheC(props){
                     }
                 }).catch(()=> console.log("Nesssuna riga modificata"))
         } catch (e) {
-            console.log(e);
+            mostraDialogErrore();
         }
     }
     return(
