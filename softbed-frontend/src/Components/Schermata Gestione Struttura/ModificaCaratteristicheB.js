@@ -1,7 +1,7 @@
-import React, {useEffect} from "react"
+import React from "react"
 import FormCaratteristicheB from "../Registrazione Struttura/FormCaratteristicheB";
 import axios from "axios";
-import ModificaCondizioni from "./ModificaCondizioni";
+
 
 function ModificaCaratteristicheB(props){
 
@@ -11,12 +11,15 @@ function ModificaCaratteristicheB(props){
            let dato = props.props;
             dato["idStruttura"]=props.idStruttura;
             console.log("Inizio la richiesta");
-            console.log(dato)
+            console.log(dato);
             axios.post('/struttura/modificaCaratteristicheB&B', dato)
                 .then(res => { // then print response status
                     if (res.status === 200) {
                         console.log(res.data);
                         console.log("OK");
+                        let contatore=props.flag+1;
+                        //aggiorno lo stato flag presente nella Schermata Gestione Struttura
+                        props.setFlag(contatore);
                     }
                 }).catch(() => console.log("Nesssuna riga modificata"))
         } catch (e) {
