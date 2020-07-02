@@ -1,46 +1,68 @@
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
 import axios from "axios";
 
-/*
-TODO: gestire le props
-*/
-
 function SchermataDatiOspiti(props){
-    const[listaOspiti, setOspiti] = useState([])
+    const[listaOspiti, setOspiti] = useState([]);
 
-    const eliminaOspite = (indice) => {
-        try {
-            console.log("DATI======= ");
-            console.log(listaOspiti[indice]);
-            axios.post('/ospite/cancellazione', listaOspiti[indice])
-                .then(res => { // then print response status
-                    console.log(res.data);
-                });
-        }catch (e) {
-        }
-        // Rimuovere dalla lista
-        let tmp = [...listaOspiti];
-        tmp.splice(indice, 1);
-        setOspiti(tmp);
-    }
+
+    useEffect(() => {
+        //TODO GESTIRE REFPRENOTAZIONE
+        let refPrenotazione = 1;
+        axios.post(`/ospite/fetch`,{refPrenotazione: refPrenotazione}).then(res => {
+            console.log("DATI OSPITI RECUPERATI=======");
+            console.log(res.data);
+            setOspiti(res.data);
+        })
+            .catch(err => console.log(err));
+    }, []);
 
     const aggiungiOspite = (dato) => {
         try {
-            console.log("OSPITE==== ");
-            console.log(dato);
-            axios.post('/ospite/inserimento', dato)
+            //TODO GESTIRE REFPRENOTAZIONE
+            axios.post("/ospite/aggiungi", dato)
                 .then(res => { // then print response status
+                    console.log("OSPITE AGGIUNTO ======= ");
                     console.log(res.data);
+                    let tmp = [...listaOspiti];
+                    dato.idOspite = res.data.insertId;
+                    tmp.push(dato);
+                    console.log(tmp);
+                    setOspiti(tmp);
                 });
-        } catch (e) {
+        }catch(err){
+            if (err.response.status === 400) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
         }
-        // Aggiungere alla lista
-        let tmp = [...listaOspiti];
-        tmp.push(dato);
-        console.log(tmp);
-        setOspiti(tmp);
+
+    }
+
+    const eliminaOspite = (idOspite, refPrenotazione, indice) => {
+        console.log(idOspite);
+        console.log(refPrenotazione);
+        let data = {"idOspite":idOspite, "refPrenotazione":refPrenotazione};
+        try {
+            axios.post(`/ospite/elimina`, data)
+                .then(res => { // then print response status
+                    console.log("OSPITE ELIMINATO ======= ");
+                    console.log(res.data);
+                    // Rimuovere dalla lista
+                    let tmp = [...listaOspiti];
+                    tmp.splice(indice, 1);
+                    setOspiti(tmp);
+                });
+        }catch(err){
+            if (err.response.status === 400) {
+                console.log('There was a problem with the server');
+            } else {
+                console.log(err.response.data.msg);
+            }
+        }
+
     }
 
     return(
@@ -50,13 +72,13 @@ function SchermataDatiOspiti(props){
                 <ul className="list-group list-group-flush mt-3 ">
                     {
                         listaOspiti.map((ospiti, indice) => {
-                            return <OspitiInseriti key={indice} indiceElemento={indice} nome={ospiti.nome} cognome={ospiti.cognome}
-                                                  codiceFiscale={ospiti.codiceFiscale}  dataNascita={ospiti.dataNascita}
-                                                  comune={ospiti.nomeComune} provincia={ospiti.nomeProvincia} regione={ospiti.nomeRegione}
+                            return <OspitiInseriti key={indice} indiceElemento={indice} idOspite={ospiti.idOspite} nome={ospiti.nome} cognome={ospiti.cognome}
+                                                  codiceFiscale={ospiti.codiceFiscale} dataNascita={ospiti.dataNascita.split("T")[0]}
+                                                  comune={ospiti.comuneNascita} provincia={ospiti.provinciaNascita} regione={ospiti.regione}
                                                   via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
-                                                   comuneResidenza={ospiti.nomeComuneResidenza} provinciaResidenza={ospiti.nomeProvinciaResidenza}
-                                                   regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo}
-                                                   permanenza={ospiti.permanenza} eliminaOspite={eliminaOspite}/>
+                                                   comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
+                                                   regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
+                                                   permanenza={ospiti.permanenza} refPrenotazione = {ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
                         })
 
                     }

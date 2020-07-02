@@ -1,6 +1,7 @@
 /*Model dell utente*/
 const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
+const createError = require('http-errors');
 
 module.exports= {
 //TODO: gestire conflitto email
@@ -12,7 +13,7 @@ module.exports= {
             await withTransaction(db, async () => {
                 let sql = ('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) VALUES ?');
                 let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore == 'gestore' ? '1' : '0'];
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
                     throw err
                 });
 
@@ -20,7 +21,7 @@ module.exports= {
 
                 sql = ('INSERT INTO `autenticazione` (refUtente, email, password) VALUES ?');
                 datiQuery = [refUtente, datiUtente.email, datiUtente.pass];
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN AUTENTICAZIONE
                     throw err;
                 });
 
@@ -28,7 +29,7 @@ module.exports= {
                 console.log(results);
                 return (callback("ok"));
             });
-        } //chiuusura try
+        } //chiusura try
         catch (err) {
             console.log(err);
         }
@@ -205,6 +206,66 @@ module.exports= {
             console.log(err);
         }
 
-    }
+    },
+
+    aggiungiDatoPagamento:async function(datoPagamento, callback) {
+        //TODO PASSARE L'ID UTENTE
+        let idUtente = 1;
+        const db = await makeDb(config);
+        let results = {};
+        try {
+            await withTransaction(db, async () => {
+                let sql = ('INSERT INTO `datoPagamento` (nomeIntestatario, cognomeIntestatario, numeroCarta, cvv, dataScadenza, refUtente) VALUES ?');
+                let datiQuery = [datoPagamento.nomeIntestatario, datoPagamento.cognomeIntestatario, datoPagamento.numeroCarta, datoPagamento.cvv, datoPagamento.dataScadenza, idUtente];
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN DATO PAGAMENTO
+                    throw err
+                });
+
+                console.log('Inserimento tabella datoPagamento');
+                console.log(results);
+                return (callback("ok"));
+            });
+        } //chiusura try
+        catch (err) {
+            console.log(err);
+        }
+    },
+
+    eliminaDatoPagamento: async function(data,res){
+        const db = await makeDb(config);
+
+        console.log("sto per eliminare");
+        console.log("id"+data.numeroCarta);
+        let query = (`DELETE FROM datoPagamento WHERE numeroCarta = ?`);
+
+        try {
+            await withTransaction(db, async () => {
+                let result = await db.query(query, data.numeroCarta).catch(() => {throw createError(500)});
+                console.log(result);
+                if (result.affectedRows === 0) throw createError(404, "Dato di pagamento non trovata");
+                else return res(result);
+            })
+        } catch(err) {
+            throw err;
+        }
+    },
+
+    getDatiPagamento: async function(data, callback){
+        let idUtente=data.idUtente;
+        console.log(idUtente);
+        const db=await makeDb(config);
+        try{
+            await withTransaction(db,async()=> {
+                let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [[[idUtente]]]).catch(err => {
+                    throw err;
+                });
+
+                return callback(listaDatiPagamento);
+            });
+        }
+        catch(err){
+            console.log(err);
+        }
+    },
 };
 
