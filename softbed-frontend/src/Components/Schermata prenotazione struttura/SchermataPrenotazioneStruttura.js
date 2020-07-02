@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import RichiesteInAttesa from "./RichiesteInAttesa";
 import RichiesteConfermate from "./RichiesteConfermate";
+import mostraDialogErrore from "../../Actions/errore";
 
 import axios from "axios";
 function SchermataPrenotazioneStruttura(props){
@@ -14,7 +15,7 @@ function SchermataPrenotazioneStruttura(props){
             console.log("prenotazioni", res.data);
             aggiornaPrenotazioni(res.data);
         })
-        .catch(err => console.log(err));
+        .catch(()=>mostraDialogErrore());
     }, [flag, props.tipologiaStruttura]);
 
     return(
@@ -23,10 +24,10 @@ function SchermataPrenotazioneStruttura(props){
             <ul className="list-group list-group-flush ">
                 {
                     prenotazioni.map((prenotazione, indice) => {
-                            if (prenotazione.confermata === 0) {
-                                return (<li key={indice} className="list-group-item list-group-item-warning">
-                                    <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag}/></li>)
-                            }
+                        if (prenotazione.confermata === 0) {
+                            return (<li key={indice} className="list-group-item list-group-item-warning">
+                                <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag}/></li>)
+                        }
                     })
                 }
             </ul>

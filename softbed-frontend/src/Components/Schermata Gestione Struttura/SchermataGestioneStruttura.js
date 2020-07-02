@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import mostraDialogErrore from "../../Actions/errore";
 import axios from 'axios';
 import {useParams} from "react-router-dom"
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
@@ -26,10 +27,8 @@ function SchermataGestioneStruttura(){
         axios.post(`/struttura/gestioneStruttura/${id}`, dati)
             .then(res => {
                 setStruttura(res.data);
-                console.log("Strutturaaa:");
-                console.log(res.data);
             })
-            .catch(err => console.log(err));
+            .catch(()=>mostraDialogErrore());
     }, []);
 
     function informazioniStruttura(){
@@ -97,9 +96,6 @@ function SchermataGestioneStruttura(){
 
 
     function correzione (nome, valore){
-/*
-        console.log("aggiorno "+nome+ " a "+valore);
-*/
         let tmp = struttura;
         tmp[nome]=valore;
         setStruttura(tmp);
@@ -170,7 +166,7 @@ function SchermataGestioneStruttura(){
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
                 <div id="condizioni" className="collapse col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} setStruttura={setStruttura}/>
+                    <ModificaCondizioni dati={struttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione}/>
                 </div>
 
             </div>

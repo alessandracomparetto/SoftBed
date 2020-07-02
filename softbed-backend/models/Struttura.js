@@ -12,28 +12,24 @@ module.exports= {
                 //inserimento into indirizzo
                 let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                 let datiQuery = [datiStruttura.via, datiStruttura.numeroCivico, datiStruttura.cap, datiStruttura.nomeComune];
-                results = await db.query(sql, [[datiQuery]]).catch(err => {
-                    throw err
-                });
+                results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
+
                 //se tutto va bene, trovo id indirizzo e inserisco nella struttura
-                console.log("Inserito in indirizzo")
+                console.log("Inserito in indirizzo");
                 refIndirizzo = results.insertId;
                 let giorno = new Date().toLocaleDateString();
                 sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
                 //TODO: REF GESTORE
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
-                results = await db.query(sql, [[datiQuery]]).catch(err => {
-                    throw err;
-                });
+                results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
+
                 console.log('Inserito nella tabella struttura');
                 refStruttura = results.insertId;
                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES ?');
                 if (datiStruttura.foto) {
                     for (foto of datiStruttura.foto) {
                         datiQuery = [refStruttura, foto];
-                        results = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw err;
-                        }); //chiusura query foto
+                        results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
                     }
                     console.log("Inserite foto");
                 }//end for
@@ -44,28 +40,23 @@ module.exports= {
                 datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
                     datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.pagamentoLoco, datiStruttura.pagamentoOnline, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti,
                     datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta];
-                results = await db.query(sql, [[datiQuery]]).catch(err => {
-                    throw err;
-                });
-                console.log("inserite condizioni");
+                results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
+                console.log("inserite condizioni");
                 if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
                     sql = ('INSERT INTO `B&B` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaAeroportuale, servizioincamera, descrizione) VALUES ?');
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.TV, datiStruttura.cucinaCeliaci,
                         datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
-                    results = await db.query(sql, [[datiQuery]]).catch(err => {
-                        throw err;
-                    });
+                    results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
+
                     console.log("Inserito B&B");
                     for (camera of datiStruttura.camere) {
                         sql = 'INSERT INTO `cameraB&B` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
                         datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
-                        results = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw err;
-                        });
+                        results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
                     }
                     console.log("Inserite camere");
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
@@ -74,19 +65,19 @@ module.exports= {
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
                         datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
-                    results = await db.query(sql, [[datiQuery]]).catch(err => {throw err;});
+                    results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                 results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3]).catch(err => {
-                    throw err;
-                });
+                 results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3])
+                     .catch((err) => {throw createError(500)});
+
                 return callback(results);
             });
         } //chiusura try
         catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -105,34 +96,32 @@ module.exports= {
                     infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `casaVacanze` \
                         WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
                         AND `casaVacanze`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune AND `comuni`.refProvincia=`province`.`idProvincia` \
-                        AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch(err => {throw err;});
+                        AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch((err) => {throw createError(500)});
                 } else if (tipologiaStruttura === "B&B") {
                     infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `B&B`\
                 WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
                 AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
-                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch(err => {throw err;});
+                AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch((err) => {throw createError(500)});
 
-                    camere = await db.query(('SELECT * FROM `cameraB&B` WHERE `cameraB&B`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {throw  err;});
+                    camere = await db.query(('SELECT * FROM `cameraB&B` WHERE `cameraB&B`.refStruttura = ?'), [[[idStruttura]]]).catch((err) => {throw createError(500)});
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
-                    /*console.log("CAMERE")
-                    console.log(array);*/
-                    infoStruttura[0]["camere"] = array;
+                   infoStruttura[0]["camere"] = array;
                 }
-                foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]]).catch(err => {
-                    throw err;
-                });
+                foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]])
+                    .catch((err) => {throw createError(500)});
+
                 array = [];
                 for (let i = 0; i < foto.length; i++) {
                     array.push(foto[i].percorso);
                 }
-                infoStruttura[0]["foto"] = array
+                infoStruttura[0]["foto"] = array;
                 array = [];
                 return callback(infoStruttura[0]);
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -146,11 +135,11 @@ module.exports= {
                             "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,
                             "condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
                             "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
-                    struttura.idStruttura]).catch(err => {throw err;});
+                    struttura.idStruttura]).catch((err) => {throw createError(500)});
                 return callback(results);
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -162,11 +151,11 @@ module.exports= {
                          WHERE refStruttura= ?', ["b&b.bambini", struttura.bambini, "b&b.ariaCondizionata", struttura.ariaCondizionata, "b&b.wifi", struttura.wifi,
                     "b&b.parcheggio", struttura.parcheggio,"b&b.strutturaDisabili", struttura.strutturaDisabili,"b&b.animaliAmmessi", struttura.animaliAmmessi,"b&b.permessoFumare", struttura.permessoFumare,
                     "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAeroportuale", struttura.navettaAeroportuale,
-                    "b&b.servizioInCamera", struttura.servizioInCamera,"b&b.descrizione", struttura.descrizione, "b&b.riscaldamento", struttura.riscaldamento,struttura.idStruttura]).catch(err => {throw err;});
+                    "b&b.servizioInCamera", struttura.servizioInCamera,"b&b.descrizione", struttura.descrizione, "b&b.riscaldamento", struttura.riscaldamento,struttura.idStruttura]).catch((err) => {throw createError(500)});
                 return callback(results);
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -177,11 +166,11 @@ module.exports= {
                 let results = await db.query('UPDATE `casavacanze` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
                          WHERE refstruttura = ?', ["casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
-                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, struttura.idStruttura]).catch(err => {throw err;});
+                    "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, struttura.idStruttura]).catch((err) => {throw createError(500)});
                 return callback(results);
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -434,14 +423,13 @@ module.exports= {
         let idGestore=3; /*TODO:sistemare gestore*/
         try {
             await withTransaction(db, async () => {
-                let results=await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '),[idGestore]).catch(err => {
-                    throw err;
-                });
+                let results=await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '),[idGestore])
+                    .catch((err) => {throw createError(500)});
                 return callback(results);
             });
         }
         catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -452,13 +440,15 @@ module.exports= {
         let dataFine= dati.dataFine;
         let idStruttura = dati.idStruttura;
         try {
-            risultato = await db.query(('SELECT * FROM prenotazione JOIN condizioni WHERE `prenotazione`.refStruttura=? AND `prenotazione`.refStruttura = `condizioni`.refStruttura \
+            await withTransaction(db, async () => {
+                risultato = await db.query(('SELECT * FROM prenotazione JOIN condizioni WHERE `prenotazione`.refStruttura=? AND `prenotazione`.refStruttura = `condizioni`.refStruttura \
             AND prenotazione.confermata=1 AND (prenotazione.checkIn >= ? AND prenotazione.checkIn<=?) AND (prenotazione.checkOut >= ? AND prenotazione.checkOut<=?)'),
-                [idStruttura, dataInizio, dataFine, dataInizio, dataFine]).catch(err=>{throw err});
-            return callback(risultato);
+                    [idStruttura, dataInizio, dataFine, dataInizio, dataFine]).catch((err) => {throw createError(500)});
+                return callback(risultato);
+            })
         }
         catch (err) {
-            console.log(err);
+            throw err;
         }
     }
 };
