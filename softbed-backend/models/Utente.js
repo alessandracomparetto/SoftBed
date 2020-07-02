@@ -1,6 +1,7 @@
 /*Model dell utente*/
 const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
+const createError = require('http-errors');
 
 module.exports= {
 //TODO: gestire conflitto email
@@ -12,25 +13,25 @@ module.exports= {
             await withTransaction(db, async () => {
                 let sql = ('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) VALUES ?');
                 let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore == 'gestore' ? '1' : '0'];
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
-                    throw err
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
+                    throw createError(500)
                 });
 
                 refUtente = results.insertId;
 
                 sql = ('INSERT INTO `autenticazione` (refUtente, email, password) VALUES ?');
                 datiQuery = [refUtente, datiUtente.email, datiUtente.pass];
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
-                    throw err;
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN AUTENTICAZIONE
+                    throw createError(500);
                 });
 
                 console.log('Inserimento tabella utente');
                 console.log(results);
                 return (callback("ok"));
             });
-        } //chiuusura try
+        } //chiusura try
         catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -44,7 +45,7 @@ module.exports= {
                 results = await db.query('SELECT * FROM `autenticazione`\
             WHERE email = ?', [datiUtente.email])
                     .catch(err => {
-                        throw err;
+                        throw createError(500);
                     });
                 if (!results[0]) {
                     console.log('Utente non trovato!');
@@ -62,7 +63,7 @@ module.exports= {
                 }
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -81,7 +82,7 @@ module.exports= {
                     AND `CR`.refProvincia = `PR`.idProvincia AND `PR`.refRegione = `RR`.idRegione AND U.refComuneNascita = `CN`.idComune\
                     AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[1])
                     .catch(err => {
-                    throw err;
+                        throw createError(500);
                 });
                 if(infoUtente[0] !== undefined) {
                     console.log("utente ha inserito nascita e residenza");
@@ -95,7 +96,7 @@ module.exports= {
                     WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refIndirizzo= I.idIndirizzo AND I.refComune=C.idComune\
                     AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [1])
                         .catch(err => {
-                            throw err;
+                            throw createError(500);
                         });
                     if(infoUtente[0] !== undefined) {
                         console.log("utente ha inserito solo residenza");
@@ -109,7 +110,7 @@ module.exports= {
                         WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refComuneNascita=C.idComune\
                         AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [1])
                             .catch(err => {
-                                throw err;
+                                throw createError(500);
                             });
                         if(infoUtente[0] !== undefined) {
                             console.log("utente ha inserito solo nascita");
@@ -120,7 +121,7 @@ module.exports= {
                             infoUtente = await db.query('SELECT * FROM `utente` JOIN `autenticazione`\
                             WHERE  `utente`.idUtente= ? AND `autenticazione`.refUtente=`utente`.idUtente', [1])
                                 .catch(err => {
-                                    throw err;
+                                    throw createError(500);
                                 });
                             return callback(infoUtente[0]);
                         }
@@ -129,7 +130,7 @@ module.exports= {
                 }
             });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
     },
 
@@ -143,13 +144,13 @@ module.exports= {
                     [`utente`, "utente.nome", datiUtente.nome, "utente.cognome", datiUtente.cognome, "utente.codiceFiscale",
                         datiUtente.codiceFiscale, "utente.dataNascita", datiUtente.dataNascita, "utente.telefono", datiUtente.telefono, "utente.refComuneNascita", datiUtente.refComuneNascita, datiUtente.idUtente])
                     .catch(err => {
-                    throw err;
+                        throw createError(500);
                 });
 
                 results = await db.query('UPDATE ?? SET ??=?,??=?  WHERE refUtente= ?',
                     [`autenticazione`, "autenticazione.email", datiUtente.email, "autenticazione.password", datiUtente.password, datiUtente.idUtente])
                     .catch(err => {
-                        throw err;
+                        throw createError(500);
                     });
 
                 if(datiUtente.gestore === "on"){
@@ -157,7 +158,7 @@ module.exports= {
                     results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
                         [`utente`, "utente.gestore", 1, datiUtente.idUtente])
                         .catch(err => {
-                            throw err;
+                            throw createError(500);
                         });
                 }
 
@@ -165,7 +166,7 @@ module.exports= {
                     results = await db.query('SELECT * FROM `utente`\
                     WHERE idUtente = ?', [datiUtente.idUtente])
                         .catch(err => {
-                            throw err;
+                            throw createError(500);
                         });
                     console.log(results);
                     if (results[0].refIndirizzo === null) {
@@ -173,7 +174,7 @@ module.exports= {
                         let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                         let datiQuery = [datiUtente.via, datiUtente.numeroCivico, datiUtente.cap, datiUtente.refComuneResidenza];
                         results = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw err;
+                            throw createError(500);
                         });
                         console.log('Inserimento in indirizzo');
                         console.log(results);
@@ -182,7 +183,7 @@ module.exports= {
                         results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
                             [`utente`, "utente.refIndirizzo", refIndirizzo, datiUtente.idUtente])
                             .catch(err => {
-                                throw err;
+                                throw createError(500);
                             });
                         console.log("Inserimento in utente")
                     }
@@ -191,7 +192,7 @@ module.exports= {
                             [`indirizzo`, "indirizzo.via", datiUtente.via, "indirizzo.numeroCivico", datiUtente.numeroCivico,
                                 "indirizzo.cap", datiUtente.cap, "indirizzo.refComune", datiUtente.refComuneResidenza, datiUtente.refIndirizzo])
                             .catch(err => {
-                                throw err;
+                                throw createError(500);
                             });
                         console.log("inserito indirizzo in utente")
                     }
@@ -202,9 +203,69 @@ module.exports= {
 
                 });
         } catch (err) {
-            console.log(err);
+            throw err;
         }
 
-    }
+    },
+
+    aggiungiDatoPagamento:async function(datoPagamento, callback) {
+        //TODO PASSARE L'ID UTENTE
+        let idUtente = 1;
+        const db = await makeDb(config);
+        let results = {};
+        try {
+            await withTransaction(db, async () => {
+                let sql = ('INSERT INTO `datoPagamento` (nomeIntestatario, cognomeIntestatario, numeroCarta, cvv, dataScadenza, refUtente) VALUES ?');
+                let datiQuery = [datoPagamento.nomeIntestatario, datoPagamento.cognomeIntestatario, datoPagamento.numeroCarta, datoPagamento.cvv, datoPagamento.dataScadenza, idUtente];
+                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN DATO PAGAMENTO
+                    throw createError(500);
+                });
+
+                console.log('Inserimento tabella datoPagamento');
+                console.log(results);
+                return (callback("ok"));
+            });
+        } //chiusura try
+        catch (err) {
+            throw err;
+        }
+    },
+
+    eliminaDatoPagamento: async function(data,res){
+        const db = await makeDb(config);
+
+        console.log("sto per eliminare");
+        console.log("id"+data.numeroCarta);
+        let query = (`DELETE FROM datoPagamento WHERE numeroCarta = ?`);
+
+        try {
+            await withTransaction(db, async () => {
+                let result = await db.query(query, data.numeroCarta).catch(() => {throw createError(500)});
+                console.log(result);
+                if (result.affectedRows === 0) throw createError(404, "Dato di pagamento non trovata");
+                else return res(result);
+            })
+        } catch(err) {
+            throw createError(500);
+        }
+    },
+
+    getDatiPagamento: async function(data, callback){
+        let idUtente=data.idUtente;
+        console.log(idUtente);
+        const db=await makeDb(config);
+        try{
+            await withTransaction(db,async()=> {
+                let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [[[idUtente]]]).catch(err => {
+                    throw createError(500);
+                });
+
+                return callback(listaDatiPagamento);
+            });
+        }
+        catch(err){
+            throw err;
+        }
+    },
 };
 

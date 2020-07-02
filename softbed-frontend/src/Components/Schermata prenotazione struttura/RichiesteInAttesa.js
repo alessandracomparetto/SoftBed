@@ -10,10 +10,10 @@ function RichiesteInAttesa(props){
             console.log(res.data);
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
-                struttura:props.prenotazione.refStruttura,
-                data:props.prenotazione.checkIn,
+                struttura:props.nomeStruttura,
+                data:new Date(props.prenotazione.checkIn).toLocaleString(),
                 emailOspite:props.prenotazione.email,
-                emailGestore:"mary_pal@live.it", /*TODO:modificare*/
+                emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
             }
             axios.post('/mail/rifiuta-prenotazione',informazioni)
                 .catch(err=> console.log(err));
@@ -29,10 +29,10 @@ function RichiesteInAttesa(props){
             console.log(res.data);
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
-                struttura:props.prenotazione.refStruttura,
-                data:props.prenotazione.checkIn,
+                struttura:props.nomeStruttura,
+                data:new Date(props.prenotazione.checkIn).toLocaleString(),
                 emailOspite:props.prenotazione.email,
-                emailGestore:"mary_pal@live.it", /*TODO:modificare*/
+                emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
             }
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));

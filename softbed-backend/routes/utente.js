@@ -71,6 +71,36 @@ router.post('/modificaDatiAggiuntivi', function (req, res) {
     })
 });
 
+//recupero dati pagamento
+router.post('/listaPagamenti', function (req, res) {
+    console.log(req.body);
+    utenteModel.getDatiPagamento(req.body,function (data){
+        res.send(data);
+    }).catch((err) => {
+        res.status(err.status).send(err.message);
+    });
+});
+
+//aggiungi dato pagamento
+router.post('/aggiungiDatoPagamento', function (req, res) {
+    console.log("REQ.BODY ====")
+    console.log(req.body);
+    utenteModel.aggiungiDatoPagamento(req.body,function(data){
+        console.log(data);
+        res.send(data);
+    });
+});
+
+//elimina dato pagamento
+router.post('/eliminaDatoPagamento', function (req, res) {
+    console.log("REQ.BODY ====")
+    console.log(req.body);
+    utenteModel.eliminaDatoPagamento(req.body,function(data){
+        console.log(data);
+        res.send(data);
+    });
+});
+
 /*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
 /*router.post('/logout', (req,res) => {
     req.session.destroy( err =>{

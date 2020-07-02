@@ -1,5 +1,4 @@
 import React, {Fragment, useEffect, useState} from 'react'
-import ButtonForm from "../ButtonForm";
 import axios from 'axios';
 import $ from 'jquery';
 
@@ -21,6 +20,7 @@ function FormDocumenti(props){
             return false
         }
     }
+
     const onChange = (event) =>{
         $("#vuoto").addClass("collapse");
         $("#formato").addClass("collapse");
