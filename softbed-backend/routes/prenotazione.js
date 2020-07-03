@@ -49,6 +49,13 @@ router.post('/annullamento', function (req, res) {
             res.status(err.status).send(err.message);
         });
 })
+router.post('/listaPrenotazioniUtente', function (req, res) {
+    prenotazioneModel.getPrenotazioniUtente(req.body,function (data){
+        res.send(data);
+    }).catch((err) => {
+        res.status(err.status).send(err.message);
+    });
+});
 
 
 module.exports = router;

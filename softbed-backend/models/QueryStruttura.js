@@ -1,4 +1,4 @@
-class Query {
+class QueryStruttura {
 
     constructor() {}
 
@@ -17,7 +17,6 @@ class Query {
                    P.nomeProvincia as provincia,
                    C.nomeComune    as comune,
                    I.via,
-                   I.numeroCivico,
                    I.numeroCivico
             FROM regioni as R,
                  province as P,
@@ -52,7 +51,7 @@ class Query {
 
     static queryTasse() {
         return `
-            SELECT C.prezzoAdulti, C.prezzoBambini
+            SELECT C.prezzoAdulti as adulti, C.prezzoBambini as bambini
             FROM condizioni as C
             WHERE C.refStruttura = ?`
     }
@@ -244,4 +243,4 @@ class Query {
     }
 }
 
-module.exports = Query;
+module.exports = QueryStruttura;

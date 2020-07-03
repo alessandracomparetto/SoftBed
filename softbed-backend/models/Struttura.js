@@ -2,7 +2,8 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
-const Queries = require('./Query');
+const Queries = require('./QueryStruttura');
+const Struttura2 = require('./StrutturaEntity');
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
@@ -177,86 +178,9 @@ module.exports= {
     },
 
     carica: async function(idStruttura, callback) {
-
-        const db = await makeDb(config);
-        let struttura = {};
-
-        try {
-            await withTransaction(db, async () => {
-
-                let risultato = await db.query(Queries.queryStruttura(), [idStruttura]).catch(() => {throw createError(500)});
-
-                struttura = risultato[0];
-
-                let fotografie = await db.query(Queries.queryFoto(), idStruttura).catch(() => {throw createError(500)});
-                let localita = await db.query(Queries.queryLocalita(), idStruttura).catch(() => {throw createError(500)});
-                let condizioni = await db.query(Queries.queryCondizioni(), idStruttura).catch(() => {throw createError(500)});
-                let tasse = await db.query(Queries.queryTasse(), idStruttura).catch(() => {throw createError(500)});
-
-                let camereBB = await db.query(Queries.queryCamereBB(), idStruttura).catch(() => {throw createError(500)});
-                let prezzoCV = await db.query(Queries.queryPrezzoCV(), idStruttura).catch(() => {throw createError(500)});
-
-                let descrizione = "";
-                let servizi = [];
-
-                // Caso B&B
-                if (camereBB[0]) {
-                    descrizione = await db.query(Queries.queryDescrizioneBB(), idStruttura).catch(() => {throw createError(500)});
-                    servizi = await db.query(Queries.queryServiziBB(), idStruttura).catch(() => {throw createError(500)});
-
-                    // Aggiunta a struttura
-                    struttura.camere = camereBB // array di oggetti {tipologiaStanza, prezzo}
-                }
-
-                // Caso CV
-                else if (prezzoCV[0]) {
-                    descrizione = await db.query(Queries.queryDescrizioneCV(), idStruttura).catch(() => {throw createError(500)});
-
-                    servizi = await db.query(Queries.queryServiziCV(), idStruttura).catch(() => {throw createError(500)});
-                    let ambienti = await db.query(Queries.queryAmbientiCV(), idStruttura).catch(() => {throw createError(500)});
-                    let bagniCamereLetti = await db.query(Queries.queryBagniCamereLettiCV(), idStruttura).catch(() => {throw createError(500)});
-
-                    // Aggiunta a struttura
-                    struttura.prezzo = prezzoCV[0].prezzoNotte; // number
-
-                    struttura.ambienti = Object.keys(ambienti[0])
-                        .reduce(function(risultato, ambiente) {
-                            if (ambienti[0][ambiente] === 1) {
-                                risultato.push(ambiente);
-                            }
-
-                            return risultato;
-                        }, []);
-
-                    struttura.altro = bagniCamereLetti[0];
-                }
-
-                // Struttura non trovata o informazioni obbligatorie mancanti
-                else throw createError(404);
-
-                // Aggiunta di informazioni dello stesso tipo
-                struttura.descrizione = descrizione[0].descrizione;
-
-                struttura.servizi = Object.keys(servizi[0])
-                    .reduce(function(risultato, servizio) {
-                        if (servizi[0][servizio] === 1) {
-                            risultato.push(servizio);
-                        }
-
-                        return risultato;
-                    }, []);
-
-                struttura.foto = fotografie.map((oggetto) => {return oggetto.percorso});
-                struttura.localita = localita[0];
-                struttura.condizioni = condizioni[0];
-                struttura.tasse = tasse[0];
-
-                console.log("Struttura", struttura); // TODO: Rimuovere console.log
-                return callback(struttura);
-            })
-        } catch(err) {
-            throw err;
-        }
+        let struttura = new Struttura2(idStruttura);
+        await struttura.init();
+        return callback(struttura);
     },
 
     cerca: async function(datiRicerca, callback) {

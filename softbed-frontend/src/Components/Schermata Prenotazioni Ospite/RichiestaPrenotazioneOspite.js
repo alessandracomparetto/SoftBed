@@ -33,16 +33,16 @@ function RichiestaPrenotazioneOspite(props) {
     }
 
     const annullaPrenotazione = () => {
-        axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.id})
+        axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.idPrenotazione})
             .then(() => {
 
-                // TODO: Prendere informazioni dinamiche
+                // TODO: Prendere informazioni dinamiche, JOIN Con autenticazione per email gestore
                 const informazioni = {
-                    id: props.prenotazione.id,
-                    struttura: props.prenotazione.struttura.nome,
+                    id: props.prenotazione.idPrenotazione,
+                    struttura: props.prenotazione.nomeStruttura,
                     data: props.prenotazione.checkIn,
                     emailOspite: "slcxx98@gmail.com",
-                    emailGestore: "slcxx98@gmail.com"
+                    emailGestore: props.prenotazione.email,
                 }
 
                 axios.post('/mail/annullamento-prenotazione', informazioni)
@@ -61,7 +61,7 @@ function RichiestaPrenotazioneOspite(props) {
                 <div className="col-12 col-sm-3 col-lg-4 h-100 my-auto">
                     <strong>Struttura</strong>
                     <br/>
-                    <span>{props.prenotazione.struttura.nome}</span>
+                    <span>{props.prenotazione.nomeStruttura}</span>
                 </div>
                 <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>Check In</strong>
@@ -76,7 +76,7 @@ function RichiestaPrenotazioneOspite(props) {
                 <div className="col-12 col-sm-3 col-lg-2 h-100 my-auto">
                     <strong>Scadenza</strong>
                     <br />
-                    <span>{props.prenotazione.scadenza.data}</span>
+                    <span>{props.prenotazione.dataScadenza}</span>
                 </div>
                 <div className="col-12 col-lg-2 h-100 my-2">
                     <button className="btn btn-warning btn-block btn-lg-inline" onClick={toggleContenuto}>{mostraContenuto ? "Mostra meno" : "Mostra di più"}</button>
