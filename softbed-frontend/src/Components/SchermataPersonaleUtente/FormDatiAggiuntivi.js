@@ -20,8 +20,7 @@ function FormDatiAggiuntivi(){
         console.log(utente.refComuneNascita);
         document.getElementById("comuneNascita").defaultValue=utente.refComuneNascita;
         document.getElementById("comuneResidenza").innerHTML=utente.comuneResidenza;*/
-        regioniHandler("N");
-        regioniHandler("R");
+
 
     });
 
@@ -75,7 +74,7 @@ function FormDatiAggiuntivi(){
     }
 
     let province = null;
-    function regioniHandler(parameter){
+   /* function regioniHandler(parameter){
         // rimozione dei precedenti elementi del menu provinca e comune
         if(parameter="N"){
             document.getElementById("provinciaNascita").innerHTML='<option value="" selected></option>';
@@ -120,7 +119,7 @@ function FormDatiAggiuntivi(){
             }
         }
 
-    }
+    }*/
     function provinceEventHandler(event){
         // rimozione dei precedenti elementi del menu Comune
         // rimozione dei precedenti elementi del menu provinca e comune

@@ -69,7 +69,7 @@ function Registrazione() {
     }
 
     if (redirect){
-        return <Redirect to='/'/>;
+        return <Redirect to='/utente'/>;
     }
 
     return(
