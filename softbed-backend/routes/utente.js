@@ -30,13 +30,15 @@ router.use(session({
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
-    utenteModel.inserisciUtente(req.body,function(data){
-        let status = (data ? 500: 200);
+    utenteModel.inserisci(req.body,function(data){
+        console.log(data);
+/*        let status = (data !==[] ? 500: 200);
         if(status===200) res.send(data);
         else {
             res.status(status);
             res.send();
-        }
+        }*/
+        res.send(data);
     }).catch((err)=>{
         console.log("entro in catch");
         res.status(err.status).send(err.message)})
@@ -46,7 +48,7 @@ router.post('/utenteRegistrato', function (req, res) {
 /* Login Utente */
 router.post('/login', function (req, res) {
     utenteModel.login(req.body,function(data){
-        req.session.session_uid = data;
+        req.session.session_uid = data.idUtente;
         console.log(req.sessionID);
         res.send(data);
     }).catch((err)=>{
@@ -54,9 +56,9 @@ router.post('/login', function (req, res) {
 });
 
 //recupero delle informazioni dell'utente
-router.get('/', function(req, res) {
-    utenteModel.fetch(function(data){
-        res.json(data);
+router.post('/fetch', function(req, res) {
+    utenteModel.fetch(req.body,function(data){
+        res.send(data);
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
 });
@@ -65,7 +67,7 @@ router.get('/', function(req, res) {
 router.post('/modificaDatiAggiuntivi', function (req, res) {
     utenteModel.modificaDatiAggiuntivi(req.body,function(data){
         let status = (data.changedRows === 0) ? 304: 200;
-        res.sendStatus( status);
+        res.send(data);
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
 });

@@ -6,32 +6,44 @@ import SidebarUtente from "./SidebarUtente";
 
 const crypto = require('crypto');
 
-//TODO: idUtente
-//TODO: DECRIPTARE PASS
+
 function FormDatiAggiuntivi(){
     const [utente,setUtente]=useState([]);
 
     useEffect(()=>{
-        document.getElementById("regioneResidenza").value=utente.regioneResidenza;
-        document.getElementById("regioneNascita").value=utente.regioneNascita;
-
-        document.getElementById("comuneResidenza").value=utente.refComuneResidenza;
-        document.getElementById("comuneResidenza").innerHTML=utente.comuneResidenza;
+       document.getElementById("regioneResidenza").value=utente.regioneResidenza;
+        document.getElementById("regioneNascita").value=utente.regioneNascita;/*
+        console.log(utente.provinciaNascita);
+        console.log(utente.provinciaResidenza);
+        document.getElementById("provinciaNascita").value=utente.provinciaNascita;
+        document.getElementById("provinciaResidenza").value=utente.provinciaResidenza;
+        console.log(utente.refComuneNascita);
+        document.getElementById("comuneNascita").defaultValue=utente.refComuneNascita;
+        document.getElementById("comuneResidenza").innerHTML=utente.comuneResidenza;*/
+        regioniHandler("N");
+        regioniHandler("R");
 
     });
 
     //recupero i dati dell'utente
     useEffect(() => {
-        axios
-            .get("/utente")
-            .then(res => {
-                res.data.dataNascita=res.data.dataNascita.split("T")[0];
-                console.log("DATI RECUPERATI=======");
-                console.log(res.data);
-                res.data.refComuneResidenza =  res.data.refComuneResidenza;
-                res.data.via = res.data.via;
-                setUtente(res.data);})
-            .catch(err => console.log(err));
+        let sessionUtente = JSON.parse(window.sessionStorage.getItem("utente"));
+        if(sessionUtente[0].refIndirizzo === null && sessionUtente[0].refComuneNascita === null){
+            console.log(sessionUtente[0]);
+            let tmp = sessionUtente[0];
+            tmp.dataNascita = tmp.dataNascita.split("T")[0];
+            setUtente(tmp);
+        }else {
+            axios
+                .post("/utente/fetch", sessionUtente[0])
+                .then(res => {
+                    res.data.dataNascita = res.data.dataNascita.split("T")[0];
+                    console.log("DATI RECUPERATI=======");
+                    console.log(res.data);
+                    setUtente(res.data);
+                })
+                .catch(err => console.log(err));
+        }
     }, []);
 
     //modifico i dati dell'utente
@@ -54,7 +66,7 @@ function FormDatiAggiuntivi(){
                     .then(res => { // then print response status
                         console.log("DATI MODIFICATI======= ");
                         console.log(res.data);
-                        console.log("Dati aggiunti");
+                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                     });
             } catch (e) {
                 console.log(e);
@@ -63,6 +75,85 @@ function FormDatiAggiuntivi(){
     }
 
     let province = null;
+    function regioniHandler(parameter){
+        // rimozione dei precedenti elementi del menu provinca e comune
+        if(parameter="N"){
+            document.getElementById("provinciaNascita").innerHTML='<option value="" selected></option>';
+            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
+            if(!($('#regioneNascita').val()) ){
+                for (let regione of data.regioni) {
+                    if (regione.nome == utente.regioneNascita) {
+                        province = regione.province;
+                        break;
+                    }
+                }
+                for (let provincia of province) {
+                    if(provincia.nome === utente.provinciaNascita){
+                        $('#provinciaNascita').val = utente.provinciaNascita;
+                        break;
+                    }
+
+                }
+            }
+        }
+        else{
+            document.getElementById("provinciaResidenza").innerHTML='<option value="" selected></option>';
+            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>'
+            if($('#regioneResidenza').val() != '') {
+                for (let regione of data.regioni) {
+                    if (regione.nome == utente.regioneResidenza) {
+                        province = regione.province;
+                        break;
+                    }
+                }
+                for (let provincia of province) {
+                    let opt = document.createElement('option');
+                    opt.value = provincia.code;
+                    opt.innerText = provincia.nome;
+                    if (utente.provinciaResidenza) {
+                        $('#provinciaResidenza').val = utente.provinciaResidenza;
+                    }
+
+                    document.getElementById("provinciaResidenza").appendChild(opt);
+
+                }
+            }
+        }
+
+    }
+    function provinceEventHandler(event){
+        // rimozione dei precedenti elementi del menu Comune
+        // rimozione dei precedenti elementi del menu provinca e comune
+        if(event.target.id === "provinciaNascita"){
+            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
+        }
+        else{
+            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
+        }
+
+
+        if (event.target.value != '') {
+            for (let provincia of province) {
+                if (provincia.code == event.target.value) {
+                    for (let comune of provincia.comuni) {
+                        let opt=document.createElement('option');
+                        opt.value=comune.code;
+                        opt.innerText = comune.nome;
+                        if(event.target.id === "provinciaNascita"){
+                            document.getElementById("comuneNascita").appendChild(opt);
+                        }
+                        else{
+                            document.getElementById("comuneResidenza").appendChild(opt);
+                        }
+
+
+                    }
+                    break; // non dobbiamo cercare oltre
+                }
+            }
+
+        }
+    }
 
     function regioniEventHandler(event){
         // rimozione dei precedenti elementi del menu provinca e comune
@@ -92,6 +183,7 @@ function FormDatiAggiuntivi(){
                 let opt = document.createElement('option');
                 opt.value = provincia.code;
                 opt.innerText = provincia.nome;
+
                 if(event.target.id === "regioneNascita"){
                     document.getElementById("provinciaNascita").appendChild(opt);
                 }
@@ -125,12 +217,16 @@ function FormDatiAggiuntivi(){
                         else{
                             document.getElementById("comuneResidenza").appendChild(opt);
                         }
+
+
                     }
                     break; // non dobbiamo cercare oltre
                 }
             }
+
         }
     }
+
 
     function addressEventHandler(event) {
         if (event.target.value != '') {
@@ -214,18 +310,18 @@ function FormDatiAggiuntivi(){
                 <div className="form-row">
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="Name">Nome</label>
-                        <input id="name" name="nome" type="text" className="form-control" defaultValue={utente.nome} required/>
+                        <input id="name" name="nome" type="text" className="form-control" defaultValue={utente.nome} disabled/>
                     </div>
 
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="Surname">Cognome</label>
-                        <input id="surname" name="cognome" type="text" className="form-control" defaultValue={utente.cognome} required/>
+                        <input id="surname" name="cognome" type="text" className="form-control" defaultValue={utente.cognome} disabled/>
                     </div>
 
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="cf">Codice fiscale</label>
                         <input id="cf" name="codiceFiscale"  type="text" className="form-control"
-                               pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" defaultValue={utente.codiceFiscale}/>
+                               pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" value={utente.codiceFiscale}/>
                         <div className="invalid-feedback">
                             Codice fiscale errato
                         </div>
@@ -233,7 +329,7 @@ function FormDatiAggiuntivi(){
 
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="birthdate">Data di Nascita</label>
-                        <input id="birthdate" name="dataNascita" type="date" className="form-control"  defaultValue={utente.dataNascita} required/>
+                        <input id="birthdate" name="dataNascita" type="date" className="form-control"  defaultValue={utente.dataNascita} disabled/>
                     </div>
 
                     <div className="col-12 mb-2">Nato a</div>
@@ -242,8 +338,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                         </div>
-                        <select id="regioneNascita" className="custom-select" name="regioneNascita" onChange={regioniEventHandler} >
-                            <option value="" selected></option>
+                        <select id="regioneNascita" className="custom-select" name="regioneNascita" defaultValue="" onChange={regioniEventHandler} >
+                            <option value=""></option>
                             <option value="Abruzzo">Abruzzo</option>
                             <option value="Basilicata">Basilicata</option>
                             <option value="Calabria">Calabria</option>
@@ -271,8 +367,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Provincia&nbsp;</span>
                         </div>
-                        <select id="provinciaNascita" name="provinciaNascita" className="custom-select" onChange={ provinceEventHandler} >
-                            <option value="" selected></option>
+                        <select id="provinciaNascita" name="provinciaNascita" defaultValue="" className="custom-select" onChange={ provinceEventHandler} >
+                            <option value="" ></option>
                         </select>
                     </div>
 
@@ -280,8 +376,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                         </div>
-                        <select id="comuneNascita" name="refComuneNascita" className="custom-select">
-                            <option value="" selected></option>
+                        <select id="comuneNascita" name="refComuneNascita" defaultValue={utente.refComuneNascita} className="custom-select">
+                            <option value="" ></option>
                         </select>
                     </div>
 
@@ -291,8 +387,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Regione&nbsp;&nbsp;</span>
                         </div>
-                        <select id="regioneResidenza" className="custom-select" name="regioneResidenza" onChange={regioniEventHandler}>
-                            <option value="" selected></option>
+                        <select id="regioneResidenza" className="custom-select" name="regioneResidenza" defaultValue="" onChange={regioniEventHandler}>
+                            <option value="" ></option>
                             <option value="Abruzzo">Abruzzo</option>
                             <option value="Basilicata">Basilicata</option>
                             <option value="Calabria">Calabria</option>
@@ -320,8 +416,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Provincia&nbsp;</span>
                         </div>
-                        <select id="provinciaResidenza" name="provinciaResidenza" className="custom-select" onChange={ provinceEventHandler}>
-                            <option value="" selected></option>
+                        <select id="provinciaResidenza" name="provinciaResidenza" className="custom-select" defaultValue="" onChange={ provinceEventHandler}>
+                            <option value=""></option>
                         </select>
                     </div>
 
@@ -329,8 +425,8 @@ function FormDatiAggiuntivi(){
                         <div className="input-group-prepend">
                             <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                         </div>
-                        <select id="comuneResidenza" name="refComuneResidenza" className="custom-select">
-                            <option value="" selected></option>
+                        <select id="comuneResidenza" name="refComuneResidenza" defaultValue="" className="custom-select">
+                            <option value=""></option>
                         </select>
                     </div>
 
@@ -376,7 +472,7 @@ function FormDatiAggiuntivi(){
                         <label htmlFor="pass">Password</label>
                         <input id="pass" name="password" type="password" className="form-control"
                                title="Almeno 8 caratteri, una lettera maiuscola e un numero"
-                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onChange={verificaPass} defaultValue={utente.password} required/>
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onChange={verificaPass}/>
                         <div className="invalid-feedback">
                             Almeno 8 caratteri di cui uno maiuscolo e un numero
                         </div>
@@ -388,7 +484,7 @@ function FormDatiAggiuntivi(){
                     <div className="form-group col-12 col-md-4" >
                         <label htmlFor="repass">Conferma password</label>
                         <input id="repass" name="repass" type="password" className="form-control"
-                               size="32" maxLength="40" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onKeyUp={confermaPass} defaultValue={utente.password} required/>
+                               size="32" maxLength="40" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onKeyUp={confermaPass}/>
                         <div>
                             <span id="message"></span>
                         </div>

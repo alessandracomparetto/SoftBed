@@ -4,8 +4,8 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
 module.exports= {
-//TODO: gestire conflitto email
-    inserisciUtente:async function(datiUtente, callback) {
+//TODO: gestire email già presente
+    inserisci:async function(datiUtente, callback) {
         const db = await makeDb(config);
         let results = {};
         let refUtente;
@@ -22,12 +22,12 @@ module.exports= {
                 sql = ('INSERT INTO `autenticazione` (refUtente, email, password) VALUES ?');
                 datiQuery = [refUtente, datiUtente.email, datiUtente.pass];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN AUTENTICAZIONE
-                    if(err.code=== 'ER_DUP_ENTRY'){
+                 /*   if(err.code=== 'ER_DUP_ENTRY'){
                         return callback(createError(500, "Utente già registrato"));
-                    }
+                    }*/
                     throw createError(500);
                 });
-                sql = ('SELECT u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
+                sql = ('SELECT u.idUtente, u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
                     FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
                 datiQuery = [refUtente];
                 results = await db.query(sql, [[datiQuery]]).catch(err => {
@@ -63,8 +63,17 @@ module.exports= {
                         throw createError(404, "Password errata");
                     } else {
                         //todo recuperare dati utente
-                        //creo id della sessione
-                        return callback(results.refUtente);
+                        let refUtente = results.refUtente;
+
+                        let sql = ('SELECT u.idUtente, u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
+                        FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
+                        let datiQuery = [refUtente];
+                        results = await db.query(sql, [[datiQuery]]).catch(err => {
+                            throw createError(500);
+                        });
+
+                        console.log(results);
+                        return (callback(results));
                     }
                 }
             });
@@ -73,85 +82,92 @@ module.exports= {
         }
     },
 
-    fetch: async function (callback) {
+    fetch: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let infoUtente;
-        /*TODO CAMBIARE refUtente */
         try {
             await withTransaction(db, async () => {
-                //recupero le informazioni dell'utente
-                infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refIndirizzo,\
-                U.refComuneNascita, U.telefono, U.gestore, A.email, A.password, I.via, I.numeroCivico, I.cap, CN.nomeComune as comuneNascita, PN.nomeProvincia AS provinciaNascita,\
+                if(datiUtente.refIndirizzo !== null && datiUtente.refComuneNascita!==null){
+                    infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refIndirizzo,\
+                U.refComuneNascita, U.telefono, U.gestore, A.email, I.via, I.numeroCivico, I.cap, CN.nomeComune as comuneNascita, PN.nomeProvincia AS provinciaNascita,\
                 RN.nomeRegione AS regioneNascita, CR.nomeComune as comuneResidenza, CR.idComune AS refComuneResidenza, PR.nomeProvincia AS provinciaResidenza, RR.nomeRegione AS regioneResidenza\
                  FROM `utente` AS U JOIN `autenticazione` AS A JOIN `indirizzo` AS I ,`comuni` as CR , `province` as PR, `regioni` as RR, `comuni` AS CN , `province` AS PN, `regioni` AS RN\
                     WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND  U.refIndirizzo=I.idIndirizzo AND I.refComune=CR.idComune\
                     AND `CR`.refProvincia = `PR`.idProvincia AND `PR`.refRegione = `RR`.idRegione AND U.refComuneNascita = `CN`.idComune\
-                    AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[1])
-                    .catch(err => {
-                        throw createError(500);
-                });
-                if(infoUtente[0] !== undefined) {
-                    console.log("utente ha inserito nascita e residenza");
+                    AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[datiUtente.idUtente])
+                        .catch(err => {
+                            throw err;
+                        });
                     return callback(infoUtente[0]);
                 }
-                else{
+
+                else if(datiUtente.refIndirizzo !== null){
                     infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refIndirizzo,\
-                    U.refComuneNascita, U.telefono, U.gestore, A.email, A.password, I.via, I.numeroCivico, I.cap, C.nomeComune as comuneResidenza, P.nomeProvincia AS provinciaResidenza,\
-                    R.nomeRegione AS regioneResidenza,\
+                    U.refComuneNascita, U.telefono, U.gestore, A.email, I.via, I.numeroCivico, I.cap, C.nomeComune as comuneResidenza, P.nomeProvincia AS provinciaResidenza,\
+                    R.nomeRegione AS regioneResidenza\
                     FROM `utente` AS U JOIN `autenticazione` AS A JOIN `indirizzo` AS I JOIN `comuni` AS C JOIN `province` AS P JOIN `regioni` AS R\
                     WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refIndirizzo= I.idIndirizzo AND I.refComune=C.idComune\
-                    AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [1])
+                    AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [datiUtente.idUtente])
                         .catch(err => {
-                            throw createError(500);
+                            throw err;
                         });
-                    if(infoUtente[0] !== undefined) {
-                        console.log("utente ha inserito solo residenza");
-                        return callback(infoUtente[0]);
-                    }
-                    else{
-                        infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refIndirizzo,\
-                        U.refComuneNascita, U.telefono, U.gestore, A.email, A.password, C.nomeComune as comuneNascita, P.nomeProvincia AS provinciaNascita,\
-                        R.nomeRegione AS regioneNascita, \
-                        FROM `utente` AS U JOIN `autenticazione` AS A JOIN `comuni` AS C JOIN `province` AS P JOIN `regioni` AS R \
-                        WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refComuneNascita=C.idComune\
-                        AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [1])
-                            .catch(err => {
-                                throw createError(500);
-                            });
-                        if(infoUtente[0] !== undefined) {
-                            console.log("utente ha inserito solo nascita");
-                            return callback(infoUtente[0]);
-                        }
-                        else {
-                            console.log("utente non ha inserito né nascita né residenza")
-                            infoUtente = await db.query('SELECT * FROM `utente` JOIN `autenticazione`\
-                            WHERE  `utente`.idUtente= ? AND `autenticazione`.refUtente=`utente`.idUtente', [1])
-                                .catch(err => {
-                                    throw createError(500);
-                                });
-                            return callback(infoUtente[0]);
-                        }
-                    }
-
+                    return callback(infoUtente[0]);
                 }
+
+                else{
+                    console.log("sono qui")
+                    infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refComuneNascita, U.telefono, U.gestore, A.email, C.nomeComune as comuneNascita, P.nomeProvincia AS provinciaNascita, R.nomeRegione AS regioneNascita \
+                        FROM `utente` AS U JOIN `autenticazione` AS A JOIN `comuni` AS C JOIN `province` AS P JOIN `regioni` AS R \
+                        WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refComuneNascita=C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [datiUtente.idUtente])
+                        .catch(err => {
+                            throw err;
+                        });
+                    return callback(infoUtente[0]);
+                }
+
             });
         } catch (err) {
+            console.log(err);
             throw err;
         }
     },
 
     modificaDatiAggiuntivi: async function (datiUtente, callback) {
         const db = await makeDb(config);
-        let results, refIndirizzo;
+        let results;
         try {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
-                results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=? WHERE idUtente = ?',
-                    [`utente`, "utente.nome", datiUtente.nome, "utente.cognome", datiUtente.cognome, "utente.codiceFiscale",
-                        datiUtente.codiceFiscale, "utente.dataNascita", datiUtente.dataNascita, "utente.telefono", datiUtente.telefono, "utente.refComuneNascita", datiUtente.refComuneNascita, datiUtente.idUtente])
+
+                if(datiUtente.refIndirizzo == null && datiUtente.via){
+                    let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
+                    let datiQuery = [datiUtente.via, datiUtente.numeroCivico, datiUtente.cap, datiUtente.refComuneResidenza];
+                    results = await db.query(sql, [[datiQuery]]).catch(err => {
+                        throw createError(500);
+                    });
+
+                    let idIndirizzo = results.insertId;
+
+                    results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
+                        [`utente`, "utente.refIndirizzo", idIndirizzo, datiUtente.idUtente])
+                        .catch(err => {
+                            throw createError(500);
+                        });
+
+                }else{
+                    results = await db.query('UPDATE ?? SET ??=? ,??=?,??=?,??=? WHERE idIndirizzo = ?',
+                        [`indirizzo`, "indirizzo.via", datiUtente.via, "indirizzo.numeroCivico", datiUtente.numeroCivico,
+                            "indirizzo.cap", datiUtente.cap, "indirizzo.refComune", datiUtente.refComuneResidenza, datiUtente.refIndirizzo])
+                        .catch(err => {
+                            throw createError(500);
+                        });
+                }
+
+                results = await db.query('UPDATE ?? SET ??=?,??=?,??=? WHERE idUtente = ?',
+                    [`utente`, "utente.codiceFiscale", datiUtente.codiceFiscale, "utente.telefono", datiUtente.telefono, "utente.refComuneNascita", datiUtente.refComuneNascita, datiUtente.idUtente])
                     .catch(err => {
                         throw createError(500);
-                });
+                    });
 
                 results = await db.query('UPDATE ?? SET ??=?,??=?  WHERE refUtente= ?',
                     [`autenticazione`, "autenticazione.email", datiUtente.email, "autenticazione.password", datiUtente.password, datiUtente.idUtente])
@@ -168,44 +184,17 @@ module.exports= {
                         });
                 }
 
-                if(datiUtente.refComuneResidenza!== undefined) {
-                    results = await db.query('SELECT * FROM `utente`\
-                    WHERE idUtente = ?', [datiUtente.idUtente])
-                        .catch(err => {
-                            throw createError(500);
-                        });
-                    console.log(results);
-                    if (results[0].refIndirizzo === null) {
-                        console.log('Indirizzo non ancora inserito!');
-                        let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
-                        let datiQuery = [datiUtente.via, datiUtente.numeroCivico, datiUtente.cap, datiUtente.refComuneResidenza];
-                        results = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw createError(500);
-                        });
-                        console.log('Inserimento in indirizzo');
-                        console.log(results);
-                        refIndirizzo = results.insertId;
-
-                        results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
-                            [`utente`, "utente.refIndirizzo", refIndirizzo, datiUtente.idUtente])
-                            .catch(err => {
-                                throw createError(500);
-                            });
-                        console.log("Inserimento in utente")
-                    }
-                    else if(results[0].refIndirizzo !== null && datiUtente.via != undefined){
-                        results = await db.query('UPDATE ?? SET ??=? ,??=?,??=?,??=? WHERE idIndirizzo = ?',
-                            [`indirizzo`, "indirizzo.via", datiUtente.via, "indirizzo.numeroCivico", datiUtente.numeroCivico,
-                                "indirizzo.cap", datiUtente.cap, "indirizzo.refComune", datiUtente.refComuneResidenza, datiUtente.refIndirizzo])
-                            .catch(err => {
-                                throw createError(500);
-                            });
-                        console.log("inserito indirizzo in utente")
-                    }
-                }
                 console.log("ho modificato!");
+
+                let sql = ('SELECT u.idUtente, u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
+                        FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
+                let datiQuery = [datiUtente.idUtente];
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
+                    throw createError(500);
+                });
+
                 console.log(results);
-                return callback(results);
+                return (callback(results));
 
                 });
         } catch (err) {
