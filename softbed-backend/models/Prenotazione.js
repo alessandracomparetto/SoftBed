@@ -84,13 +84,10 @@ module.exports = {
     rifiutaPrenotazione: async function(data,res){
         const db = await makeDb(config);
 
-        console.log("sto per eliminare");
         console.log("id"+data.idPrenotazione);
-        let query = (`DELETE FROM prenotazione WHERE idPrenotazione = ?`);
-
-        try {
+        try {/*TODO rimuovere camere*/
             await withTransaction(db, async () => {
-                let result = await db.query(query, data.idPrenotazione).catch(() => {throw createError(500)});
+                let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch(() => {throw createError(500)});
                 console.log(result);
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
                 else return res(result);

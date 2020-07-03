@@ -218,5 +218,46 @@ router.post('/conferma-prenotazione', (req, res) => {
     res.send();
 })
 
+router.post('/scadenza-prenotazione', (req, res) => {
+    const mailOspite = {
+        from: softbed.email,
+        to: req.body.emailOspite,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                Purtroppo il gestore della struttura ${req.body.struttura} per cui avevi fatto richiesta di prenotazione (ID: ${req.body.id})
+                il cui check-in era previsto in data ${req.body.data} non ha confermato la richiesta.
+                <br />
+                <br />
+            </p>`
+    };
+
+    const mailGestore = {
+        from: softbed.email,
+        to: req.body.emailGestore,
+        subject: "Annullamento prenotazione",
+        html:
+            `<p>
+                La richiesta di prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} non è stata confermata entro 48h.
+                <br />
+                <br />
+                La tua struttura è stata nuovamente resa disponibile nel periodo interessato.
+            </p>`
+    };
+
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
+    });
+
+    res.send();
+})
 
 module.exports = router;

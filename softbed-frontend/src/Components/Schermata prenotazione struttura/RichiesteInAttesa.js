@@ -24,7 +24,7 @@ function RichiesteInAttesa(props){
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
                 struttura:data,
-                data:new Date(props.prenotazione.checkIn).toLocaleString(),
+                data:new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 emailOspite:props.prenotazione.email,
                 emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
             };
@@ -43,7 +43,7 @@ function RichiesteInAttesa(props){
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
                 struttura:props.nomeStruttura,
-                data:new Date(props.prenotazione.checkIn).toLocaleString(),
+                data:new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 emailOspite:props.prenotazione.email,
                 emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
             };
