@@ -3,7 +3,7 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
 const Queries = require('./QueryStruttura');
-const Struttura2 = require('./StrutturaEntity');
+const StrutturaEntity = require('./StrutturaEntity');
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
@@ -178,7 +178,7 @@ module.exports= {
     },
 
     carica: async function(idStruttura, callback) {
-        let struttura = new Struttura2(idStruttura);
+        let struttura = new StrutturaEntity(idStruttura);
         await struttura.init();
         return callback(struttura);
     },

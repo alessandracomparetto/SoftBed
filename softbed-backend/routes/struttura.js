@@ -68,6 +68,7 @@ router.get('/:idStruttura', function(req, res) {
                     res.status(err.status).send();
                 })
         }
+
     })
 });
 
