@@ -71,7 +71,7 @@ function CalcoloGuadagno(props){
                    <input className="form-control" type="date" id="dataFine" name="dataFine" value={dataFine} onChange={aggiornaDataInizio} required/>
                </div>
                <div className="col-12 col-md-4 col-lg-3 mt-auto mb-2 ml-lg-auto">
-                   <button type="button" className="btn btn-warning btn-block" onClick={calcola}>Calcola</button>
+                   <button type="button" className="btn btn-primary btn-block" onClick={calcola}>Calcola</button>
                </div>
                <div id="mostra" className="col-12 row text-center pt-3 collapse">
                    <h3 className="col-12 col-md-6 mx-auto">Guadagno totalizzato {guadagno}€</h3>

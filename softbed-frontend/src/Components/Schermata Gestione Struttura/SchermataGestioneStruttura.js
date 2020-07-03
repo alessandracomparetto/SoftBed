@@ -7,7 +7,7 @@ import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "./CalcoloGuadagno";
-import SchermataPrenotazioneStruttura from "../Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
+import SidebarStruttura from "./SidebarStruttura";
 
 function SchermataGestioneStruttura(){
     let {id} = useParams();
@@ -25,7 +25,6 @@ function SchermataGestioneStruttura(){
                 dati=lista[i];
             }
         }
-        console.log(dati);
         axios.post(`/struttura/gestioneStruttura/${id}`, dati)
             .then(res => {
                 setStruttura(res.data);
@@ -33,52 +32,6 @@ function SchermataGestioneStruttura(){
             })
             .catch(()=>mostraDialogErrore());
     }, []);
-
-    function informazioniStruttura(){
-        document.getElementById("InformazioniPricipali").classList.remove("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-    }
-    function visualizzaPrenotazioni(){
-        document.getElementById("prenotazioni").classList.remove("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-    }
-    function modificaCaratteristiche(){
-        document.getElementById("caratteristiche").classList.remove("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-        console.log(struttura);
-    }
-    function modificaCondizioni(){
-        document.getElementById("condizioni").classList.remove("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("guadagno").classList.add("collapse");
-    }
-    function calcoloGuadagno(){
-        document.getElementById("guadagno").classList.remove("collapse");
-        document.getElementById("InformazioniPricipali").classList.add("collapse");
-        document.getElementById("caratteristiche").classList.add("collapse");
-        document.getElementById("prenotazioni").classList.add("collapse");
-        document.getElementById("condizioni").classList.add("collapse");
-
-    }
-
-    function printObject(o) {
-        let out = '';
-        for (let p in o) {
-            out += p + ': ' + o[p] + '\n';
-        } console.log(out);
-    }
 
     function handleChange(event){
         const{name,value}=event.target;
@@ -94,9 +47,7 @@ function SchermataGestioneStruttura(){
             tmp[name]=value;
         }
         setStruttura(tmp);
-        printObject(tmp)
     }
-
     function correzione (nome, valore){
         let tmp = struttura;
         tmp[nome]=valore;
@@ -108,56 +59,14 @@ function SchermataGestioneStruttura(){
         <div className="d-flex justify-content-center">
             <div className="row mx-auto maxw-xl">
                 <div className="col-12 col-md-3">
-                    {/* Navbar */}
-                    {/* <Sidebar */}
-                    <nav className="navbar bg-warning">
-                        <button className="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#menu">
-                            <span className="d-none d-sm-inline mr-2">La mia struttura</span>
-                            <span className="fas fa-edit"/>
-                        </button>
-                        <div className="collapse navbar-collapse" id="menu">
-                            <ul className="navbar-nav ml-auto text-right">
-                                <button type="button" className="btn btn-warning" onClick={informazioniStruttura}>
-                                    <li className="nav-item text-center text-md-right">Informazioni sulla struttura</li>
-                                </button>
-                                <div className="dropdown-divider"/>
-
-                                <button type="button" className="btn btn-warning" onClick={visualizzaPrenotazioni}>
-                                    <li className="nav-item text-center text-md-right">Prenotazioni</li>
-                                </button>
-                                <div className="dropdown-divider"/>
-
-                                <button type="button" className="btn btn-warning" onClick={calcoloGuadagno}>
-                                    <li className="nav-item text-center text-md-right">Calcolo guadagno</li>
-                                </button>
-                                <div className="dropdown-divider"/>
-
-
-                                <button type="button" className="btn btn-warning" onClick={modificaCaratteristiche}>
-                                    <li className="nav-item text-center text-md-right">Modifica caratteristiche</li>
-                                </button>
-                                <div className="dropdown-divider"/>
-
-
-                                <button type="button" className="btn btn-warning" onClick={modificaCondizioni}>
-                                    <li className="nav-item text-center text-md-right">Modifica condizioni</li>
-                                </button>
-                                <div className="dropdown-divider"/>
-
-                            </ul>
-                        </div>
-                    </nav>
+                    <SidebarStruttura/>
                 </div>
 
-                 <div id="InformazioniPricipali" className="col-12 col-md-9">
+                 <div id="InformazioniPricipali" className="col-12 col-md-9 contenuto">
                     {/* Contenitore principale */}
                     <InformazioniStruttura struttura={struttura}  flag={flag} />
                 </div>
-                    {/* Prenotazioni */}
-                <div id="prenotazioni" className="collapse col-12 col-md-9">
-                    <SchermataPrenotazioneStruttura idStruttura={id} tipologiaStruttura={struttura.tipologiaStruttura} nomeStruttura={struttura.nomeStruttura}/>
-                </div>
-                <div  id="caratteristiche" className="collapse col-12 col-md-9">
+                <div  id="caratteristiche" className="collapse contenuto col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
                             <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
@@ -165,10 +74,10 @@ function SchermataGestioneStruttura(){
                             <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
                     }
                 </div>
-                <div id="guadagno" className="collapse col-12 col-md-9">
+                <div id="guadagno" className="collapse contenuto col-12 col-md-9">
                     <CalcoloGuadagno idStruttura={id}/>
                 </div>
-                <div id="condizioni" className="collapse col-12 col-md-9">
+                <div id="condizioni" className="collapse contenuto col-12 col-md-9">
                     <ModificaCondizioni dati={struttura} setStruttura={setStruttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} copia={copia} setCopia={setCopia}/>
                 </div>
 
