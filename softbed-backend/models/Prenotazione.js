@@ -72,6 +72,7 @@ module.exports = {
                        console.log(listaPrenotazioni[i]);
                    }
                }
+               console.log(listaPrenotazioni);
                return callback(listaPrenotazioni);
            });
         }

@@ -33,7 +33,8 @@ function Login(){
 
             try {
                 axios.post("/utente/login", utenteLogin)
-                    .then(() => {
+                    .then((res) => {
+                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                         if (location.state && location.state.urlProvenienza) history.push(location.state.urlProvenienza)
                         else setRedirect(true);
                     });

@@ -63,7 +63,6 @@ function RegistrazioneStruttura () {
     }
 
     function correzione (nome, valore){
-        console.log("aggiorno "+nome+ " a "+valore);
         let tmp = info;
         tmp[nome]=valore;
         setInfo(tmp);
@@ -72,13 +71,9 @@ function RegistrazioneStruttura () {
     const handleSubmit=()=>{
         try {
            let dati = info;
-           console.log("DATI======= ");
-           console.log(dati);
            axios.post('/struttura', dati)
                .then(res => { // then print response status
-                   console.log(res.data);
                    console.log("hai finito");
-
                     let ok = res.data;
                    window.sessionStorage.setItem("strutture", JSON.stringify(ok));
                     _next()

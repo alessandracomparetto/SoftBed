@@ -69,7 +69,7 @@ function Registrazione() {
     }
 
     if (redirect){
-        return <Redirect to='/'/>;
+        return <Redirect to='/utente'/>;
     }
 
     return(
@@ -91,7 +91,7 @@ function Registrazione() {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-user fa"></i></span>
                             </div>
-                            <input id="name" name="name" type="text" className="form-control" maxLength="40" required/>
+                            <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire nome</div>
                         </div>
                     </div>
@@ -102,7 +102,7 @@ function Registrazione() {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-user fa"></i></span>
                             </div>
-                            <input id="surname" name="surname" type="text" className="form-control" maxLength="40" required/>
+                            <input id="surname" name="surname" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire cognome</div>
                         </div>
                     </div>

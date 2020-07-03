@@ -2,14 +2,13 @@ import React, {useEffect, useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
 import axios from "axios";
-
+import {useParams} from "react-router-dom"
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
-
+    let {refPrenotazione} = useParams();
 
     useEffect(() => {
         //TODO GESTIRE REFPRENOTAZIONE
-        let refPrenotazione = 1;
         axios.post(`/ospite/fetch`,{refPrenotazione: refPrenotazione}).then(res => {
             console.log("DATI OSPITI RECUPERATI=======");
             console.log(res.data);
@@ -88,6 +87,9 @@ function SchermataDatiOspiti(props){
             <FormDatiOspite aggiungiOspite={aggiungiOspite} dati={listaOspiti}/>
             {/*<a href={`/dichiarazioneOspiti`} className="btn btn-warning d-block d-md-inline-block m-auto stretched-link">Procedi alla dichiarazione</a>*/}
         </div>
+
+        //bottone procedi dichiarazione
+        //funzione verifica dati aggiuntivi, verifica i dati aggiuntivi.
     )
 }
 

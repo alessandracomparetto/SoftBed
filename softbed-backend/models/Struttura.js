@@ -2,6 +2,8 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
+const Queries = require('./Query');
+
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
         const db = await makeDb(config);
@@ -179,94 +181,28 @@ module.exports= {
         const db = await makeDb(config);
         let struttura = {};
 
-        let queryStruttura = `SELECT struttura.nomeStruttura, struttura.tipologiaStruttura
-            FROM struttura
-            WHERE struttura.idStruttura = ?`
-
-        let queryLocalita = `SELECT R.nomeRegione as regione, P.nomeProvincia as provincia, C.nomeComune as comune, 
-                I.via, I.numeroCivico, I.numeroCivico
-            FROM regioni as R, province as P, comuni as C, indirizzo as I, struttura as S
-            WHERE S.idStruttura = ?
-                AND S.refIndirizzo = I.idIndirizzo
-                AND I.refComune = C.idComune
-                AND C.refProvincia = P.idProvincia
-                AND P.refRegione = R.idRegione`
-
-        let queryFoto = `SELECT fotografie.percorso
-            FROM fotografie
-            WHERE fotografie.refStruttura = ?`
-
-        let queryCondizioni = `SELECT C.minSoggiorno, C.maxSoggiorno, C.oraInizioCheckIn, C.oraFineCheckIn, 
-                C.oraInizioCheckOut, C.oraFineCheckOut
-            FROM condizioni as C
-            WHERE C.refStruttura = ?`
-
-        let queryTasse = `SELECT C.prezzoAdulti, C.prezzoBambini
-            FROM condizioni as C
-            WHERE C.refStruttura = ?`
-
-        // TODO: B&B, si assume che il prezzo corrisponda al minimo per la tipologia di stanza
-        //  e che le stanze siano tutte disponibili.
-        let queryCamereBB = `SELECT CBB.tipologiaCamera, COUNT(*) as numero, MIN(CBB.prezzoBaseANotte) as prezzo
-            FROM \`cameraB&B\` as CBB, \`B&B\` as BB
-            WHERE BB.refStruttura = ?
-                AND BB.refStruttura = CBB.refStruttura
-            GROUP BY CBB.tipologiaCamera`
-
-        let queryDescrizioneBB = `SELECT BB.descrizione
-                                  FROM \`B&B\` as BB
-                                  WHERE BB.refStruttura = ?`
-
-        let queryServiziBB = `SELECT BB.bambini, BB.ariaCondizionata, BB.wifi, BB.riscaldamento, BB.parcheggio, 
-                BB.strutturaDisabili, BB.animaliAmmessi, BB.permessoFumare, BB.TV, BB.cucinaCeliaci,
-                BB.navettaAeroportuale, BB.servizioInCamera
-            FROM \`B&B\` as BB
-            WHERE BB.refStruttura = ?`
-
-        // CV
-        let queryPrezzoCV = `SELECT CV.prezzoNotte
-            FROM casaVacanze as CV
-            WHERE CV.refStruttura = ?`
-
-        let queryDescrizioneCV = `SELECT CV.descrizione
-                                  FROM casaVacanze as CV
-                                  WHERE CV.refStruttura = ?`
-
-        let queryServiziCV = `SELECT CV.bambini, CV.riscaldamento, CV.ariaCondizionata, CV.wifi, CV.parcheggio,
-                CV.strutturaDisabili, CV.animaliAmmessi, CV.permessoFumare, CV.festeAmmesse, CV.TV
-            FROM casaVacanze as CV
-            WHERE CV.refStruttura = ?`
-
-        let queryAmbientiCV = `SELECT CV.salotto, CV.giardino, CV.terrazza, CV.piscina
-            FROM casaVacanze as CV
-            WHERE CV.refStruttura = ?`
-
-        let queryBagniCamereLettiCV = `SELECT CV.nCamere as camere, CV.nBagni as bagni, CV.nLettiSingoli as singoli, CV.nLettiMatrimoniali as matrimoniali
-            FROM casaVacanze as CV
-            WHERE CV.refStruttura = ?`
-
         try {
             await withTransaction(db, async () => {
 
-                let risultato = await db.query(queryStruttura, [idStruttura]).catch(() => {throw createError(500)});
+                let risultato = await db.query(Queries.queryStruttura(), [idStruttura]).catch(() => {throw createError(500)});
 
                 struttura = risultato[0];
 
-                let fotografie = await db.query(queryFoto, idStruttura).catch(() => {throw createError(500)});
-                let localita = await db.query(queryLocalita, idStruttura).catch(() => {throw createError(500)});
-                let condizioni = await db.query(queryCondizioni, idStruttura).catch(() => {throw createError(500)});
-                let tasse = await db.query(queryTasse, idStruttura).catch(() => {throw createError(500)});
+                let fotografie = await db.query(Queries.queryFoto(), idStruttura).catch(() => {throw createError(500)});
+                let localita = await db.query(Queries.queryLocalita(), idStruttura).catch(() => {throw createError(500)});
+                let condizioni = await db.query(Queries.queryCondizioni(), idStruttura).catch(() => {throw createError(500)});
+                let tasse = await db.query(Queries.queryTasse(), idStruttura).catch(() => {throw createError(500)});
 
-                let camereBB = await db.query(queryCamereBB, idStruttura).catch(() => {throw createError(500)});
-                let prezzoCV = await db.query(queryPrezzoCV, idStruttura).catch(() => {throw createError(500)});
+                let camereBB = await db.query(Queries.queryCamereBB(), idStruttura).catch(() => {throw createError(500)});
+                let prezzoCV = await db.query(Queries.queryPrezzoCV(), idStruttura).catch(() => {throw createError(500)});
 
                 let descrizione = "";
                 let servizi = [];
 
                 // Caso B&B
                 if (camereBB[0]) {
-                    descrizione = await db.query(queryDescrizioneBB, idStruttura).catch(() => {throw createError(500)});
-                    servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
+                    descrizione = await db.query(Queries.queryDescrizioneBB(), idStruttura).catch(() => {throw createError(500)});
+                    servizi = await db.query(Queries.queryServiziBB(), idStruttura).catch(() => {throw createError(500)});
 
                     // Aggiunta a struttura
                     struttura.camere = camereBB // array di oggetti {tipologiaStanza, prezzo}
@@ -274,11 +210,11 @@ module.exports= {
 
                 // Caso CV
                 else if (prezzoCV[0]) {
-                    descrizione = await db.query(queryDescrizioneCV, idStruttura).catch(() => {throw createError(500)});
+                    descrizione = await db.query(Queries.queryDescrizioneCV(), idStruttura).catch(() => {throw createError(500)});
 
-                    servizi = await db.query(queryServiziCV, idStruttura).catch(() => {throw createError(500)});
-                    let ambienti = await db.query(queryAmbientiCV, idStruttura).catch(() => {throw createError(500)});
-                    let bagniCamereLetti = await db.query(queryBagniCamereLettiCV, idStruttura).catch(() => {throw createError(500)});
+                    servizi = await db.query(Queries.queryServiziCV(), idStruttura).catch(() => {throw createError(500)});
+                    let ambienti = await db.query(Queries.queryAmbientiCV(), idStruttura).catch(() => {throw createError(500)});
+                    let bagniCamereLetti = await db.query(Queries.queryBagniCamereLettiCV(), idStruttura).catch(() => {throw createError(500)});
 
                     // Aggiunta a struttura
                     struttura.prezzo = prezzoCV[0].prezzoNotte; // number
@@ -315,7 +251,7 @@ module.exports= {
                 struttura.condizioni = condizioni[0];
                 struttura.tasse = tasse[0];
 
-                console.log(struttura); // TODO: Rimuovere console.log
+                console.log("Struttura", struttura); // TODO: Rimuovere console.log
                 return callback(struttura);
             })
         } catch(err) {
@@ -327,117 +263,21 @@ module.exports= {
 
         const db = await makeDb(config);
 
-        // Strutture che si trovano nella zona cercata
-        let queryDestinazione = `SELECT struttura.idStruttura 
-        FROM struttura, indirizzo 
-        WHERE 
-        struttura.refIndirizzo = indirizzo.idIndirizzo AND 
-        indirizzo.refComune IN (
-            SELECT comuni.idComune
-            FROM comuni, province, regioni 
-            WHERE 
-            comuni.refProvincia = province.idProvincia AND 
-            province.refRegione = regioni.idRegione AND ( 
-                comuni.nomeComune = "${datiRicerca.destinazione}" OR 
-                province.nomeProvincia = "${datiRicerca.destinazione}" OR 
-                regioni.nomeRegione = "${datiRicerca.destinazione}" 
-            )
-        )`;
-
-        // CV: CV che non abbiano prenotazioni nel periodo selezionato e con abbastanza letti
-        let queryPrenotazioniCV = `SELECT CV.refStruttura
-        FROM casaVacanze as CV 
-        WHERE 
-        (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
-        CV.refStruttura NOT IN ( 
-            SELECT prenotazione.refStruttura 
-            FROM prenotazione 
-            WHERE 
-            ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-            ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-            ("${datiRicerca.arrivo}" <= prenotazione.checkIn AND "${datiRicerca.partenza}" >= prenotazione.checkOut)
-        )`
-
-        // B&B: B&B con almeno una camera disponibile e con abbastanza letti
-        let queryPrenotazioniBB = `SELECT DISTINCT CBB1.refStruttura
-        FROM \`cameraB&B\` as CBB1
-        WHERE 
-        (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${datiRicerca.ospiti} AND 
-        (CBB1.refStruttura, CBB1.idCamera) NOT IN ( 
-            SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera 
-            FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione 
-            WHERE 
-            CBB2.idCamera = prenotazioneCamera.refCamera AND 
-            CBB2.refStruttura = prenotazioneCamera.refStruttura AND 
-            prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND 
-            prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( 
-                ("${datiRicerca.arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-                ("${datiRicerca.partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
-                ("${datiRicerca.arrivo}" < prenotazione.checkIn AND "${datiRicerca.partenza}" > prenotazione.checkOut) 
-            )
-        )`
-
         let query;
         // Solo case vacanze
         if (datiRicerca.bedAndBreakfast !== "true") {
-            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
-            FROM struttura, fotografie
-            WHERE 
-                struttura.idStruttura IN (${queryDestinazione}) AND 
-                struttura.idStruttura IN (${queryPrenotazioniCV}) AND 
-                struttura.idStruttura = fotografie.refStruttura AND
-                fotografie.idFoto = ( 
-                    SELECT F2.idFoto
-                    FROM fotografie as F2
-                    WHERE F2.refStruttura = struttura.idStruttura
-                    LIMIT 1
-                )`
+            query = Queries.queryInformazioniCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
         }
 
         // Solo bed and breakfast
         else if (datiRicerca.casaVacanze !== "true") {
-            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
-            FROM struttura, fotografie
-            WHERE 
-                struttura.idStruttura IN (${queryDestinazione}) AND  
-                struttura.idStruttura IN (${queryPrenotazioniBB}) AND 
-                struttura.idStruttura = fotografie.refStruttura AND
-                fotografie.idFoto = ( 
-                    SELECT F2.idFoto
-                    FROM fotografie as F2
-                    WHERE F2.refStruttura = struttura.idStruttura
-                    LIMIT 1
-                )
-            `
+            query = Queries.queryInformazioniBB(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
         }
 
         // Sia case vacanze che B&B : id, nome, foto
         else {
-            query = `SELECT struttura.idStruttura as id, struttura.nomeStruttura as nome, fotografie.percorso as foto
-            FROM struttura, fotografie
-            WHERE
-                struttura.idStruttura IN (${queryDestinazione}) AND (
-                    (struttura.idStruttura IN (${queryPrenotazioniBB})) OR 
-                    (struttura.idStruttura IN (${queryPrenotazioniCV}))
-                ) AND 
-                struttura.idStruttura = fotografie.refStruttura AND
-                fotografie.idFoto = ( 
-                    SELECT F2.idFoto
-                    FROM fotografie as F2
-                    WHERE F2.refStruttura = struttura.idStruttura
-                    LIMIT 1
-                )`
+            query = Queries.queryInformazioniBBCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
         }
-
-        let queryDescrizioneBB = `SELECT BB.descrizione
-            FROM \`B&B\` as BB
-            WHERE BB.refStruttura = ?`
-
-        let queryDescrizioneCV = `SELECT CV.descrizione
-            FROM casaVacanze as CV
-            WHERE CV.refStruttura = ?`
-
-        let risultato = [];
 
         try {
             await withTransaction(db, async () => {
@@ -445,20 +285,31 @@ module.exports= {
 
                 let descrizione;
 
-                console.log("Informazioni:", informazioni);
-                informazioni.map(async (infoStruttura, indice) => {
-                    risultato[indice] = {id: infoStruttura.id, nome: infoStruttura.nome, foto: infoStruttura.foto};
-                    descrizione = await db.query(queryDescrizioneCV, [infoStruttura.id]).catch((err) => console.log(err));
 
-                    console.log("Descrizione:", descrizione);
-                    if (descrizione[0]) {
-                        risultato[indice].descrizione = descrizione[0].descrizione;
+                for (let i = 0; i < informazioni.length; i++) {
+                    let id = informazioni[i].id;
+                    let descrizioneBB = await db.query(Queries.queryDescrizioneBB(), id).catch(() => {throw createError(500)});
+                    let descrizioneCV = await db.query(Queries.queryDescrizioneCV(), id).catch(() => {throw createError(500)});
+
+                    let servizi;
+
+                    if (descrizioneBB[0]) {
+                        descrizione = descrizioneBB[0].descrizione;
+                        servizi = await db.query(Queries.queryServiziBB(), id).catch(() => {throw createError(500)});
                     }
 
-                    console.log("Risultato:", risultato);
-                    console.log("Informazioni:", informazioni);
-                    return callback(risultato);
-                });
+                    else if (descrizioneCV[0]) {
+                        descrizione = descrizioneCV[0].descrizione;
+                        servizi = await db.query(Queries.queryServiziCV(), id).catch(() => {throw createError(500)});
+                    }
+
+                    else throw createError(500);
+
+                    informazioni[i].descrizione = descrizione;
+                    informazioni[i].servizi = servizi;
+                }
+
+                return callback(informazioni);
             })
         } catch (err) {
             console.log(err);

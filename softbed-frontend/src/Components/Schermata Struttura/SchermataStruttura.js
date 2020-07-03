@@ -79,11 +79,11 @@ function SchermataStruttura() {
         const bambini = $("#bambini")
 
         adulti.on('change', () => {
-            setNumeroAdulti(adulti.val());
+            setNumeroAdulti(parseInt(adulti.val()));
         })
 
         bambini.on('change', () => {
-            setNumeroBambini(bambini.val());
+            setNumeroBambini(parseInt(bambini.val()));
         })
     }, []);
 
@@ -144,16 +144,8 @@ function SchermataStruttura() {
     }
 
     const controlloForm = (event) => {
-        if (struttura.tipologia && struttura.tipologia === "b&b") {
-            const singole = $("#singole");
-            const doppie = $("#doppie");
-            const adulti = parseInt($("#adulti").val());
-            const bambini = parseInt($("#bambini").val());
-
-            // Camere >= 1 - Ospiti <= MaxOspiti
-            if ((singole + doppie < 1) || (adulti + bambini > maxOspiti))
-                event.preventDefault();
-        }
+        if (!controlloCamere() || !controlloOspiti())
+            event.preventDefault();
 
         else controlloAccesso(event);
     }
@@ -173,11 +165,12 @@ function SchermataStruttura() {
             somma += elemento.val();
         })
 
-        if (! (somma >= 1)) {
+        if (somma < 1) {
             camereAiuto.removeClass("d-none");
             struttura.camere.map((camera) => {
                 $(`#${camera.tipologiaCamera}`).addClass("border border-danger");
             })
+            return false;
         }
 
         else {
@@ -188,6 +181,7 @@ function SchermataStruttura() {
         }
 
         aggiornaPrezzo();
+        return true;
     }
 
     const controlloDate = () => {
@@ -278,9 +272,12 @@ function SchermataStruttura() {
         const bambiniEsentiAiuto = $("#bambiniEsentiAiuto");
         const totaleOspitiAiuto = $("#totaleOspitiAiuto");
 
+        let flag = true;
+
         // Controllo numero adulti
         if (adulti.val() < 1) {
             adultiAiuto.removeClass("d-none");
+            flag = false;
         }
 
         else {
@@ -290,6 +287,7 @@ function SchermataStruttura() {
         // Controllo numero adulti esenti
         if (adultiEsenti.val() > adulti.val()) {
             adultiEsentiAiuto.removeClass("d-none");
+            flag = false;
         }
 
         else {
@@ -299,6 +297,7 @@ function SchermataStruttura() {
         // Controllo numero bambini esenti
         if (bambiniEsenti.val() > bambini.val()) {
             bambiniEsentiAiuto.removeClass("d-none");
+            flag = false;
         }
 
         else {
@@ -308,6 +307,7 @@ function SchermataStruttura() {
         // Controllo numero totale di ospiti
         if (parseInt(adulti.val()) + parseInt(bambini.val()) > maxOspiti) {
             totaleOspitiAiuto.removeClass("d-none");
+            flag = false;
         }
 
         else {
@@ -315,6 +315,7 @@ function SchermataStruttura() {
         }
 
         aggiornaPrezzo();
+        return flag;
     }
 
     const aggiornaPrezzo = () => {
@@ -357,29 +358,28 @@ function SchermataStruttura() {
     useEffect(() => {
         aggiornaPrezzo(); // Aggiornamento del prezzo al caricamento della struttura
 
-        let totale;
+        let totale = 0;
 
         if (struttura.tipologia === "cv") {
             totale = parseInt(struttura.altro.singoli) + 2 * parseInt(struttura.altro.matrimoniali);
         }
 
         else {
-            let singole, doppie, triple, quadruple;
 
             struttura.camere.map((camera) => {
                 if (camera.tipologiaCamera === "singola")
-                    singole = camera.numero || 0;
+                    totale += parseInt(camera.numero);
                 else if (camera.tipologiaCamera === "doppia")
-                    doppie = camera.numero || 0;
+                    totale += 2 * parseInt(camera.numero);
                 else if (camera.tipologiaCamera === "tripla")
-                    triple = camera.numero || 0;
+                    totale += 3 * parseInt(camera.numero);
                 else
-                    quadruple = camera.numero || 0;
-
-                totale = singole + (2 * doppie) + (3 * triple) + (4 * quadruple)
+                    totale += 4 * parseInt(camera.numero);
             })
+        }
 
-            if (totale) setMaxOspiti(totale);
+        if (totale) {
+            setMaxOspiti(totale);
         }
     }, [struttura]);
 
