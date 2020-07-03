@@ -14,7 +14,7 @@ module.exports= {
                 let sql = ('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) VALUES ?');
                 let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore == 'gestore' ? '1' : '0'];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
-                    throw createError(500)
+                    throw createError(500);
                 });
 
                 refUtente = results.insertId;
@@ -22,16 +22,24 @@ module.exports= {
                 sql = ('INSERT INTO `autenticazione` (refUtente, email, password) VALUES ?');
                 datiQuery = [refUtente, datiUtente.email, datiUtente.pass];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN AUTENTICAZIONE
+                    if(err.code=== 'ER_DUP_ENTRY'){
+                        return callback(createError(500, "Utente già registrato"));
+                    }
+                    throw createError(500);
+                });
+                sql = ('SELECT u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
+                    FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
+                datiQuery = [refUtente];
+                results = await db.query(sql, [[datiQuery]]).catch(err => {
                     throw createError(500);
                 });
 
-                console.log('Inserimento tabella utente');
                 console.log(results);
-                return (callback("ok"));
+                return (callback(results));
             });
         } //chiusura try
         catch (err) {
-            throw err;
+            console.log(err);
         }
     },
 
@@ -54,6 +62,7 @@ module.exports= {
                     if (datiUtente.pass != results[0].password) {
                         throw createError(404, "Password errata");
                     } else {
+                        //todo recuperare dati utente
                         //creo id della sessione
                         return callback(results.refUtente);
                     }

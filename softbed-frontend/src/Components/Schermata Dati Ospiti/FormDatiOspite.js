@@ -9,6 +9,7 @@ import axios from "axios";
 function FormDatiOspite(props){
     const [mostraContenuto, setMostraContenuto] = useState(false );
     const toggleContenuto = () => setMostraContenuto(true);
+    const [flag, setFlag] = useState(0 );
 
     // Gestione delle date
     const oggi = new Date(convertiData(new Date()));
@@ -65,6 +66,12 @@ function FormDatiOspite(props){
             document.getElementById("cap").value="";
             document.getElementById("arrivo").value="";
             document.getElementById("permanenza").value="";
+            if(flag===0){
+                setFlag(1);
+            }else{
+                setFlag(0);
+            }
+
             setMostraContenuto(false);
         }
     }
@@ -398,7 +405,7 @@ function FormDatiOspite(props){
                 <br/><br/>
 
                 <div className={(mostraContenuto) ? "" : "collapse"}>
-                    <FormDocumenti handleFoto={handleFoto}/>
+                    <FormDocumenti handleFoto={handleFoto} flag={flag}/>
                 </div>
 
         </form>
