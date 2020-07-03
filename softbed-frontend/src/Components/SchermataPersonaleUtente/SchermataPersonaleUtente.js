@@ -43,7 +43,7 @@ function SchermataPersonaleUtente(){
                 <div className="col-12 col-md-9 mt-3">
                     {/* Informazioni dell'utente */}
                     <div className="d-block">
-                        <h8>DATI</h8>
+                        <h6>DATI</h6>
                         {/*Caratteristiche*/}
                         <div className="my-3">
                             <InformazioneLineare nome="Nome:" valore={`${utente.nome}`} />

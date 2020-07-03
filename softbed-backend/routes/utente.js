@@ -4,14 +4,16 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-//const { Utente } = require('../sequelize/middleware');
 let utenteModel = require('../models/Utente');
 const router = express.Router();
+let Token = require('../models/Token');
+
+token = new Token();
 
 router.use(bodyParser.urlencoded({
     extended: true //per accedere a req.body
-}))
-router.use(bodyParser.json())
+}));
+router.use(bodyParser.json());
 
 //setto le opzioni per il middleware
 router.use(session({
@@ -25,22 +27,22 @@ router.use(session({
         sameSite : true, //accettiamo solo cookie che arrivano dallo stesso dominio
         secure : false, //TODO da cambiare in true!
     }
-}))
+}));
 
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
+    console.log("sono passato da qui");
     utenteModel.inserisci(req.body,function(data){
-        console.log(data);
-/*        let status = (data !==[] ? 500: 200);
-        if(status===200) res.send(data);
-        else {
-            res.status(status);
+        if(data === 400){
+            res.status(data);
             res.send();
-        }*/
-        res.send(data);
+        }
+        else{
+            token.aggiungiSessione(data.idUtente, req.sessionID);
+            res.send(data);
+        }
     }).catch((err)=>{
-        console.log("entro in catch");
         res.status(err.status).send(err.message)})
 });
 

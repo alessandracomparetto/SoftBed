@@ -67,7 +67,7 @@ function UtenteAutenticato(props) {
 
 
 function Navbar() {
-    const accessoEffettuato = true;
+    const accessoEffettuato = false;
     const utente = {nome: "SoftEngineers"}
 
     return (
