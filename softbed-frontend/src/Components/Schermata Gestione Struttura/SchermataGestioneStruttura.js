@@ -148,7 +148,6 @@ function SchermataGestioneStruttura(){
                         </div>
                     </nav>
                 </div>
-
                  <div id="InformazioniPricipali" className="col-12 col-md-9">
                     {/* Contenitore principale */}
                     <InformazioniStruttura struttura={struttura}  flag={flag} />

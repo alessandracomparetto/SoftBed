@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import FormMetodoPagamento from "./FormMetodoPagamento";
 import DatiPagamento from "./DatiPagamento";
 import axios from "axios";
-import $ from "jquery";
+import SidebarUtente from "../SchermataPersonaleUtente/SidebarUtente";
 
 
 /*
@@ -73,21 +73,24 @@ function SchermataDatoPagamento(props){
 
 
     return(
-        <div className="container my-3" >
-            <div className="my-3">
-                <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
-                <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
-                <ul className="list-group list-group-flush ">
-                    {
-                        listaDatiPagamento.map((pagamenti, indice) => {
-                            return <DatiPagamento key={indice} indiceElemento={indice} nomeIntestatario={pagamenti.nomeIntestatario} cognomeIntestatario={pagamenti.cognomeIntestatario} numeroCarta={pagamenti.numeroCarta} cvv = {pagamenti.cvv} dataScadenza={pagamenti.dataScadenza} eliminaDatoPagamento={eliminaDatoPagamento}/>
-                        })
-
-                    }
-                </ul>
+        <div className="d-block">
+            <div className="row mx-auto">
+                <SidebarUtente></SidebarUtente>
+                <div className="container my-3 col-12 col-md-9" >
+                    <div className="my-3">
+                        <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
+                        <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
+                        <ul className="list-group list-group-flush ">
+                            {
+                                listaDatiPagamento.map((pagamenti, indice) => {
+                                    return <DatiPagamento key={indice} indiceElemento={indice} nomeIntestatario={pagamenti.nomeIntestatario} cognomeIntestatario={pagamenti.cognomeIntestatario} numeroCarta={pagamenti.numeroCarta} cvv = {pagamenti.cvv} dataScadenza={pagamenti.dataScadenza} eliminaDatoPagamento={eliminaDatoPagamento}/>
+                                })
+                            }
+                        </ul>
+                    </div>
+                    <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
+                </div>
             </div>
-
-            <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
         </div>
     )
 }

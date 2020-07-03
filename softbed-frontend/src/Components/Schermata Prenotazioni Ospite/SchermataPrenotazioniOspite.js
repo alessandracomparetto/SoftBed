@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import RichiestaPrenotazioneOspite from "./RichiestaPrenotazioneOspite";
 import PrenotazioneOspite from "./PrenotazioneOspite";
+import SidebarUtente from "../SchermataPersonaleUtente/SidebarUtente";
 
 function SchermataPrenotazioniOspite() {
 
@@ -105,39 +106,44 @@ function SchermataPrenotazioniOspite() {
     }
 
     return (
-        <div className="container my-3">
-            {/* Richieste in attesa */}
-            { richieste[0] && (
-                <div className="my-3">
-                    <h3>Richieste in attesa</h3>
-                    <ul className="list-group list-group-flush">
+        <div className="d-block">
+            <div className="row mx-auto">
+                <SidebarUtente></SidebarUtente>
+                <div className="container my-3 col-12 pr-3 col-md-9">
+                    {/* Richieste in attesa */}
+                    { richieste[0] && (
+                        <div className="my-3">
+                            <h3>Richieste in attesa</h3>
+                            <ul className="list-group list-group-flush">
 
-                        { richieste.map((richiesta, indice) => {
-                            return (
-                                <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviRichiesta}/>
-                            )
-                        })}
+                                { richieste.map((richiesta, indice) => {
+                                    return (
+                                        <RichiestaPrenotazioneOspite key={indice} prenotazione={richiesta} primo={indice === 0} rimuovi={rimuoviRichiesta}/>
+                                    )
+                                })}
 
-                    </ul>
-                </div>
-            )}
+                            </ul>
+                        </div>
+                    )}
 
-            {/* Prenotazioni prenotazioni */}
-            { prenotazioni[0] && (
-                <div className="my-3">
-                    <h3>Prenotazioni precedenti</h3>
-                    <ul className="list-group list-group-flush">
+                    {/* Prenotazioni prenotazioni */}
+                    { prenotazioni[0] && (
+                        <div className="my-3">
+                            <h3>Prenotazioni precedenti</h3>
+                            <ul className="list-group list-group-flush">
 
-                        { prenotazioni.map((prenotazione, indice) => {
-                            return (
-                                // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (ma non passate)
-                                <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0} rimuovi={rimuoviPrenotazione}/>
-                            )
-                        })}
+                                { prenotazioni.map((prenotazione, indice) => {
+                                    return (
+                                        // TODO: Aggiungere annulla prenotazione per prenotazioni confermate (ma non passate)
+                                        <PrenotazioneOspite key={indice} prenotazione={prenotazione} primo={indice === 0} rimuovi={rimuoviPrenotazione}/>
+                                    )
+                                })}
 
-                    </ul>
-                </div>
-            )}
+                            </ul>
+                        </div>
+                    )}
+            </div>
+            </div>
         </div>
     )
 }
