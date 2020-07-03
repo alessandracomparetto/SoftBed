@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import './App.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import Footer from "./Components/Footer";
 import Immagine from "./Components/Immagine";
 import Login from "./Components/Login";
