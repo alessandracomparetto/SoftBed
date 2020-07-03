@@ -10,15 +10,16 @@ import Registrazione from "./Components/Registrazione";
 import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
 import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
 import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
-import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
 import SchermataPaginaNonTrovata from "./Components/Pagina Non Trovata/SchermataPaginaNonTrovata";
 import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
 import SchermataPrincipale from "./Components/SchermataPrincipale";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
 import SchermataStrutture from "./Components/SchermataStrutture/SchermataStrutture";
-import SchermataPrenotazioneStruttura
-    from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
+import SchermataDatoPagamento from "./Components/Schermata Dato Pagamento/SchermataDatoPagamento";
+import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAggiuntivi";
+import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
+import SchermataPrenotazioneStruttura from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 
 
 function App() {
@@ -60,8 +61,18 @@ function App() {
                             <SchermataPagamento />
                         </Route>
 
-                        <Route exact path="/profilo/prenotazioni-effettuate/">
-                            <SchermataPrenotazioniOspite />
+                        <Route exact path="/utente/:idUtente">
+                            <SchermataPersonaleUtente/>
+                        </Route>
+
+                        <Route exact path="/utente/:idUtente/modificaAccount">
+                            <FormDatiAggiuntivi/>
+                        </Route>
+                        <Route exact path="/utente/:idUtente/pagamenti">
+                            <SchermataDatoPagamento/>
+                        </Route>
+                        <Route exact  path="/utente/:idUtente/prenotazioni">
+                            <SchermataPrenotazioniOspite/>
                         </Route>
 
                         <Route exact path="/registrati/">

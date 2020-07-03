@@ -52,7 +52,7 @@ function UtenteAutenticato(props) {
                             <span className="mr-2">{props.utente.nome}</span><i className="fas fa-user"/>
                         </Link>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="#">Modifica profilo</Link>
+                            <Link className="dropdown-item" to="/utente/:idUtente">Modifica profilo</Link>
                             <Link className="dropdown-item" to="/gestioneStrutture/">Gestione strutture</Link>
                             <Link className="dropdown-item" to="#">Le mie prenotazioni</Link>
                             <div className="dropdown-divider"/>

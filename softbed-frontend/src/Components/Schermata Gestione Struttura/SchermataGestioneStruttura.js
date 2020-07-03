@@ -61,7 +61,6 @@ function SchermataGestioneStruttura(){
                 <div className="col-12 col-md-3">
                     <SidebarStruttura/>
                 </div>
-
                  <div id="InformazioniPricipali" className="col-12 col-md-9 contenuto">
                     {/* Contenitore principale */}
                     <InformazioniStruttura struttura={struttura}  flag={flag} />

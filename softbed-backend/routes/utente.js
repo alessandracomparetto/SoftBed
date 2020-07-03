@@ -31,8 +31,14 @@ router.use(session({
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
     utenteModel.inserisciUtente(req.body,function(data){
-        res.send(data);
+        let status = (data ? 500: 200);
+        if(status===200) res.send(data);
+        else {
+            res.status(status);
+            res.send();
+        }
     }).catch((err)=>{
+        console.log("entro in catch");
         res.status(err.status).send(err.message)})
 });
 
