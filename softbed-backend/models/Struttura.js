@@ -6,7 +6,7 @@ module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
         const db = await makeDb(config);
         let results={};
-        let refIndirizzo;
+        let refIndirizzo, refStruttura;
         try {
             await withTransaction(db, async () => {
                 //inserimento into indirizzo
@@ -17,11 +17,11 @@ module.exports= {
                 //se tutto va bene, trovo id indirizzo e inserisco nella struttura
                 console.log("Inserito in indirizzo");
                 refIndirizzo = results.insertId;
-                let giorno = new Date().toLocaleDateString();
-                sql = ('INSERT INTO `struttura` (nomestruttura, tipologiastruttura, refgestore, refindirizzo, rendicontoeffettuato) VALUES ?');
+                let giorno = new Date().toISOString().slice(0, 10);
+                sql = ('INSERT INTO struttura (nomeStruttura, tipologiaStruttura, refGestore, refIndirizzo, rendicontoEffettuato) VALUES ?');
                 //TODO: REF GESTORE
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
-                results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
+                results = await db.query(sql, [[datiQuery]]).catch((err) => {throw err});
 
                 console.log('Inserito nella tabella struttura');
                 refStruttura = results.insertId;
@@ -70,14 +70,14 @@ module.exports= {
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                 results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3])
-                     .catch((err) => {throw createError(500)});
+                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3])
+                    .catch((err) => {throw createError(500)});
 
                 return callback(results);
             });
         } //chiusura try
         catch (err) {
-            throw err;
+            console.log(err);
         }
     },
 
@@ -107,7 +107,7 @@ module.exports= {
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
-                   infoStruttura[0]["camere"] = array;
+                    infoStruttura[0]["camere"] = array;
                 }
                 foto = await db.query(('SELECT `percorso` FROM `fotografie` WHERE  `fotografie`.refStruttura = ?'), [[[idStruttura]]])
                     .catch((err) => {throw createError(500)});
@@ -131,10 +131,10 @@ module.exports= {
             await withTransaction(db, async () => {
                 let results = await db.query('UPDATE `condizioni` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
                          WHERE refStruttura = ?', ["condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
-                            "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
-                            "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,
-                            "condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
-                            "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
+                    "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
+                    "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,
+                    "condizioni.anticipoPrenotazioneMin", struttura.anticipoPrenotazioneMin,"condizioni.anticipoPrenotazioneMax", struttura.anticipoPrenotazioneMax,
+                    "condizioni.politicaCancellazione", struttura.politicaCancellazione,"condizioni.penaleCancellazione", struttura.penaleCancellazione,"condizioni.preavvisoDisdetta", struttura.preavvisoDisdetta,
                     struttura.idStruttura]).catch((err) => {throw createError(500)});
                 return callback(results);
             });
@@ -267,7 +267,7 @@ module.exports= {
                 if (camereBB[0]) {
                     descrizione = await db.query(queryDescrizioneBB, idStruttura).catch(() => {throw createError(500)});
                     servizi = await db.query(queryServiziBB, idStruttura).catch(() => {throw createError(500)});
-                    
+
                     // Aggiunta a struttura
                     struttura.camere = camereBB // array di oggetti {tipologiaStanza, prezzo}
                 }

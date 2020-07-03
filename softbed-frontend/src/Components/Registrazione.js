@@ -29,7 +29,10 @@ function Registrazione() {
             }
             try{
                 axios.post("/utente/utenteRegistrato", utenteRegistrato)
-                    .then(() => setRedirect(true));
+                    .then((res) => {
+                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
+                        setRedirect(true)}
+                    );
             }
             catch(err){
                 if (err.response.status === 400) {

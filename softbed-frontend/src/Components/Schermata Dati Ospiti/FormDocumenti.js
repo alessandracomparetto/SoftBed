@@ -8,6 +8,12 @@ function FormDocumenti(props){
     const [filename, setFilename] = useState([]); //lista dei nomi dei file
     let fileList = {}; //copia dei file
 
+    useEffect(() => {
+        setFilename([]);
+        setNumero(0);
+        setFile([]);
+    }, [props.flag]);
+
     //controlla che tuti i file siano immagini
     const checkMimeType=(fileList)=>{
         let files = fileList;
