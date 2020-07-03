@@ -20,6 +20,7 @@ import SchermataDatoPagamento from "./Components/Schermata Dato Pagamento/Scherm
 import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAggiuntivi";
 import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
 import SchermataPrenotazioneStruttura from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
+import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
 
 
 function App() {
@@ -68,10 +69,12 @@ function App() {
                         <Route exact path="/utente/:idUtente/modificaAccount">
                             <FormDatiAggiuntivi/>
                         </Route>
+
                         <Route exact path="/utente/:idUtente/pagamenti">
                             <SchermataDatoPagamento/>
                         </Route>
-                        <Route exact  path="/utente/:idUtente/prenotazioni">
+
+                        <Route exact path="/utente/:idUtente/prenotazioni">
                             <SchermataPrenotazioniOspite/>
                         </Route>
 
