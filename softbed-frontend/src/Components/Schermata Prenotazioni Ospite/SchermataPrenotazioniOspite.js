@@ -6,6 +6,7 @@ import SidebarUtente from "../SchermataPersonaleUtente/SidebarUtente";
 function SchermataPrenotazioniOspite() {
 
     // TODO: rimuovere lo stato iniziale
+    //TODO: idUtente
     const [richieste, setRichieste] = useState([
         {
             id: 75,
