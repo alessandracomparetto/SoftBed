@@ -3,7 +3,6 @@ import $ from "jquery";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
 import {confirmAlert} from "react-confirm-alert";
-import {Link} from "react-router-dom";
 
 const crypto = require('crypto');
 
@@ -154,7 +153,6 @@ function Registrazione() {
                             <div className="invalid-feedback">Almeno 8 caratteri di cui uno maiuscolo e un numero</div>
                             <div id="mdPass" className="valid-feedback text-warning">Password media</div>
                         </div>
-
                     </div>
 
                     <div className="form-group mt-3" >
