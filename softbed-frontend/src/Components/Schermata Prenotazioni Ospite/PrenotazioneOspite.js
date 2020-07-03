@@ -45,7 +45,7 @@ function PrenotazioneOspite(props) {
 
                 props.rimuovi(props.prenotazione.id);
             })
-            .catch(() => {
+             .catch(() => {
                 mostraDialogErrore();
             });
     }
