@@ -1,17 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import FormCondizioni from "../Registrazione Struttura/FormCondizioni";
 import axios from "axios";
 import mostraDialogErrore from "../../Actions/errore";
+import mostraDialogConferma from "../../Actions/conferma_struttura";
 
 function ModificaCondizioni(props) {
-
-    function printObject(o) {
-        let out = '';
-        for (let p in o) {
-            out += p + ': ' + o[p] + '\n';
-        } console.log(out);
-    }
-
 
     function modificaCondizioni(event) {
         event.preventDefault();
@@ -31,6 +24,7 @@ function ModificaCondizioni(props) {
                                 let contatore=props.flag+1;
                                 props.setFlag(contatore);
                                 props.setCopia(props.dati);
+                                mostraDialogConferma();
                             }
                         }).catch(() => console.log("Nesssuna riga modificata"))
                 }
@@ -43,18 +37,12 @@ function ModificaCondizioni(props) {
         }
     }
 
-    function annullamento() {
-        console.log("COPIA=================");
-        printObject(props.copia);
-        props.setStruttura(props.copia);
-    }
 
     return (
         <form id="formCondizioni" className="p-3" noValidate onChange={props.handleChange}>
             <FormCondizioni dati={props.dati} correzione={props.correzione} handleChange={props.handleChange}/>
-            <div className="d-flex flex-row-reverse justify-content-around">
+            <div className="d-flex flex-row-reverse justify-content-center">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={modificaCondizioni} >Conferma</button>
-                <button id="indietro" type="button" className="btn btn-secondary mt-3 w-200px" onClick={annullamento}>Annulla</button>
             </div>
         </form>
     )

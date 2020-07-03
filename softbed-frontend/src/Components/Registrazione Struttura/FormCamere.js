@@ -108,7 +108,6 @@ function FormCamere(props){
 
                 //aggiorno lo stato
                 let tmp = ({tipologiaCamera: tipologia.value, nLettiMatrimoniali: nlettiMatrimoniali.value, nLettiSingoli: nlettiSingoli.value , prezzoBaseANotte: prezzo.value});
-                console.log(tmp);
                 props.handleCamere(tmp);
             }
 

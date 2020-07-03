@@ -19,7 +19,7 @@ function FormCaratteristicheC(props){
             <div onClick={props.handleChange}>
                 <div className="form-row-group text-center offset-2">
                     <div className="form-check-inline col-12 col-md-5">
-                        <input type="checkbox" className="form-check-input" id="Wifi" value={1} name="Wifi" defaultChecked={props.dati.Wifi}/>
+                        <input type="checkbox" className="form-check-input" id="Wifi" value={1} name="Wifi" defaultChecked={props.dati.wifi}/>
                         <label className="form-check-label" htmlFor="Wifi">Connessione Wi-fi</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5">

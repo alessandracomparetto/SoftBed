@@ -1,20 +1,33 @@
 import Prenotazione from "./Prenotazione";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+    let data;
+    let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
+
+
+    useEffect(()=>{
+        for(let i = 0 ; i<listaStrutture.length; i++){
+            if(listaStrutture[i].idStruttura=props.id){
+                data=listaStrutture[i].nomeStruttura;
+                break;
+            }
+        }
+    },[]);
+
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
             console.log(res.data);
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
-                struttura:props.nomeStruttura,
+                struttura:data,
                 data:new Date(props.prenotazione.checkIn).toLocaleString(),
                 emailOspite:props.prenotazione.email,
                 emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
-            }
+            };
             axios.post('/mail/rifiuta-prenotazione',informazioni)
                 .catch(err=> console.log(err));
             //aggiorno la lista delle prenotazioni
@@ -33,7 +46,7 @@ function RichiesteInAttesa(props){
                 data:new Date(props.prenotazione.checkIn).toLocaleString(),
                 emailOspite:props.prenotazione.email,
                 emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
-            }
+            };
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));
             console.log("aggiorno lo stato");
