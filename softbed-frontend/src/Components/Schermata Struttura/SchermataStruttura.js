@@ -33,15 +33,17 @@ function SchermataStruttura() {
         axios.get(`/struttura/${id}`)
             .then((res) => {
                 Object.assign(tmp, struttura);
-                tmp.nome = res.data.nomeStruttura;
+                tmp.nome = res.data.nome;
                 tmp.descrizione = res.data.descrizione;
-                tmp.tipologia = res.data.tipologiaStruttura;
+                tmp.tipologia = res.data.tipologia;
                 tmp.foto = res.data.foto;
                 tmp.localita = res.data.localita;
-                tmp.condizioni = res.data.condizioni;
+                tmp.condizioniSoggiorno = res.data.condizioniSoggiorno;
                 tmp.tasse = res.data.tasse;
-                tmp.prezzo = res.data.prezzo;
                 tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });
+
+                if (res.data.prezzo) // Solo per CV, per i B&B si trova nelle camere
+                    tmp.prezzo = res.data.prezzo;
 
                 if (res.data.camere) // Solo per B&B
                     tmp.camere = res.data.camere;
@@ -49,7 +51,7 @@ function SchermataStruttura() {
                 if (res.data.ambienti) // Solo per CV
                     tmp.ambienti = res.data.ambienti.map((ambiente) => { return ambienti[ambiente] });
 
-                if (res.data.altro) // Solo per CV
+                if (res.data.altro) // Solo per CV: numCamere, numBagni, numLettiSingoli, numLettiMatrimoniali
                     tmp.altro = res.data.altro;
 
                 setStruttura(tmp);
@@ -197,9 +199,9 @@ function SchermataStruttura() {
         const differenzaMS = new Date(new Date(CO).getTime() - new Date(CI).getTime());
         const differenzaGiorni = Math.ceil(differenzaMS.getTime() / GIORNO);
 
-        if (struttura.condizioni) {
-            if ((differenzaGiorni < struttura.condizioni.minSoggiorno) ||
-                (differenzaGiorni > struttura.condizioni.maxSoggiorno)) {
+        if (struttura.condizioniSoggiorno) {
+            if ((differenzaGiorni < struttura.condizioniSoggiorno.soggiorno.min) ||
+                (differenzaGiorni > struttura.condizioniSoggiorno.soggiorno.max)) {
                 intervalloDateAiuto.removeClass("d-none");
             }
 
@@ -237,9 +239,9 @@ function SchermataStruttura() {
         const orarioCheckInAiuto = $("#orarioCheckInAiuto");
         const orarioCheckOutAiuto = $("#orarioCheckOutAiuto");
 
-        if (struttura.condizioni) {
-            if ((orarioCheckIn.val() < struttura.condizioni.oraInizioCheckIn.slice(0, 5)) ||
-                (orarioCheckIn.val() > struttura.condizioni.oraFineCheckIn.slice(0, 5))) {
+        if (struttura.condizioniSoggiorno) {
+            if ((orarioCheckIn.val() < struttura.condizioniSoggiorno.checkIn.inizio.slice(0, 5)) ||
+                (orarioCheckIn.val() > struttura.condizioniSoggiorno.checkIn.fine.slice(0, 5))) {
                 orarioCheckIn.addClass("border border-danger");
                 orarioCheckInAiuto.removeClass("d-none");
             }
@@ -249,8 +251,8 @@ function SchermataStruttura() {
                 orarioCheckInAiuto.addClass("d-none")
             }
 
-            if ((orarioCheckOut.val() < struttura.condizioni.oraInizioCheckOut.slice(0, 5)) ||
-                (orarioCheckOut.val() > struttura.condizioni.oraFineCheckOut.slice(0, 5))) {
+            if ((orarioCheckOut.val() < struttura.condizioniSoggiorno.checkOut.inizio.slice(0, 5)) ||
+                (orarioCheckOut.val() > struttura.condizioniSoggiorno.checkOut.fine.slice(0, 5))) {
                 orarioCheckOut.addClass("border border-danger");
                 orarioCheckOutAiuto.removeClass("d-none");
             }
@@ -349,12 +351,13 @@ function SchermataStruttura() {
         let tasseBambini = 0;
 
         if (struttura.tasse) {
-            tasseAdulti = (adulti - adultiEsenti) * struttura.tasse.prezzoAdulti;
-            tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.prezzoBambini;
+            tasseAdulti = (adulti - adultiEsenti) * struttura.tasse.adulti;
+            tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.bambini;
         }
 
         setPrezzo(Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100);
     }
+
     useEffect(() => {
         aggiornaPrezzo(); // Aggiornamento del prezzo al caricamento della struttura
 
@@ -392,7 +395,7 @@ function SchermataStruttura() {
                     {url: "/search?destinazione=" + struttura.localita.regione, testo: struttura.localita.regione},
                     {url: "/search?destinazione=" + struttura.localita.provincia, testo: struttura.localita.provincia},
                     {url: "/search?destinazione=" + struttura.localita.comune, testo: struttura.localita.comune},
-                    {testo: `via ${struttura.localita.via}, ${struttura.localita.numeroCivico}`, stato: "active"}
+                    {testo: struttura.localita.indirizzo, stato: "active"}
                 ]} icona="map"/>
             </div>
 
@@ -416,9 +419,9 @@ function SchermataStruttura() {
                                 <label className="sr-only" htmlFor="orarioCheckIn">Orario</label>
                                 <div className="col-sm-4">
                                     <input name="orarioCheckIn" type="time" className="form-control" id="orarioCheckIn"
-                                           defaultValue={struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)}
-                                           min={struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)}
-                                           max={struttura.condizioni && struttura.condizioni.oraFineCheckIn.slice(0, 5)}
+                                           defaultValue={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkIn.inizio.slice(0, 5)}
+                                           min={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkIn.inizio.slice(0, 5)}
+                                           max={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkIn.fine.slice(0, 5)}
                                            required onChange={controlloOrari}/>
                                 </div>
                             </div>
@@ -433,9 +436,9 @@ function SchermataStruttura() {
                                 <label className="sr-only" htmlFor="orarioCheckOut">Orario</label>
                                 <div className="col-sm-4">
                                     <input name="orarioCheckOut" type="time" className="form-control" id="orarioCheckOut"
-                                           defaultValue={struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)}
-                                           min={struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)}
-                                           max={struttura.condizioni && struttura.condizioni.oraFineCheckOut.slice(0, 5)}
+                                           defaultValue={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkOut.inizio.slice(0, 5)}
+                                           min={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkOut.inizio.slice(0, 5)}
+                                           max={struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkOut.fine.slice(0, 5)}
                                            required onChange={controlloOrari}/>
                                 </div>
                             </div>
@@ -449,15 +452,15 @@ function SchermataStruttura() {
                             </small>
 
                             <small id="intervalloDateAiuto" className="form-text text-warning d-none">
-                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioni && struttura.condizioni.minSoggiorno} e {struttura.condizioni && struttura.condizioni.maxSoggiorno}
+                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.min} e {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.max}
                             </small>
 
                             <small id="orarioCheckInAiuto" className="form-text text-warning d-none">
-                                Per questa struttura l'orario di check-in deve essere compreso fra le {struttura.condizioni && struttura.condizioni.oraInizioCheckIn.slice(0, 5)} e le {struttura.condizioni && struttura.condizioni.oraFineCheckIn.slice(0, 5)}
+                                Per questa struttura l'orario di check-in deve essere compreso fra le {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkIn.inizio.slice(0, 5)} e le {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkIn.fine.slice(0, 5)}
                             </small>
 
                             <small id="orarioCheckOutAiuto" className="form-text text-warning d-none">
-                                Per questa struttura l'orario di check-out deve essere compreso fra le {struttura.condizioni && struttura.condizioni.oraInizioCheckOut.slice(0, 5)} e le {struttura.condizioni && struttura.condizioni.oraFineCheckOut.slice(0, 5)}
+                                Per questa struttura l'orario di check-out deve essere compreso fra le {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkOut.inizio.slice(0, 5)} e le {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.checkOut.fine.slice(0, 5)}
                             </small>
                         </div>
 
