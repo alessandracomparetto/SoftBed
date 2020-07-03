@@ -2,11 +2,27 @@ import React, {useState} from 'react';
 import $ from "jquery";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
+import {confirmAlert} from "react-confirm-alert";
+import {Link} from "react-router-dom";
 
 const crypto = require('crypto');
 
 function Registrazione() {
     const[redirect, setRedirect] = useState(false);
+
+    const mostraDialogEmail = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="custom-ui text-center">
+                        <h3>Ti sei già registrato con questa email!</h3>
+                        <button className="btn btn-warning px-3 py-2 m-2 minw-200px"><a className="text-dark text-decoration-none" href={"/accedi/"}>Effettua il Login</a></button>
+                    </div>
+                )
+            }
+        })
+    };
+
 
     function onSubmit(e){
         e.preventDefault();
@@ -26,26 +42,24 @@ function Registrazione() {
                 email: document.getElementById("email").value ,
                 pass: encpass,
                 gestore: $( "input:checked" ).val(),
-            }
-            try{
+            };
+            try {
                 axios.post("/utente/utenteRegistrato", utenteRegistrato)
                     .then((res) => {
-                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
-                        setRedirect(true)}
-                    );
+                            window.sessionStorage.setItem("utente", JSON.stringify(res.data));
+                            setRedirect(true)
+                        }
+                    ).catch(err => {
+                        mostraDialogEmail();
+                });
             }
             catch(err){
-                if (err.response.status === 400) {
-                    console.log('There was a problem with the server');
-                } else {
-                    console.log(err.response.data.msg);
-                }
+                console.log(err.response.data.msg);
             }
-
         }
-
-
     }
+
+
     function verificaPass(event) {
         const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
             if (strongPass.test(event.target.value)) {
@@ -91,7 +105,7 @@ function Registrazione() {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-user fa"></i></span>
                             </div>
-                            <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" maxLength="40" required/>
+                            <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire nome</div>
                         </div>
                     </div>
@@ -102,7 +116,7 @@ function Registrazione() {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-user fa"></i></span>
                             </div>
-                            <input id="surname" name="surname" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" maxLength="40" required/>
+                            <input id="surname" name="surname" type="text" className="form-control" pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire cognome</div>
                         </div>
                     </div>
