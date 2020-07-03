@@ -4,29 +4,31 @@ const createError = require('http-errors');
 module.exports={
 
     aggiungi:async function(datiOspite, callback) {
-        let refPrenotazione =1
         const db = await makeDb(config);
         let results = {};
         let results2 = {};
         let refIndirizzo, refOspite;
         try {
             await withTransaction(db, async () => {
+                console.log("sono qui");
                 let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                 let datiQuery = [datiOspite.via, datiOspite.numero, datiOspite.cap, datiOspite.refComuneResidenza];
 
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
                     throw createError(500);
                 });
-
+                console.log("sono qui2");
                 refIndirizzo = results.insertId;
+                console.log(refIndirizzo);
 
 
                 sql = ('INSERT INTO `ospite` (nome, cognome, codiceFiscale, dataNascita, refindirizzo, refComuneNascita, refPrenotazione, tassa, dataArrivo, permanenza) VALUES ?');
-                datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, refIndirizzo, datiOspite.refComuneNascita, refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
+                datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, datiOspite.indirizzo, datiOspite.refComuneNascita, datiOspite.refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN OSPITE
-                    throw createError(500);
+                    throw err;
                 });
 
+                console.log("sono qui3");
                 refOspite = results.insertId;
 
                 sql = ('INSERT INTO `documenti` (refOspite, percorso) VALUES ?');
@@ -34,7 +36,7 @@ module.exports={
                     for(documento of datiOspite.documenti){
                         datiQuery = [refOspite, documento];
                         results2 = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw createError(500);
+                            throw err;
                         });
                     }
                     console.log("Inseriti documenti");
@@ -79,9 +81,9 @@ module.exports={
     },
 
     fetch: async function (refPrenotazione, callback) {
-        /*TODO refPrenotazione */
         const db = await makeDb(config);
         let infoOspite;
+        console.log(refPrenotazione);
 
         try {
             await withTransaction(db, async () => {

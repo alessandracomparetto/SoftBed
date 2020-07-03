@@ -2,14 +2,19 @@ import React, {useEffect, useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
 import axios from "axios";
-import {useParams} from "react-router-dom"
+import {useParams, useHistory, useLocation} from "react-router-dom";
+import reindirizza from "../../Actions/reindirizzamento";
+import $ from "jquery";
+import RiepilogoDatiQuestura from "./RiepilogoDatiQuestura";
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
-    let {refPrenotazione} = useParams();
+    const history = useHistory();
+    const location = useLocation();
+    const {idStruttura, refPrenotazione} = useParams();
 
     useEffect(() => {
-        //TODO GESTIRE REFPRENOTAZIONE
-        axios.post(`/ospite/fetch`,{refPrenotazione: refPrenotazione}).then(res => {
+
+        axios.post(`/ospite/fetch`,[refPrenotazione]).then(res => {
             console.log("DATI OSPITI RECUPERATI=======");
             console.log(res.data);
             setOspiti(res.data);
@@ -19,7 +24,8 @@ function SchermataDatiOspiti(props){
 
     const aggiungiOspite = (dato) => {
         try {
-            //TODO GESTIRE REFPRENOTAZIONE
+            dato.refPrenotazione = refPrenotazione;
+            console.log(dato);
             axios.post("/ospite/aggiungi", dato)
                 .then(res => { // then print response status
                     console.log("OSPITE AGGIUNTO ======= ");
@@ -64,32 +70,61 @@ function SchermataDatiOspiti(props){
 
     }
 
-    return(
-        <div className="container my-3" >
-            <div className="my-3">
-                <h4 className="mt-3 d-inline">I tuoi ospiti</h4>
-                <ul className="list-group list-group-flush mt-3 ">
-                    {
-                        listaOspiti.map((ospiti, indice) => {
-                            return <OspitiInseriti key={indice} indiceElemento={indice} idOspite={ospiti.idOspite} nome={ospiti.nome} cognome={ospiti.cognome}
-                                                  codiceFiscale={ospiti.codiceFiscale} dataNascita={ospiti.dataNascita.split("T")[0]}
-                                                  comune={ospiti.comuneNascita} provincia={ospiti.provinciaNascita} regione={ospiti.regione}
-                                                  via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
-                                                   comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
-                                                   regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
-                                                   permanenza={ospiti.permanenza} refPrenotazione = {ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
-                        })
 
-                    }
-                </ul>
+    const verificaDatiAggiuntivi =(event)=>{
+        event.preventDefault();
+        let utente = JSON.parse(window.sessionStorage.getItem("utente"));
+        /*if(utente[0].refIndirizzo === null || utente[0].refComuneNascita=== null){
+            // Se il gestore non ha inserito i propri dati, viene rimandato al form dati aggiuntivi
+            reindirizza(history, {
+                pathname:`/utente/${utente[0].idUtente}/modificaAccount`,
+                state: {
+                    provenienza: 'Schermata dati Ospiti',
+                    urlProvenienza: location.pathname
+                }
+            }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
+
+        }
+        else*/
+        document.getElementById("ospiti").classList.add("collapse");
+        document.getElementById("riepilogo").classList.remove("collapse");
+    }
+
+
+
+    return(
+
+        <div  className="container my-3" >
+
+            <div id ="ospiti" >
+                <div  className="my-3">
+                    <h4 className="mt-3 d-inline">I tuoi ospiti</h4>
+                    <ul className="list-group list-group-flush mt-3 ">
+                        {
+                            listaOspiti.map((ospiti, indice) => {
+                                return <OspitiInseriti key={indice} indiceElemento={indice} idOspite={ospiti.idOspite} nome={ospiti.nome} cognome={ospiti.cognome}
+                                                      codiceFiscale={ospiti.codiceFiscale} dataNascita={ospiti.dataNascita.split("T")[0]}
+                                                      comune={ospiti.comuneNascita} provincia={ospiti.provinciaNascita} regione={ospiti.regione}
+                                                      via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
+                                                       comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
+                                                       regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
+                                                       permanenza={ospiti.permanenza} refPrenotazione = {ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
+                            })
+
+                        }
+                    </ul>
+                </div>
+
+                <FormDatiOspite aggiungiOspite={aggiungiOspite} dati={listaOspiti}/>
+                <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
+            </div>
+            <div id = "riepilogo" className="my-3 collapse">
+                       <RiepilogoDatiQuestura dati={listaOspiti} idStruttura={idStruttura}/>
             </div>
 
-            <FormDatiOspite aggiungiOspite={aggiungiOspite} dati={listaOspiti}/>
-            {/*<a href={`/dichiarazioneOspiti`} className="btn btn-warning d-block d-md-inline-block m-auto stretched-link">Procedi alla dichiarazione</a>*/}
         </div>
 
-        //bottone procedi dichiarazione
-        //funzione verifica dati aggiuntivi, verifica i dati aggiuntivi.
+
     )
 }
 

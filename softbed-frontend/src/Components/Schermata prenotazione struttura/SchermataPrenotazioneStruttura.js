@@ -50,7 +50,7 @@ function SchermataPrenotazioneStruttura(){
                                 prenotazioni.map((prenotazione, indice) => {
                                     if (prenotazione.confermata === 1) {
                                         return (<li key={indice} className="list-group-item list-group-item-warning">
-                                            <RichiesteConfermate key={indice}  indiceElemento={indice} prenotazione={prenotazione}/></li>)
+                                            <RichiesteConfermate key={indice}  indiceElemento={indice} prenotazione={prenotazione}  id={id}/></li>)
                                     }
                                 })
                             }
