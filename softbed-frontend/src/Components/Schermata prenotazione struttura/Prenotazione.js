@@ -62,7 +62,8 @@ return(
                </div>
                <div className="col-sm-12 col-md">
                    <strong>Esenti:</strong>
-                   <span> {props.dati.nEsenti}</span>
+                   <span> Adulti: {props.dati.nEsentiAdulti}</span>
+                   <span> Bambini: {props.dati.nEsentiBambini}</span>
                </div>
            </div>
            <div className="row  mb-3">
