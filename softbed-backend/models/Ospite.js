@@ -10,25 +10,23 @@ module.exports={
         let refIndirizzo, refOspite;
         try {
             await withTransaction(db, async () => {
-                console.log("sono qui");
                 let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                 let datiQuery = [datiOspite.via, datiOspite.numero, datiOspite.cap, datiOspite.refComuneResidenza];
 
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
                     throw createError(500);
                 });
-                console.log("sono qui2");
+
                 refIndirizzo = results.insertId;
-                console.log(refIndirizzo);
+
 
 
                 sql = ('INSERT INTO `ospite` (nome, cognome, codiceFiscale, dataNascita, refindirizzo, refComuneNascita, refPrenotazione, tassa, dataArrivo, permanenza) VALUES ?');
-                datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, datiOspite.indirizzo, datiOspite.refComuneNascita, datiOspite.refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
+                datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, refIndirizzo, datiOspite.refComuneNascita, datiOspite.refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN OSPITE
                     throw err;
                 });
 
-                console.log("sono qui3");
                 refOspite = results.insertId;
 
                 sql = ('INSERT INTO `documenti` (refOspite, percorso) VALUES ?');
@@ -53,6 +51,7 @@ module.exports={
 
     elimina: async function(data,callback){
         const db = await makeDb(config);
+        console.log("ehiiiiiiii");
         console.log(data);
         try {
             await withTransaction(db, async () => {
@@ -61,8 +60,20 @@ module.exports={
                 let result = await db.query(query, datiQuery).catch(() => {throw createError(500)});
                 console.log(result);
                 let refIndirizzo = result[0].refIndirizzo;
-                console.log("INDIRIZZO:");
-                console.log(refIndirizzo);
+
+                query = (`SELECT * FROM documenti WHERE refOspite= ?`);
+                datiQuery = [data.idOspite,];
+                result = await db.query(query, datiQuery).catch(() => {throw createError(500)});
+                console.log(result);
+
+                if(result) {
+                    query = (`DELETE FROM documenti WHERE refOspite= ?`);
+                    datiQuery = [data.idOspite];
+                    let risultato = await db.query(query, datiQuery).catch(() => {
+                        throw createError(500)
+                    });
+                }
+
                 query = (`DELETE FROM ospite WHERE idOspite= ? AND refPrenotazione=?`);
                 datiQuery = [data.idOspite, data.refPrenotazione];
                 result = await db.query(query, datiQuery).catch(() => {throw createError(500)});

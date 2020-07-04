@@ -9,24 +9,22 @@ function RiepilogoDatiQuestura(props) {
     const [gestore, setGestore]=useState([]);
     const [struttura, setStruttura]=useState([]);
     useEffect(() => {
-        console.log(sessionUtente[0]);
-        console.log(props.idStruttura);
-        axios
-            .post("/ospite/fetchStruttura", props.idStruttura)
-            .then(res => {
-                console.log(res.data);
-                setStruttura(res.data);
-            })
-            .catch(err => console.log(err));
-
         axios
             .post("/utente/fetch", sessionUtente[0])
             .then(res => {
-                console.log(res.data);
                 res.data.dataNascita = res.data.dataNascita.split("T")[0];
                 setGestore(res.data);
             })
             .catch(err => console.log(err));
+
+
+        axios
+            .post("/ospite/fetchStruttura", {"idStruttura" : props.idStruttura})
+            .then(res => {
+                setStruttura(res.data[0]);
+            })
+            .catch(err => console.log(err));
+
 
     }, []);
 
@@ -40,22 +38,20 @@ function RiepilogoDatiQuestura(props) {
 
     doc.setFontSize(14);
     doc.setFontType("normal");
-    doc.text(25, 10 * y, `Il sottoscritto ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
+    doc.text(25, 10 * y, `Il/La sottoscritto/a ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
     doc.text(80, 10 * y++, '');
     doc.text(25, 10 * y, `nato a ${gestore.comuneNascita} (${gestore.provinciaNascita}) il ${gestore.dataNascita},`);
     doc.text(80, 10 * y++, '');
-    doc.text(25, 10 * y, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza})`);
+    doc.text(25, 10 * y, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza}), via ${gestore.via}, n. ${gestore.numeroCivico}, CAP ${gestore.cap}`);
     doc.text(80, 10 * y++, '');
 
 
     doc.setFontType("bold");
-    doc.text(25, 10 * y, 'proprietario della seguente struttura: ');
+    doc.text(25, 10 * y, ' in qualità di proprietario/amministratore della seguente struttura: ');
     doc.text(80, 10 * y++, '');
 
     doc.setFontType("normal")
-    doc.text(25, 10 * y, `${struttura.nomeStruttura}, sito a ${struttura.comune}  (${struttura.provincia}),`);
-    doc.text(80, 10 * y++, '');
-    doc.text(25, 10 * y, `via  ${struttura.via}, n. ${struttura.numeroCivico} CAP: ${struttura.cap}`);
+    doc.text(25, 10 * y, `"${struttura.nomeStruttura}", sita a ${struttura.comune} (${struttura.provincia}), via ${struttura.via}, n. ${struttura.numeroCivico}, CAP ${struttura.cap}`);
 
     doc.text(80, 10 * y++, '');
 
@@ -152,11 +148,14 @@ function RiepilogoDatiQuestura(props) {
         doc.save("documentoQuestura.pdf");
     }
     return(
-        <div className="container mh-100 p-3 w-75" style={{height: 500 + 'px'}}  >
-            <React.Fragment>
-                <button name="ok" id="ok" type="button" className="btn btn-warning mt-3 mr-5 float-left" onClick={handleScarica}>Visualizza dichiarazione</button>
-                <button name="ok" id="ok" type="button" className="btn btn-success mt-3 ml-5 float-right" onClick={handleInvia}>Invia dichiarazione</button>
-            </React.Fragment>
+        <div className="container mh-100 p-3 w-80" style={{height: 500 + 'px'}}  >
+            <div className="row">
+                    <button name="ok" id="ok" type="button" className=" col-12 col-md-5 btn btn-warning mt-3 float-left " style={{width: 250 + 'px'}} onClick={handleScarica}>Visualizza dichiarazione</button>
+            </div>
+
+            <div className="row">
+                <button name="ok" id="ok" type="button" className=" col-12 col-md-5 btn btn-success mt-3 float-right" style={{width: 250 + 'px'}} onClick={handleInvia}>Invia dichiarazione</button>
+            </div>
         </div>
 
 
