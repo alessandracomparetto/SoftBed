@@ -11,7 +11,7 @@ function RichiesteInAttesa(props){
 
     useEffect(()=>{
         for(let i = 0 ; i<listaStrutture.length; i++){
-            if(listaStrutture[i].idStruttura=props.id){
+            if(listaStrutture[i].idStruttura===props.id){
                 data=listaStrutture[i].nomeStruttura;
                 break;
             }
@@ -21,12 +21,13 @@ function RichiesteInAttesa(props){
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
             console.log(res.data);
+            let emailGestore= JSON.parse(window.sessionStorage.getItem("utente")).email;
             const informazioni={
                 id:props.prenotazione.idPrenotazione,
                 struttura:data,
                 data:new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 emailOspite:props.prenotazione.email,
-                emailGestore:"alec5@hotmail.it", /*TODO:modificare*/
+                emailGestore:emailGestore,
             };
             axios.post('/mail/rifiuta-prenotazione',informazioni)
                 .catch(err=> console.log(err));

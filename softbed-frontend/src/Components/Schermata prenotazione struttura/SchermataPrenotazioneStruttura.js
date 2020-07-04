@@ -5,7 +5,6 @@ import mostraDialogErrore from "../../Actions/errore";
 import {useParams} from "react-router-dom"
 
 import axios from "axios";
-import SidebarStruttura from "../Schermata Gestione Struttura/SidebarStruttura";
 function SchermataPrenotazioneStruttura(){
     const [prenotazioni, aggiornaPrenotazioni]=useState([]);
     const  [flag, aggiornaFlag]=useState(0); //utilizzo dello stato per indicare quando aggiornare la lista della prenotazioni
@@ -15,7 +14,7 @@ function SchermataPrenotazioneStruttura(){
 
      useEffect(() => {
          for(let i = 0 ; i<listaStrutture.length; i++){
-             if(listaStrutture[i].idStruttura=id){
+             if(listaStrutture[i].idStruttura===id){
                  data = {"idStruttura":id, "tipologiaStruttura":listaStrutture[i].tipologiaStruttura};
                  break;
              }
