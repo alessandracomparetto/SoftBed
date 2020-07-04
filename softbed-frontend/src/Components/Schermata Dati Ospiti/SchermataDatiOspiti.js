@@ -27,26 +27,25 @@ function SchermataDatiOspiti(props){
             .catch(err => console.log(err));
     }, []);
 
-    useEffect(() => {
-        console.log("Ciao");
-    }, [flag]);
+
 
 
     function aggiungiOspite(dato) {
+        console.log(listaOspiti);
         try {
-            console.log(listaOspiti);
+            console.log("Entrato");
             dato.refPrenotazione = refPrenotazione;
-            console.log(dato);
+            dato.refStruttura = idStruttura;
+
             axios.post("/ospite/aggiungi", dato)
                 .then(res => { // then print response status
-                    let tmp = [...listaOspiti];
+                    console.log("TMP COPIATO");
+                    let tmp = listaOspiti.slice(0, listaOspiti.length);
                     console.log("TMP COPIATO" ,tmp);
                     dato.idOspite = res.data.insertId;
                     tmp.push(dato);
                     setOspiti(tmp);
                     console.log("OSPITI",tmp);
-                    let contatore = flag +1;
-                    setFlag(contatore);
                 });
         }catch(err){
             if (err.response.status === 400) {
@@ -86,7 +85,7 @@ function SchermataDatiOspiti(props){
     const verificaDatiAggiuntivi = (event)=>{
         event.preventDefault();
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
-        /*if(utente[0].refIndirizzo === null || utente[0].refComuneNascita=== null){
+        if(utente[0].refIndirizzo === null || utente[0].refComuneNascita=== null){
             // Se il gestore non ha inserito i propri dati, viene rimandato al form dati aggiuntivi
             reindirizza(history, {
                 pathname:`/utente/${utente[0].idUtente}/modificaAccount`,
@@ -97,7 +96,7 @@ function SchermataDatiOspiti(props){
             }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
 
         }
-        else*/
+        else
         document.getElementById("ospiti").classList.add("collapse");
         document.getElementById("riepilogo").classList.remove("collapse");
     }
@@ -131,7 +130,7 @@ function SchermataDatiOspiti(props){
                 <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
             </div>
             <div id = "riepilogo" className="my-3 collapse">
-                       <RiepilogoDatiQuestura dati={listaOspiti} idStruttura={idStruttura}/>
+                       <RiepilogoDatiQuestura dati={listaOspiti} idStruttura={idStruttura} refPrenotazione = {refPrenotazione}/>
             </div>
 
         </div>

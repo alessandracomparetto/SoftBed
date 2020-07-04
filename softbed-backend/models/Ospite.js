@@ -29,10 +29,10 @@ module.exports={
 
                 refOspite = results.insertId;
 
-                sql = ('INSERT INTO `documenti` (refOspite, percorso) VALUES ?');
+                sql = ('INSERT INTO `documenti` (refOspite, percorso, refStruttura, refPrenotazione) VALUES ?');
                 if(datiOspite.documenti) {
                     for(documento of datiOspite.documenti){
-                        datiQuery = [refOspite, documento];
+                        datiQuery = [refOspite, documento, datiOspite.refStruttura, datiOspite.refPrenotazione];
                         results2 = await db.query(sql, [[datiQuery]]).catch(err => {
                             throw err;
                         });
@@ -116,5 +116,20 @@ module.exports={
             throw err;
         }
     },
+
+    fetchDocumenti: async function(data, callback) {
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                let risultato = await db.query(('SELECT D.percorso FROM documenti as D\
+                    WHERE D.refPrenotazione = ?'), [data.refPrenotazione]).catch((err) => {throw err});
+                return callback(risultato);
+            })
+        }
+        catch (err) {
+            throw err;
+        }
+
+    }
 
 };

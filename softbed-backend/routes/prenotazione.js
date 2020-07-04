@@ -4,7 +4,7 @@ let router = express.Router();
 let Timer= require('../models/Timer');
 let prenotazioneModel = require('../models/Prenotazione')
 
-timer=new Timer();
+/*timer=new Timer();*/
 
 /* La rotta / è vietata */
 router.get('/', function(req, res, next) {
@@ -65,6 +65,15 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
     }).catch((err) => {
         res.status(err.status).send(err.message);
     });
+});
+
+router.post('/rendiconto', function (req, res) {
+    prenotazioneModel.rendiconto(req.body, function (data) {
+        res.send(data);
+    })
+        .catch((err) => {
+            res.status(err.status).send(err);
+        });
 });
 
 

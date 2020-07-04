@@ -33,9 +33,10 @@ router.post('/fetch', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-//recupero struttura per dichiarazione ospiti
-router.post('/fetchStruttura', function (req, res) {
-    strutturaModel.fetchStruttura(req.body,function (data){
+
+//recupero documenti
+router.post('/fetchDocumenti', function (req, res) {
+    ospiteModel.fetchDocumenti(req.body,function (data){
         res.send(data);
     }).catch((err) => {
         res.status(err.status).send(err.message)})

@@ -139,4 +139,20 @@ module.exports = {
             console.log(err);
         }
     },
+
+    rendiconto: async function(dati, callback) {
+        console.log(dati.trimestre, dati.rendicontoEffettuato)
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                let risultato = await db.query(('SELECT P.idPrenotazione FROM prenotazione AS P  \
+                    WHERE P.refStruttura = ? AND P.checkIn < ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendicontoEffettuato]).catch((err) => {throw err});
+                return callback(risultato);
+            })
+        }
+        catch (err) {
+            throw err;
+        }
+
+    }
 }
