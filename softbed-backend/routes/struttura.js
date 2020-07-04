@@ -25,11 +25,10 @@ router.post('/gestioneStruttura/:id', function(req, res) {
 });
 
 router.post('/listaStruttureGestore', function (req, res) {
-    console.log("sono qui")
-        console.log(req);
+    console.log(req.body);
         token.stampaToken();
     //TODO: VERIFICARE TOKEN, VERIFICARE IDGESTORE
-    strutturaModel.listaStrutture(function(data){
+    strutturaModel.listaStrutture(req.body.idUtente,function(data){
         res.send(data);
     }).catch((err)=>{
         res.status(err.status).send(err.message)})

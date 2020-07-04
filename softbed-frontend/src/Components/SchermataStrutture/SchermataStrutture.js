@@ -8,12 +8,11 @@ function SchermataStrutture(){
     const [listaStrutture,setLista]=useState([]);
 
     useEffect(() => {
-        console.log("ciao");
         if(!window.sessionStorage.getItem("strutture")){
             console.log("il momento della fetch");
             let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
             console.log(idUtente);
-            axios.post('/struttura/listaStruttureGestore', idUtente) //prendo la lista delle strutture se non è presente il session storage
+            axios.post('/struttura/listaStruttureGestore', {"idUtente":idUtente}) //prendo la lista delle strutture se non è presente il session storage
                 .then(res => {
                     console.log(res.data);
                     setLista(res.data);

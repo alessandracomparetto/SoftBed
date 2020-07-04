@@ -241,9 +241,9 @@ module.exports= {
 
     },
 
-    listaStrutture:async function(callback){
-        const db = await makeDb(config);
-        let idGestore=3; /*TODO:sistemare gestore*/
+    listaStrutture:async function(idGestore,callback){
+        const db = await makeDb(config)
+        console.log("id",idGestore);
         try {
             await withTransaction(db, async () => {
                 let results=await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '),[idGestore])
