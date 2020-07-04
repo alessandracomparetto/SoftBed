@@ -23,6 +23,7 @@ import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAg
 import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
 import SchermataPrenotazioneStruttura from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
+import SchermataDatiOspiti from "./Components/Schermata Dati Ospiti/SchermataDatiOspiti";
 
 
 function App() {
@@ -64,19 +65,19 @@ function App() {
                             <SchermataPagamento />
                         </Route>
 
-                        <Route exact path="/utente">
+                        <Route exact path="/utente/:idUtente">
                             <SchermataPersonaleUtente/>
                         </Route>
 
-                        <Route exact path="/utente/modificaAccount">
+                        <Route exact path="/utente/:idUtente/modificaAccount">
                             <FormDatiAggiuntivi/>
                         </Route>
 
-                        <Route exact path="/utente/pagamenti">
+                        <Route exact path="/utente/:idUtente/pagamenti">
                             <SchermataDatoPagamento/>
                         </Route>
 
-                        <Route exact path="/utente/prenotazioni">
+                        <Route exact path="/utente/:idUtente/prenotazioni">
                             <SchermataPrenotazioniOspite/>
                         </Route>
 
@@ -98,6 +99,10 @@ function App() {
 
                         <Route exact path="/struttura/gestioneStruttura/:indice/prenotazioni">
                             <SchermataPrenotazioneStruttura />
+                        </Route>
+
+                        <Route exact path="/ospiti/dichiarazioneOspiti/:idStruttura/:refPrenotazione">
+                            <SchermataDatiOspiti />
                         </Route>
 
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}

@@ -277,10 +277,10 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                risultato = await db.query(('SELECT S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
-                     C.nomeComune as comune, I.via, I.numeroCivico FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
+                let risultato = await db.query(('SELECT S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
+                     C.nomeComune as comune, I.via, I.numeroCivico, I.cap FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
                     WHERE S.idStruttura = ? AND S.refIndirizzo = I.idIndirizzo AND I.refComune = C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione'),
-                    [idStruttura]).catch((err) => {throw createError(500)});
+                    [data.idStruttura]).catch((err) => {throw err});
                 return callback(risultato);
             })
         }

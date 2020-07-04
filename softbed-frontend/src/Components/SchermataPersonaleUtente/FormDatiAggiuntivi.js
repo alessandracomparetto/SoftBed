@@ -3,7 +3,7 @@ import data from "../../regioni_province_comuni.js";
 import $ from "jquery";
 import axios from "axios";
 import SidebarUtente from "./SidebarUtente";
-
+import {useHistory, useLocation} from "react-router-dom";
 const crypto = require('crypto');
 
 //TODO: SE DIVENTO GESTORE NON VEDO PIù NESSUN CAMPO
@@ -66,6 +66,7 @@ function FormDatiAggiuntivi(){
                         console.log("DATI MODIFICATI======= ");
                         console.log(res.data);
                         window.sessionStorage.setItem("utente", JSON.stringify(res.data));
+                        //if (location.state && location.state.urlProvenienza) history.push(location.state.urlProvenienza)
                     });
             } catch (e) {
                 console.log(e);

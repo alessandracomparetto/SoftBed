@@ -88,6 +88,7 @@ module.exports= {
                         .catch(err => {
                             throw err;
                         });
+                    console.log(infoUtente[0]);
                     return callback(infoUtente[0]);
                 }
 

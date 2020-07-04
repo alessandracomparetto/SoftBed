@@ -31,10 +31,11 @@ function FormDatiOspite(props){
         refComuneResidenza:"",
         comuneResidenza:"",
         provinciaResidenza:"",
-        refPrenotazione:"",
         tassa:"",
         dataArrivo:"",
-        permanenza:""
+        permanenza:"",
+        idOspite:"",
+        refPrenotazione:""
     });
 
 
@@ -46,8 +47,6 @@ function FormDatiOspite(props){
 
 
         if(form.checkValidity()){
-            //TODO: CAMBIARE REF PRENOTAZIONE
-            ospite.refPrenotazione=1;
             props.aggiungiOspite(ospite);
 
             form.classList.remove('was-validated');
@@ -66,6 +65,7 @@ function FormDatiOspite(props){
             document.getElementById("cap").value="";
             document.getElementById("arrivo").value="";
             document.getElementById("permanenza").value="";
+
             if(flag===0){
                 setFlag(1);
             }else{
