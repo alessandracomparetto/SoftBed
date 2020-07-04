@@ -16,23 +16,23 @@ router.use(bodyParser.urlencoded({
 router.use(bodyParser.json());
 
 //setto le opzioni per il middleware
-router.use(session({
+const config_session={
     name : "sid", //session id cookie, lo uso per leggere dalla richiesta
-    resave : false, //non risalvo nello store richieste non modificate
+        resave : false, //non risalvo nello store richieste non modificate
     saveUninitialized : false, //non mi interessa salvare sessioni non inizializzate (nuova ma non modificata durante la richiesta) nello store
     secret : "s0f7_B3D", //chiave simmetrica per proteggere il cookie
     cookie : {
-        //per default è HttpOnly, non accessibile da client
-        maxAge : 1000 * 60 * 60 * 2,  //in millisecondi, 2 ore
+    //per default è HttpOnly, non accessibile da client
+    maxAge : 1000 * 60 * 60 * 2,  //in millisecondi, 2 ore
         sameSite : true, //accettiamo solo cookie che arrivano dallo stesso dominio
         secure : false, //TODO da cambiare in true!
-    }
-}));
+    }};
+
+router.use(session(config_session));
 
 
 /* Registrazione Utente */
 router.post('/utenteRegistrato', function (req, res) {
-    console.log("sono passato da qui");
     utenteModel.inserisci(req.body,function(data){
         if(data === 400){
             res.status(data);
@@ -46,13 +46,17 @@ router.post('/utenteRegistrato', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-
 /* Login Utente */
 router.post('/login', function (req, res) {
     utenteModel.login(req.body,function(data){
-        req.session.session_uid = data.idUtente;
-        console.log(req.sessionID);
-        res.send(data);
+        if(data === 404){
+            res.sendStatus(404);
+        }else if( data === 400){
+            res.sendStatus(400)
+        }else{
+            token.aggiungiSessione(data.idUtente, req.sessionID);
+            res.send(data);
+        }
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
 });
@@ -112,7 +116,11 @@ router.post('/eliminaDatoPagamento', function (req, res) {
 })*/
 
 
-module.exports = router;
+module.exports = {
+    router: router,
+    token: token
+};
+
 
 // recupero dello user id
 

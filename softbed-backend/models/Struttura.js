@@ -23,7 +23,7 @@ module.exports= {
                 let giorno = new Date().toISOString().slice(0, 10);
                 sql = ('INSERT INTO struttura (nomeStruttura, tipologiaStruttura, refGestore, refIndirizzo, rendicontoEffettuato) VALUES ?');
                 //TODO: REF GESTORE
-                datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, 3, refIndirizzo, giorno];
+                datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, datiStruttura.idUtente, refIndirizzo, giorno];
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw err});
 
                 console.log('Inserito nella tabella struttura');
@@ -273,7 +273,26 @@ module.exports= {
         catch (err) {
             throw err;
         }
+    },
+
+
+    fetchStruttura: async function(idStruttura, callback) {
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                risultato = await db.query(('SELECT S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
+                     C.nomeComune as comune, I.via, I.numeroCivico FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
+                    WHERE S.idStruttura = ? AND S.refIndirizzo = I.idIndirizzo AND I.refComune = C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione'),
+                    [idStruttura]).catch((err) => {throw createError(500)});
+                return callback(risultato);
+            })
+        }
+        catch (err) {
+            throw err;
+        }
+
     }
+
 };
 
 

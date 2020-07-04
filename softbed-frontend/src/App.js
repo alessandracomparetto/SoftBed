@@ -64,19 +64,19 @@ function App() {
                             <SchermataPagamento />
                         </Route>
 
-                        <Route exact path="/utente/:idUtente">
+                        <Route exact path="/utente">
                             <SchermataPersonaleUtente/>
                         </Route>
 
-                        <Route exact path="/utente/:idUtente/modificaAccount">
+                        <Route exact path="/utente/modificaAccount">
                             <FormDatiAggiuntivi/>
                         </Route>
 
-                        <Route exact path="/utente/:idUtente/pagamenti">
+                        <Route exact path="/utente/pagamenti">
                             <SchermataDatoPagamento/>
                         </Route>
 
-                        <Route exact path="/utente/:idUtente/prenotazioni">
+                        <Route exact path="/utente/prenotazioni">
                             <SchermataPrenotazioniOspite/>
                         </Route>
 
