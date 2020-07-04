@@ -8,12 +8,12 @@ const crypto = require('crypto');
 
 //TODO: SE DIVENTO GESTORE NON VEDO PIù NESSUN CAMPO
 function FormDatiAggiuntivi(){
-    const [utente,setUtente]=useState([]);
+    const [utente,setUtente]=useState({});
 
     useEffect(()=>{
-       document.getElementById("regioneResidenza").value=utente.regioneResidenza;
+        document.getElementById("regioneResidenza").value=utente.regioneResidenza;
         document.getElementById("regioneNascita").value=utente.regioneNascita;/*
-        console.log(utente.provinciaNascita);
+        /*console.log(utente.provinciaNascita);
         console.log(utente.provinciaResidenza);
         document.getElementById("provinciaNascita").value=utente.provinciaNascita;
         document.getElementById("provinciaResidenza").value=utente.provinciaResidenza;
@@ -27,16 +27,16 @@ function FormDatiAggiuntivi(){
     //recupero i dati dell'utente
     useEffect(() => {
         let sessionUtente = JSON.parse(window.sessionStorage.getItem("utente"));
-        if(sessionUtente.refIndirizzo === null && sessionUtente.refComuneNascita === null){
-            console.log(sessionUtente);
+        if(sessionUtente){
+            console.log("sono qui");
             let tmp = sessionUtente;
             tmp.dataNascita = tmp.dataNascita.split("T")[0];
             setUtente(tmp);
         }else {
+            console.log("non trovo i dati nella sessione, faccio la post");
             axios
                 .post("/utente/fetch", sessionUtente)
                 .then(res => {
-                    res.data.dataNascita = res.data.dataNascita.split("T");
                     console.log("DATI RECUPERATI=======");
                     console.log(res.data);
                     setUtente(res.data);
@@ -44,7 +44,29 @@ function FormDatiAggiuntivi(){
                 .catch(err => console.log(err));
         }
     }, []);
+    useEffect(()=>{
+        if(utente.via!= ""){
+            $("#addressnum").removeAttr("disabled");
+            $("#cap").removeAttr("disabled");
+        }
+        document.getElementById("regioneResidenza").value=utente.regioneResidenza;
+        document.getElementById("regioneNascita").value=utente.regioneNascita;
 
+    },[utente])
+    function handleGestore(event){ //Affinchè un utente sia un gestore tutti i campi del form devono essere compilati
+        if(event.target.value==="on" || utente.gestore==1) {
+            for (let input of $("input")){
+                if (input.getAttribute("type") != "password") {
+                    input.setAttribute("required", "");
+                }
+            }
+        }
+        else{
+            for(let input of $("input")) {
+                input.removeAttribute("required");
+            }
+        }
+    }
     //modifico i dati dell'utente
     function modificaDatiAggiuntivi(event) {
         event.preventDefault();
@@ -57,15 +79,20 @@ function FormDatiAggiuntivi(){
             let passhash = crypto.createHash('sha512'); // istanziamo l'algoritmo di hashing
             passhash.update(pass); // cifriamo la password
             let encpass = passhash.digest('hex'); // otteniamo la stringa esadecimale
+            console.log(utente);
+            let tmp=Object.assign({},utente);
             utente.password= encpass;
+            console.log("tmp",tmp);
+            console.log("password",utente);
+            console.log(tmp);
             try {
-                console.log("DATI INVIATI======= ");
                 console.log(utente);
                 axios.post('/utente/modificaDatiAggiuntivi', utente)
                     .then(res => { // then print response status
                         console.log("DATI MODIFICATI======= ");
-                        console.log(res.data);
-                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
+                        window.sessionStorage.setItem("utente", JSON.stringify(tmp)); //utilizzo tmp per non memorizzare nella session storage la password
+                        console.log("ho modificato i dati");
+
                     });
             } catch (e) {
                 console.log(e);
@@ -145,7 +172,6 @@ function FormDatiAggiuntivi(){
                             document.getElementById("comuneResidenza").appendChild(opt);
                         }
 
-
                     }
                     break; // non dobbiamo cercare oltre
                 }
@@ -192,6 +218,7 @@ function FormDatiAggiuntivi(){
             }
         }
     }
+
     function provinceEventHandler(event){
         // rimozione dei precedenti elementi del menu Comune
         // rimozione dei precedenti elementi del menu provinca e comune
@@ -226,23 +253,30 @@ function FormDatiAggiuntivi(){
         }
     }
 
-
     function addressEventHandler(event) {
         if (event.target.value != '') {
-            $('.form-row input').not('#address').removeAttr('disabled');
+            console.log("CIAO");
+            document.getElementById("addressnum").removeAttribute('disabled');
+            document.getElementById("cap").removeAttribute('disabled');
         } else {
-            $('.form-row input').not('#address').attr('disabled', 'disabled');
+            document.getElementById("addressnum").setAttribute('disabled','');
+            document.getElementById("cap").setAttribute('disabled','');
+            document.getElementById("cap").value="";
+            document.getElementById("addressnum").value="";
         }
     }
 
     function tabEventHandler(event){
         if (event.keyCode == 9) { // pressione TAB
             if ($(this).val() != '') {
-                $('.form-row input').not('#address').removeAttr('disabled');
-                $('.form-row input').not('#address').attr('required', 'required');
+                console.log("CIAO");
+                document.getElementById("addressnum").removeAttribute('disabled');
+                document.getElementById("cap").removeAttribute('disabled');
             } else {
-                $('.form-row input').not('#address').attr('disabled', 'disabled');
-                $('.form-row input').not('#address').removeAttr('required');
+                document.getElementById("addressnum").setAttribute('disabled','');
+                document.getElementById("cap").setAttribute('disabled','');
+                document.getElementById("cap").value="";
+                document.getElementById("addressnum").value="";
             }
         }
     }
@@ -294,9 +328,17 @@ function FormDatiAggiuntivi(){
 
     function handleChange(event){
         const{name,value}=event.target;
-        let tmp=utente;
-        tmp[name]=value;
-        setUtente(tmp);
+        if (name !== "password" && name !== "repass") {
+            console.log("sono passato da qui");
+            let tmp=utente;
+            tmp[name]=value;
+            setUtente(tmp);
+            console.log(utente);
+        }
+        else{
+            console.log(name)
+        }
+
     }
     return(
         <div className="d-block">
@@ -320,7 +362,7 @@ function FormDatiAggiuntivi(){
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="cf">Codice fiscale</label>
                         <input id="cf" name="codiceFiscale"  type="text" className="form-control"
-                               pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" value={utente.codiceFiscale}/>
+                               pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" value={utente.codiceFiscale} required={utente.gestore ===1}/>
                         <div className="invalid-feedback">
                             Codice fiscale errato
                         </div>
@@ -328,7 +370,7 @@ function FormDatiAggiuntivi(){
 
                     <div className="form-group col-12 col-md-6 col-lg-3">
                         <label htmlFor="birthdate">Data di Nascita</label>
-                        <input id="birthdate" name="dataNascita" type="date" className="form-control"  defaultValue={utente.dataNascita} disabled/>
+                        <input id="birthdate" name="dataNascita" type="date" className="form-control"  defaultValue={utente.dataNascita} />
                     </div>
 
                     <div className="col-12 mb-2">Nato a</div>
@@ -431,12 +473,12 @@ function FormDatiAggiuntivi(){
 
                     <div className="form-group col-12 col-md-4">
                         <label htmlFor="address">Via/Piazza</label>
-                        <input id="address" name="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={utente.via}/>
+                        <input id="address" name="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={addressEventHandler} defaultValue={utente.via}/>
                     </div>
 
                     <div className="form-group col-4 col-md-2">
                         <label htmlFor="addressnum">N.</label>
-                        <input id="addressnum" name="numeroCivico" type="number" className="form-control" min="1" max="9999" disabled defaultValue={utente.numeroCivico} required/>
+                        <input id="addressnum" name="numeroCivico" type="number" className="form-control" min="1" max="9999"  defaultValue={utente.numeroCivico} required disabled/>
                         <div className="invalid-feedback r">
                             1 - 9999
                         </div>
@@ -445,7 +487,7 @@ function FormDatiAggiuntivi(){
                     <div className="form-group col-8 col-md-2">
                         <label htmlFor="cap">CAP</label>
                         <input id="cap" name="cap" type="tel" className="form-control form-check " pattern="^\d{5}$" placeholder="#####"
-                               title="Inserire 5 cifre da 00100 a 98168" size="5"  disabled onSubmit={controlloCAP} defaultValue={utente.cap} required/>
+                               title="Inserire 5 cifre da 00100 a 98168" size="5" onSubmit={controlloCAP} defaultValue={utente.cap} disabled required/>
                     </div>
                     <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
 
@@ -460,15 +502,15 @@ function FormDatiAggiuntivi(){
                     </div>
                 </div>
 
-                <h6 className="mt-4 text-uppercase ">Autenticazione</h6>
+                <h6 className="mt-4 text-uppercase ">Cambia password</h6>
                 <div className="form-row">
                     <div className="form-group col-12 col-md-4">
                         <label htmlFor="email">E-mail</label>
-                        <input name="email" id="email" type="email" className="form-control" defaultValue={utente.email} required/>
+                        <input name="email" id="email" type="email" className="form-control" defaultValue={utente.email} disabled/>
                     </div>
 
                     <div className="form-group col-12 col-md-4">
-                        <label htmlFor="pass">Password</label>
+                        <label htmlFor="pass">Nuova password</label>
                         <input id="pass" name="password" type="password" className="form-control"
                                title="Almeno 8 caratteri, una lettera maiuscola e un numero"
                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onChange={verificaPass}/>
@@ -494,7 +536,7 @@ function FormDatiAggiuntivi(){
                 <h6 className={utente.gestore ? "collapse" : "mt-4 text-uppercase" }>DIVENTA UN GESTORE</h6>
                 <div className={utente.gestore ? "collapse" : "form-group mt-3"}>
                     <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                        <input className="form-check-input" type="radio" name="gestore" id="gestore"/>
+                        <input className="form-check-input" type="checkbox" name="gestore" id="gestore" onChange={handleGestore}/>
                         <label className="form-check-label" htmlFor="gestore">Gestore</label>
                     </div>
                 </div>
