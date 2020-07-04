@@ -1,5 +1,5 @@
 
-
+let prenotazioneModel = require('../models/Prenotazione');
 class Timer{
     constructor() {
         const dueGiorni=48*60*60*1000;
@@ -8,11 +8,13 @@ class Timer{
 
     aggiungiTimeout(prenotazione){
         let idTimeout=setTimeout(function(){
-            router.post('/scadenza-prenotazione')
-        }, 3000); /*TODO Sistemare timer*/
+            console.log("E' scaduto il timer");
+            PrenotazioneModel.rifiutaPrenotazione({"idPrenotazione" : idPrenotazione})
+        }, 10000); /*TODO Sistemare timer*/
         console.log("id", idTimeout);
         this.array.push({"id":idTimeout, "prenotazione":prenotazione});
         console.log(this.array);
+        console.log("start timer");
     }
 
     distruggiTimeout(prenotazione){
@@ -25,7 +27,6 @@ class Timer{
         }
         return 1;
     }
-
 }
 
-module.exports = Token;
+module.exports = Timer;

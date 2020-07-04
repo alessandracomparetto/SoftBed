@@ -2,6 +2,7 @@ const {makeDb, withTransaction} = require('../db/dbmiddleware');
 const {config} = require("../db/config");
 const createError = require('http-errors');
 
+
 module.exports = {
 
     create: async function (datiPrenotazione, res) {
@@ -33,7 +34,7 @@ module.exports = {
         }
     },
 
-    delete: async function (idPrenotazione, res) {
+    delete: async function (idPrenotazione, res) { /*Todo simile a delete,scegliere quale eliminare */
         const db = await makeDb(config);
 
         let query = (`DELETE FROM prenotazione WHERE idPrenotazione = ?`);
@@ -59,7 +60,7 @@ module.exports = {
                let listaPrenotazioni = await db.query('SELECT prenotazione.*,utente.*, autenticazione.email FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente', [[[idStruttura]]]).catch(err => {
                    throw err;
                });
-               if (dati.tipologiaStruttura == "B&B"){
+               if (dati.tipologiaStruttura === "B&B"){
                    for (let i = 0; i < listaPrenotazioni.length; i++) {
                        let indice = listaPrenotazioni[i].idPrenotazione;
                        let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?  \
@@ -83,7 +84,6 @@ module.exports = {
 
     rifiutaPrenotazione: async function(data,res){
         const db = await makeDb(config);
-
         console.log("id"+data.idPrenotazione);
         try {/*TODO rimuovere camere*/
             await withTransaction(db, async () => {
