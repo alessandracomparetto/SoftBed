@@ -1,5 +1,6 @@
 html {
     min-height: 100vh;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,16 +43,6 @@ body {
     max-height: 420px;
 }
 
-@media screen and (min-width: 768px) {
-    .annuncio-box-descrizione {
-        min-height: 90px;
-    }
-
-    .annuncio-box-servizi {
-        min-height: 101px;
-    }
-}
-
 .footer{
     clear: both;
 }
@@ -85,6 +76,10 @@ body {
     min-width: 200px;
 }
 
+.no-radius {
+    border-radius: 0;
+}
+
 .outline-error {
     outline: 2px solid #dc3545;
 }
@@ -113,4 +108,14 @@ body {
 
 .w-200px {
     width: 200px
+}
+
+@media screen and (min-width: 768px) {
+    .annuncio-box-descrizione {
+        min-height: 90px;
+    }
+
+    .annuncio-box-servizi {
+        min-height: 101px;
+    }
 }

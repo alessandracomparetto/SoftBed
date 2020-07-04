@@ -11,8 +11,8 @@ import reindirizza from "../../Actions/reindirizzamento";
 function SchermataPagamento() {
 
     // TODO: utilizzate per test, da rimuovere, ottenere in altro modo e settare tramite le setter
-    const [pagamentoOnline, setPagamentoOnline] = useState(false);
-    const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
+    const [pagamentoOnline, setPagamentoOnline] = useState(true);
+    const [pagamentoInLoco, setPagamentoInLoco] = useState(true);
     const [listaDatiPagamento, setDatiPagamento] = useState([
         {id: 2751, nomeIntestatario: "Mario", cognomeIntestatario: "Rossi", numeroCarta: "0000 1111 2222 3333"},
         {id: 3725, nomeIntestatario: "Chiara", cognomeIntestatario: "Verdi", numeroCarta: "3333 4444 5555 6666"}

@@ -24,12 +24,13 @@ module.exports = {
 
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(query, datiQuery).catch(() => {throw createError(500)});
+                let risultato = await db.query(query, datiQuery).catch((err) => {console.log(err)});
                 if (risultato && risultato.insertId) return res(risultato.insertId);
                 else throw createError(400);
             })
         } catch(err) {
-            throw err;
+            console.log(err);
+            throw createError(500);
         }
     },
 

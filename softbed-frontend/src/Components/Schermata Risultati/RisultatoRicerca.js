@@ -1,9 +1,10 @@
 import React from "react";
 import Caratteristica from "./Caratteristica";
+import {servizi} from "../../caratteristiche";
 
 function RisultatoRicerca(props) {
     return (
-        <div className="card shadow p-3 m-2 m-sm-3 d-flex flex-md-row maxw-xl">
+        <div className="card shadow px-0 p-3 mx-0 my-2 my-sm-3 mx-lg-3 d-flex flex-md-row maxw-xl">
             <figure className="figure m-0 d-flex justify-content-center">
                 <img className="annuncio-img" src={`/uploads/foto/${props.idStruttura}/${props.foto}`} alt={props.nomeStruttura}/>
             </figure>
@@ -14,7 +15,7 @@ function RisultatoRicerca(props) {
                 <div className="row p-2 annuncio-box-servizi">
                     {
                         props.servizi.map((servizio) => {
-                            return <Caratteristica key={servizio.servizio} caratteristica={servizio.servizio} icona={servizio.icona} />
+                            return <Caratteristica key={servizi[servizio].nome} caratteristica={servizi[servizio].nome} icona={servizi[servizio].icona} />
                         })
                     }
                 </div>
