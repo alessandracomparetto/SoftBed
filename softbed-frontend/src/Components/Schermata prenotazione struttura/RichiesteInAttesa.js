@@ -5,27 +5,19 @@ import axios from "axios";
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
-    const [nomeStruttura, setNomeStruttura] = useState("");
 
     useEffect(()=>{
         let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
         if(!listaStrutture || !listaStrutture[props.indice] || props.indice >= listaStrutture.length){
             window.location.href="/gestioneStrutture/";
         }
-        console.log("props,indice", props.indice)
-        setNomeStruttura(listaStrutture[props.indice].nomeStruttura);
     },[]);
-
-    useEffect(()=>{
-        console.log("NOME STRUTTU", nomeStruttura);
-
-    },[nomeStruttura]);
 
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
-                "struttura":nomeStruttura,
+                "struttura":props.nomeStruttura,
                 "data":new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 "emailOspite":props.prenotazione.email,
                 "emailGestore":"alec5@hotmail.it", /*TODO:modificare*/
@@ -44,7 +36,7 @@ function RichiesteInAttesa(props){
         axios.post(`/prenotazione/confermaPrenotazione`, {idPrenotazione:props.prenotazione.idPrenotazione}).then(res => {
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
-                "struttura": nomeStruttura,
+                "struttura":props.nomeStruttura,
                 "data":new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 "emailOspite":props.prenotazione.email,
                 "emailGestore":"alec5@hotmail.it", /*TODO:modificare*/
@@ -52,7 +44,6 @@ function RichiesteInAttesa(props){
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));
             console.log("aggiorno lo stato");
-
             let contatore=props.flag+1;
             props.aggiornaFlag(contatore);
         })

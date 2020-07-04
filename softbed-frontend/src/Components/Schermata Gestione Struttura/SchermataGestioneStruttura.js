@@ -16,6 +16,10 @@ function SchermataGestioneStruttura(){
     const {indice} = useParams();
 
     useEffect(() => {
+        let utente = window.sessionStorage.getItem("utente");
+        if(!utente || utente.length==0){
+            window.location.href="/accedi";
+        }
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
         if(!lista || indice>=lista.length || !lista[indice]){
             window.location.href="/gestioneStrutture/"

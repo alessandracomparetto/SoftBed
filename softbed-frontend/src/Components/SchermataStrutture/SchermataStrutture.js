@@ -7,6 +7,10 @@ function SchermataStrutture(){
     const [listaStrutture,setLista]=useState([]);
 
     useEffect(() => {
+        let utente = window.sessionStorage.getItem("utente");
+        if(!utente || utente.length==0){
+            window.location.href="/accedi";
+        }
         if(!window.sessionStorage.getItem("strutture")){
             console.log("il momento della fetch");
             let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;

@@ -12,7 +12,12 @@ function SchermataDatiOspiti(props){
     const location = useLocation();
     const {idStruttura, refPrenotazione} = useParams();
     const [flag, setFlag] = useState(0);
+
     useEffect(() => {
+        let utente = window.sessionStorage.getItem("utente");
+        if(!utente || utente.length==0){
+            window.location.href="/accedi";
+        }
 
         axios.post(`/ospite/fetch`,[refPrenotazione]).then(res => {
             console.log("DATI OSPITI RECUPERATI=======");

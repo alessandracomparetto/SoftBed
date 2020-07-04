@@ -14,6 +14,10 @@ function SchermataDatoPagamento(props){
     const[listaDatiPagamento, setDatiPagamento] = useState([]);
 
   useEffect(() => {
+      let utente = window.sessionStorage.getItem("utente");
+      if(!utente || utente.length==0){
+          window.location.href="/accedi";
+      }
       //TODO GESTIRE ID UTENTE
       let data = {"idUtente":1}
       /*props.idUtente*/

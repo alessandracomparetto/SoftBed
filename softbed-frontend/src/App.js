@@ -101,7 +101,7 @@ function App() {
                             <SchermataPrenotazioneStruttura />
                         </Route>
 
-                        <Route exact path="/ospiti/dichiarazioneOspiti/:idStruttura/:refPrenotazione">
+                        <Route exact path="/ospiti/dichiarazioneOspiti/:indice/:refPrenotazione">
                             <SchermataDatiOspiti />
                         </Route>
 
