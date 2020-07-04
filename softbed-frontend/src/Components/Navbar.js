@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import { Link } from "react-router-dom"
+
 
 function UtenteNonAutenticato() {
     return (
@@ -32,17 +33,27 @@ function UtenteAutenticato(props) {
                     {/* Collapsed menu | d-sm-none (<576px) */}
                     <div className="d-sm-none">
                         <li className="nav-item">
-                            <Link className="nav-link" to="#">Modifica profilo</Link>
+                            <Link className="nav-link" to="/utente/modificaAccount">Modifica profilo</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="#">Gestione strutture</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="#">Le mie prenotazioni</Link>
-                        </li>
+                        {
+                            (props.utente.gestore == 1) ? (
+                                <Fragment>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/gestioneStrutture/">Gestione strutture</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="dropdown-item" to="/registrazioneStruttura/">Registra la tua struttura</Link>
+                                    </li>
+                                </Fragment>
+                            ) : (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/utente/prenotazioni">Le mie prenotazioni</Link>
+                                </li>
+                            )
+                        }
                         <div className="dropdown-divider d-sm-none"/>
                         <li className="nav-item">
-                            <Link className="nav-link" to="#">Esci</Link>
+                            <Link className="nav-link" to="/">Esci</Link>
                         </li>
                     </div>
 
@@ -52,11 +63,19 @@ function UtenteAutenticato(props) {
                             <span className="mr-2">{props.utente.nome}</span><i className="fas fa-user"/>
                         </Link>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="/utente/:idUtente">Modifica profilo</Link>
-                            <Link className="dropdown-item" to="/gestioneStrutture/">Gestione strutture</Link>
-                            <Link className="dropdown-item" to="#">Le mie prenotazioni</Link>
+                            <Link className="dropdown-item" to="/utente/modificaAccount">Modifica profilo</Link>
+                            {
+                                (props.utente.gestore == 1) ? (
+                                    <Fragment>
+                                        <Link className="dropdown-item" to="/gestioneStrutture/">Gestione strutture</Link>
+                                        <Link className="dropdown-item" to="/registrazioneStruttura/">Registra la tua struttura</Link>
+                                    </Fragment>
+                                ):(
+                                    <Link className="dropdown-item" to="/utente/prenotazioni">Le mie prenotazioni</Link>
+                                )
+                            }
                             <div className="dropdown-divider"/>
-                            <Link className="dropdown-item" to="#">Esci</Link>
+                            <Link className="dropdown-item" to="/">Esci</Link>
                         </div>
                     </li>
                 </ul>
@@ -65,10 +84,17 @@ function UtenteAutenticato(props) {
     )
 }
 
-
 function Navbar() {
-    const accessoEffettuato = false;
-    const utente = {nome: "SoftEngineers"}
+    const [accessoEffettuato, setAccessoEffettuato] = useState("");
+    const[utente, setUtente]=useState("");
+
+    useEffect(()=>{
+        let dati = JSON.parse(window.sessionStorage.getItem("utente"));
+        if(dati){
+            setAccessoEffettuato(true);
+            setUtente(dati);
+        }
+    },[]);
 
     return (
         <nav className ="navbar navbar-expand-sm bg-dark navbar-dark">

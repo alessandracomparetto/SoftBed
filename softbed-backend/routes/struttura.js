@@ -1,10 +1,14 @@
 let express = require('express');
 let router = express.Router();
+const session = require('express-session');
 let strutturaModel = require('../models/Struttura');
+const ModuloUtente = require('../routes/utente');
+const token = ModuloUtente.token;
 
 // Cache
 let cacheManager = require('cache-manager');
 let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300}) // 5 minuti
+
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
@@ -20,7 +24,11 @@ router.post('/gestioneStruttura/:id', function(req, res) {
         res.status(err.status).send(err.message)})
 });
 
-router.get('/listaStruttureGestore', function (req, res) {
+router.post('/listaStruttureGestore', function (req, res) {
+    console.log("sono qui")
+        console.log(req);
+        token.stampaToken();
+    //TODO: VERIFICARE TOKEN, VERIFICARE IDGESTORE
     strutturaModel.listaStrutture(function(data){
         res.send(data);
     }).catch((err)=>{

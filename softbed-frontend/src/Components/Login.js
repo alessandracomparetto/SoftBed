@@ -1,19 +1,18 @@
 import React, {useState} from 'react';
 import axios from "axios";
-import {Redirect, useHistory, useLocation} from "react-router-dom";
-
+import $ from 'jquery';
+import mostraDialogErrore from "../Actions/errore";
+import {useHistory, useLocation} from "react-router-dom";
 const crypto = require('crypto');
 
-
-
 function Login(){
-    const[redirect, setRedirect] = useState(false);
     const history = useHistory();
     const location = useLocation();
 
     function onSubmit(e){
         e.preventDefault();
-
+        $("#errore-pass").addClass("collapse");
+        $("#errore-email").addClass("collapse");
         let form = document.getElementById("form");
         form.classList.add('was-validated');
 
@@ -28,7 +27,7 @@ function Login(){
             const utenteLogin = {
                 email: email,
                 pass: encpass,
-            }
+            };
             console.log(utenteLogin);
 
             try {
@@ -36,21 +35,28 @@ function Login(){
                     .then((res) => {
                         window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                         if (location.state && location.state.urlProvenienza) history.push(location.state.urlProvenienza)
-                        else setRedirect(true);
+                        else window.location.href="/utente";
+                    }).catch(err =>{
+                        let flag = false;
+                        if(err.response.status === 400){
+                            $("#errore-pass").removeClass("collapse");
+                            console.log(err);
+                            flag = true;
+                        }
+                        if(err.response.status === 404){
+                            $("#errore-email").removeClass("collapse");
+                            console.log(err);
+                            flag = true;
+                        }
+                        else if(!flag){
+                            mostraDialogErrore()};
                     });
             } catch (err) {
-                if (err.response.status === 400) {
-                    console.log('There was a problem with the server');
-                } else {
-                    console.log(err.response.data.msg);
-                }
+                console.log(err.response.data.msg);
             }
         }
     }
 
-    if (redirect){
-        return <Redirect to='/'/>;
-    }
     return(
             <div className="container text-center">
                 <div style={{height:20+'vh'}}/>
@@ -71,6 +77,7 @@ function Login(){
                                 <input name="email" id="email" type="email" className="form-control" placeholder="email" required/>
                                 <div className="invalid-feedback">Inserire indirizzo e-mail</div>
                             </div>
+                            <div id="errore-email" className="collapse text-danger small">Email errata!</div>
                         </div>
                         <div className="form-group">
                             <label className="sr-only" htmlFor="password"></label>
@@ -81,6 +88,7 @@ function Login(){
                                 <input name="pass" id="pass" type="password" className="form-control input_pass was-validated" placeholder="password" autoComplete="current-password" required/>
                                 <div className="invalid-feedback">Inserire password</div>
                             </div>
+                            <div id="errore-pass" className="collapse text-danger small">Password errata!</div>
                         </div>
                         <button id="ok" type="submit" className="btn btn-primary btn btn-warning rounded-pill text-dark mt-5 col-12 col-sm-6">Accedi</button>
                     </form>

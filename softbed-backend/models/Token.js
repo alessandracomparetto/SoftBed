@@ -6,7 +6,7 @@ class Token{
     aggiungiSessione(id, sessione){
         console.log("id", id);
         this.array.push({"id":id, "sessione":sessione});
-        console.log(this.array);
+        this.stampaToken();
     }
 
     verificaToken(id, sessione){
@@ -27,6 +27,10 @@ class Token{
             }
         }
         return 1;
+    }
+
+    stampaToken(){
+        console.log(this.array);
     }
 }
 

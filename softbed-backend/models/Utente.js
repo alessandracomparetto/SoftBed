@@ -4,7 +4,6 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
 module.exports= {
-//TODO: gestire email già presente
     inserisci:async function(datiUtente, callback) {
         console.log("la mia rotta")
         const db = await makeDb(config);
@@ -17,7 +16,7 @@ module.exports= {
 
                 if(results.length === 0) { //se non c'è una corrispondenza
                     let sql = ('INSERT INTO `utente` (nome, cognome, dataNascita, gestore) VALUES ?');
-                    let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore == 'gestore' ? '1' : '0'];
+                    let datiQuery = [datiUtente.nome, datiUtente.cognome, datiUtente.dataNascita, datiUtente.gestore];
                     results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN UTENTE
                         throw createError(500);
                     });
@@ -45,7 +44,6 @@ module.exports= {
         }
     },
 
-
     login:async function(datiUtente, callback) {
         const db = await makeDb(config);
         let results = {};
@@ -53,29 +51,19 @@ module.exports= {
             await withTransaction(db, async() => {
                 // inserimento utente
                 results = await db.query('SELECT * FROM `autenticazione`\
-            WHERE email = ?', [datiUtente.email])
-                    .catch(err => {
-                        throw createError(500);
-                    });
-                if (!results[0]) {
-                    throw createError(404, "Utente non trovato");
+            WHERE email = ?', [datiUtente.email]).catch(err => {throw createError(500);});
+                if (!results[0]) { //email errata
+                    return callback(404);
                 } else {
-
-                    if (datiUtente.pass != results[0].password) {
-                        throw createError(404, "Password errata");
+                    if (datiUtente.pass != results[0].password) { //password errata
+                        return callback(400);
                     } else {
-                        //todo recuperare dati utente
-                        let refUtente = results.refUtente;
-
+                        let refUtente = results[0].refUtente;
                         let sql = ('SELECT u.idUtente, u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
                         FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
                         let datiQuery = [refUtente];
-                        results = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw createError(500);
-                        });
-
-                        console.log(results);
-                        return (callback(results));
+                        results = await db.query(sql, [[datiQuery]]).catch(err => {throw createError(500);});
+                        return (callback(results[0]));
                     }
                 }
             });
@@ -126,7 +114,6 @@ module.exports= {
                         });
                     return callback(infoUtente[0]);
                 }
-
             });
         } catch (err) {
             console.log(err);

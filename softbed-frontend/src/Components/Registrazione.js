@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
 import $ from "jquery";
 import axios from "axios";
-import {Redirect} from "react-router-dom";
 import {confirmAlert} from "react-confirm-alert";
-
+import mostraDialogErrore from "../Actions/errore";
 const crypto = require('crypto');
 
 function Registrazione() {
-    const[redirect, setRedirect] = useState(false);
 
     const mostraDialogEmail = () => {
         confirmAlert({
@@ -21,7 +19,6 @@ function Registrazione() {
             }
         })
     };
-
 
     function onSubmit(e){
         e.preventDefault();
@@ -40,16 +37,19 @@ function Registrazione() {
                 dataNascita: document.getElementById("dataNascita").value,
                 email: document.getElementById("email").value ,
                 pass: encpass,
-                gestore: $( "input:checked" ).val(),
+                gestore: $("input:checked").val(),
             };
             try {
                 axios.post("/utente/utenteRegistrato", utenteRegistrato)
                     .then((res) => {
-                            window.sessionStorage.setItem("utente", JSON.stringify(res.data));
-                            setRedirect(true)
+                        window.sessionStorage.setItem("utente", JSON.stringify(res.data));
+                        window.location.href="/utente"
                         }
                     ).catch(err => {
-                        mostraDialogEmail();
+                        if(err.response.status === 400){mostraDialogEmail();
+                        }else{
+                            mostraDialogErrore()
+                        }
                 });
             }
             catch(err){
@@ -57,7 +57,6 @@ function Registrazione() {
             }
         }
     }
-
 
     function verificaPass(event) {
         const strongPass = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}");
@@ -81,12 +80,8 @@ function Registrazione() {
         }
     }
 
-    if (redirect){
-        return <Redirect to='/utente'/>;
-    }
 
     return(
-
         <div className="container">
             <div style={{height:10+'vh'}}/>
             <div className="col-12 col-lg-8 mb-3 rounded shadow border border-secondary bg-light mx-auto">
@@ -173,15 +168,13 @@ function Registrazione() {
                         <label htmlFor="account">Tipo di account</label>
                         <br/>
                         <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required/>
+                            <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required onClick={(event)=>{console.log("gestore", event.target.value)}}/>
                             <label className="form-check-label" htmlFor="gestore">Gestore</label>
                         </div>
                         <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required/>
+                            <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required onClick={(event)=>{console.log("gestore", event.target.value)}}/>
                             <label className="form-check-label" htmlFor="ospite">Ospite</label>
-                            <div className="invalid-feedback ml-2">
-                                Inserire il tipo di account
-                            </div>
+                            <div className="invalid-feedback ml-2">Inserire il tipo di account</div>
                         </div>
                     </div>
 

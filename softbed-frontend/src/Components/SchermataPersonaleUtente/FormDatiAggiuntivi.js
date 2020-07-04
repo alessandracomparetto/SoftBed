@@ -6,7 +6,7 @@ import SidebarUtente from "./SidebarUtente";
 
 const crypto = require('crypto');
 
-
+//TODO: SE DIVENTO GESTORE NON VEDO PIù NESSUN CAMPO
 function FormDatiAggiuntivi(){
     const [utente,setUtente]=useState([]);
 
@@ -27,16 +27,16 @@ function FormDatiAggiuntivi(){
     //recupero i dati dell'utente
     useEffect(() => {
         let sessionUtente = JSON.parse(window.sessionStorage.getItem("utente"));
-        if(sessionUtente[0].refIndirizzo === null && sessionUtente[0].refComuneNascita === null){
-            console.log(sessionUtente[0]);
-            let tmp = sessionUtente[0];
+        if(sessionUtente.refIndirizzo === null && sessionUtente.refComuneNascita === null){
+            console.log(sessionUtente);
+            let tmp = sessionUtente;
             tmp.dataNascita = tmp.dataNascita.split("T")[0];
             setUtente(tmp);
         }else {
             axios
-                .post("/utente/fetch", sessionUtente[0])
+                .post("/utente/fetch", sessionUtente)
                 .then(res => {
-                    res.data.dataNascita = res.data.dataNascita.split("T")[0];
+                    res.data.dataNascita = res.data.dataNascita.split("T");
                     console.log("DATI RECUPERATI=======");
                     console.log(res.data);
                     setUtente(res.data);

@@ -71,6 +71,8 @@ function RegistrazioneStruttura () {
     const handleSubmit=()=>{
         try {
            let dati = info;
+           let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
+           dati["idUtente"]=idUtente;
            axios.post('/struttura', dati)
                .then(res => { // then print response status
                    console.log("hai finito");

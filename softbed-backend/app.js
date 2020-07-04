@@ -12,10 +12,12 @@ db = makeDb(config);
 const uploadRouter = require('./routes/upload');
 const prenotazioneRouter = require('./routes/prenotazione');
 const strutturaRouter = require('./routes/struttura');
-const utenteRouter = require('./routes/utente');
 const ricercaRouter = require('./routes/ricerca');
 const mailRouter = require('./routes/mail');
 const ospiteRouter = require('./routes/ospite');
+
+const ModuloUtente = require('./routes/utente');
+const utenteRouter = ModuloUtente.router;
 
 const app = express();
 
