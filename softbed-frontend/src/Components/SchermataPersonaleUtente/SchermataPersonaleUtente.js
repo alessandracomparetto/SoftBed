@@ -35,7 +35,7 @@ function SchermataPersonaleUtente(){
                             <InformazioneLineare nome="Nome:" valore={`${utente.nome}`} />
                             <InformazioneLineare nome="Cognome:" valore={`${utente.cognome} `} />
                             <InformazioneLineare nome="Email:" valore={`${utente.email}`} />
-                            <InformazioneLineare nome="Data di nasscita:" valore={new Date(utente.dataNascita).toLocaleDateString()} />
+                            <InformazioneLineare nome="Data di nascita:" valore={new Date(utente.dataNascita).toLocaleDateString()} />
                         </div>
                     </div>
                 </div>

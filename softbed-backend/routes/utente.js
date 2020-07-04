@@ -2,8 +2,11 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 let utenteModel = require('../models/Utente');
+var cookieParser = require('cookie-parser');
 const router = express.Router();
 let Token = require('../models/Token');
+
+router.use(cookieParser());
 
 token = new Token();
 
@@ -36,7 +39,9 @@ router.post('/utenteRegistrato', function (req, res) {
             res.send();
         }
         else{
-            token.aggiungiSessione(data.idUtente, req.sessionID);
+            let cookie = req.sessionID; //prendo un id univoco per il cookie
+            res.cookie('sid', cookie, { maxAge: 1000 * 60 * 60 * 2, httpOnly: true }); //setto il cookie negli headers della risposta
+            token.aggiungiSessione(data.idUtente, req.sessionID); //salvo il cookie in memoria
             res.send(data);
         }
     }).catch((err)=>{
@@ -51,6 +56,8 @@ router.post('/login', function (req, res) {
         }else if( data === 400){
             res.sendStatus(400)
         }else{
+            let cookie = req.sessionID;
+            res.cookie('sid', cookie, { maxAge: 1000 * 60 * 60 * 2, httpOnly: true });
             token.aggiungiSessione(data.idUtente, req.sessionID);
             res.send(data);
         }
@@ -100,36 +107,20 @@ router.post('/eliminaDatoPagamento', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-/*Logout  TODO: il pulsante a cui accedere, cosa mandare a frontend in caso di errore*/
-/*router.post('/logout', (req,res) => {
-    req.session.destroy( err =>{
-        if(err){
-            //non posso distruggere la sessione
-            console.log("Errore durante il logout")
-        }
-    })
-    //se tutto ok, distruggo il coockie della sessione
-    res.clearCookie(req.session.name);
-})*/
-
+router.post('/logout', (req,res) => {
+    let c=(req.headers.cookie).split("=")[1];
+    if(token.distruggiToken(req.body.idUtente, c) === 0){
+        res.clearCookie(req.session.name);
+        res.send();
+    }else{
+        res.sendStatus(500);
+    }
+});
 
 module.exports = {
     router: router,
     token: token
 };
 
-
-// recupero dello user id
-
-
-//custom middleware
-/*router.use((req, res, utente, next) =>{
-    //prendo session_uid
-    const {session_uid}  = req.session;
-    if(session_uid){
-        //oggetto condiviso nel middleware
-        res.locals.user =
-    }
-})*/
 
 

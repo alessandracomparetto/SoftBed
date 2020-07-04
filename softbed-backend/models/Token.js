@@ -3,15 +3,15 @@ class Token{
         this.array = [];
     }
 
-    aggiungiSessione(id, sessione){
+    aggiungiSessione(id, cookie){
         console.log("id", id);
-        this.array.push({"id":id, "sessione":sessione});
+        this.array.push({"id":id, "cookie":cookie});
         this.stampaToken();
     }
 
-    verificaToken(id, sessione){
+    verificaToken(id, cookie){
         for(let i = 0; i<this.array; i++){
-            if(this.array[i].id===id && this.array[i].sessione===sessione){
+            if(this.array[i].id===id && this.array[i].cookie===cookie){
                 return 0;
                 break;
             }
@@ -19,11 +19,13 @@ class Token{
         return 1;
     }
 
-    distruggiToken(id, sessione){
-        for(let i = 0; i<this.array; i++){
-            if(this.array[i].id===id && this.array[i].sessione===sessione){
+    distruggiToken(id, cookie){
+        this.stampaToken()
+        for(let i = 0; i<this.array.length; i++){
+            console.log("dentro il for");
+            if(this.array[i].id===id && this.array[i].cookie===cookie){
                 this.array.splice(i,1); //rimuove l'elemento di posto i
-                break;
+                return 0
             }
         }
         return 1;

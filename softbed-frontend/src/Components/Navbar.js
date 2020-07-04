@@ -1,10 +1,8 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import axios from 'axios';
+import mostraDialogErrore from "../Actions/errore";
 
-function logout() {
-    window.sessionStorage.removeItem("utente");
-    window.location.href="/";
-}
 
 function UtenteNonAutenticato() {
     return (
@@ -27,6 +25,19 @@ function UtenteNonAutenticato() {
 }
 
 function UtenteAutenticato(props) {
+
+    function logout() {
+        try {
+            axios.post('/utente/logout', {"idUtente":props.utente.idUtente})
+                .then(()=> {
+                    window.sessionStorage.removeItem("utente");
+                    window.location.href = "/"
+                }).catch(()=> mostraDialogErrore());
+        }catch (e) {
+            mostraDialogErrore();
+        }
+    }
+
     return (
         <React.Fragment>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -37,7 +48,7 @@ function UtenteAutenticato(props) {
                     {/* Collapsed menu | d-sm-none (<576px) */}
                     <div className="d-sm-none">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/utente/modificaAccount">Modifica profilo</Link>
+                            <Link className="nav-link" to="/utente">Modifica profilo</Link>
                         </li>
                         {
                             (props.utente.gestore == 1) ? (
@@ -67,7 +78,7 @@ function UtenteAutenticato(props) {
                             <span className="mr-2">{props.utente.nome}</span><i className="fas fa-user"/>
                         </Link>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <Link className="dropdown-item" to="/utente/modificaAccount">Modifica profilo</Link>
+                            <Link className="dropdown-item" to="/utente">Modifica profilo</Link>
                             {
                                 (props.utente.gestore == 1) ? (
                                     <Fragment>
