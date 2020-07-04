@@ -10,12 +10,25 @@ function FormFiltri(props) {
     const history = useHistory();
     const query = new URLSearchParams(useLocation().search);
 
+    // Carico i valori dei filtri in base ai parametri contenuti nell'URL
     useEffect(() => {
+        if (query.get("prezzoMinimo"))
+            $("#prezzoMinimo").val(query.get("prezzoMinimo"));
+
+        if (query.get("prezzoMassimo"))
+            $("#prezzoMassimo").val(query.get("prezzoMassimo"));
+
         Object.keys(servizi).map((servizio) => {
 
-            console.log(servizio);
             if (query.get(servizio)) {
                 $(`#${servizio}`)[0].checked = true;
+            }
+        })
+
+        Object.keys(ambienti).map((ambiente) => {
+
+            if (query.get(ambiente)) {
+                $(`#${ambiente}`)[0].checked = true;
             }
         })
     }, [])
@@ -32,9 +45,17 @@ function FormFiltri(props) {
             ospiti: query.get("ospiti"),
         }
 
+        parametri.prezzoMinimo = $("#prezzoMinimo").val();
+        parametri.prezzoMassimo = $("#prezzoMassimo").val();
+
         Object.keys(servizi).map((servizio) => {
             if ($(`#${servizio}`)[0].checked)
                 parametri[servizio] = true;
+        })
+
+        Object.keys(ambienti).map((ambiente) => {
+            if ($(`#${ambiente}`)[0].checked)
+                parametri[ambiente] = true;
         })
 
 
@@ -52,9 +73,9 @@ function FormFiltri(props) {
     return (
         <form className="form form-row p-3" onSubmit={onSubmit}>
             <div className="col-12 mt-3">
-                <h4>Prezzo</h4>
+                <h4>Prezzo a notte</h4>
                 <div className="mx-2">
-                    <SliderPrezzo minimo={50} massimo={300}/>
+                    <SliderPrezzo minimo={0} massimo={500}/>
                 </div>
             </div>
             <div className="col-12 mt-3">
@@ -75,8 +96,8 @@ function FormFiltri(props) {
                 { Object.keys(ambienti).map((ambiente) => {
                     return (
                         <div key={ambienti[ambiente].nome} className="form-check mx-2">
-                            <input className="form-check-input" id={ambienti[ambiente].nome} name={ambiente} type="checkbox"/>
-                            <label className="form-check-label" htmlFor={ambienti[ambiente].nome}>{ambienti[ambiente].nome}</label>
+                            <input className="form-check-input" id={ambiente} name={ambiente} type="checkbox"/>
+                            <label className="form-check-label" htmlFor={ambiente}>{ambienti[ambiente].nome}</label>
                         </div>
                     );
                 })}

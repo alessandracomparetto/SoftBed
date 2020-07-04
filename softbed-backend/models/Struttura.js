@@ -131,7 +131,7 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE `condizioni` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                let results = await db.query('UPDATE `condizioni` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
                          WHERE refStruttura = ?', ["condizioni.minSoggiorno", struttura.minSoggiorno, "condizioni.maxSoggiorno", struttura.maxSoggiorno, "condizioni.oraInizioCheckIn", struttura.oraInizioCheckIn,
                     "condizioni.oraInizioCheckOut", struttura.oraInizioCheckOut,"condizioni.oraFineCheckIn", struttura.oraFineCheckIn,"condizioni.oraFineCheckOut", struttura.oraFineCheckOut,"condizioni.pagamentoLoco", struttura.pagamentoLoco,
                     "condizioni.pagamentoOnline", struttura.pagamentoOnline,"condizioni.prezzoBambini", struttura.prezzoBambini,"condizioni.prezzoAdulti", struttura.prezzoAdulti,
@@ -149,7 +149,7 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE `b&b` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
+                let results = await db.query('UPDATE `B&B` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
                          WHERE refStruttura= ?', ["b&b.bambini", struttura.bambini, "b&b.ariaCondizionata", struttura.ariaCondizionata, "b&b.wifi", struttura.wifi,
                     "b&b.parcheggio", struttura.parcheggio,"b&b.strutturaDisabili", struttura.strutturaDisabili,"b&b.animaliAmmessi", struttura.animaliAmmessi,"b&b.permessoFumare", struttura.permessoFumare,
                     "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAeroportuale", struttura.navettaAeroportuale,
@@ -165,8 +165,8 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE `casavacanze` SET ??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=?,??=? \
-                         WHERE refstruttura = ?', ["casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
+                let results = await db.query('UPDATE `casaVacanze` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
+                         WHERE refStruttura = ?', ["casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
                     "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, struttura.idStruttura]).catch((err) => {throw createError(500)});
                 return callback(results);
