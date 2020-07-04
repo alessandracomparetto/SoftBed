@@ -1,41 +1,88 @@
 let express = require('express');
 let router = express.Router();
 
-// Cache
-let cacheManager = require('cache-manager');
-let cacheRicerche = cacheManager.caching({store: 'memory', max: 200, ttl: 300}) // 5 minuti
+let cacheRicerche = []; // [ chiave: stringa, valore: ListaStrutture ]
+let StrutturaModel = require('../models/Struttura');
 
-// Model
-let strutturaModel = require('../models/Struttura')
+function getParametri(req) {
+    // I valori della chiave sono obbligatori
+    const chiave = {
+        destinazione: req.query.destinazione,
+        arrivo: req.query.arrivo,
+        partenza: req.query.partenza,
+        ospiti: req.query.ospiti,
+        bedAndBreakfast: req.query.bedAndBreakfast,
+        casaVacanze: req.query.casaVacanze
+    }
+
+    const listaFiltri = [
+        "animaliAmmessi",
+        "ariaCondizionata",
+        "bambini",
+        "cucinaCeliaci",
+        "festeAmmesse",
+        "navettaAeroportuale",
+        "parcheggio",
+        "riscaldamento",
+        "servizioInCamera",
+        "strutturaDisabili",
+        "permessoFumare",
+        "TV",
+        "wifi",
+    ];
+
+    const filtri = listaFiltri.reduce(function(res, filtro) {
+        if (req.query[filtro])
+            res.push(filtro);
+
+        return res;
+    }, [])
+
+    return {chiave: chiave, filtri: filtri};
+}
 
 router.get('/', function(req, res) {
-    // Controllo se la ricerca è presente in cache
-    const query = JSON.stringify(req.query);
 
-    cacheRicerche.get(query, function(err, result) {
-        // Se la ricerca è salvata in cache viene inviato il risultato memorizzato
-        if (result) {
-            console.log("Cache hit!");
-            res.send(result);
+    const parametro = getParametri(req);
+    const pos = cacheRicerche.map((ricerca) => { return ricerca.chiave; }).indexOf(JSON.stringify(parametro.chiave));
+    let risultato;
+
+    // Se trovo la ricerca nella cache
+    if (pos !== -1) {
+        console.log("Cache HIT!");
+        risultato = cacheRicerche[pos].valore;
+        cacheRicerche.splice(pos, 1);
+
+        // Applico i filtri
+        if (parametro.filtri[0]) {
+            risultato = risultato.applicaFiltri(parametro.filtri);
+            res.send(risultato)
+        } else {
+            res.send(risultato.lista);
         }
+    }
 
-        // Altrimenti viene effettuata la query al db
-        else {
-            strutturaModel.cerca(req.query, function(data) {
-                console.log("Cache miss!");
+    // Altrimenti
+    else {
+        console.log("Cache MISS!");
+        StrutturaModel.cerca(parametro.chiave, function(data) {
+            risultato = data;
 
-                res.send(data);
+            if (parametro.filtri && parametro.filtri[0]) {
+                risultato = risultato.applicaFiltri(parametro.filtri);
+                res.send(risultato);
+            } else {
+                res.send(risultato.lista);
+            }
 
-                // Inserimento in cache
-                cacheRicerche.set(query, JSON.stringify(data), function(err) {
-                    if (err) throw err;
-                })
-            })
-                .catch((err) => {
-                    res.status(500).send(err);
-                });
-        }
-    });
+            // Aggiunta in cache e controllo che ci siano meno di 100 ricerche in cache
+            const numero = cacheRicerche.unshift({chiave: JSON.stringify(parametro.chiave), valore: risultato});
+
+            if (numero > 100)
+                cacheRicerche.slice(Math.max(0, numero - 100), numero);
+
+        }).catch((err) => res.status(err).send());
+    }
 })
 
 module.exports = router;

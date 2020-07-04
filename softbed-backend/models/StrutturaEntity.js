@@ -28,7 +28,7 @@ class StrutturaEntity {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryStruttura(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryStruttura(), [this.id]).catch((err) => {throw err});
                 this.nome = risultato[0].nomeStruttura;
                 this.tipologia = risultato[0].tipologiaStruttura;
             })
@@ -46,9 +46,9 @@ class StrutturaEntity {
                 let risultato = [];
 
                 if (this.tipologia === "cv") {
-                    risultato = await db.query(Query.queryDescrizioneCV(), [this.id]).catch((err) => console.log(err));
+                    risultato = await db.query(Query.queryDescrizioneCV(), [this.id]).catch((err) => {throw err});
                 } else if (this.tipologia === "B&B") {
-                    risultato = await db.query(Query.queryDescrizioneBB(), [this.id]).catch((err) => console.log(err));
+                    risultato = await db.query(Query.queryDescrizioneBB(), [this.id]).catch((err) => {throw err});
                 } else {throw createError(500)}
 
                 this.descrizione = risultato[0].descrizione;
@@ -64,7 +64,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryFoto(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryFoto(), [this.id]).catch((err) => {throw err});
                 this.foto = risultato.map((oggetto) => {return oggetto.percorso})
             })
         } catch (err) {
@@ -103,7 +103,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryCondizioni(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryCondizioni(), [this.id]).catch((err) => {throw err});
 
                 this.condizioniSoggiorno.soggiorno.min = risultato[0].minSoggiorno;
                 this.condizioniSoggiorno.soggiorno.max = risultato[0].maxSoggiorno;
@@ -125,7 +125,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryCamereBB(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryCamereBB(), [this.id]).catch((err) => {throw err});
                 this.camere = risultato;
             })
         } catch (err) {
@@ -144,7 +144,7 @@ class StrutturaEntity {
         }
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryLocalita(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryLocalita(), [this.id]).catch((err) => {throw err});
                 this.localita.indirizzo = `via ${risultato[0].via}, ${risultato[0].numeroCivico}`;
                 this.localita.comune = risultato[0].comune;
                 this.localita.provincia = risultato[0].provincia;
@@ -163,7 +163,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryPrezzoCV(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryPrezzoCV(), [this.id]).catch((err) => {throw err});
                 this.prezzo = risultato[0].prezzoNotte;
             })
         } catch (err) {
@@ -177,7 +177,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryTasse(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryTasse(), [this.id]).catch((err) => {throw err});
                 this.tasse = risultato[0];
             })
         } catch (err) {
@@ -193,7 +193,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryAmbientiCV(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryAmbientiCV(), [this.id]).catch((err) => {throw err});
                 this.ambienti = Object.keys(risultato[0])
                     .reduce(function(res, ambiente) {
                         if (risultato[0][ambiente] === 1) {
@@ -223,7 +223,7 @@ class StrutturaEntity {
 
         try {
             await withTransaction(db, async () => {
-                const risultato = await db.query(Query.queryBagniCamereLettiCV(), [this.id]).catch((err) => console.log(err));
+                const risultato = await db.query(Query.queryBagniCamereLettiCV(), [this.id]).catch((err) => {throw err});
                 this.altro = risultato[0];
             })
         } catch(err) {
@@ -239,9 +239,9 @@ class StrutturaEntity {
         try {
             await withTransaction(db, async () => {
                 if (this.tipologia === "cv") {
-                    risultato = await db.query(Query.queryServiziCV(), [this.id]).catch((err) => console.log(err));
+                    risultato = await db.query(Query.queryServiziCV(), [this.id]).catch((err) => {throw err});
                 } else if (this.tipologia === "B&B") {
-                    risultato = await db.query(Query.queryServiziBB(), [this.id]).catch((err) => console.log(err));
+                    risultato = await db.query(Query.queryServiziBB(), [this.id]).catch((err) => {throw err});
                 } else {throw createError(500)}
 
                 this.servizi = Object.keys(risultato[0])
@@ -258,6 +258,17 @@ class StrutturaEntity {
             throw createError(500);
         }
     }
+
+    soddisfaFiltri(filtri) {
+
+        for (let filtro of filtri) {
+            if (this.servizi.indexOf(filtro) === -1)
+                return false;
+        }
+
+        return true;
+    }
+
 }
 
 module.exports = StrutturaEntity;

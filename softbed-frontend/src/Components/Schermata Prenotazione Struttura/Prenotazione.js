@@ -45,8 +45,8 @@ return(
                                return (
                                    <div key={indice} className="col-sm-12 col-md">
                                        <strong className="text-capitalize">{camera.tipologiaCamera}:</strong>
-                                       <span> {camera.nLettiSingoli} letti singoli</span>
-                                       <span> {camera.nLettiMatrimoniali} letti matrimoniali</span>
+                                       <span> {camera.nLettiSingoli}x letti singoli</span>
+                                       <span> {camera.nLettiMatrimoniali}x letti matrimoniali</span>
                                    </div>
                                );
                            }
@@ -58,7 +58,7 @@ return(
            <div className="row mb-3">
                <div className="col-sm-12 col-md">
                    <h6 ><strong>Ospiti:</strong></h6>
-                   <span> {props.dati.nAdulti+props.dati.nBambini} ({props.dati.nAdulti} adulti e {props.dati.nBambini} bambini) </span>
+                   <span> {props.dati.nAdulti+props.dati.nBambini} ({props.dati.nAdulti}x adulti e {props.dati.nBambini}x bambini) </span>
                </div>
                <div className="col-sm-12 col-md">
                    <strong>Esenti:</strong>

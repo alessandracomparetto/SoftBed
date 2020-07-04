@@ -1,8 +1,7 @@
 let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-let Timer = require('../models/Timer')
-
+let Timer= require('../models/Timer');
 let prenotazioneModel = require('../models/Prenotazione')
 
 timer=new Timer();

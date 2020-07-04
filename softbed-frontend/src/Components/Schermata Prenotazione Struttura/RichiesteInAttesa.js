@@ -5,6 +5,9 @@ import axios from "axios";
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+    let data;
+    let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
+
 
     useEffect(()=>{
         let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
@@ -15,14 +18,15 @@ function RichiesteInAttesa(props){
 
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
+            console.log(res.data);
+            let emailGestore= JSON.parse(window.sessionStorage.getItem("utente")).email;
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
                 "struttura":props.nomeStruttura,
                 "data":new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 "emailOspite":props.prenotazione.email,
-                "emailGestore":"alec5@hotmail.it", /*TODO:modificare*/
+                "emailGestore":emailGestore,
             };
-            console.log("info", informazioni);
             axios.post('/mail/rifiuta-prenotazione',informazioni)
                 .catch(err=> console.log(err));
             //aggiorno la lista delle prenotazioni
@@ -34,12 +38,14 @@ function RichiesteInAttesa(props){
     function confermaPrenotazione () {
         console.log("sto per inviare la conferma di prenotazione");
         axios.post(`/prenotazione/confermaPrenotazione`, {idPrenotazione:props.prenotazione.idPrenotazione}).then(res => {
+            console.log(res.data);
+            let emailGestore= JSON.parse(window.sessionStorage.getItem("utente")).email;
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
                 "struttura":props.nomeStruttura,
                 "data":new Date(props.prenotazione.checkIn).toISOString().slice(0, 10),
                 "emailOspite":props.prenotazione.email,
-                "emailGestore":"alec5@hotmail.it", /*TODO:modificare*/
+                "emailGestore":emailGestore,
             };
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));

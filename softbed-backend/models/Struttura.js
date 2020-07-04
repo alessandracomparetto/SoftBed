@@ -2,8 +2,8 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
-const Queries = require('./QueryStruttura');
 const StrutturaEntity = require('./StrutturaEntity');
+const ListaStrutture = require('./ListaStruttureEntity');
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
@@ -183,61 +183,9 @@ module.exports= {
     },
 
     cerca: async function(datiRicerca, callback) {
-
-        const db = await makeDb(config);
-
-        let query;
-        // Solo case vacanze
-        if (datiRicerca.bedAndBreakfast !== "true") {
-            query = Queries.queryInformazioniCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        // Solo bed and breakfast
-        else if (datiRicerca.casaVacanze !== "true") {
-            query = Queries.queryInformazioniBB(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        // Sia case vacanze che B&B : id, nome, foto
-        else {
-            query = Queries.queryInformazioniBBCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        try {
-            await withTransaction(db, async () => {
-                let informazioni = await db.query(query, []).catch((err) => {console.log(err)});
-
-                let descrizione;
-
-
-                for (let i = 0; i < informazioni.length; i++) {
-                    let id = informazioni[i].id;
-                    let descrizioneBB = await db.query(Queries.queryDescrizioneBB(), id).catch(() => {throw createError(500)});
-                    let descrizioneCV = await db.query(Queries.queryDescrizioneCV(), id).catch(() => {throw createError(500)});
-
-                    let servizi;
-
-                    if (descrizioneBB[0]) {
-                        descrizione = descrizioneBB[0].descrizione;
-                        servizi = await db.query(Queries.queryServiziBB(), id).catch(() => {throw createError(500)});
-                    }
-
-                    else if (descrizioneCV[0]) {
-                        descrizione = descrizioneCV[0].descrizione;
-                        servizi = await db.query(Queries.queryServiziCV(), id).catch(() => {throw createError(500)});
-                    }
-
-                    else throw createError(500);
-
-                    informazioni[i].descrizione = descrizione;
-                    informazioni[i].servizi = servizi;
-                }
-
-                return callback(informazioni);
-            })
-        } catch (err) {
-            console.log(err);
-        }
-
+        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casaVacanze);
+        await listaStrutture.init();
+        return callback(listaStrutture);
     },
 
     listaStrutture:async function(idGestore,callback){

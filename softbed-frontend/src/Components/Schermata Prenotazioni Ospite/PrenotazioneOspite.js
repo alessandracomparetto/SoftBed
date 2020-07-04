@@ -31,12 +31,12 @@ function PrenotazioneOspite(props) {
         axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.idPrenotazione})
             .then(() => {
 
-                // TODO: Prendere email dell'ospite
+                let emailUtente= JSON.parse(window.sessionStorage.getItem("utente")).email;
                 const informazioni = {
                     id: props.prenotazione.idPrenotazione,
                     struttura: props.prenotazione.nomeStruttura,
                     data: props.prenotazione.checkIn,
-                    emailOspite: "mary_pal@live.it",
+                    emailOspite: emailUtente,
                     emailGestore: props.prenotazione.email,
                 }
 
@@ -80,7 +80,7 @@ function PrenotazioneOspite(props) {
                         <div>
                             <strong>Scade il </strong>
                             <br />
-                            <span> Scade il {new Date(props.prenotazione.dataScadenza).toISOString().slice(0, 19).replace('T', ' ')}</span>
+                            <span> {new Date(props.prenotazione.dataScadenza).toISOString().slice(0, 19).replace('T', ' ')}</span>
                         </div>
                     }
                 </div>
