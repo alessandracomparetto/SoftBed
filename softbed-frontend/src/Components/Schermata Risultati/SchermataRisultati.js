@@ -6,6 +6,7 @@ import Mappa from "./Mappa";
 import FormFiltri from "./FormFiltri/FormFiltri";
 import axios from "axios";
 import $ from "jquery";
+import {servizi} from "../../caratteristiche";
 
 function SchermataRisultati() {
     // Per la navigazione fra le varie pagine
@@ -17,7 +18,7 @@ function SchermataRisultati() {
 
         // Genero manualmente la GET a partire dai campi del form di ricerca
         // (sempre validi al caricamento del componente)
-        const parametri = {
+        let parametri = {
             destinazione: $("#destinazione").val().trim(),
             arrivo: $("#arrivo").val(),
             partenza: $("#partenza").val(),
@@ -25,6 +26,11 @@ function SchermataRisultati() {
             bedAndBreakfast: $("#bedAndBreakfast")[0].checked,
             casaVacanze: $("#casaVacanze")[0].checked
         }
+
+        Object.keys(servizi).map((servizio) => {
+            if ($(`#${servizio}`)[0].checked)
+                parametri[servizio] = true;
+        })
 
         const valoriRicerca = $.param(parametri);
 
@@ -34,35 +40,19 @@ function SchermataRisultati() {
             .catch(err => console.log(err));
     }, []);
 
-    // TODO: da rimuovere, solo per test
-    const servizi = [
-            {servizio: "Aria condizionata", icona: "snowflake"},
-            {servizio: "Riscaldamento", icona: "fire"},
-            {servizio: "TV", icona: "tv"},
-            {servizio: "Wi-Fi", icona: "wifi"},
-            {servizio: "Piscina", icona: "water"},
-            {servizio: "Idonea per bambini", icona: "child"}
-        ]
-
     return (
         <Fragment>
             <FormRicerca setDestinazione={setDestinazione}/>
+            <a className="btn btn-primary btn-block d-lg-none mt-0 no-radius" href="#filtri">
+                Filtri<span className="ml-2 fas fa-filter"/>
+            </a>
             <div className="container">
-                <div className="row">
-                    <div className="shadow d-none d-lg-block col-lg-4 h-100 p-3 card mt-3">
-                        <div className="shadow-sm" style={{height: 250 + "px"}}>
-                            <Mappa destinazione={destinazione}/>
-                        </div>
-                        <FormFiltri servizi={[
-                            {nome: "Cucina per celiaci", id: "cucinaPerCeliaci"},
-                            {nome: "TV", id: "tv"}
-                            ]}/>
-                    </div>
-                    <div className="col-12 col-lg-8">
-                        { listaStrutture[0] ? (
+                <div className="d-lg-flex flex-row-reverse">
+                    <div className="col-12 col-lg-8 px-0 px-lg-2">
+                        { listaStrutture && listaStrutture[0] ? (
                             <Fragment>
-                                { listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
-                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={servizi} foto={struttura.foto}/>
+                                { listaStrutture instanceof Array && listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
+                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi} foto={struttura.foto[0]}/>
                                 })}
                                 <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
                             </Fragment>
@@ -72,6 +62,13 @@ function SchermataRisultati() {
                             </div>
                         )}
 
+                    </div>
+
+                    <div id="filtri" className="shadow d-lg-block col-12 col-lg-4 h-100 p-3 card mt-3">
+                        <div className="shadow-sm" style={{height: 250 + "px"}}>
+                            <Mappa destinazione={destinazione}/>
+                        </div>
+                        <FormFiltri setListaStrutture={setListaStrutture}/>
                     </div>
                 </div>
             </div>

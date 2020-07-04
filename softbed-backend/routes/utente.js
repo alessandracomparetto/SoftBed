@@ -1,6 +1,3 @@
-/*TODO: gestire gli errori del login e fare apparire messaggi diversi in base all'errore:
-*  password sbagliato o email non corretta*/
-
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');

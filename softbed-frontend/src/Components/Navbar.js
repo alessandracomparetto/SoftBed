@@ -1,6 +1,10 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import { Link } from "react-router-dom"
 
+function logout() {
+    window.sessionStorage.removeItem("utente");
+    window.location.href="/";
+}
 
 function UtenteNonAutenticato() {
     return (
@@ -53,7 +57,7 @@ function UtenteAutenticato(props) {
                         }
                         <div className="dropdown-divider d-sm-none"/>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">Esci</Link>
+                            <Link className="nav-link" onClick={logout}>Esci</Link>
                         </li>
                     </div>
 
@@ -75,7 +79,7 @@ function UtenteAutenticato(props) {
                                 )
                             }
                             <div className="dropdown-divider"/>
-                            <Link className="dropdown-item" to="/">Esci</Link>
+                            <Link className="dropdown-item" onClick={logout}>Esci</Link>
                         </div>
                     </li>
                 </ul>

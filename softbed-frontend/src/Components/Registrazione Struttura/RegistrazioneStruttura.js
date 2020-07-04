@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import FormTipologiaStruttura from "./FormTipologiaStruttura";
 import FormCamere from "./FormCamere";
 import InserimentoCaratteristicheB from "./InserimentoCaratteristicheB";
@@ -17,12 +17,12 @@ function RegistrazioneStruttura () {
     const [step, setStep]= useState(1);
     const [info, setInfo]= useState({});
 
-    function printObject(o) {
-        let out = '';
-        for (let p in o) {
-            out += p + ': ' + o[p] + '\n';
-        } console.log(out);
-    }
+    useEffect(()=>{
+       let utente = window.sessionStorage.getItem("utente");
+       if(!utente || utente.length==0){
+           window.location.href="/accedi";
+       }
+    },[]);
 
     function handleChange(event){
         const{name,value}=event.target;

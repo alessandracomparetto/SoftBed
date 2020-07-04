@@ -1,34 +1,33 @@
 import React, {useEffect, useState} from "react";
 import mostraDialogErrore from "../../Actions/errore";
 import axios from 'axios';
-import {useParams} from "react-router-dom"
 import InformazioniStruttura from "../Registrazione Struttura/InformazioniStruttura";
 import ModificaCaratteristicheB from "./ModificaCaratteristicheB";
 import ModificaCondizioni from "./ModificaCondizioni";
 import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "./CalcoloGuadagno";
 import SidebarStruttura from "./SidebarStruttura";
+import {useParams} from "react-router-dom";
 
 function SchermataGestioneStruttura(){
-    let {id} = useParams();
     const [struttura,setStruttura]=useState([]);
-    const [flag, setFlag]=useState(0);
-
-    const[copia, setCopia]= useState("");
     //utilizzo questo stato per aggiornare le informazioni della struttura al modificare delle condizione e delle caratteristiche
+    const [flag, setFlag]=useState(0);
+    const {indice} = useParams();
 
     useEffect(() => {
-        let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
-        let dati;
-        for(let i = 0; i<lista.length; i++){
-            if(lista[i].idStruttura == id){
-                dati=lista[i];
-            }
+        let utente = window.sessionStorage.getItem("utente");
+        if(!utente || utente.length==0){
+            window.location.href="/accedi";
         }
-        axios.post(`/struttura/gestioneStruttura/${id}`, dati)
+        let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
+        if(!lista || indice>=lista.length || !lista[indice]){
+            window.location.href="/gestioneStrutture/"
+        }
+        let dati = lista[indice];
+        axios.post(`/struttura/gestioneStruttura`, dati)
             .then(res => {
                 setStruttura(res.data);
-                setCopia(res.data);
             })
             .catch(()=>mostraDialogErrore());
     }, []);
@@ -54,7 +53,6 @@ function SchermataGestioneStruttura(){
         setStruttura(tmp);
     }
 
-
     return (
         <div className="d-flex justify-content-center">
             <div className="row mx-auto maxw-xl">
@@ -68,16 +66,16 @@ function SchermataGestioneStruttura(){
                 <div  id="caratteristiche" className="collapse contenuto col-12 col-md-9">
                     {
                         (struttura.tipologiaStruttura==="cv")?
-                            <ModificaCaratteristicheC idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
+                            <ModificaCaratteristicheC props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
                             :
-                            <ModificaCaratteristicheB idStruttura={id} props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
+                            <ModificaCaratteristicheB props={struttura} handleChange={handleChange} flag={flag} setFlag={setFlag} />
                     }
                 </div>
                 <div id="guadagno" className="collapse contenuto col-12 col-md-9">
-                    <CalcoloGuadagno idStruttura={id}/>
+                    <CalcoloGuadagno idStruttura={struttura.idStruttura}/>
                 </div>
                 <div id="condizioni" className="collapse contenuto col-12 col-md-9">
-                    <ModificaCondizioni dati={struttura} setStruttura={setStruttura} idStruttura={id} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione} copia={copia} setCopia={setCopia}/>
+                    <ModificaCondizioni dati={struttura} setStruttura={setStruttura} handleChange={handleChange} flag={flag} setFlag={setFlag} correzione={correzione}/>
                 </div>
 
             </div>

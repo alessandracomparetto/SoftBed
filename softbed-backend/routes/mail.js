@@ -179,7 +179,7 @@ router.post('/rifiuta-prenotazione', (req, res) => {
 })
 
 router.post('/conferma-prenotazione', (req, res) => {
-    console.log("sono qui");
+    console.log("body===================", req.body);
     const mailOspite = {
         from: softbed.email,
         to: req.body.emailOspite,

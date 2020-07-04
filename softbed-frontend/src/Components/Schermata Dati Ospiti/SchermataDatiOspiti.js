@@ -11,8 +11,13 @@ function SchermataDatiOspiti(props){
     const history = useHistory();
     const location = useLocation();
     const {idStruttura, refPrenotazione} = useParams();
+    const [flag, setFlag] = useState(0);
 
     useEffect(() => {
+        let utente = window.sessionStorage.getItem("utente");
+        if(!utente || utente.length==0){
+            window.location.href="/accedi";
+        }
 
         axios.post(`/ospite/fetch`,[refPrenotazione]).then(res => {
             console.log("DATI OSPITI RECUPERATI=======");
@@ -22,19 +27,26 @@ function SchermataDatiOspiti(props){
             .catch(err => console.log(err));
     }, []);
 
-    const aggiungiOspite = (dato) => {
+    useEffect(() => {
+        console.log("Ciao");
+    }, [flag]);
+
+
+    function aggiungiOspite(dato) {
         try {
+            console.log(listaOspiti);
             dato.refPrenotazione = refPrenotazione;
             console.log(dato);
             axios.post("/ospite/aggiungi", dato)
                 .then(res => { // then print response status
-                    console.log("OSPITE AGGIUNTO ======= ");
-                    console.log(res.data);
                     let tmp = [...listaOspiti];
+                    console.log("TMP COPIATO" ,tmp);
                     dato.idOspite = res.data.insertId;
                     tmp.push(dato);
-                    console.log(tmp);
                     setOspiti(tmp);
+                    console.log("OSPITI",tmp);
+                    let contatore = flag +1;
+                    setFlag(contatore);
                 });
         }catch(err){
             if (err.response.status === 400) {
@@ -46,12 +58,12 @@ function SchermataDatiOspiti(props){
 
     }
 
-    const eliminaOspite = (idOspite, refPrenotazione, indice) => {
+   const eliminaOspite = (idOspite, refPrenotazione, indice) => {
+        console.log("Sono qui");
         console.log(idOspite);
         console.log(refPrenotazione);
-        let data = {"idOspite":idOspite, "refPrenotazione":refPrenotazione};
         try {
-            axios.post(`/ospite/elimina`, data)
+            axios.post(`/ospite/elimina`, {"idOspite":idOspite, "refPrenotazione":refPrenotazione})
                 .then(res => { // then print response status
                     console.log("OSPITE ELIMINATO ======= ");
                     console.log(res.data);
@@ -71,7 +83,7 @@ function SchermataDatiOspiti(props){
     }
 
 
-    const verificaDatiAggiuntivi =(event)=>{
+    const verificaDatiAggiuntivi = (event)=>{
         event.preventDefault();
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
         /*if(utente[0].refIndirizzo === null || utente[0].refComuneNascita=== null){
@@ -105,17 +117,17 @@ function SchermataDatiOspiti(props){
                                 return <OspitiInseriti key={indice} indiceElemento={indice} idOspite={ospiti.idOspite} nome={ospiti.nome} cognome={ospiti.cognome}
                                                       codiceFiscale={ospiti.codiceFiscale} dataNascita={ospiti.dataNascita.split("T")[0]}
                                                       comune={ospiti.comuneNascita} provincia={ospiti.provinciaNascita} regione={ospiti.regione}
-                                                      via={ospiti.via} numero={ospiti.numero} cap={ospiti.cap}
+                                                      via={ospiti.via} numero={ospiti.numeroCivico} cap={ospiti.cap}
                                                        comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
                                                        regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
-                                                       permanenza={ospiti.permanenza} refPrenotazione = {ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
+                                                       permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
                             })
 
                         }
                     </ul>
                 </div>
 
-                <FormDatiOspite aggiungiOspite={aggiungiOspite} dati={listaOspiti}/>
+                <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
                 <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
             </div>
             <div id = "riepilogo" className="my-3 collapse">

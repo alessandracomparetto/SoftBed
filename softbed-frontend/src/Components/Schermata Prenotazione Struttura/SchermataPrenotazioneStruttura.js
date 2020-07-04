@@ -5,20 +5,24 @@ import mostraDialogErrore from "../../Actions/errore";
 import {useParams} from "react-router-dom"
 
 import axios from "axios";
+import SidebarStruttura from "../Schermata Gestione Struttura/SidebarStruttura";
 function SchermataPrenotazioneStruttura(){
     const [prenotazioni, aggiornaPrenotazioni]=useState([]);
-    const  [flag, aggiornaFlag]=useState(0); //utilizzo dello stato per indicare quando aggiornare la lista della prenotazioni
-    const {id} = useParams();
-    let data;
-    let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
-
+    const [flag, aggiornaFlag]=useState(0); //utilizzo dello stato per indicare quando aggiornare la lista della prenotazioni
+    const {indice} = useParams();
+    const [struttura, setStruttura] = useState([])
      useEffect(() => {
-         for(let i = 0 ; i<listaStrutture.length; i++){
-             if(listaStrutture[i].idStruttura===id){
-                 data = {"idStruttura":id, "tipologiaStruttura":listaStrutture[i].tipologiaStruttura};
-                 break;
-             }
+         let utente = window.sessionStorage.getItem("utente");
+         if(!utente || utente.length==0){
+             window.location.href="/accedi";
          }
+         let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
+         if(!listaStrutture || !listaStrutture[indice] || indice >= listaStrutture.length){
+             window.location.href="/gestioneStrutture/";
+         }
+         let data = listaStrutture[indice];
+         console.log(data);
+         setStruttura(data);
         axios.post(`/prenotazione/listaPrenotazioni`, data).then(res => {
             aggiornaPrenotazioni(res.data);
         })
@@ -35,10 +39,10 @@ function SchermataPrenotazioneStruttura(){
                         <h4>Richieste in attesa</h4>
                         <ul className="list-group list-group-flush ">
                             {
-                                prenotazioni.map((prenotazione, indice) => {
+                                prenotazioni.map((prenotazione, i) => {
                                     if (prenotazione.confermata === 0) {
-                                        return (<li key={indice} className="list-group-item list-group-item-warning">
-                                            <RichiesteInAttesa key={indice}  indiceElemento={indice} prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag} id={id}/></li>)
+                                        return (<li key={i} className="list-group-item list-group-item-warning">
+                                            <RichiesteInAttesa prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag} indice={indice} nomeStruttura={struttura.nomeStruttura}/></li>)
                                     }
                                 })
                             }
@@ -46,10 +50,10 @@ function SchermataPrenotazioneStruttura(){
                         <h4>Richieste confermate</h4>
                         <ul className="list-group list-group-flush ">
                             {
-                                prenotazioni.map((prenotazione, indice) => {
+                                prenotazioni.map((prenotazione, i) => {
                                     if (prenotazione.confermata === 1) {
-                                        return (<li key={indice} className="list-group-item list-group-item-warning">
-                                            <RichiesteConfermate key={indice}  indiceElemento={indice} prenotazione={prenotazione}  id={id}/></li>)
+                                        return (<li key={i} className="list-group-item list-group-item-warning">
+                                            <RichiesteConfermate prenotazione={prenotazione} indice={indice}/></li>)
                                     }
                                 })
                             }

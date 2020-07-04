@@ -19,7 +19,7 @@ router.post('/listaPrenotazioni', function (req, res) {
     });
 });
 router.post('/rifiutaPrenotazione', function (req, res) {
-    prenotazioneModel.rifiutaPrenotazione
+    prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
             timer.distruggiTimeout(req.body.idPrenotazione);
             res.send();
@@ -30,7 +30,7 @@ router.post('/rifiutaPrenotazione', function (req, res) {
     });
 
 router.post('/confermaPrenotazione', function (req, res) {
-    prenotazioneModel.confermaPrenotazione
+    prenotazioneModel.confermaPrenotazione(req.body)
         .then(()=>{
             timer.distruggiTimeout(req.body.idPrenotazione);
             res.send();

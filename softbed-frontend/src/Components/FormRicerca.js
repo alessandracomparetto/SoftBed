@@ -244,11 +244,9 @@ function FormRicerca(props) {
             </form>
             {
                 (path !== "/") && (
-                    <div className={`mx-auto bg-warning text-center d-md-none`}>
-                        <button type="button" className="btn btn-block" onClick={() => toggleVisibile(!visibile)}>
-                            <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
-                        </button>
-                    </div>
+                    <button type="button" className="btn btn-warning btn-block d-md-none my-0 no-radius" onClick={() => toggleVisibile(!visibile)}>
+                        <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
+                    </button>
                 )
             }
         </Fragment>

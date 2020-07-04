@@ -23,6 +23,7 @@ import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAg
 import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
 import SchermataPrenotazioneStruttura from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
 import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
+import SchermataDatiOspiti from "./Components/Schermata Dati Ospiti/SchermataDatiOspiti";
 
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
                             <Login />
                         </Route>
 
-                       <Route exact path="/struttura/gestioneStruttura/:id">
+                       <Route exact path="/struttura/gestioneStruttura/:indice">
                             <SchermataGestioneStruttura />
                         </Route>
 
@@ -96,8 +97,12 @@ function App() {
                             <SchermataStruttura />
                         </Route>
 
-                        <Route exact path="/struttura/gestioneStruttura/:id/prenotazioni">
+                        <Route exact path="/struttura/gestioneStruttura/:indice/prenotazioni">
                             <SchermataPrenotazioneStruttura />
+                        </Route>
+
+                        <Route exact path="/ospiti/dichiarazioneOspiti/:indice/:refPrenotazione">
+                            <SchermataDatiOspiti />
                         </Route>
 
                         {/* Se il percorso non è stato trovato viene mostrata la pagina di errore 404 */}

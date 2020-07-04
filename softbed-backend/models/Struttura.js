@@ -2,8 +2,8 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
-const Queries = require('./QueryStruttura');
 const StrutturaEntity = require('./StrutturaEntity');
+const ListaStrutture = require('./ListaStruttureEntity');
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
@@ -73,9 +73,8 @@ module.exports= {
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3])
+                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [datiStruttura.idUtente])
                     .catch((err) => {throw createError(500)});
-
                 return callback(results);
             });
         } //chiusura try
@@ -84,10 +83,10 @@ module.exports= {
         }
     },
 
-    fetch: async function (ID, dati, callback) {
+    fetch: async function (dati, callback) {
         let camere;
         let array = [];
-        let idStruttura = ID;
+        let idStruttura = dati.idStruttura;
         let tipologiaStruttura = dati.tipologiaStruttura;
         let refGestore = dati.refGestore;
         let infoStruttura;
@@ -184,61 +183,9 @@ module.exports= {
     },
 
     cerca: async function(datiRicerca, callback) {
-
-        const db = await makeDb(config);
-
-        let query;
-        // Solo case vacanze
-        if (datiRicerca.bedAndBreakfast !== "true") {
-            query = Queries.queryInformazioniCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        // Solo bed and breakfast
-        else if (datiRicerca.casaVacanze !== "true") {
-            query = Queries.queryInformazioniBB(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        // Sia case vacanze che B&B : id, nome, foto
-        else {
-            query = Queries.queryInformazioniBBCV(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti);
-        }
-
-        try {
-            await withTransaction(db, async () => {
-                let informazioni = await db.query(query, []).catch((err) => {console.log(err)});
-
-                let descrizione;
-
-
-                for (let i = 0; i < informazioni.length; i++) {
-                    let id = informazioni[i].id;
-                    let descrizioneBB = await db.query(Queries.queryDescrizioneBB(), id).catch(() => {throw createError(500)});
-                    let descrizioneCV = await db.query(Queries.queryDescrizioneCV(), id).catch(() => {throw createError(500)});
-
-                    let servizi;
-
-                    if (descrizioneBB[0]) {
-                        descrizione = descrizioneBB[0].descrizione;
-                        servizi = await db.query(Queries.queryServiziBB(), id).catch(() => {throw createError(500)});
-                    }
-
-                    else if (descrizioneCV[0]) {
-                        descrizione = descrizioneCV[0].descrizione;
-                        servizi = await db.query(Queries.queryServiziCV(), id).catch(() => {throw createError(500)});
-                    }
-
-                    else throw createError(500);
-
-                    informazioni[i].descrizione = descrizione;
-                    informazioni[i].servizi = servizi;
-                }
-
-                return callback(informazioni);
-            })
-        } catch (err) {
-            console.log(err);
-        }
-
+        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casaVacanze);
+        await listaStrutture.init();
+        return callback(listaStrutture);
     },
 
     listaStrutture:async function(idGestore,callback){
@@ -258,7 +205,6 @@ module.exports= {
 
     calcoloGuadagno: async function(dati, callback){
         const db = await makeDb(config);
-        let idGestore=dati.refGestore;
         let dataInizio=dati.dataInizio;
         let dataFine= dati.dataFine;
         let idStruttura = dati.idStruttura;
@@ -275,15 +221,14 @@ module.exports= {
         }
     },
 
-
     fetchStruttura: async function(idStruttura, callback) {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                risultato = await db.query(('SELECT S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
-                     C.nomeComune as comune, I.via, I.numeroCivico FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
+                let risultato = await db.query(('SELECT S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
+                     C.nomeComune as comune, I.via, I.numeroCivico, I.cap FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
                     WHERE S.idStruttura = ? AND S.refIndirizzo = I.idIndirizzo AND I.refComune = C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione'),
-                    [idStruttura]).catch((err) => {throw createError(500)});
+                    [data.idStruttura]).catch((err) => {throw err});
                 return callback(risultato);
             })
         }

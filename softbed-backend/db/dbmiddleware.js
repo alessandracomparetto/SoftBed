@@ -26,7 +26,6 @@ exports.makeDb = async function(config) {
     // per gestire efficientemente le richieste concorrenti
     // per una singola connessione si può usare createConnection
     let pool = mysql.createPool(config);
-    console.log('Pool creato dalla configurazione');
 
     // Creiamo la versione asincrona di pool.getConnection
     let getConnection = () => {
@@ -44,7 +43,6 @@ exports.makeDb = async function(config) {
     // nelle versioni asincrone dei metodi
     // del nostro middleware
     const connection = await getConnection();
-    console.log('connessione creata: ');
 
     return {
         query(sql, args) {

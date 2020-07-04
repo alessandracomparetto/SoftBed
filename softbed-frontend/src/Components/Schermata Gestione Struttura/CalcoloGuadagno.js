@@ -10,11 +10,12 @@ function CalcoloGuadagno(props){
     const GIORNO = 86400000; //constante in millisecondi
 
     function calcola() {
+        $("#mostra").addClass("collapse");
         $("#formCalcoloGuadagno").addClass("was-validated");
         if($("#dataInizio").val() && $("#dataFine").val()){
             try{
                 //TODO prendere ref gesttore da session storage
-                let data = {"idStruttura":props.idStruttura, "dataInizio": new Date(dataInizio).toISOString().slice(0, 10), "dataFine": new Date(dataFine).toISOString().slice(0, 10), "refGestore":3};
+                let data = {"idStruttura":props.idStruttura, "dataInizio": new Date(dataInizio).toISOString().slice(0, 10), "dataFine": new Date(dataFine).toISOString().slice(0, 10)};
                 axios.post('/struttura/calcoloGuadagno', data)
                     .then ( res =>{
                         setGuadagno(res.data);

@@ -3,7 +3,7 @@ import data from "../../regioni_province_comuni.js";
 import $ from "jquery";
 import axios from "axios";
 import SidebarUtente from "./SidebarUtente";
-
+import {useHistory, useLocation} from "react-router-dom";
 const crypto = require('crypto');
 
 //TODO: SE DIVENTO GESTORE NON VEDO PIù NESSUN CAMPO
@@ -52,21 +52,6 @@ function FormDatiAggiuntivi(){
         document.getElementById("regioneResidenza").value=utente.regioneResidenza;
         document.getElementById("regioneNascita").value=utente.regioneNascita;
 
-    },[utente])
-    function handleGestore(event){ //Affinchè un utente sia un gestore tutti i campi del form devono essere compilati
-        if(event.target.value==="on" || utente.gestore==1) {
-            for (let input of $("input")){
-                if (input.getAttribute("type") != "password") {
-                    input.setAttribute("required", "");
-                }
-            }
-        }
-        else{
-            for(let input of $("input")) {
-                input.removeAttribute("required");
-            }
-        }
-    }
     //modifico i dati dell'utente
     function modificaDatiAggiuntivi(event) {
         event.preventDefault();
