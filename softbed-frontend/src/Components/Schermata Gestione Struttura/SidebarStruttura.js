@@ -21,7 +21,7 @@ function SidebarStruttura() {
         $(".contenuto").addClass("collapse");
         $("#guadagno").removeClass("collapse");
     }
-    let {id} = useParams();
+    let {indice} = useParams();
 
     return(
         <nav className="navbar bg-warning">
@@ -37,7 +37,7 @@ function SidebarStruttura() {
                     <div className="dropdown-divider"/>
 
                     <button type="button" className="btn btn-warning">
-                        <Link to={`${id}/prenotazioni`} className="text-decoration-none">
+                        <Link to={`${indice}/prenotazioni`} className="text-decoration-none">
                             <li className="nav-item text-center text-md-right text-dark ">Prenotazioni</li>
                         </Link>
                     </button>

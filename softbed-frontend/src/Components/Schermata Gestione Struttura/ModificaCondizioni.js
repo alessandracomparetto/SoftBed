@@ -14,7 +14,6 @@ function ModificaCondizioni(props) {
                 document.getElementById("feedbackPagamento").classList.add("collapse");
                 if (document.getElementById("formCondizioni").checkValidity()) {
                     let dato = props.dati;
-                    dato["idStruttura"]=props.idStruttura;
                     console.log("Inizio della richiesta");
                     axios.post('/struttura/modificaCondizioni', dato)
                         .then(res => { // then print response status
@@ -23,10 +22,15 @@ function ModificaCondizioni(props) {
                                 //aggiorno lo stato flag presente nella Schermata Gestione Struttura
                                 let contatore=props.flag+1;
                                 props.setFlag(contatore);
-                                props.setCopia(props.dati);
                                 mostraDialogConferma();
                             }
-                        }).catch(() => console.log("Nesssuna riga modificata"))
+                        }).catch((err) => {
+                            if(err.response.status== 304){
+                                console.log("nessuna riga modficata");
+                            }else{
+                                console.log(err);
+                            }
+                    })
                 }
             }
             else{
@@ -36,7 +40,6 @@ function ModificaCondizioni(props) {
             mostraDialogErrore();
         }
     }
-
 
     return (
         <form id="formCondizioni" className="p-3" noValidate onChange={props.handleChange}>

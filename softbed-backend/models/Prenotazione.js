@@ -53,26 +53,22 @@ module.exports = {
     getPrenotazioni: async function(dati, callback){
         idStruttura=dati.idStruttura;
         const db=await makeDb(config);
-        console.log(dati);
         try{
            await withTransaction(db,async()=> {
-               let listaPrenotazioni = await db.query('SELECT prenotazione.*,utente.*, autenticazione.email FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente', [[[idStruttura]]]).catch(err => {
-                   throw err;
-               });
+               let listaPrenotazioni = await db.query('SELECT prenotazione.*,utente.*, autenticazione.email FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente',
+                   [[[idStruttura]]]).catch(err => {throw err;});
                if (dati.tipologiaStruttura == "B&B"){
                    for (let i = 0; i < listaPrenotazioni.length; i++) {
                        let indice = listaPrenotazioni[i].idPrenotazione;
-                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?  \
-                                                       ', [indice]).catch(err=>{throw err});
+                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?',
+                           [indice]).catch(err=>{throw err});
                        let array=[];
                        for (let i = 0; i < camere.length; i++) {
                            array.push(camere[i]);
                        }
                        listaPrenotazioni[i]["camere"] = array;
-                       console.log(listaPrenotazioni[i]);
                    }
                }
-               console.log(listaPrenotazioni);
                return callback(listaPrenotazioni);
            });
         }
@@ -81,34 +77,30 @@ module.exports = {
         }
     },
 
-    rifiutaPrenotazione: async function(data,res){
+    rifiutaPrenotazione: async function(data){
         const db = await makeDb(config);
-
         console.log("id"+data.idPrenotazione);
-        try {/*TODO rimuovere camere*/
+        try {
             await withTransaction(db, async () => {
-                let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch(() => {throw createError(500)});
+                let camere = await db.query(`DELETE FROM prenotazionecamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
+                console.log(camere);
+                let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
                 console.log(result);
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
-                else return res(result);
             })
         } catch(err) {
             throw err;
         }
     },
 
-    confermaPrenotazione: async function(data,res){
+    confermaPrenotazione: async function(data){
         const db = await makeDb(config);
         let dataConferma=new Date();
         console.log("sto per confermare");
-        console.log("id"+data.idPrenotazione);
-        console.log(dataConferma);
         try {
             await withTransaction(db, async () => {
                 let result = await db.query('UPDATE prenotazione SET prenotazione.confermata=1 , prenotazione.dataScadenza=null , prenotazione.dataConferma=? WHERE idPrenotazione = ?', [dataConferma,data.idPrenotazione]).catch((err) => {throw err});
-                console.log(result);
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
-                else return res(result);
             })
         } catch(err) {
             throw err;
@@ -117,9 +109,7 @@ module.exports = {
 
     getPrenotazioniUtente: async function(dati, callback){
         idUtente=dati.idUtente;
-
         const db=await makeDb(config);
-        console.log(dati);
         try{
             await withTransaction(db,async()=> {
                 let listaPrenotazioni = await db.query('SELECT prenotazione.*,struttura.*,utente.idUtente ,autenticazione.email\
@@ -141,8 +131,6 @@ module.exports = {
                         listaPrenotazioni[0]["camere"] = array;
                     }
                 }
-                console.log("RESULTS==========")
-                console.log(listaPrenotazioni);
                 return callback(listaPrenotazioni);
             });
         }

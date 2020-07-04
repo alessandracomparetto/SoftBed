@@ -9,18 +9,23 @@ function ModificaCaratteristicheC(props){
         event.preventDefault()
         try {
             let dato = props.props;
-            dato["idStruttura"]=props.idStruttura;
             console.log("Inizio la richiesta");
             axios.post('/struttura/modificaCaratteristicheCasaVacanze', dato)
                 .then(res => { // then print response status
                     if(res.status===200){
-                        console.log(res.data);
+                        console.log("OK");
                         let contatore=props.flag+1;
                         //aggiorno lo stato flag presente nella Schermata Gestione Struttura
                         props.setFlag(contatore);
                         mostraDialogConferma();
                     }
-                }).catch(()=> console.log("Nesssuna riga modificata"))
+                }).catch((err) => {
+                if(err.response.status== 304){
+                    console.log("nessuna riga modficata");
+                }else{
+                    console.log(err);
+                }
+                })
         } catch (e) {
             mostraDialogErrore();
         }

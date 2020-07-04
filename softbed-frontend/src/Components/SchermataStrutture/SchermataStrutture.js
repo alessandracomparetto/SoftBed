@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import CalcoloGuadagno from "../Schermata Gestione Struttura/CalcoloGuadagno"
-import $ from 'jquery';
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
 
@@ -43,7 +42,7 @@ function SchermataStrutture(){
                                         <strong>{struttura.tipologiaStruttura}</strong>
                                     </div>
                                     <div  className=" col-12 col-lg-3">
-                                        <Link className="text-light" to={`/struttura/gestioneStruttura/${listaStrutture[indice].idStruttura}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
+                                        <Link className="text-light" to={`/struttura/gestioneStruttura/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
                                     </div>
                                 </div>
                                 <div className="collapse">

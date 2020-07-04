@@ -73,9 +73,8 @@ module.exports= {
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [3])
+                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [datiStruttura.idUtente])
                     .catch((err) => {throw createError(500)});
-
                 return callback(results);
             });
         } //chiusura try
@@ -84,10 +83,10 @@ module.exports= {
         }
     },
 
-    fetch: async function (ID, dati, callback) {
+    fetch: async function (dati, callback) {
         let camere;
         let array = [];
-        let idStruttura = ID;
+        let idStruttura = dati.idStruttura;
         let tipologiaStruttura = dati.tipologiaStruttura;
         let refGestore = dati.refGestore;
         let infoStruttura;
@@ -258,7 +257,6 @@ module.exports= {
 
     calcoloGuadagno: async function(dati, callback){
         const db = await makeDb(config);
-        let idGestore=dati.refGestore;
         let dataInizio=dati.dataInizio;
         let dataFine= dati.dataFine;
         let idStruttura = dati.idStruttura;
@@ -274,7 +272,6 @@ module.exports= {
             throw err;
         }
     },
-
 
     fetchStruttura: async function(idStruttura, callback) {
         const db = await makeDb(config);

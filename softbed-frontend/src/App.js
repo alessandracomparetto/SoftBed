@@ -48,7 +48,7 @@ function App() {
                             <Login />
                         </Route>
 
-                       <Route exact path="/struttura/gestioneStruttura/:id">
+                       <Route exact path="/struttura/gestioneStruttura/:indice">
                             <SchermataGestioneStruttura />
                         </Route>
 
@@ -96,7 +96,7 @@ function App() {
                             <SchermataStruttura />
                         </Route>
 
-                        <Route exact path="/struttura/gestioneStruttura/:id/prenotazioni">
+                        <Route exact path="/struttura/gestioneStruttura/:indice/prenotazioni">
                             <SchermataPrenotazioneStruttura />
                         </Route>
 

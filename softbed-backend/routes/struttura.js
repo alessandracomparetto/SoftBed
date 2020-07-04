@@ -7,7 +7,7 @@ const token = ModuloUtente.token;
 
 // Cache
 let cacheManager = require('cache-manager');
-let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300}) // 5 minuti
+let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300}); // 5 minuti
 
 
 router.post('/', function (req, res) {
@@ -17,8 +17,8 @@ router.post('/', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-router.post('/gestioneStruttura/:id', function(req, res) {
-    strutturaModel.fetch(req.params.id, req.body , function(data) {
+router.post('/gestioneStruttura/', function(req, res) {
+    strutturaModel.fetch(req.body , function(data) {
         res.send(data);
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
@@ -26,7 +26,7 @@ router.post('/gestioneStruttura/:id', function(req, res) {
 
 router.post('/listaStruttureGestore', function (req, res) {
     console.log(req.body);
-        token.stampaToken();
+    token.stampaToken();
     //TODO: VERIFICARE TOKEN, VERIFICARE IDGESTORE
     strutturaModel.listaStrutture(req.body.idUtente,function(data){
         res.send(data);
@@ -83,8 +83,7 @@ router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
         console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
-        res.status(status);
-        res.send();
+        res.sendStatus(status);
     }).catch( (err) =>{
         res.status(err.status).send(err.message);
     })
@@ -92,7 +91,6 @@ router.post('/modificaCondizioni', function (req, res) {
 
 router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
     strutturaModel.modificaCaratteristicheC(req.body,function(data){
-        console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus( status);
     }).catch( (err) =>{
@@ -102,7 +100,6 @@ router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
 
 router.post('/modificaCaratteristicheB&B', function (req, res) {
     strutturaModel.modificaCaratteristicheB(req.body,function(data){
-        console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus( status);
     }).catch( (err) =>{
@@ -111,3 +108,5 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
 });
 
 module.exports = router;
+
+

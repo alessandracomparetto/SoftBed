@@ -28,4 +28,4 @@ class Timer{
 
 }
 
-module.exports = Token;
+module.exports = Timer;
