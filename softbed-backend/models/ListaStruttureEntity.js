@@ -53,12 +53,17 @@ class ListaStruttureEntity {
         }
     }
 
-    applicaFiltri(filtri) {
+    filtra(servizi, ambienti, prezzo) {
         let listaFiltrata;
-        console.log(filtri, "Siamo dentro:");
+
+
         listaFiltrata = this.lista.reduce(function(res, struttura) {
 
-            if (struttura.soddisfaFiltri(filtri)) {
+            if (
+                (!servizi[0] || struttura.soddisfaServizi(servizi)) &&
+                (!ambienti[0] || struttura.soddisfaAmbienti(ambienti)) &&
+                (!(prezzo.min || prezzo.max) || struttura.soddisfaPrezzo(prezzo))
+            ) {
                 res.push(struttura);
             }
 
@@ -67,6 +72,7 @@ class ListaStruttureEntity {
 
         return listaFiltrata;
     }
+
 }
 
 module.exports = ListaStruttureEntity;

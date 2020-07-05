@@ -58,10 +58,10 @@ module.exports = {
            await withTransaction(db,async()=> {
                let listaPrenotazioni = await db.query('SELECT prenotazione.*,utente.*, autenticazione.email FROM prenotazione JOIN utente JOIN autenticazione WHERE prenotazione.refStruttura=? AND prenotazione.refUtente=utente.idUtente AND utente.idUtente =autenticazione.refUtente',
                    [[[idStruttura]]]).catch(err => {throw err;});
-               if (dati.tipologiaStruttura == "B&B"){
+               if (dati.tipologiaStruttura === "B&B"){
                    for (let i = 0; i < listaPrenotazioni.length; i++) {
                        let indice = listaPrenotazioni[i].idPrenotazione;
-                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?',
+                       let camere = await db.query('SELECT * FROM `cameraB&B` JOIN prenotazioneCamera WHERE `cameraB&B`.idCamera=prenotazioneCamera.refCamera AND prenotazioneCamera.refPrenotazione=?',
                            [indice]).catch(err=>{throw err});
                        let array=[];
                        for (let i = 0; i < camere.length; i++) {
@@ -83,7 +83,7 @@ module.exports = {
         console.log("id"+data.idPrenotazione);
         try {
             await withTransaction(db, async () => {
-                let camere = await db.query(`DELETE FROM prenotazionecamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
+                let camere = await db.query(`DELETE FROM prenotazioneCamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
                 console.log(camere);
                 let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
                 console.log(result);
@@ -122,7 +122,7 @@ module.exports = {
                 for (let i = 0; i < listaPrenotazioni.length; i++) {
                     let indice = listaPrenotazioni[i].idPrenotazione;
                     if(listaPrenotazioni[i].tipologiaStruttura==="B&B"){
-                        let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?  \
+                        let camere = await db.query('SELECT * FROM `cameraB&B` JOIN prenotazioneCamera WHERE `cameraB&B`.idCamera=prenotazioneCamera.refCamera AND prenotazioneCamera.refPrenotazione=?  \
                                                        ', [indice]).catch(err=>{throw err});
                         let array=[];
                         console.log(indice);
@@ -139,4 +139,20 @@ module.exports = {
             console.log(err);
         }
     },
+
+    rendiconto: async function(dati, callback) {
+        console.log(dati.trimestre, dati.rendicontoEffettuato)
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                let risultato = await db.query(('SELECT P.idPrenotazione FROM prenotazione AS P  \
+                    WHERE P.refStruttura = ? AND P.checkIn < ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendicontoEffettuato]).catch((err) => {throw err});
+                return callback(risultato);
+            })
+        }
+        catch (err) {
+            throw err;
+        }
+
+    }
 }

@@ -36,17 +36,20 @@ function SchermataStrutture(){
                         return(
                             <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key={indice}>
                                 <div className="row d-flex justify-content-center">
-                                    <div className="col-4 col-md-3 my-auto text-center">
+                                    <div className="col-4 col-lg-2 my-auto text-center">
                                         <strong>{struttura.nomeStruttura}</strong>
                                     </div>
-                                    <div className="col-4 col-md-3 my-auto text-center">
+                                    <div className="col-4 col-lg-2 my-auto text-center">
                                         <strong>{struttura.via} {struttura.numeroCivico} </strong>
                                     </div>
-                                    <div className="col-4 col-md-3 my-auto text-center">
+                                    <div className="col-4 col-lg-2 my-auto text-center">
                                         <strong>{struttura.tipologiaStruttura}</strong>
                                     </div>
-                                    <div  className=" col-12 col-lg-3">
+                                    <div  className=" col-6 col-lg-2">
                                         <Link className="text-light" to={`/struttura/gestioneStruttura/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
+                                    </div>
+                                    <div  className=" col-6 col-lg-2">
+                                        <Link className="text-light" to={`/struttura/rendiconto/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Rendiconto</button></Link>
                                     </div>
                                 </div>
                                 <div className="collapse">

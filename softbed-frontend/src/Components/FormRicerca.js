@@ -245,7 +245,7 @@ function FormRicerca(props) {
             {
                 (path !== "/") && (
                     <button type="button" className="btn btn-warning btn-block d-md-none my-0 no-radius" onClick={() => toggleVisibile(!visibile)}>
-                        <span className={`fas fa-${visibile ? "sort-up" : "search"}`}/>
+                        {visibile? "" : "Cerca"} <span className={` fas fa-${visibile ? "sort-up" : "search ml-2"}`}/>
                     </button>
                 )
             }

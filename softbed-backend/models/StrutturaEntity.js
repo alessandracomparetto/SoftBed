@@ -259,14 +259,46 @@ class StrutturaEntity {
         }
     }
 
-    soddisfaFiltri(filtri) {
+    soddisfaAmbienti(ambienti) {
+        if (this.tipologia !== "cv")
+            return false;
 
-        for (let filtro of filtri) {
-            if (this.servizi.indexOf(filtro) === -1)
+        for (let ambiente of ambienti) {
+            if (this.ambienti.indexOf(ambiente) === -1)
                 return false;
         }
 
         return true;
+    }
+
+    soddisfaServizi(servizi) {
+
+        for (let servizio of servizi) {
+            if (this.servizi.indexOf(servizio) === -1)
+                return false;
+        }
+
+        return true;
+    }
+
+    soddisfaPrezzo(prezzo) {
+        console.log(prezzo);
+
+        if (this.tipologia === "cv") {
+            return ((!prezzo.min || this.prezzo >= prezzo.min) && (!prezzo.max || this.prezzo <= prezzo.max))
+        }
+
+        else if (this.tipologia === "B&B") {
+            for (let camera of this.camere) {
+                console.log(camera);
+                if ((!prezzo.min || camera.prezzo >= prezzo.min) && (!prezzo.max || camera.prezzo <= prezzo.max))
+                    return true;
+            }
+            console.log("nope");
+            return false;
+        }
+
+        else return false;
     }
 
 }

@@ -21,9 +21,10 @@ import SchermataStrutture from "./Components/SchermataStrutture/SchermataStruttu
 import SchermataDatoPagamento from "./Components/Schermata Dato Pagamento/SchermataDatoPagamento";
 import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAggiuntivi";
 import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
-import SchermataPrenotazioneStruttura from "./Components/Schermata prenotazione struttura/SchermataPrenotazioneStruttura";
+import SchermataPrenotazioneStruttura from "./Components/Schermata Prenotazione Struttura/SchermataPrenotazioneStruttura";
 import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
 import SchermataDatiOspiti from "./Components/Schermata Dati Ospiti/SchermataDatiOspiti";
+import Rendiconto from "./Components/Schermata Gestione Struttura/Rendiconto";
 
 
 function App() {
@@ -52,6 +53,12 @@ function App() {
                        <Route exact path="/struttura/gestioneStruttura/:indice">
                             <SchermataGestioneStruttura />
                         </Route>
+
+
+                        <Route exact path="/struttura/rendiconto/:indice">
+                            <Rendiconto />
+                        </Route>
+
 
                         <Route path="/gestioneStrutture/">
                             <SchermataStrutture />

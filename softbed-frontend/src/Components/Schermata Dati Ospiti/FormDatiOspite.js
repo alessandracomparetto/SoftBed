@@ -5,7 +5,7 @@ import FormDocumenti from "./FormDocumenti";
 import {convertiData} from "../../Actions/gestioneDate";
 import axios from "axios";
 
-//TODO RIPULIRE IL FORM DOCUMENTI AL SUBMIT
+
 function FormDatiOspite(props){
     const [mostraContenuto, setMostraContenuto] = useState(false );
     const toggleContenuto = () => setMostraContenuto(true);

@@ -47,7 +47,7 @@ function FormMetodoPagamento(props) {
             <div className="form-row">
                 <div className="form-group col-12 col-md-5 ">
                     <label htmlFor="nome">Nome intestatario</label>
-                    <input id="nome" name="nomeIntestatario" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" placeholder="Nome" maxLength="16" onChange={handleChange} required/>
+                    <input id="nome" name="nomeIntestatario" type="text" className="form-control"  pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" placeholder="Nome" maxLength="16" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire nome
                     </div>
@@ -55,7 +55,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-12 col-md-5 ">
                     <label htmlFor="cognome">Cognome intestatario</label>
-                    <input id="cognome" name="cognomeIntestatario" type="text" className="form-control" pattern = "^[A-z]+[éèùàòì]?[\s[A-z]+[éèùàòì]?]?$" placeholder="Cognome" maxLength="16" onChange={handleChange} required/>
+                    <input id="cognome" name="cognomeIntestatario" type="text" className="form-control"  pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" placeholder="Cognome" maxLength="16" onChange={handleChange} required/>
                     <div className="invalid-feedback">
                         Inserire cognome
                     </div>

@@ -34,14 +34,14 @@ function SliderPrezzo(props) {
         },
         {
             value: `${Math.round(props.massimo)}`,
-            label: `${Math.round(props.massimo)}€`,
+            label: `> ${Math.round(props.massimo)}€`,
         },
     ];
 
     return (
         <Fragment>
-            <input name={"prezzoMinimo"} type={"number"} className={"d-none"}/>
-            <input name={"prezzoMassimo"} type={"number"} className={"d-none"}/>
+            <input id="prezzoMinimo" name="prezzoMinimo" type="number" className="d-none" value={value[0]} readOnly/>
+            <input id="prezzoMassimo" name="prezzoMassimo" type="number" className="d-none" value={value[1]} readOnly/>
             <Slider
                 min={props.minimo}
                 max={props.massimo}
