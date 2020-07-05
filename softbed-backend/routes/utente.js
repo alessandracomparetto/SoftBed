@@ -76,8 +76,10 @@ router.post('/fetch', function(req, res) {
 //modifica dati personali dell'utente
 router.post('/modificaDatiAggiuntivi', function (req, res) {
     utenteModel.modificaDatiAggiuntivi(req.body,function(data){
-        let status = (data.changedRows === 0) ? 304: 200;
-        res.send(data);
+        console.log("ciaone", data);
+        res.sendStatus(200);
+        res.json(data);
+        res.end();
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
 });

@@ -3,6 +3,7 @@ import $ from "jquery";
 import axios from "axios";
 import {confirmAlert} from "react-confirm-alert";
 import mostraDialogErrore from "../Actions/errore";
+import {convertiData} from "../Actions/gestioneDate";
 const crypto = require('crypto');
 
 function Registrazione() {
@@ -34,10 +35,10 @@ function Registrazione() {
             const utenteRegistrato = {
                 nome: document.getElementById("name").value,
                 cognome: document.getElementById("surname").value,
-                dataNascita: document.getElementById("dataNascita").value,
+                dataNascita: document.getElementById("birthdate").value,
                 email: document.getElementById("email").value ,
                 pass: encpass,
-                gestore: $("input:checked").val(),
+                gestore: 0,
             };
             try {
                 axios.post("/utente/utenteRegistrato", utenteRegistrato)
@@ -121,8 +122,8 @@ function Registrazione() {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"><i className="fa fa-birthday-cake"></i></span>
                             </div>
-                            <input id="dataNascita" name="dataNascita" type="date" className="form-control" required/>
-                            <div className="invalid-feedback">Inserire la data di nascita</div>
+                            <input id="birthdate" name="dataNascita" type="date" className="form-control" min={convertiData(new Date(), 0,0,-100)} max={convertiData(new Date(), 0,0,-18)}/>
+                            <div className="invalid-feedback r">Data di nascita non valida</div>
                         </div>
                     </div>
 
@@ -163,21 +164,6 @@ function Registrazione() {
                             <span id="message"></span>
                         </div>
                     </div>
-
-                    <div className="form-group mt-3">
-                        <label htmlFor="account">Tipo di account</label>
-                        <br/>
-                        <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="gestore" value={1} required onClick={(event)=>{console.log("gestore", event.target.value)}}/>
-                            <label className="form-check-label" htmlFor="gestore">Gestore</label>
-                        </div>
-                        <div className="form-check form-check-inline" style={{ top: -8 +'px'}}>
-                            <input className="form-check-input" type="radio" name="account" id="ospite" value={0} required onClick={(event)=>{console.log("gestore", event.target.value)}}/>
-                            <label className="form-check-label" htmlFor="ospite">Ospite</label>
-                            <div className="invalid-feedback ml-2">Inserire il tipo di account</div>
-                        </div>
-                    </div>
-
                     <button name="ok" id="ok" type="submit" className="btn btn-warning rounded-pill text-dark mt-4 col-6">Continua</button>
                 </form>
             </div>

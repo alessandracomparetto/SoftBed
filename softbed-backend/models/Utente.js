@@ -3,6 +3,7 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
+
 module.exports= {
     inserisci:async function(datiUtente, callback) {
         console.log("la mia rotta")
@@ -71,7 +72,7 @@ module.exports= {
             throw err;
         }
     },
-
+//TODO E CAPIRE SE SERVE
     fetch: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let infoUtente;
@@ -125,67 +126,48 @@ module.exports= {
     modificaDatiAggiuntivi: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let results;
+        let idIndirizzo = datiUtente.refIndirizzo;
+        let residenza;
+        let nascita;
+        console.log(idIndirizzo);
         try {
             await withTransaction(db, async () => {
                 console.log("sto per modificare!");
-
-                if(datiUtente.refIndirizzo == null && datiUtente.via){
+               if(datiUtente.refIndirizzo===null && datiUtente.refComuneResidenza!= null){
                     let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                     let datiQuery = [datiUtente.via, datiUtente.numeroCivico, datiUtente.cap, datiUtente.refComuneResidenza];
-                    results = await db.query(sql, [[datiQuery]]).catch(err => {
-                        throw createError(500);
-                    });
-
-                    let idIndirizzo = results.insertId;
-
-                    results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
-                        [`utente`, "utente.refIndirizzo", idIndirizzo, datiUtente.idUtente])
-                        .catch(err => {
-                            throw createError(500);
-                        });
-
-                }else{
-                    results = await db.query('UPDATE ?? SET ??=? ,??=?,??=?,??=? WHERE idIndirizzo = ?',
-                        [`indirizzo`, "indirizzo.via", datiUtente.via, "indirizzo.numeroCivico", datiUtente.numeroCivico,
-                            "indirizzo.cap", datiUtente.cap, "indirizzo.refComune", datiUtente.refComuneResidenza, datiUtente.refIndirizzo])
-                        .catch(err => {
-                            throw createError(500);
-                        });
+                    results = await db.query(sql, [[datiQuery]]).catch(err => {console.log(err);});
+                    idIndirizzo = results.insertId;
+               }else if(datiUtente.refComuneResidenza!= null) {
+                   results = await db.query('UPDATE ?? SET ??=? ,??=?,??=?,??=? WHERE idIndirizzo = ?',
+                       [`indirizzo`, "indirizzo.via", datiUtente.via, "indirizzo.numeroCivico", datiUtente.numeroCivico,
+                           "indirizzo.cap", datiUtente.cap, "indirizzo.refComune", datiUtente.refComuneResidenza, datiUtente.refIndirizzo])
+                       .catch(err => {console.log(err);});
+               }
+                results = await db.query('UPDATE ?? SET ??=?,??=?,??=?,??=?,??=?,??=? WHERE idUtente = ?',
+                    ["utente", "utente.codiceFiscale", datiUtente.codiceFiscale, "utente.dataNascita", datiUtente.dataNascita, "utente.refComuneNascita", datiUtente.refComuneNascita,
+                        "utente.telefono", datiUtente.telefono ,"utente.gestore", datiUtente.gestore, "utente.refIndirizzo",idIndirizzo, datiUtente.idUtente])
+                    .catch(err => {console.log(err)});
+                if(datiUtente.refComuneResidenza) {
+                    residenza = await db.query('SELECT comuni.idComune as refComuneResidenza, province.nomeProvincia as provinciaResidenza, regioni.nomeRegione as regioneResidenza FROM comuni JOIN province JOIN regioni WHERE comuni.idComune=? AND comuni.refProvincia=province.idProvincia AND province.refRegione=regioni.idRegione',
+                        [datiUtente.refComuneResidenza]).catch(err => {console.log(err);});
+                }
+                if(datiUtente.refComuneNascita){
+                    nascita = await db.query('SELECT comuni.idComune as refComuneNascita, province.nomeProvincia as provinciaNascita, regioni.nomeRegione as regioneNascita FROM comuni JOIN province JOIN regioni WHERE comuni.idComune=? AND comuni.refProvincia=province.idProvincia AND province.refRegione=regioni.idRegione',
+                        [datiUtente.refComuneNascita]).catch(err => {console.log(err);});
                 }
 
-                results = await db.query('UPDATE ?? SET ??=?,??=?,??=? WHERE idUtente = ?',
-                    [`utente`, "utente.codiceFiscale", datiUtente.codiceFiscale, "utente.telefono", datiUtente.telefono, "utente.refComuneNascita", datiUtente.refComuneNascita, datiUtente.idUtente])
+                let infoUtente = await db.query('SELECT utente.*, autenticazione.email FROM utente JOIN autenticazione WHERE utente.idUtente=? AND utente.idUtente=autenticazione.refUtente ',[datiUtente.idUtente])
                     .catch(err => {
-                        throw createError(500);
+                        console.log(err);
                     });
-
-                results = await db.query('UPDATE ?? SET ??=?,??=?  WHERE refUtente= ?',
-                    [`autenticazione`, "autenticazione.email", datiUtente.email, "autenticazione.password", datiUtente.password, datiUtente.idUtente])
-                    .catch(err => {
-                        throw createError(500);
-                    });
-
-                if(datiUtente.gestore === "on"){
-                    console.log("Sto diventando gestore");
-                    results = await db.query('UPDATE ?? SET ??=? WHERE idUtente = ?',
-                        [`utente`, "utente.gestore", 1, datiUtente.idUtente])
-                        .catch(err => {
-                            throw createError(500);
-                        });
+                for(var propt in residenza[0]){
+                    infoUtente[0][propt]=residenza[0][propt]
                 }
-
-                console.log("ho modificato!");
-
-                let sql = ('SELECT u.idUtente, u.nome, u.cognome, u.codiceFiscale, u.dataNascita, u.refIndirizzo, u.refComuneNascita, u.telefono, u.gestore, a.email\
-                        FROM utente AS u JOIN autenticazione AS a WHERE u.idUtente=? AND u.idUtente=a.refUtente');
-                let datiQuery = [datiUtente.idUtente];
-                results = await db.query(sql, [[datiQuery]]).catch(err => {
-                    throw createError(500);
-                });
-
-                console.log(results);
-                return (callback(results));
-
+                for(var propt in nascita[0]){
+                    infoUtente[0][propt]=nascita[0][propt]
+                }
+                return callback(infoUtente[0]);
                 });
         } catch (err) {
             throw err;
