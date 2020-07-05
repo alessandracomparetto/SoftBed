@@ -1,6 +1,7 @@
 import React from "react";
 import Caratteristica from "./Caratteristica";
 import {servizi} from "../../caratteristiche";
+import {Link} from "react-router-dom";
 
 function RisultatoRicerca(props) {
     return (
@@ -21,7 +22,7 @@ function RisultatoRicerca(props) {
                 </div>
 
                 <div className="text-md-right">
-                    <a href={`/struttura/${props.idStruttura}`} className="btn btn-primary d-block d-md-inline-block m-auto stretched-link">Visualizza struttura</a>
+                    <Link to={`/struttura/${props.idStruttura}`} className="btn btn-primary d-block d-md-inline-block m-auto stretched-link">Visualizza struttura</Link>
                 </div>
             </div>
         </div>
