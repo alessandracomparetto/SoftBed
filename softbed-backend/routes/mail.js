@@ -80,8 +80,10 @@ router.post('/richiesta-prenotazione', (req, res) => {
                 <br />
                 Il gestore ha 48 ore per accettare o declinare la tua richiesta.
                 <br />
-                <br />
                 In allegato trovi il riepilogo della tua richiesta.
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`,
         attachments: [
             {
@@ -102,8 +104,10 @@ router.post('/richiesta-prenotazione', (req, res) => {
                 Hai appena ricevuto una nuova richiesta di prenotazione su softbed! Accedi alla tua 
                 <a href="${softbed.site}struttura/gestioneStrutture/">area personale</a> per accettarla o rifiutarla.
                 <br />
-                <br />
                 Ti ricordiamo che hai a disposizione 48 ore di tempo per prendere una decisione.
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -130,6 +134,9 @@ router.post('/annullamento-prenotazione', (req, res) => {
         html:
             `<p>
                 La tua prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} è stata annullata, come da te richiesto!
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -143,8 +150,10 @@ router.post('/annullamento-prenotazione', (req, res) => {
                 ${req.body.struttura} il cui check-in era previsto in data ${req.body.data} ha cambiato idea ed ha 
                 annullato la sua prenotazione.
                 <br />
-                <br />
                 La tua struttura è stata nuovamente resa disponibile nel periodo interessato.
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -172,8 +181,9 @@ router.post('/rifiuta-prenotazione', (req, res) => {
             `<p>
                 Purtroppo il gestore della struttura ${req.body.struttura} per cui avevi fatto richiesta di prenotazione (ID: ${req.body.id})
                 il cui check-in era previsto in data ${req.body.data} ha rifutato la prenotazione.
-                <br />
-                <br />
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -184,6 +194,9 @@ router.post('/rifiuta-prenotazione', (req, res) => {
         html:
             `<p>
                 La prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} è stata annullata, come da te richiesto!
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -212,8 +225,9 @@ router.post('/conferma-prenotazione', (req, res) => {
             `<p>
                 Il gestore della struttura ${req.body.struttura} che hai prenotato (ID: ${req.body.id})
                 il cui check-in è previsto in data ${req.body.data} ha accettato la prenotazione.
-                <br />
-                <br />
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -224,6 +238,9 @@ router.post('/conferma-prenotazione', (req, res) => {
         html:
             `<p>
                 La prenotazione (ID: ${req.body.id}) per la tua struttura ${req.body.struttura} è stata confermata, come da te richiesto!
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -251,8 +268,9 @@ router.post('/scadenza-prenotazione', (req, res) => {
             `<p>
                 Purtroppo il gestore della struttura ${req.body.struttura} per cui avevi fatto richiesta di prenotazione (ID: ${req.body.id})
                 il cui check-in era previsto in data ${req.body.data} non ha confermato la richiesta.
-                <br />
-                <br />
+               <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 
@@ -264,8 +282,10 @@ router.post('/scadenza-prenotazione', (req, res) => {
             `<p>
                 La richiesta di prenotazione (ID: ${req.body.id}) per la struttura ${req.body.struttura} non è stata confermata entro 48h.
                 <br />
-                <br />
                 La tua struttura è stata nuovamente resa disponibile nel periodo interessato.
+                <br/>
+                <br/>
+                <em>Il Team di SoftBed</em>
             </p>`
     };
 

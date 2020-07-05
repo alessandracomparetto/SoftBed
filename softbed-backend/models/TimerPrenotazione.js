@@ -35,6 +35,7 @@ class TimerPrenotazione{
                 il cui check-in era previsto in data ${new Date(dati.checkIn).toLocaleDateString()} non ha confermato la richiesta.
                 <br />
                 <br />
+                 <em>Il Team di SoftBed</em>
             </p>`
         };
 
@@ -45,9 +46,11 @@ class TimerPrenotazione{
             html:
                 `<p>
                 La richiesta di prenotazione (ID: ${dati.idPrenotazione}) per la struttura ${dati.nomeStruttura} non è stata confermata entro 48h.
-                <br />
-                <br />
+                <br/>
                 La tua struttura è stata nuovamente resa disponibile nel periodo interessato.
+                <br />
+                <br />
+                <em>Il Team di SoftBed</em>
             </p>`
         };
 
