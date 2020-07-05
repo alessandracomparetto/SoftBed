@@ -180,7 +180,6 @@ module.exports= {
     },
 
     aggiungiDatoPagamento:async function(datoPagamento, callback) {
-        //TODO PASSARE L'ID UTENTE
         let idUtente = datoPagamento.idUtente;
         const db = await makeDb(config);
         let results = {};
