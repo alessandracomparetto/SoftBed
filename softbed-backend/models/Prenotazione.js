@@ -34,20 +34,21 @@ module.exports = {
         }
     },
 
-    delete: async function (idPrenotazione, res) { /*Todo simile a delete,scegliere quale eliminare */
+    delete: async function (idPrenotazione, res) {
         const db = await makeDb(config);
 
-        let query = (`DELETE FROM prenotazione WHERE idPrenotazione = ?`);
+        let query = `DELETE FROM prenotazione WHERE idPrenotazione = ?`;
 
         try {
             await withTransaction(db, async () => {
-                let result = await db.query(query, idPrenotazione).catch(() => {throw createError(500)});
+                let result = await db.query(query, [idPrenotazione]).catch((err) => {console.log(err)});
 
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
-                else return res(result);
+                else return result;
             })
         } catch(err) {
-            throw err;
+            console.log(err);
+            throw createError(500);
         }
     },
 
@@ -108,30 +109,61 @@ module.exports = {
         }
     },
 
-    getPrenotazioniUtente: async function(dati, callback){
-        idUtente=dati.idUtente;
+    getPrenotazioniUtente: async function(idUtente, callback){
+
+        let query = `
+            SELECT prenotazione.*, struttura.*, utente.idUtente, autenticazione.email, fotografie.percorso as foto
+            FROM prenotazione
+                     JOIN struttura
+                     JOIN fotografie
+                     JOIN utente
+                     JOIN autenticazione
+            WHERE prenotazione.refUtente = ?
+              AND prenotazione.refStruttura = struttura.idStruttura
+              AND struttura.refGestore = utente.idUtente
+              AND utente.idUtente = autenticazione.refUtente
+              AND fotografie.idFoto = (
+                SELECT F2.idFoto
+                FROM fotografie as F2
+                WHERE F2.refStruttura = struttura.idStruttura
+                LIMIT 1
+            )
+            ORDER BY prenotazione.checkIn
+        `
+
+        let queryBB = `
+        SELECT *
+        FROM \`cameraB&B\` as CBB, prenotazioneCamera as PC
+        WHERE CBB.refStruttura = PC.refStruttura
+          AND CBB.idCamera = PC.refCamera 
+          AND PC.refPrenotazione = ?
+        `
+
         const db=await makeDb(config);
         try{
             await withTransaction(db,async()=> {
-                let listaPrenotazioni = await db.query('SELECT prenotazione.*,struttura.*,utente.idUtente ,autenticazione.email\
-                                                    FROM prenotazione JOIN struttura JOIN utente JOIN autenticazione WHERE prenotazione.refUtente=?\
-                                                    AND prenotazione.refStruttura=struttura.idStruttura AND struttura.refGestore=utente.idUtente AND \
-                                                    utente.idUtente=autenticazione.refUtente', [[[idUtente]]]).catch(err => {
+
+                let listaPrenotazioni = await db.query(query, [idUtente]).catch(err => {
                     throw err;
                 });
+
                 for (let i = 0; i < listaPrenotazioni.length; i++) {
-                    let indice = listaPrenotazioni[i].idPrenotazione;
-                    if(listaPrenotazioni[i].tipologiaStruttura==="B&B"){
-                        let camere = await db.query('SELECT * FROM `cameraB&B` JOIN prenotazioneCamera WHERE `cameraB&B`.idCamera=prenotazioneCamera.refCamera AND prenotazioneCamera.refPrenotazione=?  \
-                                                       ', [indice]).catch(err=>{throw err});
-                        let array=[];
-                        console.log(indice);
+                    let idPrenotazione = listaPrenotazioni[i].idPrenotazione;
+
+                    if (listaPrenotazioni[i].tipologiaStruttura === "B&B") {
+                        let camere = await db.query(queryBB, [idPrenotazione]).catch(err=>{throw err});
+
+
+                        let array = [];
+
                         for (let i = 0; i < camere.length; i++) {
                             array.push(camere[i]);
                         }
-                        listaPrenotazioni[0]["camere"] = array;
+
+                        listaPrenotazioni[i].camere = array;
                     }
                 }
+
                 return callback(listaPrenotazioni);
             });
         }

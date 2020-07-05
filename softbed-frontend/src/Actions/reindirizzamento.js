@@ -14,6 +14,7 @@ const reindirizza = (history, url, tempo, messaggio) => {
     }, tempo);
 
     confirmAlert({
+        closeOnClickOutside: false,
         customUI: () => {
             return (
                 <div className="custom-ui text-center">

@@ -64,6 +64,10 @@ body {
     object-fit: cover;
 }
 
+.maxh-200px {
+    max-height: 200px;
+}
+
 .maxw-xl {
     max-width: 1140px;
 }

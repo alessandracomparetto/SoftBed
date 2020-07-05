@@ -2,11 +2,22 @@ import React, {useState} from "react";
 import axios from "axios";
 import mostraDialogErrore from "../../Actions/errore";
 import {confirmAlert} from "react-confirm-alert";
+import {convertiData} from "../../Actions/gestioneDate";
+import {Link} from "react-router-dom";
 
 function PrenotazioneOspite(props) {
+    // Gestiscono il funzionamento dei pulsanti per mostrare/nascondere le informazioni aggiuntive
     const [mostraContenuto, setMostraContenuto] = useState(false);
-
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+
+    // Stringhe per date e orari
+    const dataCheckIn = new Date(props.prenotazione.checkIn);
+    const stringaCheckIn = `${dataCheckIn.toLocaleDateString()} ${dataCheckIn.toLocaleTimeString().slice(0, 5)}`;
+    const dataCheckOut = new Date(props.prenotazione.checkOut);
+    const stringaCheckOut = `${dataCheckOut.toLocaleDateString()} ${dataCheckOut.toLocaleTimeString().slice(0, 5)}`;
+    const dataCS = new Date(((props.prenotazione.confermata === 1) ? props.prenotazione.dataConferma : props.prenotazione.dataScadenza ));
+    const stringaDateCS = dataCS.toLocaleDateString();
+    const stringaTimeCS = dataCS.toLocaleTimeString().slice(0, 5);
 
     const mostraDialogConferma = () => {
         confirmAlert({
@@ -27,6 +38,7 @@ function PrenotazioneOspite(props) {
                 )}
         })
     }
+
     const annullaPrenotazione = () => {
         axios.post('/prenotazione/annullamento', {idPrenotazione: props.prenotazione.idPrenotazione})
             .then(() => {
@@ -43,7 +55,7 @@ function PrenotazioneOspite(props) {
                 axios.post('/mail/annullamento-prenotazione', informazioni)
                     .catch(err => console.log(err));
 
-                props.rimuovi(props.prenotazione.id);
+                props.rimuovi(props.prenotazione.idPrenotazione);
             })
              .catch(() => {
                 mostraDialogErrore();
@@ -52,7 +64,6 @@ function PrenotazioneOspite(props) {
 
     return (
         <li className={"rounded list-group-item text-dark border border-dark"}>
-            {/*Todo rimuovere ogni bordo inferiore del list item tranne per l'ultimo */}
             <div className="row">
                 <div className="col-12 col-sm-3 col-lg-4 h-100 my-auto">
                     <strong>Struttura</strong>
@@ -60,40 +71,32 @@ function PrenotazioneOspite(props) {
                     <span>{props.prenotazione.nomeStruttura}</span>
                 </div>
                 <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
-                    <strong>Check In</strong>
+                    <strong>Check-in</strong>
                     <br/>
-                    <span>{new Date(props.prenotazione.checkIn).toISOString().slice(0, 19).replace('T', ' ')}</span>
+                    <span>{stringaCheckIn}</span>
                 </div>
                 <div className="col-6 col-sm-3 col-lg-2 h-100 my-auto">
-                    <strong>Check out</strong>
+                    <strong>Check-out</strong>
                     <br />
-                    <span>{new Date(props.prenotazione.checkOut).toISOString().slice(0, 19).replace('T', ' ')}</span>
+                    <span>{stringaCheckOut}</span>
                 </div>
                 <div className="col-12 col-sm-3 col-lg-2 h-100 my-auto">
-                    {props.prenotazione.confermata===1 ?
-                        <div>
-                            <strong>Confermata il </strong>
-                            <br />
-                            <span> {new Date(props.prenotazione.dataConferma).toISOString().slice(0, 19).replace('T', ' ')}</span>
-                        </div>
-                    :
-                        <div>
-                            <strong>Scade il </strong>
-                            <br />
-                            <span> {new Date(props.prenotazione.dataScadenza).toISOString().slice(0, 19).replace('T', ' ')}</span>
-                        </div>
-                    }
+                    <div>
+                        <strong>{(props.prenotazione.confermata === 1) ? "Confermata il" : "Scade il"}</strong>
+                        <br />
+                        <span>{stringaDateCS}</span>
+                    </div>
                 </div>
-                <div className="col-12 col-lg-2 h-100 my-2">
+                <div className="col-12 col-lg-2 h-100 my-auto">
                     <button className="btn btn-warning btn-block btn-lg-inline" onClick={toggleContenuto}>{mostraContenuto ? "Mostra meno" : "Mostra di più"}</button>
                 </div>
 
                 <div className={"col-12 my-3 py-3 border-top border-dark" + ((mostraContenuto) ? "" : " collapse")}>
                     <div className="row">
-                        {/*TODO: sistemare foto*/}
+                        {/* TODO: sistemare foto */}
                         <div className="d-none d-lg-block col-3">
-                            <figure className="figure overflow-hidden rounded" style={{maxHeight: 140 + "px"}}>
-                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.nomeStruttura} src="/uploads/foto/1/1.jpg" />
+                            <figure className="figure overflow-hidden rounded maxh-200px">
+                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.nomeStruttura} src={`/uploads/foto/${props.prenotazione.idPrenotazione}/${props.prenotazione.foto}`} />
                             </figure>
                         </div>
 
@@ -103,14 +106,14 @@ function PrenotazioneOspite(props) {
                                     <h5>Ospiti</h5>
                                     <div className="row mx-auto mb-3">
                                         <div className="row col-12">
-                                            <div className="col-12 col-md-4">
+                                            <div className="col-12 col-md-6">
                                                 <strong>Adulti</strong>
                                                 <strong className="d-none d-md-inline">: </strong>
                                                 <br className="d-md-none" />
                                                 <span>{props.prenotazione.nAdulti}</span>
                                             </div>
 
-                                            <div className="col-12 col-md-4">
+                                            <div className="col-12 col-md-6">
                                                 <strong>Bambini</strong>
                                                 <strong className="d-none d-md-inline">: </strong>
                                                 <br className="d-md-none" />
@@ -119,18 +122,18 @@ function PrenotazioneOspite(props) {
                                         </div>
 
                                         <div className="row col-12 mt-2 mt-md-0">
-                                            <div className="col-12 col-md-4">
+                                            <div className="col-12 col-md-6">
                                                 <strong>Adulti esenti da tasse</strong>
                                                 <strong className="d-none d-md-inline">: </strong>
                                                 <br className="d-md-none" />
-                                                <span>{props.prenotazione.nEsentiAdulti}</span>
+                                                <span>{props.prenotazione.nEsentiAdulti || 0}</span>
                                             </div>
 
-                                            <div className="col-12 col-md-4">
+                                            <div className="col-12 col-md-6">
                                                 <strong>Bambini esenti da tasse</strong>
                                                 <strong className="d-none d-md-inline">: </strong>
                                                 <br className="d-md-none" />
-                                                <span>{props.prenotazione.nEsentiBambini}</span>
+                                                <span>{props.prenotazione.nEsentiBambini || 0}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -144,7 +147,7 @@ function PrenotazioneOspite(props) {
                                                 {props.prenotazione.camere && props.prenotazione.camere.map((camera, indice) => {
                                                     return (
                                                         <div key={indice} className="mb-2 mb-md-0">
-                                                            Camera {camera.idCamera} : {camera.tipologiaCamera}
+                                                            Camera {camera.idCamera}: {camera.tipologiaCamera}
                                                         </div>
                                                     );
                                                 })}
@@ -174,13 +177,11 @@ function PrenotazioneOspite(props) {
 
 
                                             <div className="mb-2 mb-md-0">
-                                                <strong>Stato:</strong>{
-                                                props.prenotazione.confermata===1 ?
-                                                    <span> confermata il {new Date(props.prenotazione.dataConferma).toLocaleDateString()}</span>
-                                                    :
-                                                    <span> scade il {new Date(props.prenotazione.dataScadenza).toLocaleString()}</span>
-
-                                                }
+                                                <strong>Stato:&nbsp;</strong>
+                                                    <span>
+                                                        {(props.prenotazione.confermata === 1) ? "confermata il" : "scade il"} {stringaDateCS}
+                                                        &nbsp;alle {stringaTimeCS}
+                                                    </span>
                                             </div>
                                         </div>
                                     </div>
@@ -190,22 +191,21 @@ function PrenotazioneOspite(props) {
                     </div>
 
                     <div className="d-md-flex flex-md-nowrap">
-                        {(props.prenotazione.confermata === 1 && props.prenotazione.checkIn < new Date() || props.prenotazione.confermata === 0) &&
-                            <div className="p-2 col-12 col-md-6">
-                                <div className="col-12 col-md-6 mr-auto">
-                                <button className="btn btn-primary btn-block" onClick={mostraDialogConferma}>Annulla</button>
-                                </div>
-                            </div>
-                        }
-                        <div className="p-2 col-12 col-md-3 ml-auto">
-                            <a href={`/struttura/${props.prenotazione.idStruttura}`}>
-                                <button className="btn btn-primary btn-block"> Visualizza struttura </button>
+                        <div className="order-1 m-2 ml-md-auto">
+                            <Link className="btn btn-primary btn-block" to={`/struttura/${props.prenotazione.idStruttura}`}>Visualizza struttura</Link>
+                        </div>
+
+                        <div className="order-2 m-2">
+                            <a href={`mailto:${props.prenotazione.email}`} className="btn btn-primary btn-block">
+                                Contatta il gestore
                             </a>
                         </div>
 
-                        <div className="p-2 col-12 col-md-3">
-                            <a href={`mailto:${props.prenotazione.email}`} className="btn btn-primary btn-block">Contatta il gestore</a>
-                        </div>
+                        {((props.prenotazione.confermata === 1 && new Date(convertiData(dataCheckIn, 0, -1, 0)) < new Date() || props.prenotazione.confermata === 0)) && (
+                            <div className="order-0 m-2 mr-md-auto">
+                                <button className="btn btn-secondary btn-block" onClick={mostraDialogConferma}>Annulla prenotazione</button>
+                            </div>
+                        )}
                     </div>
                 </div>
 

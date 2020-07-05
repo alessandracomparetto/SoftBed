@@ -18,6 +18,7 @@ router.post('/listaPrenotazioni', function (req, res) {
         res.status(err.status).send(err.message);
     });
 });
+
 router.post('/rifiutaPrenotazione', function (req, res) {
     prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
@@ -39,6 +40,7 @@ router.post('/confermaPrenotazione', function (req, res) {
             res.status(err.status).send(err.message);
         });
     });
+
 router.post('/richiesta', function (req, res) {
     prenotazioneModel.create(req.body, function (idPrenotazione) {
         timer.aggiungiTimeout(idPrenotazione);
@@ -52,15 +54,16 @@ router.post('/richiesta', function (req, res) {
 router.post('/annullamento', function (req, res) {
     prenotazioneModel.delete(req.body.idPrenotazione)
         .then(()=>{
-        timer.distruggiTimeout(req.body.idPrenotazione);
+        // Timer.distruggiTimeout(req.body.idPrenotazione);
         res.send();
         })
         .catch((err) => {
         res.status(err.status).send(err.message);
         });
 })
+
 router.post('/listaPrenotazioniUtente', function (req, res) {
-    prenotazioneModel.getPrenotazioniUtente(req.body,function (data){
+    prenotazioneModel.getPrenotazioniUtente(req.body.idUtente, function (data) {
         res.send(data);
     }).catch((err) => {
         res.status(err.status).send(err.message);

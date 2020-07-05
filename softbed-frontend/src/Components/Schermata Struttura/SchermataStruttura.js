@@ -111,21 +111,8 @@ function SchermataStruttura() {
     const location = useLocation();
     const controlloAccesso = (event) => {
         event.preventDefault();
-        // TODO: Verificare correttezza della chiave
-        const accesso = sessionStorage.getItem("idUtente");
 
-        if (!accesso) {
-            // Se l'utente non risulta loggato, viene rimandato alla pagina di login
-            reindirizza(history, {
-                pathname: '/accedi',
-                state: {
-                    provenienza: 'Schermata struttura',
-                    urlProvenienza: location.pathname
-                }
-            }, 3000, "Devi effettuare l'accesso per poter effettuare una richiesta di prenotazione.");
-        }
-
-        else {
+        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             // Mi genero un URL personalizzato interpretabile dalla pagina di pagamento
             const parametri = {
                 idStruttura: id,
@@ -143,11 +130,22 @@ function SchermataStruttura() {
             history.push("/pagamento/informazioni?" + stringaParametri);
         }
 
+        else {
+            // Se l'utente non risulta loggato, viene rimandato alla pagina di login
+            reindirizza(history, {
+                pathname: '/accedi',
+                state: {
+                    provenienza: 'Schermata struttura',
+                    urlProvenienza: location.pathname
+                }
+            }, 3000, "Devi effettuare l'accesso per poter effettuare una richiesta di prenotazione.");
+        }
     }
 
     const controlloForm = (event) => {
-        if (!controlloCamere() || !controlloOspiti())
+        if ((struttura.tipologia === "B&B" && !controlloCamere()) || !controlloOspiti()) {
             event.preventDefault();
+        }
 
         else controlloAccesso(event);
     }
