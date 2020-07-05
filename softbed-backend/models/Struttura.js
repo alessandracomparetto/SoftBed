@@ -236,6 +236,20 @@ module.exports= {
             throw err;
         }
 
+    },
+
+    setDataRendiconto: async function (info, callback) {
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                let results = await db.query('UPDATE ?? SET ??=? WHERE idStruttura = ?',
+                    ["struttura", "struttura.rendicontoEffettuato", info.rendiconto, info.idStruttura])
+                    .catch(err => {console.log(err)});
+                return callback(results);
+            });
+        } catch (err) {
+            throw err;
+        }
     }
 
 };

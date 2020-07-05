@@ -74,7 +74,7 @@ function OspitiInseriti(props){
                     </div>
 
                     <div className="col-12 col-md-3">
-                        <button type="button" className="btn btn-danger btn-block mt-3" onClick={() => props.eliminaOspite(props.idOspite, props.refPrenotazione, props.indiceElemento)}>Elimina</button>
+                        <button type="button" className="btn btn-danger btn-block mt-3" onClick={() => props.eliminaOspite(props.indiceElemento)}>Elimina</button>
                     </div>
                 </div>
 

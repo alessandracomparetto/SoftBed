@@ -6,18 +6,27 @@ import {useParams, useHistory, useLocation} from "react-router-dom";
 import reindirizza from "../../Actions/reindirizzamento";
 import $ from "jquery";
 import RiepilogoDatiQuestura from "./RiepilogoDatiQuestura";
+import RiepilogoPrenotazionePDF from "../Schermata Pagamento/RiepilogoPrenotazionePDF";
+import mostraDialogErrore from "../../Actions/errore";
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
+    const [struttura, setStruttura] = useState([]);
     const history = useHistory();
     const location = useLocation();
-    const {idStruttura, refPrenotazione} = useParams();
-    const [flag, setFlag] = useState(0);
+    const {indice, refPrenotazione} = useParams();
 
     useEffect(() => {
         let utente = window.sessionStorage.getItem("utente");
-        if(!utente || utente.length==0){
+        if(!utente || utente.length === 0){
             window.location.href="/accedi";
         }
+        let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
+        if(!listaStrutture || !listaStrutture[indice] || indice >= listaStrutture.length){
+            window.location.href="/gestioneStrutture/";
+        }
+        let data = listaStrutture[indice];
+        console.log(data);
+        setStruttura(data);
 
         axios.post(`/ospite/fetch`,[refPrenotazione]).then(res => {
             console.log("DATI OSPITI RECUPERATI=======");
@@ -30,81 +39,51 @@ function SchermataDatiOspiti(props){
 
 
 
-    function aggiungiOspite(dato) {
-        console.log(listaOspiti);
-        try {
-            console.log("Entrato");
-            dato.refPrenotazione = refPrenotazione;
-            dato.refStruttura = idStruttura;
-
-            axios.post("/ospite/aggiungi", dato)
-                .then(res => { // then print response status
-                    console.log("TMP COPIATO");
-                    let tmp = listaOspiti.slice(0, listaOspiti.length);
-                    console.log("TMP COPIATO" ,tmp);
-                    dato.idOspite = res.data.insertId;
-                    tmp.push(dato);
-                    setOspiti(tmp);
-                    console.log("OSPITI",tmp);
-                });
-        }catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
-            }
-        }
-
+    const aggiungiOspite = (dato) => {
+        dato.refPrenotazione = refPrenotazione;
+        dato.refStruttura = struttura.idStruttura;
+        let tmp = [...listaOspiti];
+        tmp.push(dato);
+        console.log(tmp);
+        setOspiti(tmp);
     }
 
-   const eliminaOspite = (idOspite, refPrenotazione, indice) => {
-        console.log("Sono qui");
-        console.log(idOspite);
-        console.log(refPrenotazione);
-        try {
-            axios.post(`/ospite/elimina`, {"idOspite":idOspite, "refPrenotazione":refPrenotazione})
-                .then(res => { // then print response status
-                    console.log("OSPITE ELIMINATO ======= ");
-                    console.log(res.data);
-                    // Rimuovere dalla lista
-                    let tmp = [...listaOspiti];
-                    tmp.splice(indice, 1);
-                    setOspiti(tmp);
-                });
-        }catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
-            }
-        }
-
+   const eliminaOspite = (indice) => {
+        let tmp = [...listaOspiti];
+        tmp.splice(indice, 1);
+        setOspiti(tmp);
     }
 
 
     const verificaDatiAggiuntivi = (event)=>{
         event.preventDefault();
-        let utente = JSON.parse(window.sessionStorage.getItem("utente"));
-        if(utente[0].refIndirizzo === null || utente[0].refComuneNascita=== null){
-            // Se il gestore non ha inserito i propri dati, viene rimandato al form dati aggiuntivi
-            reindirizza(history, {
-                pathname:`/utente/${utente[0].idUtente}/modificaAccount`,
-                state: {
-                    provenienza: 'Schermata dati Ospiti',
-                    urlProvenienza: location.pathname
+
+       axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
+        }).catch(err => console.log(err));
+
+        /*
+        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
+            if (JSON.parse(sessionStorage.getItem("utente")).refIndirizzo === null || JSON.parse(sessionStorage.getItem("utente")).refComuneNascita === null ) {
+                reindirizza(history, {
+                    pathname:`/utente/modificaAccount`,
+                    state: {
+                        provenienza: 'Schermata dati Ospiti',
+                        urlProvenienza: location.pathname
+                    }
+                }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
+
+            }else {
+                const informazioni = {
+                    emailGestore: JSON.parse(sessionStorage.getItem("utente")).email,
+                    allegato: RiepilogoDatiQuestura(listaOspiti, struttura.idStruttura, refPrenotazione)
                 }
-            }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
+                axios.post('/mail/dichiarazione', informazioni)
+                    .catch();
 
+            }*/
         }
-        else
-        document.getElementById("ospiti").classList.add("collapse");
-        document.getElementById("riepilogo").classList.remove("collapse");
-    }
-
-
 
     return(
-
         <div  className="container my-3" >
 
             <div id ="ospiti" >
@@ -129,10 +108,6 @@ function SchermataDatiOspiti(props){
                 <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
                 <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
             </div>
-            <div id = "riepilogo" className="my-3 collapse">
-                       <RiepilogoDatiQuestura dati={listaOspiti} idStruttura={idStruttura} refPrenotazione = {refPrenotazione}/>
-            </div>
-
         </div>
 
 

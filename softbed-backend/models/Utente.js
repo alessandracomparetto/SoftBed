@@ -76,6 +76,8 @@ module.exports= {
     fetch: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let infoUtente;
+        console.log("DATI UTENTEE");
+        console.log(datiUtente.idUtente);
         try {
             await withTransaction(db, async () => {
                 if(datiUtente.refIndirizzo !== null && datiUtente.refComuneNascita!==null){
@@ -89,6 +91,8 @@ module.exports= {
                         .catch(err => {
                             throw err;
                         });
+                    console.log("INFO UTENTE");
+                    console.log(infoUtente);
                     console.log(infoUtente[0]);
                     return callback(infoUtente[0]);
                 }

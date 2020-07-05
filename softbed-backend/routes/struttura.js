@@ -126,7 +126,14 @@ router.post('/fetchStruttura', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-
+router.post('/setDataRendiconto', function (req, res) {
+    strutturaModel.setDataRendiconto(req.body,function(data){
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
+        res.status(err.status).send(err.message);
+    })
+});
 
 module.exports = router;
 
