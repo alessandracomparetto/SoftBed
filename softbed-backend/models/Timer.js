@@ -67,14 +67,12 @@ class Timer{
     }
 
     distruggiTimeout(prenotazione){
-        for(let i = 0; i<this.array; i++){
+        for(let i = 0; i<this.array.length; i++){
             if(this.array[i].prenotazione===prenotazione){
-                clearTimeout(array[i].timeout); //stop al timer
+                clearTimeout(this.array[i].timeout); //stop al timer
                 this.array.splice(i,1); //rimuove l'elemento di posto i
-                return true;
             }
         }
-        return false;
     }
 }
 
