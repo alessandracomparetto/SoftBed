@@ -2,8 +2,10 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
+
 const StrutturaEntity = require('./StrutturaEntity');
 const ListaStrutture = require('./ListaStruttureEntity');
+
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {

@@ -4,14 +4,16 @@ const session = require('express-session');
 let strutturaModel = require('../models/Struttura');
 const ModuloUtente = require('../routes/utente');
 const token = ModuloUtente.token;
+const Timer = require ('../models/TimerRendiconto');
 
 // Cache
 let cacheManager = require('cache-manager');
 let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300}); // 5 minuti
-
+timer = new Timer();
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
+        timer.aggiungiTimeout(data.idStruttura);
        res.send(data);
     }).catch((err)=>{
         res.status(err.status).send(err.message)})
@@ -128,7 +130,13 @@ router.post('/fetchStruttura', function (req, res) {
 
 router.post('/setDataRendiconto', function (req, res) {
     strutturaModel.setDataRendiconto(req.body,function(data){
-        let status = (data.changedRows === 0) ? 304: 200;
+        let status;
+        if(data.changedRows === 0){
+            status = 304;
+        }else{
+            timer.aggiornaTimeout(req.body.idStruttura);
+            status = 200;
+        }
         res.sendStatus( status);
     }).catch( (err) =>{
         res.status(err.status).send(err.message);

@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-class Timer{
+class TimerPrenotazione{
 
     constructor() {
         this.array = [];
@@ -76,4 +76,4 @@ class Timer{
     }
 }
 
-module.exports = Timer;
+module.exports = TimerPrenotazione;
