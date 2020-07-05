@@ -58,7 +58,7 @@ function OspitiInseriti(props){
                     </div>
 
                     <div className="col-5 col-md-3 mt-2 h-100"><strong>Data di arrivo:</strong>
-                         <br/>
+                        <br/>
                         <span> {props.dataArrivo}</span>
                     </div>
 
