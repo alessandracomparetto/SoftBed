@@ -3,43 +3,43 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 module.exports={
 
-    aggiungi:async function(datiOspite, callback) {
+    aggiungi:async function(listaOspiti, callback) {
         const db = await makeDb(config);
         let results = {};
         let results2 = {};
         let refIndirizzo, refOspite;
         try {
             await withTransaction(db, async () => {
-                let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
-                let datiQuery = [datiOspite.via, datiOspite.numero, datiOspite.cap, datiOspite.refComuneResidenza];
+                for (let i = 0; i < listaOspiti.length; i++) {
+                    let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
+                    let datiQuery = [datiOspite[i].via, datiOspite[i].numero, datiOspite[i].cap, datiOspite[i].refComuneResidenza];
 
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
-                    throw createError(500);
-                });
+                    results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
+                        throw createError(500);
+                    });
 
-                refIndirizzo = results.insertId;
+                    refIndirizzo = results.insertId;
 
 
+                    sql = ('INSERT INTO `ospite` (nome, cognome, codiceFiscale, dataNascita, refindirizzo, refComuneNascita, refPrenotazione, tassa, dataArrivo, permanenza) VALUES ?');
+                    datiQuery = [datiOspite[i].nome, datiOspite[i].cognome, datiOspite[i].codiceFiscale, datiOspite[i].dataNascita, refIndirizzo, datiOspite[i].refComuneNascita, datiOspite[i].refPrenotazione, datiOspite[i].tassa, datiOspite[i].dataArrivo, datiOspite[i].permanenza];
+                    results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN OSPITE
+                        throw err;
+                    });
 
-                sql = ('INSERT INTO `ospite` (nome, cognome, codiceFiscale, dataNascita, refindirizzo, refComuneNascita, refPrenotazione, tassa, dataArrivo, permanenza) VALUES ?');
-                datiQuery = [datiOspite.nome, datiOspite.cognome, datiOspite.codiceFiscale, datiOspite.dataNascita, refIndirizzo, datiOspite.refComuneNascita, datiOspite.refPrenotazione, datiOspite.tassa, datiOspite.dataArrivo, datiOspite.permanenza];
-                results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN OSPITE
-                    throw err;
-                });
+                    refOspite = results.insertId;
 
-                refOspite = results.insertId;
-
-                sql = ('INSERT INTO `documenti` (refOspite, percorso, refStruttura, refPrenotazione) VALUES ?');
-                if(datiOspite.documenti) {
-                    for(documento of datiOspite.documenti){
-                        datiQuery = [refOspite, documento, datiOspite.refStruttura, datiOspite.refPrenotazione];
-                        results2 = await db.query(sql, [[datiQuery]]).catch(err => {
-                            throw err;
-                        });
-                    }
-                    console.log("Inseriti documenti");
-                }//end for
-
+                    sql = ('INSERT INTO `documenti` (refOspite, percorso, refStruttura, refPrenotazione) VALUES ?');
+                    if (datiOspite[i].documenti) {
+                        for (documento of datiOspite.documenti) {
+                            datiQuery = [refOspite, documento, datiOspite[i].refStruttura, datiOspite[i].refPrenotazione];
+                            results2 = await db.query(sql, [[datiQuery]]).catch(err => {
+                                throw err;
+                            });
+                        }
+                        console.log("Inseriti documenti");
+                    }//end for
+                }
                 return callback(results);
 
             });
@@ -49,7 +49,7 @@ module.exports={
         }
     },
 
-    elimina: async function(data,callback){
+/*    elimina: async function(data,callback){
         const db = await makeDb(config);
         console.log("ehiiiiiiii");
         console.log(data);
@@ -90,7 +90,7 @@ module.exports={
             throw err;
         }
     },
-
+*/
     fetch: async function (refPrenotazione, callback) {
         const db = await makeDb(config);
         let infoOspite;

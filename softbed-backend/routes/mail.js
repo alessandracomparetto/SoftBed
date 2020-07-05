@@ -45,6 +45,29 @@ router.post('/', (req, res) => {
     });
 });
 
+router.post('/invioRendiconto', (req, res) => {
+
+    let mailOptions = {
+        from: softbed.email,
+        to: "c.sofy1998@libero.it", //email ufficio del turismo
+        subject: "Dichiarazione rendiconto trimestrale",
+        text: "Si inoltra in allegato quando indicato in oggetto.",
+        attachments: [
+            {
+                filename: 'rendicontoTrimestrale.pdf',
+                path: req.body.allegato,
+                contentType: 'application/pdf',
+                encoding: 'base64'
+            }
+        ]
+    };
+
+    transporter.sendMail(mailOptions, (err, res) => {
+    });
+
+    res.send();
+})
+
 router.post('/richiesta-prenotazione', (req, res) => {
     const mailOspite = {
         from: softbed.email,
