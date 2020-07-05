@@ -49,13 +49,13 @@ function FormCaratteristicheC(props){
 
                 <h6 className="mt-3 border-bottom border-primary">Sugli ospiti</h6>
                 <div className="form-row-group text-center offset-2">
-                    <div className="form-check-inline col-12 col-md-5 text-left p-0">
-                        <input type="checkbox" className="form-check-input" id="festeAmmesse" name="festeAmmesse" value={1} defaultChecked={props.dati.festeAmmesse}/>
-                        <label className="form-check-label" htmlFor="festeAmmesse" style={{minWidth : 290+'px'}}>Permesso per feste/eventi</label>
-                    </div>
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" id="animaliAmmessi" name="animaliAmmessi" value={1} defaultChecked={props.dati.animaliAmmessi}/>
                         <label className="form-check-label" htmlFor="animaliAmmessi">Animali ammessi</label>
+                    </div>
+                    <div className="form-check-inline col-12 col-md-5 text-left p-0">
+                        <input type="checkbox" className="form-check-input" id="festeAmmesse" name="festeAmmesse" value={1} defaultChecked={props.dati.festeAmmesse}/>
+                        <label className="form-check-label" htmlFor="festeAmmesse" style={{minWidth : 290+'px'}}>Permesso per feste/eventi</label>
                     </div>
                     <div className="form-check-inline col-12 col-md-5">
                         <input type="checkbox" className="form-check-input" id="permessoFumare" name="permessoFumare" value={1} defaultChecked={props.dati.permessoFumare}/>

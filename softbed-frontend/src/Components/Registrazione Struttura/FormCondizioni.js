@@ -212,7 +212,7 @@ function FormCondizioni(props) {
                         </div>
                         <div className="form-group">
                             <div className="input-group">
-                                <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":"text-muted")} id="preavvisoTesto">Preavviso
+                                <label htmlFor="preavvisoDisdetta" className={'pr-2'+((props.dati.politicaCancellazione === "pagamento")? "":" text-muted")} id="preavvisoTesto">Preavviso
                                     minimo disdetta</label>
                                 <select id="preavvisoDisdetta" className="custom-select " name="preavvisoDisdetta"
                                         defaultValue={props.dati.preavvisoDisdetta}
@@ -236,7 +236,7 @@ function FormCondizioni(props) {
                 <h5 id="turismo">Si compilano i campi in base alle normative <br/> dell'ufficio del Turismo in cui si
                     trova la struttura </h5>
                 <div className="form-row">
-                    <div className="input-group col-12 col-md-6 d-flex justify-content-center mb-2">
+                    <div className="input-group  d-flex justify-content-center mb-2">
                         <label htmlFor="prezzoBambini" className="pr-3">Prezzo base bambini</label>
                         <div className="input-group-prepend">
                             <span className="input-group-text">€</span>
@@ -246,7 +246,7 @@ function FormCondizioni(props) {
                                style={{maxWidth: 100 + 'px'}}/>
                         <div className="invalid-feedback text-center">1€-10€</div>
                     </div>
-                    <div className="input-group col-12 col-md-6 d-flex justify-content-center mb-2">
+                    <div className="input-group  d-flex justify-content-center mb-2">
                         <label htmlFor="prezzoAdulti" className="pr-4 mr-2">Prezzo base adulti</label>
                         <div className="input-group-prepend">
                             <span className="input-group-text">€</span>

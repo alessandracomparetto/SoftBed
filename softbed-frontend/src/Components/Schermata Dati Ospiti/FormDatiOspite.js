@@ -47,8 +47,10 @@ function FormDatiOspite(props){
 
 
         if(form.checkValidity()){
+            console.log("sto per aggiungere un ospite alla lista degli ospiti");
+            console.log("ospite che sto per aggiungere",ospite);
             props.aggiungiOspite(ospite);
-
+            console.log("ho aggiunto i dati dell'ospito, setto i valori a zero");
             form.classList.remove('was-validated');
             document.getElementById("nome").value="";
             document.getElementById("cognome").value="";

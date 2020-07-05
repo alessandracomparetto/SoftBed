@@ -90,9 +90,9 @@ function FormStruttura (props) {
 
     function vaiAvanti(event) {
         event.preventDefault();
-        document.getElementById("form").classList.add("was-validated");
+        $("#form").addClass("was-validated");
         if (controlloCAP()) {
-            document.getElementById("feedback").classList.add("collapse");
+            $("#feedbackCap").removeClass("collapse");
             if (document.getElementById("form").checkValidity()) {
                props.go();
             } else {
@@ -202,6 +202,9 @@ function FormStruttura (props) {
                     <label htmlFor="via">Via/Piazza</label>
                     <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
                            maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={props.dati.via} required/>
+                    <div className="invalid-feedback">
+                        Selezionare la via
+                    </div>
                 </div>
                 <div className="col-5 col-md-4 col-lg-3">
                     <label htmlFor="numeroCivico">N.</label>
@@ -214,8 +217,9 @@ function FormStruttura (props) {
                     <input name="cap" id="cap" type="tel" className="form-control form-check" pattern="^\d{5}$" placeholder="#####"
                            title="Inserire 5 cifre da 00010 a 98168" size="5" maxLength="5"  defaultValue={props.dati.cap}
                            onChange={controlloCAP} required/>
+                    <div className="invalid-feedback">00010 - 98168</div>
                 </div>
-                <p id="feedback" className=" text-danger collapse" >Inserire il CAP corretto 00010 - 98168</p>
+                <p id="feedbackCap" className=" text-danger collapse" >00010 - 98168</p>
             </div>
 
             <div className="d-flex flex-row-reverse justify-content-around">

@@ -55,12 +55,12 @@ function FormAmbienti(props) {
                 <div className="form-group">
                     <label htmlFor="nLettiMatrimoniali">Numero letti matrimoniali</label>
                     <input name="nLettiMatrimoniali" id="nLettiMatrimoniali" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" defaultValue={props.dati.nLettiMatrimoniali} required/>
-                    <div className="invalid-feedback">1 - 10</div>
+                    <div className="invalid-feedback">0 - 10</div>
                 </div>
                 <div className="form-group">
                     <label htmlFor="nLettiSingoli">Numero letti singoli </label>
                     <input name="nLettiSingoli" id="nLettiSingoli" type="number" className="form-control" min="0" max="10" size="2" maxLength="2" defaultValue={props.dati.nLettiSingoli} required/>
-                    <div className="invalid-feedback">1 - 10</div>
+                    <div className="invalid-feedback">0 - 10</div>
                 </div>
 
                 <h6 className="mt-3 border-bottom border-primary">Informazioni generali</h6>
