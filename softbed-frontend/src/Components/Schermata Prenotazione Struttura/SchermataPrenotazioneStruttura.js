@@ -3,15 +3,20 @@ import RichiesteInAttesa from "./RichiesteInAttesa";
 import RichiesteConfermate from "./RichiesteConfermate";
 import mostraDialogErrore from "../../Actions/errore";
 import {useParams} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom";
 
 import axios from "axios";
-import SidebarStruttura from "../Schermata Gestione Struttura/SidebarStruttura";
+import reindirizza from "../../Actions/reindirizzamento";
 
 function SchermataPrenotazioneStruttura(){
     const [prenotazioni, aggiornaPrenotazioni]=useState([]);
     const [flag, aggiornaFlag]=useState(0); //utilizzo dello stato per indicare quando aggiornare la lista della prenotazioni
     const {indice} = useParams();
-    const [struttura, setStruttura] = useState([])
+    const [struttura, setStruttura] = useState([]);
+
+    const history = useHistory();
+    const location = useLocation();
+
      useEffect(() => {
          let utente = window.sessionStorage.getItem("utente");
          if(!utente || utente.length === 0){
@@ -27,8 +32,22 @@ function SchermataPrenotazioneStruttura(){
         axios.post(`/prenotazione/listaPrenotazioni`, data).then(res => {
             aggiornaPrenotazioni(res.data);
         })
-        .catch(()=>mostraDialogErrore());
+            .catch(err =>{
+                if(err.response.status === 401){
+                    reindirizza(history, {
+                        pathname: '/accedi',
+                        state: {
+                            provenienza: "Schermata Prenotazioni Struttura",
+                            urlProvenienza: location.pathname
+                        }
+
+                    }, 3000, "Devi effettuare nuovamente l'accesso per accedere alle prenotazioni della struttura.");
+                }else{
+                    mostraDialogErrore();
+                }
+            });
     }, [flag]);
+
 
     return(
         <div className="d-flex justify-content-center">
@@ -39,28 +58,39 @@ function SchermataPrenotazioneStruttura(){
                         Torna indietro</button>
                 </div>
                     <div className="col-12 col-md-9">
-                        <h4>Richieste in attesa</h4>
-                        <ul className="list-group list-group-flush ">
+                        { (prenotazioni.length === 0) ? (
+                            <div className="card shadow p-2 m-2 m-sm-3 maxw-xl text-center mt-3">
+                                <h4>Pare che tu non abbia ancora alcuna prenotazione.</h4>
+                                <h5>Prova a modificare le caratteristiche della tua struttura.</h5>
+                                <i className="fa fa-pencil fa-4x" aria-hidden="true"/>
+                            </div>
+                        ):(
+                            <div>
+                                <h4>Richieste in attesa</h4>
+                                <ul className="list-group list-group-flush ">
                             {
                                 prenotazioni.map((prenotazione, i) => {
                                     if (prenotazione.confermata === 0) {
                                         return (<li key={i} className="list-group-item list-group-item-warning">
-                                            <RichiesteInAttesa prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag} indice={indice} nomeStruttura={struttura.nomeStruttura}/></li>)
+                                        <RichiesteInAttesa prenotazione={prenotazione} flag={flag} aggiornaFlag={aggiornaFlag} indice={indice} nomeStruttura={struttura.nomeStruttura}/></li>)
                                     }
                                 })
                             }
-                        </ul>
-                        <h4>Richieste confermate</h4>
-                        <ul className="list-group list-group-flush ">
+                                </ul>
+                                <h4>Richieste confermate</h4>
+                                <ul className="list-group list-group-flush ">
                             {
                                 prenotazioni.map((prenotazione, i) => {
                                     if (prenotazione.confermata === 1) {
                                         return (<li key={i} className="list-group-item list-group-item-warning">
-                                            <RichiesteConfermate prenotazione={prenotazione} indice={indice}/></li>)
+                                        <RichiesteConfermate prenotazione={prenotazione} indice={indice}/></li>)
                                     }
                                 })
                             }
-                        </ul>
+                                </ul>
+                            </div>
+                            )
+                        }
                     </div>
             </div>
         </div>

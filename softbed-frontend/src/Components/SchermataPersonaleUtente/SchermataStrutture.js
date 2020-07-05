@@ -2,25 +2,49 @@ import React, {useEffect, useState} from "react";
 import CalcoloGuadagno from "../Schermata Gestione Struttura/CalcoloGuadagno"
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
+import {useHistory, useLocation} from "react-router-dom";
+import reindirizza from "../../Actions/reindirizzamento";
+import mostraDialogErrore from "../../Actions/errore";
 
 function SchermataStrutture(){
+    const history = useHistory();
+    const location = useLocation();
     const [listaStrutture,setLista]=useState([]);
 
     useEffect(() => {
         let utente = window.sessionStorage.getItem("utente");
         if(!utente || utente.length==0){
-            window.location.href="/accedi";
+            reindirizza(history, {
+                pathname: '/accedi',
+                state: {
+                    provenienza: 'Schermata Gestione Strutture',
+                    urlProvenienza: location.pathname
+                }
+            }, 3000, "Devi effettuare l'accesso per visualizzare le tue strutture");
         }
         if(!window.sessionStorage.getItem("strutture")){
             console.log("il momento della fetch");
             let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
-            console.log(idUtente);
             axios.post('/struttura/listaStruttureGestore', {"idUtente":idUtente}) //prendo la lista delle strutture se non è presente il session storage
                 .then(res => {
                     console.log(res.data);
                     setLista(res.data);
                     window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
-                }).catch(err => console.log(err));
+                }).catch(err => {
+                    if (err.response.status === 401) {
+                        reindirizza(history, {
+                            pathname: '/accedi',
+                            state: {
+                                provenienza: "Schermata Dato Pagamento",
+                                urlProvenienza: location.pathname
+                            }
+
+                        }, 3000, "Devi effettuare nuovamente l'accesso per accedere ai tuoi dati");
+                    } else {
+                        mostraDialogErrore();
+                    }
+                }
+            );
         } else{
             setLista(JSON.parse(window.sessionStorage.getItem("strutture")));
         }

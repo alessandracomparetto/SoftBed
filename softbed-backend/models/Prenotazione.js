@@ -172,19 +172,28 @@ module.exports = {
         }
     },
 
-    rendiconto: async function(dati, callback) {
-        console.log(dati.trimestre, dati.rendicontoEffettuato)
+    rendiconto: async function (dati, callback) {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(('SELECT P.idPrenotazione FROM prenotazione AS P  \
-                    WHERE P.refStruttura = ? AND P.checkIn < ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendicontoEffettuato]).catch((err) => {throw err});
-                return callback(risultato);
-            })
-        }
-        catch (err) {
+                //recupero le informazioni generali della struttura
+                let prenotazioni = await db.query(('SELECT P.idPrenotazione, C.prezzoBambini, C.prezzoAdulti FROM prenotazione AS P, condizioni AS C \
+                    WHERE P.refStruttura = ? AND P.refStruttura = C.refStruttura AND P.checkIn < ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendiconto]).catch((err) => {throw err});
+
+                for (let i = 0; i < prenotazioni.length; ++i) {
+                    let indice = prenotazioni[i].idPrenotazione;
+                    let ospiti = await db.query('SELECT * FROM `ospiti` WHERE `ospiti`.refPrenotazione=?', [indice]).catch(err=>{throw err});
+                        let array=[];
+                        console.log(indice);
+                        for (let i = 0; i < ospiti.length; i++) {
+                            array.push(ospiti[i]);
+                        }
+                        prenotazioni[0]["ospiti"] = array;
+                    }
+                return callback(prenotazioni);
+            });
+        } catch (err) {
             throw err;
         }
-
-    }
+    },
 }

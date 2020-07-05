@@ -17,28 +17,6 @@ function FormTipologiaStruttura(props) {
             document.getElementById("feedback").classList.remove("collapse");
         }
     }
-        /*if(document.getElementById("cv").checked || document.getElementById("B&B").checked){
-            document.getElementById("feedback").classList.add("collapse"); */
-           /* let tip;
-            if(document.getElementById("cv").checked === true){
-                tip = {tipologia : document.getElementById("cv").value}
-            }else{
-               tip = {tipologia : document.getElementById("B&B").value}
-            }
-            try{
-                axios.post("/struttura/tipologia", tip)
-                    .then( res => console.log(res.status))
-            } catch (err) {
-                if (err.response.status === 400) {
-                    console.log('There was a problem with the server');
-                } else {
-                    console.log(err.response.data.msg);
-                }
-            } */
-        /*}
-        else{
-            document.getElementById("feedback").classList.remove("collapse");
-        } */
 
     if(props.currentStep !== 1){
         return null;

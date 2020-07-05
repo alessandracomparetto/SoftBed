@@ -1,6 +1,7 @@
 import Prenotazione from "./Prenotazione";
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import {confirmAlert} from "react-confirm-alert";
 
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
@@ -15,6 +16,26 @@ function RichiesteInAttesa(props){
             window.location.href="/gestioneStrutture/";
         }
     },[]);
+
+    const mostraDialogConferma = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="custom-ui">
+                        <h3>Sei sicuro di voler rifiutare la prenotazione?</h3>
+                        <div className="text-right">
+                            <button className="btn btn-secondary px-3 py-2 m-2" onClick={onClose}>No, torna indietro</button>
+                            <button className="btn btn-danger px-3 py-2 m-2" onClick={() => {
+                                rifiutaPrenotazione();
+                                onClose();
+                            }} >
+                                Sì, voglio rifiutare la prenotazione!
+                            </button>
+                        </div>
+                    </div>
+                )}
+        })
+    };
 
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
@@ -76,7 +97,7 @@ function RichiesteInAttesa(props){
                 <Prenotazione dati={props.prenotazione}></Prenotazione>
                 <div id="buttonRemove" className="mt-3 btn-group d-flex justify-content-between">
                     <button type="button " className="btn  btn-success mr-2" style={{maxWidth : 170+'px'}} onClick={confermaPrenotazione}>Conferma </button>
-                    <button type="button " className="btn btn-danger mr-2" style={{maxWidth : 170+'px'}} onClick={rifiutaPrenotazione}>Rifiuta</button>
+                    <button type="button " className="btn btn-danger mr-2" style={{maxWidth : 170+'px'}} onClick={mostraDialogConferma}>Rifiuta</button>
                 </div>
             </div>
         </div>

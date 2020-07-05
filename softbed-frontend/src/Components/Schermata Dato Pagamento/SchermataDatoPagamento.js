@@ -3,6 +3,9 @@ import FormMetodoPagamento from "./FormMetodoPagamento";
 import DatiPagamento from "./DatiPagamento";
 import axios from "axios";
 import SidebarUtente from "../SchermataPersonaleUtente/SidebarUtente";
+import {useHistory, useLocation} from "react-router-dom";
+import reindirizza from "../../Actions/reindirizzamento";
+import mostraDialogErrore from "../../Actions/errore";
 
 
 /*
@@ -12,47 +15,61 @@ TODO:
 
 function SchermataDatoPagamento(props){
     const[listaDatiPagamento, setDatiPagamento] = useState([]);
+    const history = useHistory();
+    const location = useLocation();
 
   useEffect(() => {
-      let utente = window.sessionStorage.getItem("utente");
+      let utente = JSON.parse(window.sessionStorage.getItem("utente"));
       if(!utente || utente.length==0){
-          window.location.href="/accedi";
+          reindirizza(history, {
+              pathname: '/accedi',
+              state: {
+                  provenienza: 'Schermata Dato Pagamento',
+                  urlProvenienza: location.pathname
+              }
+          }, 3000, "Qualcosa è andato storto. Effettua nuovamente l'accesso");
       }
-      //TODO GESTIRE ID UTENTE
-      let data = {"idUtente":1}
-      /*props.idUtente*/
-        axios.post(`/utente/listaPagamenti`, data).then(res => {
+        axios.post(`/utente/listaPagamenti`, {"idUtente":utente.idUtente}).then(res => {
             console.log("DATI PAGAMENTO RECUPERATI=======");
             console.log(res.data);
             setDatiPagamento(res.data);
-        })
-            .catch(err => console.log(err));
+        }).catch(err =>{
+            if(err.response.status === 401){
+                reindirizza(history, {
+                    pathname: '/accedi',
+                    state: {
+                        provenienza: "Schermata Dato Pagamento",
+                        urlProvenienza: location.pathname
+                    }
+
+                }, 3000, "Devi effettuare nuovamente l'accesso per accedere ai tuoi dati");
+            }else{
+                mostraDialogErrore();
+            }
+        });
     }, []);
 
 
   const aggiungiDatoPagamento = (dato) => {
-      //TODO: PASSARE ID UTENTE
-      console.log(dato);
-          try {
-              axios.post("/utente/aggiungiDatoPagamento", dato)
-                  .then(res => { // then print response status
-                      console.log("DATO AGGIUNTO ======= ");
-                      console.log(res.data);
-                      console.log("Dati aggiunti");
-                      let tmp = [...listaDatiPagamento];
-                      tmp.push(dato);
-                      console.log(tmp);
-                      setDatiPagamento(tmp);
-                  });
+      console.log("dato", dato);
+      let idUtente = (JSON.parse(window.sessionStorage.getItem("utente"))).idUtente;
+      console.log(idUtente);
+      dato["idUtente"]=idUtente;
+      try {
+          axios.post("/utente/aggiungiDatoPagamento", dato)
+              .then(res => { // then print response status
+                  console.log("DATO AGGIUNTO ======= ");
+                  console.log(res.data);
+                  console.log("Dati aggiunti");
+                  let tmp = [...listaDatiPagamento];
+                  tmp.push(dato);
+                  console.log(tmp);
+                  setDatiPagamento(tmp);
+              });
           }catch(err){
-              if (err.response.status === 400) {
-                  console.log('There was a problem with the server');
-              } else {
-                  console.log(err.response.data.msg);
-              }
+              mostraDialogErrore();
           }
-
-    }
+    };
 
     const eliminaDatoPagamento = (numeroCarta, indice) => {
         let data = {"numeroCarta":numeroCarta};
@@ -66,20 +83,15 @@ function SchermataDatoPagamento(props){
                     setDatiPagamento(tmp);
                 });
         }catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
-            }
+            mostraDialogErrore();
         }
-
-    }
+    };
 
 
     return(
         <div className="d-block">
             <div className="row mx-auto">
-                <SidebarUtente></SidebarUtente>
+                <SidebarUtente/>
                 <div className="container my-3 col-12 col-md-9" >
                     <div className="my-3">
                         <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>

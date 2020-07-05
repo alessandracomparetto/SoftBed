@@ -2,7 +2,9 @@ let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
 let Timer= require('../models/Timer');
-let prenotazioneModel = require('../models/Prenotazione')
+let prenotazioneModel = require('../models/Prenotazione');
+const ModuloUtente = require('../routes/utente');
+const token = ModuloUtente.token;
 
 /*timer=new Timer();*/
 
@@ -12,18 +14,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/listaPrenotazioni', function (req, res) {
-    prenotazioneModel.getPrenotazioni(req.body,function (data){
-        res.send(data);
-    }).catch((err) => {
-        res.status(err.status).send(err.message);
-    });
+    let c=(req.headers.cookie).split("=")[1];
+    if(token.verificaToken(req.body.refGestore, c)) {
+        prenotazioneModel.getPrenotazioni(req.body, function (data) {
+            res.send(data);
+        }).catch((err) => {
+            res.status(err.status).send(err.message);
+        });
+    }else{
+        res.sendStatus(401);
+    }
 });
 
 router.post('/rifiutaPrenotazione', function (req, res) {
     prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
-            timer.distruggiTimeout(req.body.idPrenotazione);
-            res.send();
+            // timer.distruggiTimeout(req.body.idPrenotazione);
+             res.send();
         })
         .catch((err) => {
             res.status(err.status).send(err.message);

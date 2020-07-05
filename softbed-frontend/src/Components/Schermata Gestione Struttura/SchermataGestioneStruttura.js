@@ -8,28 +8,45 @@ import ModificaCaratteristicheC from "./ModificaCaratteristicheC";
 import CalcoloGuadagno from "./CalcoloGuadagno";
 import SidebarStruttura from "./SidebarStruttura";
 import {useParams} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
+import reindirizza from "../../Actions/reindirizzamento";
 
 function SchermataGestioneStruttura(){
     const [struttura,setStruttura]=useState([]);
     //utilizzo questo stato per aggiornare le informazioni della struttura al modificare delle condizione e delle caratteristiche
     const [flag, setFlag]=useState(0);
     const {indice} = useParams();
+    const history = useHistory();
+    const location = useLocation();
 
     useEffect(() => {
         let utente = window.sessionStorage.getItem("utente");
         if(!utente || utente.length==0){
-            window.location.href="/accedi";
+            window.location.href="/accedi"
         }
         let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
         if(!lista || indice>=lista.length || !lista[indice]){
             window.location.href="/gestioneStrutture/"
         }
         let dati = lista[indice];
+        console.log("la fetch");
         axios.post(`/struttura/gestioneStruttura`, dati)
             .then(res => {
                 setStruttura(res.data);
-            })
-            .catch(()=>mostraDialogErrore());
+            }).catch(err =>{
+            if(err.response.status === 401){
+                reindirizza(history, {
+                    pathname: '/accedi',
+                    state: {
+                        provenienza: "Schermata Gestione Struttura",
+                        urlProvenienza: location.pathname
+                    }
+
+                }, 3000, "Devi effettuare nuovamente l'accesso per accedere a questa struttura.");
+            }else{
+                mostraDialogErrore();
+            }
+        });
     }, []);
 
     function handleChange(event){

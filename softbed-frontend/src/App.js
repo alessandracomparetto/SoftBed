@@ -17,7 +17,7 @@ import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Osp
 import SchermataPrincipale from "./Components/SchermataPrincipale";
 import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
-import SchermataStrutture from "./Components/SchermataStrutture/SchermataStrutture";
+import SchermataStrutture from "./Components/SchermataPersonaleUtente/SchermataStrutture";
 import SchermataDatoPagamento from "./Components/Schermata Dato Pagamento/SchermataDatoPagamento";
 import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAggiuntivi";
 import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";

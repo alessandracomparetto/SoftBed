@@ -18,20 +18,31 @@ router.post('/', function (req, res) {
 });
 
 router.post('/gestioneStruttura/', function(req, res) {
-    strutturaModel.fetch(req.body , function(data) {
-        res.send(data);
-    }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+    console.log(req.body);
+    let c=(req.headers.cookie).split("=")[1];
+    console.log(c);
+     if(token.verificaToken(req.body.refGestore, c)) {
+        strutturaModel.fetch(req.body, function (data) {
+            res.send(data);
+        }).catch((err) => {
+            res.status(err.status).send(err.message)
+        })
+   }else{
+        res.sendStatus(401);
+    }
 });
 
 router.post('/listaStruttureGestore', function (req, res) {
-    console.log(req.body);
-    token.stampaToken();
-    //TODO: VERIFICARE TOKEN, VERIFICARE IDGESTORE
-    strutturaModel.listaStrutture(req.body.idUtente,function(data){
-        res.send(data);
-    }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+    let c=(req.headers.cookie).split("=")[1];
+    if(token.verificaToken(req.body.idUtente, c)) {
+        strutturaModel.listaStrutture(req.body.idUtente, function (data) {
+            res.send(data);
+        }).catch((err) => {
+            res.status(err.status).send(err.message)
+        })
+    }else{
+        res.sendStatus(401);
+    }
 });
 
 router.post('/calcoloGuadagno/', function(req, res, next) {
@@ -115,7 +126,14 @@ router.post('/fetchStruttura', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-
+router.post('/setDataRendiconto', function (req, res) {
+    strutturaModel.setDataRendiconto(req.body,function(data){
+        let status = (data.changedRows === 0) ? 304: 200;
+        res.sendStatus( status);
+    }).catch( (err) =>{
+        res.status(err.status).send(err.message);
+    })
+});
 
 module.exports = router;
 
