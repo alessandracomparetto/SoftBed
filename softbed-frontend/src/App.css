@@ -7,6 +7,14 @@ body {
     background-color: #ffe;
     height: 100%;
 }
+.footer{
+    clear: both;
+    position: relative;
+}
+
+.corpo{
+    min-height: 86vh;
+}
 
 #root {
     height: 100%;
@@ -46,11 +54,6 @@ body {
 .carousel-img {
     max-height: 420px;
 }
-
-.footer{
-    clear: both;
-}
-
 
 .bg-footer {
     background-color: #FFA207;
