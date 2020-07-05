@@ -39,7 +39,7 @@ function SchermataDatiOspiti(props){
 
 
 
-    function aggiungiOspite(dato) {
+    function aggiungiOspite(dato){
         dato.refPrenotazione = refPrenotazione;
         dato.refStruttura = struttura.idStruttura;
         let tmp = [...listaOspiti];

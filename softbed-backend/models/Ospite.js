@@ -16,7 +16,7 @@ module.exports={
 
                     results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
                         throw createError(500);
-                    });
+                        });
 
                     refIndirizzo = results.insertId;
 

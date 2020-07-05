@@ -3,7 +3,6 @@ import data from "../../regioni_province_comuni";
 import $ from "jquery";
 import FormDocumenti from "./FormDocumenti";
 import {convertiData} from "../../Actions/gestioneDate";
-import axios from "axios";
 
 
 function FormDatiOspite(props){
