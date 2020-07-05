@@ -72,7 +72,7 @@ module.exports= {
             throw err;
         }
     },
-//TODO E CAPIRE SE SERVE
+
     fetch: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let infoUtente;
@@ -177,7 +177,7 @@ module.exports= {
 
     aggiungiDatoPagamento:async function(datoPagamento, callback) {
         //TODO PASSARE L'ID UTENTE
-        let idUtente = 1;
+        let idUtente = datoPagamento.idUtente;
         const db = await makeDb(config);
         let results = {};
         try {
@@ -187,9 +187,6 @@ module.exports= {
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN DATO PAGAMENTO
                     throw createError(500);
                 });
-
-                console.log('Inserimento tabella datoPagamento');
-                console.log(results);
                 return (callback("ok"));
             });
         } //chiusura try
@@ -219,14 +216,12 @@ module.exports= {
 
     getDatiPagamento: async function(data, callback){
         let idUtente=data.idUtente;
-        console.log(idUtente);
         const db=await makeDb(config);
         try{
             await withTransaction(db,async()=> {
-                let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [[[idUtente]]]).catch(err => {
-                    throw createError(500);
+                let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [idUtente]).catch(err => {
+                    console.log(err);
                 });
-
                 return callback(listaDatiPagamento);
             });
         }

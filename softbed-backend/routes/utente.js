@@ -25,7 +25,7 @@ const config_session={
     //per default è HttpOnly, non accessibile da client
     maxAge : 1000 * 60 * 60 * 2,  //in millisecondi, 2 ore
         sameSite : true, //accettiamo solo cookie che arrivano dallo stesso dominio
-        secure : false, //TODO da cambiare in true!
+        secure : false
     }};
 
 router.use(session(config_session));
@@ -67,30 +67,39 @@ router.post('/login', function (req, res) {
 
 //recupero delle informazioni dell'utente
 router.post('/fetch', function(req, res) {
-    utenteModel.fetch(req.body,function(data){
-        res.send(data);
-    }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+    let c=(req.headers.cookie).split("=")[1];
+    if(token.verificaToken(req.body.idUtente, c)) {
+        utenteModel.fetch(req.body, function (data) {
+            res.send(data);
+        }).catch((err) => {
+            res.status(err.status).send(err.message)
+        })
+    }else{
+        res.sendStatus(401);
+    }
 });
 
 //modifica dati personali dell'utente
 router.post('/modificaDatiAggiuntivi', function (req, res) {
     utenteModel.modificaDatiAggiuntivi(req.body,function(data){
-        console.log("ciaone", data);
-        res.sendStatus(200);
         res.json(data);
         res.end();
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.send})
 });
 
 //recupero dati pagamento
 router.post('/listaPagamenti', function (req, res) {
-    utenteModel.getDatiPagamento(req.body,function (data){
-        res.send(data);
-    }).catch((err) => {
-        res.status(err.status).send(err.message);
-    });
+    let c=(req.headers.cookie).split("=")[1];
+    if(token.verificaToken(req.body.idUtente, c)) {
+        utenteModel.getDatiPagamento(req.body, function (data) {
+            res.send(data);
+        }).catch((err) => {
+            res.status(err.status).send(err.message);
+        });
+    }else{
+        res.sendStatus(401);
+    }
 });
 
 //aggiungi dato pagamento
@@ -111,7 +120,7 @@ router.post('/eliminaDatoPagamento', function (req, res) {
 
 router.post('/logout', (req,res) => {
     let c=(req.headers.cookie).split("=")[1];
-    if(token.distruggiToken(req.body.idUtente, c) === 0){
+    if(token.distruggiToken(req.body.idUtente, c)){
         res.clearCookie(req.session.name);
         res.send();
     }else{

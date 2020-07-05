@@ -12,15 +12,14 @@ import OperazioneCompletataRegistrazioneStruttura from "./OperazioneCompletataRe
 import axios from 'axios';
 import mostraDialogErrore from "../../Actions/errore";
 
-
 function RegistrazioneStruttura () {
     const [step, setStep]= useState(1);
     const [info, setInfo]= useState({});
 
     useEffect(()=>{
        let utente = window.sessionStorage.getItem("utente");
-       if(!utente || utente.length==0){
-           window.location.href="/accedi";
+       if(!utente || utente.length==0) {
+           window.location.href = "/accedi"
        }
     },[]);
 

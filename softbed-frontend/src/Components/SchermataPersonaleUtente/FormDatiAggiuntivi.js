@@ -1,23 +1,59 @@
 import React, {useEffect, useState} from "react";
+import reindirizza from "../../Actions/reindirizzamento";
+import mostraDialogErrore from "../../Actions/errore";
 import data from "../../regioni_province_comuni.js";
 import $ from "jquery";
 import { convertiData} from "../../Actions/gestioneDate";
 import axios from "axios";
 import SidebarUtente from "./SidebarUtente";
+import {useHistory, useLocation} from "react-router-dom";
+
 const crypto = require('crypto');
+
 
 function FormDatiAggiuntivi(){
     const [utente,setUtente]=useState({});
+    const history = useHistory();
+    const location = useLocation();
 
     //recupero i dati dell'utente
     useEffect(() => {
         let sessionUtente = JSON.parse(window.sessionStorage.getItem("utente"));
         if(!sessionUtente) {
-            window.location.href = "/accedi";
-        }else{
+            reindirizza(history, {
+                pathname: '/accedi',
+                state: {
+                    provenienza: 'Form Dati Aggiuntivi',
+                    urlProvenienza: location.pathname
+                }
+
+            }, 3000, "Qualcosa è andato storto. Effettua nuovamente l'accesso");
+        }else if(sessionUtente.refIndirizzo === null && sessionUtente.refComuneNascita === null){
             let tmp = sessionUtente;
             tmp.dataNascita = tmp.dataNascita.split("T")[0];
             setUtente(tmp);
+        }else {
+            axios
+                .post("/utente/fetch", sessionUtente)
+                .then(res => {
+                    res.data.dataNascita = res.data.dataNascita.split("T")[0];
+                    console.log("DATI RECUPERATI=======");
+                    console.log(res.data);
+                    setUtente(res.data);
+                }).catch(err =>{
+                    if(err.response.status === 401){
+                        reindirizza(history, {
+                            pathname: '/accedi',
+                            state: {
+                                provenienza: "Form Dati Aggiuntivi 2",
+                                urlProvenienza: location.pathname
+                            }
+
+                        }, 3000, "Devi effettuare nuovamente l'accesso per accedere ai tuoi dati");
+                    }else{
+                        mostraDialogErrore();
+                    }
+            });
         }
     }, []);
 
@@ -76,7 +112,10 @@ function FormDatiAggiuntivi(){
                         console.log("cosa è tornato!!" , res.data);
                         window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                         setUtente(res.data);
-                    }).catch(err=> console.log(err));
+                        if (res.data.gestore===1){
+                            window.location.reload();
+                        }}
+                    ).catch(err=> console.log(err));
             } catch (e) {
                 console.log(e);
             }

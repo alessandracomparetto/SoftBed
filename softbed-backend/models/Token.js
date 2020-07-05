@@ -4,31 +4,37 @@ class Token{
     }
 
     aggiungiSessione(id, cookie){
-        console.log("id", id);
-        this.array.push({"id":id, "cookie":cookie});
+        let flag = false;
+        for(let i = 0; i<this.array.length;i++){
+            if(this.array[i].id===id){
+                this.array[i].cookie=cookie;
+                flag = true;
+                break;
+            }
+        }
+        if(!flag){
+            this.array.push({"id":id, "cookie":cookie});
+        }
         this.stampaToken();
     }
 
     verificaToken(id, cookie){
-        for(let i = 0; i<this.array; i++){
+        for(let i = 0; i<this.array.length; i++){
             if(this.array[i].id===id && this.array[i].cookie===cookie){
-                return 0;
-                break;
+                return true;
             }
         }
-        return 1;
+        return false;
     }
 
     distruggiToken(id, cookie){
-        this.stampaToken()
         for(let i = 0; i<this.array.length; i++){
-            console.log("dentro il for");
             if(this.array[i].id===id && this.array[i].cookie===cookie){
                 this.array.splice(i,1); //rimuove l'elemento di posto i
-                return 0
+                return true;
             }
         }
-        return 1;
+        return false;
     }
 
     stampaToken(){

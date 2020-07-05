@@ -31,6 +31,9 @@ function UtenteAutenticato(props) {
             axios.post('/utente/logout', {"idUtente":props.utente.idUtente})
                 .then(()=> {
                     window.sessionStorage.removeItem("utente");
+                    if(window.sessionStorage.getItem("strutture")){
+                        window.sessionStorage.removeItem("strutture");
+                    }
                     window.location.href = "/"
                 }).catch(()=> mostraDialogErrore());
         }catch (e) {

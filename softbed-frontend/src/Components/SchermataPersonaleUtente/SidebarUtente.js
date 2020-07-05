@@ -9,6 +9,8 @@ function SidebarUtente(){
         let dati = JSON.parse(window.sessionStorage.getItem("utente"));
         if(dati){
             setUtente(dati);
+        }else {
+            window.location.href="/accedi";
         }
     },[]);
 

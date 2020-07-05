@@ -5,8 +5,12 @@ function SchermataPersonaleUtente(){
     const [utente,setUtente]=useState([]);
 
     useEffect(() => {
-        let dati = JSON.parse(window.sessionStorage.getItem(["utente"]));
-        setUtente(dati);
+        let dati = JSON.parse(window.sessionStorage.getItem("utente"));
+        if(!dati){
+            window.location.href="/accedi";
+        }else {
+            setUtente(dati);
+        }
     }, []);
 
     function InformazioneLineare(props) {
