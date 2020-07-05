@@ -3,14 +3,14 @@ const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 module.exports={
 
-    aggiungi:async function(listaOspiti, callback) {
+    aggiungi:async function(datiOspite, callback) {
         const db = await makeDb(config);
         let results = {};
         let results2 = {};
         let refIndirizzo, refOspite;
         try {
             await withTransaction(db, async () => {
-                for (let i = 0; i < listaOspiti.length; i++) {
+                for (let i = 0; i < datiOspite.length; i++) {
                     let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
                     let datiQuery = [datiOspite[i].via, datiOspite[i].numero, datiOspite[i].cap, datiOspite[i].refComuneResidenza];
 
