@@ -133,18 +133,15 @@ function FormCondizioni(props) {
                         <label htmlFor="oraInizioCheckIn" className="border-bottom border-primary ">Inizio ora
                             check-in</label>
                         <input type="time" id="oraInizioCheckIn" name="oraInizioCheckIn" className="form-control "
-                               placeholder="Select time" defaultValue={props.dati.oraInizioCheckIn} min="06:00"
-                               max="15:00" onChange={verificaInizioCheckIn} required/>
-                        <div className="invalid-feedback">06:00-15:00</div>
+                               placeholder="Select time" defaultValue={props.dati.oraInizioCheckIn} onChange={verificaInizioCheckIn} required/>
                     </div>
 
                     <div className="md-form md-outline">
                         <label htmlFor="oraFineCheckIn" className="border-bottom border-primary">Fine ora
                             check-in</label>
                         <input type="time" id="oraFineCheckIn" name="oraFineCheckIn" className="form-control "
-                               defaultValue={props.dati.oraFineCheckIn} min="09:00" max="20:00"
+                               defaultValue={props.dati.oraFineCheckIn}
                                placeholder="Select time" onChange={verificaFineCheckIn} required/>
-                        <div className="invalid-feedback">09:00-20:00</div>
                     </div>
                 </div>
 
@@ -153,20 +150,17 @@ function FormCondizioni(props) {
                         <label htmlFor="oraInizioCheckOut" className="border-bottom border-primary">Inizio ora
                             check-out</label>
                         <input type="time" id="oraInizioCheckOut" name="oraInizioCheckOut" className="form-control"
-                               min="09:00" max="13:00" defaultValue={props.dati.oraInizioCheckOut}
+                               defaultValue={props.dati.oraInizioCheckOut}
                                placeholder="Select time" onChange={verificaInizioCheckOut} required/>
-                        <div className="invalid-feedback">09:00-13:00</div>
                     </div>
 
                     <div className="md-form md-outline pl-1">
                         <label htmlFor="oraFineCheckOut" className="border-bottom border-primary">Fine ora
                             check-out</label>
                         <input type="time" id="oraFineCheckOut" name="oraFineCheckOut" className="form-control"
-                               min="10:00" max="18:00" defaultValue={props.dati.oraFineCheckOut}
+                                defaultValue={props.dati.oraFineCheckOut}
                                placeholder="Select time" onChange={verificaFineCheckOut} required/>
-                        <div className="invalid-feedback">10:00-18:00</div>
                     </div>
-
                 </div>
             </div>
             <div className="border p-3" onClick={props.handleChange}>
