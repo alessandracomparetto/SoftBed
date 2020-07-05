@@ -1,12 +1,11 @@
 let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-let Timer= require('../models/Timer');
+let Timer = require('../models/Timer');
 let prenotazioneModel = require('../models/Prenotazione');
 const ModuloUtente = require('../routes/utente');
 const token = ModuloUtente.token;
-
-/*timer=new Timer();*/
+timer = new Timer();
 
 /* La rotta / è vietata */
 router.get('/', function(req, res, next) {
@@ -38,20 +37,18 @@ router.post('/rifiutaPrenotazione', function (req, res) {
     });
 
 router.post('/confermaPrenotazione', function (req, res) {
-    prenotazioneModel.confermaPrenotazione(req.body)
-        .then(()=>{
-            timer.distruggiTimeout(req.body.idPrenotazione);
+    prenotazioneModel.confermaPrenotazione(req.body,  function (data) {
+        timer.distruggiTimeout(req.body.idPrenotazione);
             res.send();
-        })
-        .catch((err) => {
-            res.status(err.status).send(err.message);
+        }).catch((err) => {
+                res.status(err.status).send(err.message);
         });
     });
 
 router.post('/richiesta', function (req, res) {
-    prenotazioneModel.create(req.body, function (idPrenotazione) {
-        timer.aggiungiTimeout(idPrenotazione);
-        res.send(`${idPrenotazione}`);
+    prenotazioneModel.create(req.body, function (dati) {
+        timer.aggiungiTimeout(dati);
+        res.send(`${dati.idPrenotazione}`);
         })
         .catch((err) => {
             res.status(err.status).send(err);

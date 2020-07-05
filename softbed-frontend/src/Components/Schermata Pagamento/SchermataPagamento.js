@@ -10,34 +10,73 @@ import reindirizza from "../../Actions/reindirizzamento";
 
 function SchermataPagamento() {
 
-    const location = useLocation();
-    const history = useHistory();
+    // TODO: utilizzate per test, da rimuovere, ottenere in altro modo e settare tramite le setter
+    const [pagamentoOnline, setPagamentoOnline] = useState(true);
+    const [pagamentoInLoco, setPagamentoInLoco] = useState(true);
+    const [listaDatiPagamento, setDatiPagamento] = useState([
+        {id: 2751, nomeIntestatario: "Mario", cognomeIntestatario: "Rossi", numeroCarta: "0000 1111 2222 3333"},
+        {id: 3725, nomeIntestatario: "Chiara", cognomeIntestatario: "Verdi", numeroCarta: "3333 4444 5555 6666"}
+    ]);
 
-    const [pagamentoOnline, setPagamentoOnline] = useState(false);
-    const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
-    const [listaDatiPagamento, setDatiPagamento] = useState([]);
     const [online, setStatoOnline] = useState(false);
+
+    // metodoPagamento e refUtente
+
+    const query = new URLSearchParams(useLocation().search);
+    const history = useHistory();
     const [datiRichiesta, setDatiRichiesta] = useState({});
 
     useEffect(() => {
+        // TODO: L'utente deve aver effettuato il login
 
-        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
-            if (!location.state || !location.state.provenienza || !(location.state.provenienza === "Schermata struttura")) {
-                reindirizza(history, '/', 3000, "Puoi accedere alla pagina di pagamento solamente dalla pagina della struttura!")
-            } else {
-                setDatiRichiesta(location.state);
-                console.log(datiRichiesta);
-            }
-        } else {
-            reindirizza(history, {
-                pathname: '/accedi/',
-                state: {
-                    provenienza: 'Schermata pagamento',
-                    urlProvenienza: location.pathname,
-                }
-            })
+        // GESTIONE DEI PARAMETRI URL
+        // Se uno dei parametri richiesti non è inserito si viene reindirizzati alla pagina della struttura / home
+        // poiché non vi è la possibilità di selezionare tali parametri dalla schermata di pagamento
+        if (
+            !query.get("idStruttura") ||
+            !query.get("dataCheckIn") ||
+            !query.get("dataCheckOut") ||
+            !query.get("adulti") ||
+            !query.get("bambini") ||
+            !query.get("adultiEsenti") ||
+            !query.get("bambiniEsenti")
+        ) {
+            // if (!query.get("idStruttura")) reindirizza(history, "/", 4000);
+            // else reindirizza(history, `/struttura/${query.get("idStruttura")}`, 4000);
         }
 
+
+
+        // Aggiorna i valori dello stato
+        const valori = {
+            dataCheckIn: query.get("dataCheckIn"),
+            orarioCheckIn: query.get("orarioCheckIn"),
+            dataCheckOut: query.get("dataCheckOut"),
+            orarioCheckOut: query.get("orarioCheckOut"),
+            adulti: query.get("adulti"),
+            bambini: query.get("bambini"),
+            adultiEsenti: query.get("adultiEsenti"),
+            bambiniEsenti: query.get("bambiniEsenti"),
+            idStruttura: query.get("idStruttura"),
+            struttura: "Casa dolce vista mare",
+            camere: [
+                {tipologia: "singola", numero: 1},
+                {tipologia: "doppia", numero: 1}
+            ],
+            prezzo: 42.00
+        }
+
+        // TODO: Verificare validità e disponibilità dati inseriti
+        // nomeStruttura, prezzo per notte, etc.., modalità di pagamento accettate...
+        // axios.get("/struttura")
+        //     .then((res) => {
+        //         // TODO: Aggiorna i dati (prezzo)
+        //     })
+        //     .catch((err) => {
+        //         // TODO: Mostra messaggio di errore
+        //     })
+
+        setDatiRichiesta(valori);
 
         // Gestione della selezione sulla tipologia di pagamento (in loco o online)
         const modPagamentoOnline = $("#online");
@@ -53,14 +92,14 @@ function SchermataPagamento() {
         let tmp = [...listaDatiPagamento];
         tmp.push(dato);
         setDatiPagamento(tmp);
-    }
+    };
 
     const onSubmit = (event) => {
         event.preventDefault();
 
         // TODO: Ottenere ID Utente e il metodo di pagamento selezionato
         let tmp = datiRichiesta;
-        tmp["idUtente"] = 5;
+        tmp["idUtente"] = 139;
         tmp["metodoPagamento"] = null; // null per pagamenti in loco
         setDatiRichiesta(tmp);
 

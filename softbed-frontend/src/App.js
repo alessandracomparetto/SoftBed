@@ -69,7 +69,7 @@ function App() {
                             <SchermataOperazioneCompletata />
                         </Route>
 
-                        <Route exact path="/pagamento">
+                        <Route exact path="/pagamento/informazioni">
                             <SchermataPagamento />
                         </Route>
 
