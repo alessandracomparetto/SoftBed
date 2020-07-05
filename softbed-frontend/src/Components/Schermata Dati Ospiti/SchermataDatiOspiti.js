@@ -6,14 +6,14 @@ import {useParams, useHistory, useLocation} from "react-router-dom";
 import reindirizza from "../../Actions/reindirizzamento";
 import $ from "jquery";
 import RiepilogoDatiQuestura from "./RiepilogoDatiQuestura";
+import RiepilogoPrenotazionePDF from "../Schermata Pagamento/RiepilogoPrenotazionePDF";
+import mostraDialogErrore from "../../Actions/errore";
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
     const [struttura, setStruttura] = useState([]);
     const history = useHistory();
     const location = useLocation();
-
     const {indice, refPrenotazione} = useParams();
-    const [flag, setFlag] = useState(0);
 
     useEffect(() => {
         let utente = window.sessionStorage.getItem("utente");
@@ -39,11 +39,12 @@ function SchermataDatiOspiti(props){
 
 
 
-    function aggiungiOspite(dato) {
+    const aggiungiOspite = (dato) => {
         dato.refPrenotazione = refPrenotazione;
         dato.refStruttura = struttura.idStruttura;
         let tmp = [...listaOspiti];
         tmp.push(dato);
+        console.log(tmp);
         setOspiti(tmp);
     }
 
@@ -57,28 +58,30 @@ function SchermataDatiOspiti(props){
     const verificaDatiAggiuntivi = (event)=>{
         event.preventDefault();
 
-        axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
+       axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
         }).catch(err => console.log(err));
 
-        let utente = JSON.parse(window.sessionStorage.getItem("utente"));
-        if(utente.refIndirizzo === null || utente.refComuneNascita=== null){
-            // Se il gestore non ha inserito i propri dati, viene rimandato al form dati aggiuntivi
-            reindirizza(history, {
-                pathname:`/utente/${utente[0].idUtente}/modificaAccount`,
-                state: {
-                    provenienza: 'Schermata dati Ospiti',
-                    urlProvenienza: location.pathname
+        /*
+        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
+            if (JSON.parse(sessionStorage.getItem("utente")).refIndirizzo === null || JSON.parse(sessionStorage.getItem("utente")).refComuneNascita === null ) {
+                reindirizza(history, {
+                    pathname:`/utente/modificaAccount`,
+                    state: {
+                        provenienza: 'Schermata dati Ospiti',
+                        urlProvenienza: location.pathname
+                    }
+                }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
+
+            }else {
+                const informazioni = {
+                    emailGestore: JSON.parse(sessionStorage.getItem("utente")).email,
+                    allegato: RiepilogoDatiQuestura(listaOspiti, struttura.idStruttura, refPrenotazione)
                 }
-            }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
+                axios.post('/mail/dichiarazione', informazioni)
+                    .catch();
 
+            }*/
         }
-        else {
-            document.getElementById("ospiti").classList.add("collapse");
-            document.getElementById("riepilogo").classList.remove("collapse");
-        }
-    }
-
-
 
     return(
         <div  className="container my-3" >
@@ -105,10 +108,6 @@ function SchermataDatiOspiti(props){
                 <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
                 <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
             </div>
-            <div id = "riepilogo" className="my-3 collapse">
-                       <RiepilogoDatiQuestura dati={listaOspiti} idStruttura={struttura.idStruttura} refPrenotazione = {refPrenotazione}/>
-            </div>
-
         </div>
 
 
