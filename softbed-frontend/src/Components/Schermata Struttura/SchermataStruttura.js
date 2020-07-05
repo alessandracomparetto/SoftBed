@@ -123,11 +123,19 @@ function SchermataStruttura() {
                 adulti: $("#adulti").val(),
                 bambini: $("#bambini").val(),
                 adultiEsenti: $("#adultiEsenti").val(),
-                bambiniEsenti: $("#bambiniEsenti").val()
+                bambiniEsenti: $("#bambiniEsenti").val(),
+                struttura: struttura
             }
 
             const stringaParametri = $.param(parametri);
-            history.push("/pagamento/informazioni?" + stringaParametri);
+            history.push({
+                pathname:'/pagamento',
+                state: {
+                    provenienza: 'Schermata struttura',
+                    urlProvenienza: location.pathname,
+                    data: parametri
+                }
+            })
         }
 
         else {

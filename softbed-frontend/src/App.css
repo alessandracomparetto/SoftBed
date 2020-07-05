@@ -1,11 +1,15 @@
 html {
-    min-height: 100vh;
+    height: 100%;
     scroll-behavior: smooth;
 }
 
 body {
     background-color: #ffe;
-    min-height: 100vh;
+    height: 100%;
+}
+
+#root {
+    height: 100%;
 }
 
 .annuncio-btn {

@@ -8,7 +8,7 @@ function Breadcrumb(props) {
                 {
                     props.gerarchia.map((elemento, indice) => {
                         return (
-                            <li key={indice} className={"breadcrumb-item " + elemento.stato }>
+                            <li key={indice} className={`${indice > 2 ? "d-none d-sm-block " : ""}breadcrumb-item ${elemento.stato}`}>
                                 { elemento.stato === "active" ? (
                                     <span>{elemento.testo}</span>
                                     ) : (
