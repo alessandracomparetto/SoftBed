@@ -4,27 +4,27 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import Footer from "./Components/Footer";
-import Immagine from "./Components/Immagine";
-import Login from "./Components/Login";
-import Navbar from "./Components/Navbar";
-import Registrazione from "./Components/Registrazione";
-import RegistrazioneStruttura from "./Components/Registrazione Struttura/RegistrazioneStruttura";
-import SchermataGestioneStruttura from "./Components/Schermata Gestione Struttura/SchermataGestioneStruttura";
-import SchermataOperazioneCompletata from "./Components/Schermata Operazione Completata/SchermataOperazioneCompletata";
-import SchermataPaginaNonTrovata from "./Components/Pagina Non Trovata/SchermataPaginaNonTrovata";
-import SchermataPrenotazioniOspite from "./Components/Schermata Prenotazioni Ospite/SchermataPrenotazioniOspite";
-import SchermataPrincipale from "./Components/SchermataPrincipale";
-import SchermataRisultati from "./Components/Schermata Risultati/SchermataRisultati";
-import SchermataStruttura from "./Components/Schermata Struttura/SchermataStruttura";
-import SchermataStrutture from "./Components/SchermataPersonaleUtente/SchermataStrutture";
-import SchermataDatoPagamento from "./Components/Schermata Dato Pagamento/SchermataDatoPagamento";
-import FormDatiAggiuntivi from "./Components/SchermataPersonaleUtente/FormDatiAggiuntivi";
-import SchermataPersonaleUtente from "./Components/SchermataPersonaleUtente/SchermataPersonaleUtente";
-import SchermataPrenotazioneStruttura from "./Components/Schermata Prenotazione Struttura/SchermataPrenotazioneStruttura";
-import SchermataPagamento from "./Components/Schermata Pagamento/SchermataPagamento";
-import SchermataDatiOspiti from "./Components/Schermata Dati Ospiti/SchermataDatiOspiti";
-import Rendiconto from "./Components/Schermata Gestione Struttura/Rendiconto";
+import Footer from "./Components/Componenti Parziali/Footer";
+import Immagine from "./Components/Componenti Parziali/Immagine";
+import Login from "./Components/Gestione Account/Autenticazione/Login";
+import Navbar from "./Components/Componenti Parziali/Navbar";
+import Registrazione from "./Components/Gestione Account/Autenticazione/Registrazione";
+import RegistrazioneStruttura from "./Components/Gestione Struttura/Registrazione Struttura/RegistrazioneStruttura";
+import SchermataGestioneStruttura from "./Components/Gestione Struttura/SchermataGestioneStruttura";
+import SchermataOperazioneCompletata from "./Components/Componenti Parziali/Schermata Operazione Completata/SchermataOperazioneCompletata";
+import SchermataPaginaNonTrovata from "./Components/Componenti Parziali/Pagina Non Trovata/SchermataPaginaNonTrovata";
+import SchermataPrenotazioniOspite from "./Components/Gestione Prenotazioni/Prenotazioni Ospite/SchermataPrenotazioniOspite";
+import SchermataPrincipale from "./Components/Homepage/SchermataPrincipale";
+import SchermataRisultati from "./Components/Ricerca/Schermata Risultati/SchermataRisultati";
+import SchermataStruttura from "./Components/Ricerca/Schermata Struttura/SchermataStruttura";
+import SchermataStrutture from "./Components/Gestione Account/SchermataStrutture";
+import SchermataDatoPagamento from "./Components/Gestione Account/Modifica Account/Schermata Dato Pagamento/SchermataDatoPagamento";
+import FormDatiAggiuntivi from "./Components/Gestione Account/Modifica Account/FormDatiAggiuntivi";
+import SchermataPersonaleUtente from "./Components/Gestione Account/SchermataPersonaleUtente";
+import SchermataPrenotazioneStruttura from "./Components/Gestione Prenotazioni/Prenotazioni Struttura/SchermataPrenotazioneStruttura";
+import SchermataPagamento from "./Components/Gestione Prenotazioni/Schermata Pagamento/SchermataPagamento";
+import SchermataDatiOspiti from "./Components/Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/SchermataDatiOspiti";
+import Rendiconto from "./Components/Gestione Dichiarazioni/Gestione Rendiconto/Rendiconto";
 
 
 function App() {
