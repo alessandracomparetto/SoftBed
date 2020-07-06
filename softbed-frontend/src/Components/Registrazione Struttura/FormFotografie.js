@@ -22,13 +22,14 @@ function FormFotografie(props){
     const checkMimeType=(fileList)=>{
         let files = fileList;
         const types = ['image/png', 'image/jpeg', 'image/jpg'];
-        for(let x = 0; x < files.length; x++) {
+
+        for (let x = 0; x < files.length; x++) {
             if (types.every(type => files[x].type !== type)) {
                 $("#formato").removeClass("collapse");
                 return true;
             }
-            return false
         }
+        return false;
     };
     //on change dell'input
     const browse = (event) =>{

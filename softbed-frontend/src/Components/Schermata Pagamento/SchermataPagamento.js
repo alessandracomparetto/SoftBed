@@ -74,7 +74,7 @@ function SchermataPagamento() {
                 });
             })
             .catch(() => {
-                mostraDialogErrore("Hai già effettuato una prenotazione con questi dati!");
+                mostraDialogErrore("Assicurati di non aver già effettuato questa prenotazione e di non superare il limite annuo di 28 giorni di alloggio per la struttura selezionata.");
             });
     };
 
@@ -194,7 +194,7 @@ function SchermataPagamento() {
                                 </button>
                             </h5>
                             <div id="formNuovoMetodo" className="collapse">
-                                <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
+                                <FormMetodoPagamento setDatiPagamento={aggiungiDatoPagamento} listaDatiPagamento={listaDatiPagamento}/>
                             </div>
                         </div>
                     )}

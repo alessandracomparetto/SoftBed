@@ -88,7 +88,7 @@ function Registrazione() {
             <div className="col-12 col-lg-8 mb-3 rounded shadow border border-secondary bg-light mx-auto">
                 <div className="d-flex justify-content-center">
                     <div className="container rounded-cicle text-center" style={{position: "absolute", top: -45+'px'}}>
-                        <i className="fa fa-user-circle fa-5x text-warning bg-white rounded-circle" aria-hidden="true"></i>
+                        <i className="fa fa-user-circle fa-5x text-warning bg-white rounded-circle" aria-hidden="true"/>
                     </div>
                 </div>
                 <div className="text-center mt-4 pt-2"><h3>Registrati</h3></div>
@@ -98,7 +98,7 @@ function Registrazione() {
                         <label htmlFor="name">Nome</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
                             <div className="input-group-prepend">
-                                <span className="input-group-text"><i className="fa fa-user fa"></i></span>
+                                <span className="input-group-text"><i className="fa fa-user fa"/></span>
                             </div>
                             <input id="name" name="name" type="text" className="form-control" pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire nome</div>
@@ -109,7 +109,7 @@ function Registrazione() {
                         <label htmlFor="surname">Cognome</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
                             <div className="input-group-prepend">
-                                <span className="input-group-text"><i className="fa fa-user fa"></i></span>
+                                <span className="input-group-text"><i className="fa fa-user fa"/></span>
                             </div>
                             <input id="surname" name="surname" type="text" className="form-control" pattern = "^[A-z\sàèìòùÀÈÌÒÙéÉ]+$" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire cognome</div>
@@ -120,7 +120,7 @@ function Registrazione() {
                         <label htmlFor="dataNascita">Data di nascita</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
                             <div className="input-group-prepend">
-                                <span className="input-group-text"><i className="fa fa-birthday-cake"></i></span>
+                                <span className="input-group-text"><i className="fa fa-birthday-cake"/></span>
                             </div>
                             <input id="birthdate" name="dataNascita" type="date" className="form-control" min={convertiData(new Date(), 0,0,-100)} max={convertiData(new Date(), 0,0,-18)}/>
                             <div className="invalid-feedback r">Data di nascita non valida</div>
@@ -131,7 +131,7 @@ function Registrazione() {
                         <label htmlFor="email">E-mail</label>
                         <div className="input-group" style={{ top: -8 +'px'}}>
                             <div className="input-group-prepend">
-                                <span className="input-group-text"><i className="fa fa-envelope fa" ></i></span>
+                                <span className="input-group-text"><i className="fa fa-envelope fa" /></span>
                             </div>
                             <input id="email" name="email" type="email" className="form-control" size="32" maxLength="40" required/>
                             <div className="invalid-feedback">Inserire indirizzo e-mail</div>
@@ -161,7 +161,7 @@ function Registrazione() {
                                    size="32" maxLength="40" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$" onKeyUp={confermaPass} required/>
                         </div>
                         <div>
-                            <span id="message"></span>
+                            <span id="message"/>
                         </div>
                     </div>
                     <button name="ok" id="ok" type="submit" className="btn btn-warning rounded-pill text-dark mt-4 col-6">Continua</button>

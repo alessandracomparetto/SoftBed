@@ -3,7 +3,6 @@ import $ from "jquery";
 import axios from "axios";
 import mostraDialogErrore from "../../Actions/errore";
 function FormMetodoPagamento(props) {
-
     const GIORNO = 86400000;
     const dataAttuale = new Date();
     //la data di scadenza deve essere maggiore o uguale al mese attuale
@@ -79,7 +78,7 @@ function FormMetodoPagamento(props) {
 
                 <div className="form-group col-12 col-md-4">
                     <label htmlFor="ncarta">Numero carta</label>
-                    <input id="ncarta" name="numeroCarta" type="text" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####"required/>
+                    <input id="ncarta" name="numeroCarta" type="text" className="form-control" pattern="^[0-9]{16}" placeholder="#### #### #### ####" required/>
                     <div className="invalid-feedback">
                         Inserire numero carta
                     </div>

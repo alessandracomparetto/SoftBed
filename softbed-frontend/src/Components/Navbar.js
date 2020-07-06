@@ -112,12 +112,12 @@ function UtenteAutenticato(props) {
 }
 
 function Navbar() {
-    const [accessoEffettuato, setAccessoEffettuato] = useState("");
-    const[utente, setUtente]=useState("");
+    const [accessoEffettuato, setAccessoEffettuato] = useState(false);
+    const [utente, setUtente]=useState("");
 
     useEffect(()=>{
         let dati = JSON.parse(window.sessionStorage.getItem("utente"));
-        if(dati){
+        if (dati) {
             setAccessoEffettuato(true);
             setUtente(dati);
         }
@@ -128,7 +128,6 @@ function Navbar() {
             <Link className="navbar-brand" to="/">softbed</Link>
 
             { accessoEffettuato ? (
-                // TODO
                 <UtenteAutenticato utente={utente} />
             ) : (
                 <UtenteNonAutenticato />

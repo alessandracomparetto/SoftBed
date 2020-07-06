@@ -73,7 +73,7 @@ function SchermataDatoPagamento(props){
                 <div className="container my-3 col-12 col-md-9" >
                     <div className="my-3">
                         <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
-                        <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
+                        <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png" alt="metodi di pagamento accettati"/>
                         <ul className="list-group list-group-flush ">
                             {listaDatiPagamento &&
                                 listaDatiPagamento.map((pagamenti, indice) => {

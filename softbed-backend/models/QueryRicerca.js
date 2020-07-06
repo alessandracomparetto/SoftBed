@@ -24,16 +24,16 @@ class QueryRicerca {
     static queryPrenotazioniBB(arrivo, partenza, ospiti) {
         return `
             SELECT DISTINCT CBB1.refStruttura
-            FROM \`cameraB&B\` as CBB1
+            FROM \`camerab&b\` as CBB1
             WHERE (CBB1.nLettiSingoli + 2 * CBB1.nLettiMatrimoniali) >= ${ospiti} AND 
                 (CBB1.refStruttura, CBB1.idCamera) NOT IN ( 
                 SELECT DISTINCT CBB2.refStruttura, CBB2.idCamera 
-                FROM \`cameraB&B\` as CBB2, prenotazioneCamera, prenotazione 
+                FROM \`camerab&b\` as CBB2, prenotazionecamera as PC, prenotazione 
                 WHERE 
-                CBB2.idCamera = prenotazioneCamera.refCamera AND 
-                CBB2.refStruttura = prenotazioneCamera.refStruttura AND 
-                prenotazioneCamera.refPrenotazione = prenotazione.idPrenotazione AND 
-                prenotazioneCamera.refStruttura = prenotazione.refStruttura AND ( 
+                CBB2.idCamera = PC.refCamera AND 
+                CBB2.refStruttura = PC.refStruttura AND 
+                PC.refPrenotazione = prenotazione.idPrenotazione AND 
+                PC.refStruttura = prenotazione.refStruttura AND ( 
                     ("${arrivo}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
                     ("${partenza}" BETWEEN prenotazione.checkIn AND prenotazione.checkOut) OR 
                     ("${arrivo}" < prenotazione.checkIn AND "${partenza}" > prenotazione.checkOut) 
@@ -44,7 +44,7 @@ class QueryRicerca {
     static queryPrenotazioniCV(arrivo, partenza, ospiti) {
         return `
             SELECT CV.refStruttura
-            FROM casaVacanze as CV 
+            FROM casavacanze as CV 
             WHERE (CV.nLettiSingoli + 2 * CV.nLettiMatrimoniali) >= ${ospiti} AND 
                 CV.refStruttura NOT IN ( 
                 SELECT prenotazione.refStruttura 

@@ -689,7 +689,7 @@ function SchermataStruttura() {
                                             esteso={true}/>
                             }
                             {struttura.condizioniPrenotazione && struttura.condizioniPrenotazione.pagamentoInLoco &&
-                            <Caratteristica key="pagamentoOnline" caratteristica="Pagamento in loco"
+                            <Caratteristica key="pagamentoInLoco" caratteristica="Pagamento in loco"
                                             icona="money-bill-alt" esteso={true}/>
                             }
                         </div>

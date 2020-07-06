@@ -491,10 +491,10 @@ function FormDatiAggiuntivi(){
 
                 <div className="form-group col-12 col-md-4">
                     <label htmlFor="telefono">Telefono</label>
-                    <input id="tel" name="telefono" type="tel" className="form-control" pattern="((((\+|00)[1-9]{2})|0)?([1-9]{2,3}))([0-9]{6,10})"
+                    <input id="tel" name="telefono" type="tel" className="form-control" pattern="^(((\+|00)[1-9]{2}))?([0-9]{10})$"
                            title="Inserire il numero di telefono nel formato (+|00)<pref. int.><pref. loc.><numero> oppure 0<pref. loc.><numero>" defaultValue={utente.telefono}/>
                     <div className="invalid-feedback">
-                        Numero errato
+                        Numero non valido
                     </div>
                 </div>
             </div>

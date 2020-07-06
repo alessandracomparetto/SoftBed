@@ -63,7 +63,7 @@ class QueryStruttura {
     static queryDescrizioneBB() {
         return `
             SELECT BB.descrizione
-            FROM \`B&B\` as BB
+            FROM \`b&b\` as BB
             WHERE BB.refStruttura = ?`
     }
 
@@ -81,15 +81,15 @@ class QueryStruttura {
                    BB.cucinaCeliaci,
                    BB.navettaAeroportuale,
                    BB.servizioInCamera
-            FROM \`B&B\` as BB
+            FROM \`b&b\` as BB
             WHERE BB.refStruttura = ?`
     }
 
     static queryCamereBB() {
         return `
             SELECT CBB.tipologiaCamera, COUNT(*) as numero, MIN(CBB.prezzoBaseANotte) as prezzo
-            FROM \`cameraB&B\` as CBB,
-                 \`B&B\` as BB
+            FROM \`camerab&b\` as CBB,
+                 \`b&b\` as BB
             WHERE BB.refStruttura = ?
               AND BB.refStruttura = CBB.refStruttura
             GROUP BY CBB.tipologiaCamera`
@@ -99,14 +99,14 @@ class QueryStruttura {
     static queryDescrizioneCV() {
         return `
             SELECT CV.descrizione
-            FROM casaVacanze as CV
+            FROM casavacanze as CV
             WHERE CV.refStruttura = ?`
     }
 
     static queryPrezzoCV() {
         return `
             SELECT CV.prezzoNotte
-            FROM casaVacanze as CV
+            FROM casavacanze as CV
             WHERE CV.refStruttura = ?`
     }
 
@@ -122,14 +122,14 @@ class QueryStruttura {
                    CV.permessoFumare,
                    CV.festeAmmesse,
                    CV.TV
-            FROM casaVacanze as CV
+            FROM casavacanze as CV
             WHERE CV.refStruttura = ?`
     }
 
     static queryAmbientiCV() {
         return `
             SELECT CV.salotto, CV.giardino, CV.terrazza, CV.piscina
-            FROM casaVacanze as CV
+            FROM casavacanze as CV
             WHERE CV.refStruttura = ?`
     }
 
@@ -139,7 +139,7 @@ class QueryStruttura {
                    CV.nBagni             as bagni,
                    CV.nLettiSingoli      as singoli,
                    CV.nLettiMatrimoniali as matrimoniali
-            FROM casaVacanze as CV
+            FROM casavacanze as CV
             WHERE CV.refStruttura = ?`
     }
 }

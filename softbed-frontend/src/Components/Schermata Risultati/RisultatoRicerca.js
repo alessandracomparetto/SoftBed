@@ -22,7 +22,12 @@ function RisultatoRicerca(props) {
                 </div>
 
                 <div className="text-md-right">
-                    <Link to={`/struttura/${props.idStruttura}`} className="btn btn-primary d-block d-md-inline-block m-auto stretched-link">Visualizza struttura</Link>
+                    <Link
+                        to={{
+                            pathname: `/struttura/${props.idStruttura}`,
+                            state: {data: props.parametri}
+                        }}
+                        className="btn btn-primary d-block d-md-inline-block m-auto stretched-link">Visualizza struttura</Link>
                 </div>
             </div>
         </div>

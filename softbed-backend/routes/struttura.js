@@ -84,8 +84,8 @@ router.get('/:idStruttura', function(req, res) {
                     if (err) throw err;
                 })
             })
-                .catch((err) =>{
-                    res.status(err.status).send();
+                .catch(() =>{
+                    throw createError(500);
                 })
         }
 

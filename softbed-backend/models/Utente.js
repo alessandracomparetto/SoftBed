@@ -165,10 +165,10 @@ module.exports= {
                     .catch(err => {
                         console.log(err);
                     });
-                for(var propt in residenza[0]){
+                for (let propt in residenza[0]){
                     infoUtente[0][propt]=residenza[0][propt]
                 }
-                for(var propt in nascita[0]){
+                for (let propt in nascita[0]){
                     infoUtente[0][propt]=nascita[0][propt]
                 }
                 return callback(infoUtente[0]);
@@ -179,14 +179,14 @@ module.exports= {
 
     },
 
-    aggiungiDatoPagamento:async function(datoPagamento, callback) {
-        let idUtente = datoPagamento.idUtente;
+    aggiungiDatoPagamento:async function(datopagamento, callback) {
+        let idUtente = datopagamento.idUtente;
         const db = await makeDb(config);
         let results = {};
         try {
             await withTransaction(db, async () => {
-                let sql = ('INSERT INTO `datoPagamento` (nomeIntestatario, cognomeIntestatario, numeroCarta, cvv, dataScadenza, refUtente) VALUES ?');
-                let datiQuery = [datoPagamento.nomeIntestatario, datoPagamento.cognomeIntestatario, datoPagamento.numeroCarta, datoPagamento.cvv, datoPagamento.dataScadenza, idUtente];
+                let sql = ('INSERT INTO `datopagamento` (nomeIntestatario, cognomeIntestatario, numeroCarta, cvv, dataScadenza, refUtente) VALUES ?');
+                let datiQuery = [datopagamento.nomeIntestatario, datopagamento.cognomeIntestatario, datopagamento.numeroCarta, datopagamento.cvv, datopagamento.dataScadenza, idUtente];
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN DATO PAGAMENTO
                     throw createError(500);
                 });
@@ -203,7 +203,7 @@ module.exports= {
 
         console.log("sto per eliminare");
         console.log("id"+data.numeroCarta);
-        let query = (`DELETE FROM datoPagamento WHERE numeroCarta = ?`);
+        let query = (`DELETE FROM datopagamento WHERE numeroCarta = ?`);
 
         try {
             await withTransaction(db, async () => {
@@ -223,7 +223,7 @@ module.exports= {
         const db=await makeDb(config);
         try{
             await withTransaction(db,async()=> {
-                let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [idUtente]).catch(err => {
+                let listaDatiPagamento = await db.query('SELECT * FROM datopagamento WHERE datopagamento.refUtente=?', [idUtente]).catch(err => {
                     console.log(err);
                 });
                 console.log(listaDatiPagamento);

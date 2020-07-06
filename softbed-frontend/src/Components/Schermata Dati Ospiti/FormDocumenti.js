@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios';
 import $ from 'jquery';
 
@@ -18,13 +18,14 @@ function FormDocumenti(props){
     const checkMimeType=(fileList)=>{
         let files = fileList;
         const types = ['image/png', 'image/jpeg', 'image/jpg']
-        for(var x = 0; x < files.length; x++) {
+
+        for(let x = 0; x < files.length; x++) {
             if (types.every(type => files[x].type !== type)) {
                 $("#formato").removeClass("collapse");
                 return true;
             }
-            return false
         }
+        return false;
     }
 
     const onChange = (event) =>{
@@ -74,7 +75,7 @@ function FormDocumenti(props){
             <p>Inserisci qui i documenti degli ospiti in formato jpeg, jpg, o png</p>
             <form encType="multipart/form-data" onSubmit={onSubmit}>
                 <div className="custom-file mt-3 ">
-                    <input name="file" type="file" className="custom-file-input" id="customFile" lang="it"multiple onChange={onChange}/>
+                    <input name="file" type="file" className="custom-file-input" id="customFile" lang="it" multiple onChange={onChange}/>
                     <label className="custom-file-label" htmlFor="customFile">{numero} file selezionati</label>
                 </div>
                 <input id="carica" type="submit" value="Carica" className="btn btn-outline-warning btn-block mt-4" accept="image/png"/>

@@ -48,24 +48,24 @@ module.exports= {
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
                 console.log("inserite condizioni");
-                if (datiStruttura.tipologiaStruttura === "B&B") { //query per B&B
-                    sql = ('INSERT INTO `B&B` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
+                if (datiStruttura.tipologiaStruttura === "B&B") { //query per b&b
+                    sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaAeroportuale, servizioincamera, descrizione) VALUES ?');
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.riscaldamento, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.TV, datiStruttura.cucinaCeliaci,
                         datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
                     results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
-                    console.log("Inserito B&B");
+                    console.log("Inserito b&b");
                     for (camera of datiStruttura.camere) {
-                        sql = 'INSERT INTO `cameraB&B` (refStruttura, tipologiaCamera, nlettiSingoli, \
+                        sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
                         datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
                         results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
                     }
                     console.log("Inserite camere");
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
-                    sql = ('INSERT INTO `casaVacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
+                    sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
                     datiQuery = [refStruttura, datiStruttura.bambini, datiStruttura.riscaldamento, datiStruttura.ariaCondizionata, datiStruttura.wifi, datiStruttura.parcheggio,
                         datiStruttura.strutturaDisabili, datiStruttura.animaliAmmessi, datiStruttura.permessoFumare, datiStruttura.festeAmmesse, datiStruttura.tv, datiStruttura.salotto,
@@ -97,17 +97,17 @@ module.exports= {
             await withTransaction(db, async () => {
                 //recupero le informazioni generali della struttura
                 if (tipologiaStruttura === "cv") {
-                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `casaVacanze` \
+                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `casavacanze` \
                         WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo AND `struttura`.idStruttura=`condizioni`.refStruttura \
-                        AND `casaVacanze`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune AND `comuni`.refProvincia=`province`.`idProvincia` \
+                        AND `casavacanze`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune AND `comuni`.refProvincia=`province`.`idProvincia` \
                         AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch((err) => {throw createError(500)});
                 } else if (tipologiaStruttura === "B&B") {
-                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `B&B`\
+                    infoStruttura = await db.query('SELECT * FROM `struttura` JOIN `indirizzo` JOIN `comuni` JOIN `province` JOIN `regioni` JOIN `condizioni` JOIN `b&b`\
                 WHERE `struttura`.idStruttura= ? AND `struttura`.refGestore=? AND `struttura`.refIndirizzo=`indirizzo`.idIndirizzo \
-                AND `struttura`.idStruttura=`condizioni`.refStruttura AND `B&B`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
+                AND `struttura`.idStruttura=`condizioni`.refStruttura AND `b&b`.refStruttura=`struttura`.idStruttura AND `indirizzo`.refComune = `comuni`.idComune\
                 AND `comuni`.refProvincia=`province`.`idProvincia` AND `province`.refRegione=`regioni`.idRegione', [idStruttura, refGestore]).catch((err) => {throw createError(500)});
 
-                    camere = await db.query(('SELECT * FROM `cameraB&B` WHERE `cameraB&B`.refStruttura = ?'), [[[idStruttura]]]).catch((err) => {throw createError(500)});
+                    camere = await db.query(('SELECT * FROM `camerab&b` WHERE `camerab&b`.refStruttura = ?'), [[[idStruttura]]]).catch((err) => {throw createError(500)});
                     for (let i = 0; i < camere.length; i++) {
                         array.push(camere[i]);
                     }
@@ -151,7 +151,7 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE `B&B` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
+                let results = await db.query('UPDATE `b&b` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
                          WHERE refStruttura= ?', ["b&b.bambini", struttura.bambini, "b&b.ariaCondizionata", struttura.ariaCondizionata, "b&b.wifi", struttura.wifi,
                     "b&b.parcheggio", struttura.parcheggio,"b&b.strutturaDisabili", struttura.strutturaDisabili,"b&b.animaliAmmessi", struttura.animaliAmmessi,"b&b.permessoFumare", struttura.permessoFumare,
                     "b&b.TV", struttura.TV,"b&b.cucinaCeliaci", struttura.cucinaCeliaci,"b&b.navettaAeroportuale", struttura.navettaAeroportuale,
@@ -167,7 +167,7 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE `casaVacanze` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
+                let results = await db.query('UPDATE `casavacanze` SET ?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=?,?=? \
                          WHERE refStruttura = ?', ["casavacanze.bambini", struttura.bambini, "casavacanze.ariaCondizionata",struttura.ariaCondizionata, "casavacanze.riscaldamento", struttura.riscaldamento, "casavacanze.Wifi", struttura.Wifi,
                     "casavacanze.parcheggio", struttura.parcheggio,"casavacanze.strutturaDisabili", struttura.strutturaDisabili,"casavacanze.animaliAmmessi", struttura.animaliAmmessi,"casavacanze.permessoFumare", struttura.permessoFumare,
                     "casavacanze.festeAmmesse", struttura.festeAmmesse,"casavacanze.TV", struttura.TV, "casavacanze.descrizione", struttura.descrizione, struttura.idStruttura]).catch((err) => {throw createError(500)});
@@ -185,7 +185,7 @@ module.exports= {
     },
 
     cerca: async function(datiRicerca, callback) {
-        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casaVacanze);
+        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casavacanze);
         await listaStrutture.init();
         return callback(listaStrutture);
     },
@@ -244,8 +244,8 @@ module.exports= {
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
-                let results = await db.query('UPDATE ?? SET ??=? WHERE idStruttura = ?',
-                    ["struttura", "struttura.rendicontoEffettuato", info.rendiconto, info.idStruttura])
+                let results = await db.query('UPDATE struttura SET struttura.rendicontoEffettuato = ? WHERE idStruttura = ?',
+                    [info.rendiconto, info.idStruttura])
                     .catch(err => {console.log(err)});
                 return callback(results);
             });

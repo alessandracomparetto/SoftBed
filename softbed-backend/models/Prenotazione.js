@@ -7,6 +7,24 @@ module.exports = {
     create: async function (datiPrenotazione, callback) {
         const db = await makeDb(config);
 
+        const dataCheckIn = new Date(datiPrenotazione.dataCheckIn);
+        const dataCheckOut = new Date(datiPrenotazione.dataCheckOut);
+
+        const GIORNO = 86400000;
+        const giorni = Math.ceil((dataCheckOut.getTime() - dataCheckIn.getTime()) / GIORNO);
+
+        const annoCI = dataCheckIn.getFullYear();
+        const inizio = annoCI + "-01-01"
+        const fine = annoCI + "-12-31"
+
+        let queryGiorni = `
+        SELECT SUM(DATEDIFF(P.checkOut, P.checkIn)) as giorni
+            FROM prenotazione as P
+            WHERE P.refUtente = ?
+              AND P.refStruttura = ?
+              AND P.checkIn >= '${inizio}'
+              AND P.checkIn <= '${fine}'`
+
         let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
         let datiQuery = [
@@ -24,6 +42,13 @@ module.exports = {
 
         try {
             await withTransaction(db, async () => {
+
+                let tmp = await db.query(queryGiorni, [datiPrenotazione.idUtente, datiPrenotazione.idStruttura])
+                    .catch((err) => {console.log(err)});
+
+                console.log(tmp[0].giorni + giorni);
+                if (tmp[0].giorni + giorni > 28) throw createError(403, "Non è possibile alloggiare nella stessa struttura per più di 28 giorni in un anno.");
+
                 let risultato = await db.query(query, datiQuery).catch((err) => {throw err});
                 if (risultato && risultato.insertId) {
                     let richiedente = await db.query('SELECT email as emailOspite FROM autenticazione WHERE refUtente=?', datiPrenotazione.idUtente).catch((err) => {throw err});
@@ -36,8 +61,11 @@ module.exports = {
                 }
             })
         } catch(err) {
-            throw ((err.code && err.code === "ER_DUP_ENTRY") ?
-                createError(403, "È gia presente una prenotazione con questi dati.") : createError(500));
+            if (err.code && err.code === "ER_DUP_ENTRY") {
+                throw createError(403, "È gia presente una prenotazione con questi dati.");
+            } else if (err.status && err.status === 403) {
+                throw err;
+            } else { createError(500) }
         }
     },
 
@@ -69,7 +97,7 @@ module.exports = {
                if (dati.tipologiaStruttura === "B&B"){
                    for (let i = 0; i < listaPrenotazioni.length; i++) {
                        let indice = listaPrenotazioni[i].idPrenotazione;
-                       let camere = await db.query('SELECT * FROM `cameraB&B` JOIN prenotazioneCamera WHERE `cameraB&B`.idCamera=prenotazioneCamera.refCamera AND prenotazioneCamera.refPrenotazione=?',
+                       let camere = await db.query('SELECT * FROM `camerab&b` JOIN prenotazionecamera WHERE `camerab&b`.idCamera=prenotazionecamera.refCamera AND prenotazionecamera.refPrenotazione=?',
                            [indice]).catch(err=>{throw err});
                        let array=[];
                        for (let i = 0; i < camere.length; i++) {
@@ -91,7 +119,7 @@ module.exports = {
         console.log("id"+data.idPrenotazione);
         try {
             await withTransaction(db, async () => {
-                let camere = await db.query(`DELETE FROM prenotazioneCamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
+                let camere = await db.query(`DELETE FROM prenotazionecamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
                 console.log(camere);
                 let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
                 console.log(result);
@@ -140,7 +168,7 @@ module.exports = {
 
         let queryBB = `
         SELECT *
-        FROM \`cameraB&B\` as CBB, prenotazioneCamera as PC
+        FROM \`camerab&b\` as CBB, prenotazionecamera as PC
         WHERE CBB.refStruttura = PC.refStruttura
           AND CBB.idCamera = PC.refCamera 
           AND PC.refPrenotazione = ?
@@ -185,7 +213,7 @@ module.exports = {
             await withTransaction(db, async () => {
                 //recupero le informazioni generali della struttura
                 let prenotazioni = await db.query(('SELECT P.idPrenotazione FROM prenotazione AS P\
-                    WHERE P.refStruttura = ? AND P.checkIn <= ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendiconto]).catch((err) => {console.log(err) });
+                    WHERE P.refStruttura = ? AND P.checkIn <= ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendiconto]).catch((err) => {throw (err)});
                 console.log("PRENOTAZIONI: ", prenotazioni);
                 for (let i = 0; i < prenotazioni.length; ++i) {
                     let indice = prenotazioni[i].idPrenotazione;
@@ -208,5 +236,4 @@ module.exports = {
             throw err;
         }
     },
-
 }
