@@ -228,8 +228,8 @@ module.exports= {
         try {
             await withTransaction(db, async () => {
                 let risultato = await db.query(('SELECT S.idStruttura, S.nomeStruttura, R.nomeRegione as regione, P.nomeProvincia as provincia,\
-                     C.nomeComune as comune, I.via, I.numeroCivico, I.cap FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S\
-                    WHERE S.idStruttura = ? AND S.refIndirizzo = I.idIndirizzo AND I.refComune = C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione'),
+                     C.nomeComune as comune, I.via, I.numeroCivico, I.cap, CO.prezzoAdulti, CO.prezzoBambini FROM regioni as R, province as P,comuni as C, indirizzo as I,struttura as S, condizioni AS CO\
+                   WHERE S.idStruttura = ? AND S.idStruttura = CO.refStruttura AND S.refIndirizzo = I.idIndirizzo AND I.refComune = C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione'),
                     [dati.idStruttura]).catch((err) => {throw err});
                 return callback(risultato);
             })

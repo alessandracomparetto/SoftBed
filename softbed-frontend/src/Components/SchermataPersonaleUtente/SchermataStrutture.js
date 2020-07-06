@@ -5,6 +5,8 @@ import axios from "axios";
 import {useHistory, useLocation} from "react-router-dom";
 import reindirizza from "../../Actions/reindirizzamento";
 import mostraDialogErrore from "../../Actions/errore";
+import RiepilogoDatiQuestura from "../Schermata Dati Ospiti/RiepilogoDatiQuestura";
+import Rendiconto from "../Schermata Gestione Struttura/Rendiconto";
 
 function SchermataStrutture(){
     const history = useHistory();
@@ -50,6 +52,7 @@ function SchermataStrutture(){
         }
     }, []);
 
+
     return(
         <div className="container">
             <h4>Strutture registrate</h4>
@@ -73,7 +76,7 @@ function SchermataStrutture(){
                                         <Link className="text-light" to={`/struttura/gestioneStruttura/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
                                     </div>
                                     <div  className=" col-6 col-lg-2">
-                                        <Link className="text-light" to={`/struttura/rendiconto/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Rendiconto</button></Link>
+                                        <Rendiconto struttura={struttura}/>
                                     </div>
                                 </div>
                                 <div className="collapse">

@@ -120,7 +120,7 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
     })
 });
 
-//recupero struttura per dichiarazione ospiti
+//recupero struttura per dichiarazione ospiti e rendiconto
 router.post('/fetchStruttura', function (req, res) {
     strutturaModel.fetchStruttura(req.body,function (data){
         res.send(data);

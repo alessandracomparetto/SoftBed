@@ -184,18 +184,23 @@ module.exports = {
         try {
             await withTransaction(db, async () => {
                 //recupero le informazioni generali della struttura
-                let prenotazioni = await db.query(('SELECT P.idPrenotazione, C.prezzoBambini, C.prezzoAdulti FROM prenotazione AS P, condizioni AS C \
-                    WHERE P.refStruttura = ? AND P.refStruttura = C.refStruttura AND P.checkIn < ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendiconto]).catch((err) => {throw err});
-
+                let prenotazioni = await db.query(('SELECT P.idPrenotazione FROM prenotazione AS P\
+                    WHERE P.refStruttura = ? AND P.checkIn <= ? AND P.checkIn >?'), [dati.idStruttura, dati.trimestre, dati.rendiconto]).catch((err) => {console.log(err) });
+                console.log("PRENOTAZIONI: ", prenotazioni);
                 for (let i = 0; i < prenotazioni.length; ++i) {
                     let indice = prenotazioni[i].idPrenotazione;
-                    let ospiti = await db.query('SELECT * FROM `ospiti` WHERE `ospiti`.refPrenotazione=?', [indice]).catch(err=>{throw err});
+                    let ospiti = await db.query('SELECT O.nome, O.cognome, O.codiceFiscale, O.dataNascita, O.dataArrivo, O.permanenza, O.tassa, I.via, I.numeroCivico, I.cap, CN.nomeComune as comuneNascita, PN.nomeProvincia AS provinciaNascita,\
+                    RN.nomeRegione AS regioneNascita, CR.nomeComune as comuneResidenza, CR.idComune AS refComuneResidenza, PR.nomeProvincia AS provinciaResidenza, RR.nomeRegione AS regioneResidenza\
+                    FROM `ospite` AS O JOIN `indirizzo` AS I ,`comuni` as CR , `province` as PR, `regioni` as RR, `comuni` AS CN , `province` AS PN, `regioni` AS RN\
+                    WHERE  O.refPrenotazione= ? AND  O.refIndirizzo=I.idIndirizzo AND I.refComune=CR.idComune\
+                    AND `CR`.refProvincia = `PR`.idProvincia AND `PR`.refRegione = `RR`.idRegione AND O.refComuneNascita = `CN`.idComune\
+                    AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[indice]).catch(err=>{throw err});
                         let array=[];
                         console.log(indice);
                         for (let i = 0; i < ospiti.length; i++) {
                             array.push(ospiti[i]);
                         }
-                        prenotazioni[0]["ospiti"] = array;
+                        prenotazioni[i]["ospiti"] = array;
                     }
                 return callback(prenotazioni);
             });
@@ -203,4 +208,5 @@ module.exports = {
             throw err;
         }
     },
+
 }

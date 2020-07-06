@@ -18,11 +18,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-router.post('/', (req, res) => {
+
+router.post('/dichiarazione', (req, res) => {
 
     let mailOptions = {
         from: req.body.email,
-        to: "c.sofy1998@libero.it",  //SIMULAZIONE EMAIL DELL'UFFICIO DELLA QUESTURA
+        to: "c.sofy1998@libero.it", //SIMULAZIONE EMAIL DELL'UFFICIO DELLA QUESTURA
         subject: "Dichiarazione ospiti questura",
         text: "Si inoltra in allegato quanto indicato in oggetto.",
         attachments: [
@@ -69,8 +70,6 @@ router.post('/invioRendiconto', (req, res) => {
 });
 
 router.post('/richiesta-prenotazione', (req, res) => {
-    console.log("ospite", req.body.emailOspite);
-    console.log("gestore", req.body.emailGestore);
     const mailOspite = {
         from: softbed.email,
         to: req.body.emailOspite,
@@ -112,14 +111,16 @@ router.post('/richiesta-prenotazione', (req, res) => {
             </p>`
     };
 
-    transporter.sendMail(mailOspite, (err, res) => {
+    transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            console.log(err);
+            res.status(err.status).send(err);
         }
     });
 
-    transporter.sendMail(mailGestore, (err, res) => {
-        if (err) {console.log(err);}
+    transporter.sendMail(mailOspite, (err, res) => {
+        if (err) {
+            res.status(err.status).send(err);
+        }
     });
 
     res.send();

@@ -31,10 +31,10 @@ module.exports={
 
                     refOspite = results.insertId;
 
-                    sql = ('INSERT INTO `documenti` (refOspite, percorso, refPrenotazione) VALUES ?');
+                    sql = ('INSERT INTO `documenti` (percorso, refPrenotazione) VALUES ?');
                     if (datiOspite[i].documenti) {
                         for (documento of datiOspite[i].documenti) {
-                            datiQuery = [refOspite, documento, refPrenotazione];
+                            datiQuery = [documento, refPrenotazione];
                             results2 = await db.query(sql, [[datiQuery]]).catch(err => {
                                 throw err;
                             });
