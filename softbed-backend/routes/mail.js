@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-router.post('/dichiarazione', (req, res) => {
+router.post('/invioDichiarazione', (req, res) => {
 
     let mailOptions = {
         from: req.body.email,

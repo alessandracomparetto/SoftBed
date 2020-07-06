@@ -9,6 +9,7 @@ import $ from "jquery";
 import RiepilogoDatiQuestura from "./RiepilogoDatiQuestura";
 import RiepilogoPrenotazionePDF from "../Schermata Pagamento/RiepilogoPrenotazionePDF";
 import mostraDialogErrore from "../../Actions/errore";
+import Rendiconto from "../Schermata Gestione Struttura/Rendiconto";
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
     const [struttura, setStruttura] = useState([]);
@@ -39,7 +40,21 @@ function SchermataDatiOspiti(props){
             .catch(err => console.log(err));
     }, []);
 
+    const aggiungiOspiti =() => {
+        let tmp=[];
+        for(let i = 0; i <listaOspiti.length; i++){
+            if(listaOspiti[i].idOspite === undefined){
+                tmp.push(listaOspiti[i]);
+            }
+        }
 
+        let info = {listaOspiti:tmp, refPrenotazione:refPrenotazione};
+        axios.post(`/ospite/aggiungi`, info).then(res => {
+        }).catch(err => console.log(err));
+
+
+
+    }
 
   const eliminaOspite = (indice) => {
         let tmp = [...listaOspiti];
@@ -48,26 +63,9 @@ function SchermataDatiOspiti(props){
         console.log(tmp);
     }
 
-    const verificaDatiAggiuntivi = (event)=> {
-        event.preventDefault();
-        let tmp=[];
-        for(let i = 0; i <listaOspiti.length; i++){
-            if(listaOspiti[i].idOspite== undefined){
-                tmp.push(listaOspiti[i]);
-            }
-        }
-        console.log(tmp);
-        let info = {listaOspiti:tmp, refPrenotazione:refPrenotazione};
-
-        axios.post(`/ospite/aggiungi`, info).then(res => {
-        }).catch(err => console.log(err));
-
-        return <RiepilogoDatiQuestura listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
-    }
-
 
     return(
-        <div  className="container my-3" >
+        <div className="container my-3" >
 
             <div id ="ospiti" >
                 <div  className="my-3">
@@ -89,7 +87,8 @@ function SchermataDatiOspiti(props){
                 </div>
 
                 <FormDatiOspite listaOspiti={listaOspiti} setOspiti={setOspiti}/>
-                <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
+{/*                <RiepilogoDatiQuestura struttura={struttura} listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>*/}
+                <button type="button" className="btn btn-danger mb-5 float-right" onClick={aggiungiOspiti}>Procedi alla dichiarazione</button>
             </div>
         </div>
 
