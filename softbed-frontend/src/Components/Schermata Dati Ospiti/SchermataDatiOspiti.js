@@ -49,26 +49,16 @@ function SchermataDatiOspiti(props){
 
     const verificaDatiAggiuntivi = (event)=> {
         event.preventDefault();
+        let info = {listaOspiti:listaOspiti, refPrenotazione:refPrenotazione};
 
-        axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
+        axios.post(`/ospite/aggiungi`, info).then(res => {
         }).catch(err => console.log(err));
 
 
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
-            if (JSON.parse(sessionStorage.getItem("utente")).refIndirizzo === null || JSON.parse(sessionStorage.getItem("utente")).refComuneNascita === null) {
-                reindirizza(history, {
-                    pathname: `/utente/modificaAccount`,
-                    state: {
-                        provenienza: 'Schermata dati Ospiti',
-                        urlProvenienza: location.pathname
-                    }
-                }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
-
-            } else {
                 console.log(listaOspiti, refPrenotazione);
                 return <RiepilogoDatiQuestura id="dichiarazione" listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
             }
-        }
     }
 
 
