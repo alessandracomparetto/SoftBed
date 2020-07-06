@@ -24,9 +24,9 @@ function FormTipologiaStruttura(props) {
     else return(
         <form id="form" className="container needs-validation p-3" onChange={props.handleChange} noValidate>
             <h6 className="mt-3 border-bottom border-primary">Scegli la tipologia di struttura</h6>
-            <div className=" container d-flex justify-content-around">
-                <i className="fa fa-bed  fa-8x " aria-hidden="true"/>
-                <i className="fa fa-home fa-8x" aria-hidden="true"/>
+            <div className=" container d-flex justify-content-around mt-3">
+                <i className="fa fa-bed fa-8x icon-sm" aria-hidden="true"/>
+                <i className="fa fa-home fa-8x icon-sm" aria-hidden="true"/>
             </div>
             <div className="form-row ">
                 <div className="col-6 text-center">

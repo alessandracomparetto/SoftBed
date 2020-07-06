@@ -25,7 +25,10 @@ module.exports = {
               AND P.checkIn >= '${inizio}'
               AND P.checkIn <= '${fine}'`
 
-        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura, dataScadenza) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+
+        let tmp = new Date(new Date().getTime() + 172800000).toISOString().split("T");
+        const scadenza = tmp[0] + " " + tmp[1].slice(0, 10);
 
         let datiQuery = [
             datiPrenotazione.dataCheckIn + " " + datiPrenotazione.orarioCheckIn,
@@ -37,18 +40,21 @@ module.exports = {
             datiPrenotazione.bambiniEsenti,
             datiPrenotazione.metodoPagamento,
             datiPrenotazione.idUtente,
-            datiPrenotazione.idStruttura
+            datiPrenotazione.idStruttura,
+            scadenza
         ];
 
         try {
             await withTransaction(db, async () => {
 
+                // CONTROLLO SUI 28 GIORNI
                 let tmp = await db.query(queryGiorni, [datiPrenotazione.idUtente, datiPrenotazione.idStruttura])
                     .catch((err) => {console.log(err)});
 
                 console.log(tmp[0].giorni + giorni);
                 if (tmp[0].giorni + giorni > 28) throw createError(403, "Non è possibile alloggiare nella stessa struttura per più di 28 giorni in un anno.");
 
+                // QUERY PER IL RISULTATO
                 let risultato = await db.query(query, datiQuery).catch((err) => {throw err});
                 if (risultato && risultato.insertId) {
                     let richiedente = await db.query('SELECT email as emailOspite FROM autenticazione WHERE refUtente=?', datiPrenotazione.idUtente).catch((err) => {throw err});
@@ -179,7 +185,8 @@ module.exports = {
             await withTransaction(db,async()=> {
 
                 let listaPrenotazioni = await db.query(query, [idUtente]).catch(err => {
-                    throw err;
+                    // throw err;
+                    console.log(err);
                 });
 
                 for (let i = 0; i < listaPrenotazioni.length; i++) {

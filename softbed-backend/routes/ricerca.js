@@ -50,6 +50,11 @@ function getParametri(req) {
         risultato.prezzo.max = (x < 500) ? x : undefined;
     }
 
+    risultato.pagamento = {}
+
+    risultato.pagamento.inLoco = !!req.query["pagamentoInLoco"];
+    risultato.pagamento.online = !!req.query["pagamentoOnline"];
+
     risultato.servizi = listaServizi.reduce(function(res, servizio) {
         if (req.query[servizio])
             res.push(servizio);
@@ -80,8 +85,11 @@ router.get('/', function(req, res) {
         cacheRicerche.splice(pos, 1);
 
         // Filtro i risultati
-        if ( parametro.servizi[0] || parametro.ambienti[0] || parametro.prezzo.min || parametro.prezzo.max) {
-            const risultatoFiltrato = risultato.filtra(parametro.servizi, parametro.ambienti, parametro.prezzo);
+        if (parametro.servizi[0] || parametro.ambienti[0] ||
+            parametro.prezzo.min || parametro.prezzo.max ||
+            parametro.pagamento.online || parametro.pagamento.inLoco
+        ) {
+            const risultatoFiltrato = risultato.filtra(parametro.servizi, parametro.ambienti, parametro.prezzo, parametro.pagamento);
             res.send(risultatoFiltrato);
         } else {
             res.send(risultato.lista);
@@ -101,8 +109,11 @@ router.get('/', function(req, res) {
             risultato = data;
 
             // Filtro i servizi
-            if ( parametro.servizi[0] || parametro.ambienti[0] || parametro.prezzo.min || parametro.prezzo.max) {
-                const risultatoFiltrato = risultato.filtra(parametro.servizi, parametro.ambienti, parametro.prezzo);
+            if (parametro.servizi[0] || parametro.ambienti[0] ||
+                parametro.prezzo.min || parametro.prezzo.max ||
+                parametro.pagamento.online || parametro.pagamento.inLoco
+            ) {
+                const risultatoFiltrato = risultato.filtra(parametro.servizi, parametro.ambienti, parametro.prezzo, parametro.pagamento);
                 res.send(risultatoFiltrato);
             } else {
                 res.send(risultato.lista);
