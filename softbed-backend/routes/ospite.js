@@ -17,13 +17,6 @@ router.post('/aggiungi', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-//elimina ospite
-router.post('/elimina', function (req, res) {
-    ospiteModel.elimina(req.body,function(data){
-        res.send(data);
-    }).catch((err)=>{
-        res.status(err.status).send(err.message)})
-});
 
 //recupero ospiti
 router.post('/fetch', function (req, res) {

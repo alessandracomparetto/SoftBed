@@ -219,12 +219,14 @@ module.exports= {
 
     getDatiPagamento: async function(data, callback){
         let idUtente=data.idUtente;
+        console.log(idUtente);
         const db=await makeDb(config);
         try{
             await withTransaction(db,async()=> {
                 let listaDatiPagamento = await db.query('SELECT * FROM datoPagamento WHERE datoPagamento.refUtente=?', [idUtente]).catch(err => {
                     console.log(err);
                 });
+                console.log(listaDatiPagamento);
                 return callback(listaDatiPagamento);
             });
         }

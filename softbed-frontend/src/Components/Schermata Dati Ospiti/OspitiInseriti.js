@@ -1,9 +1,10 @@
-import React, {useState} from "react";
-import FormDocumenti from "./FormDocumenti";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 function OspitiInseriti(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
+
 
     return(
         <li className="rounded list-group-item list-group-item-warning text-dark border border-dark">
@@ -74,7 +75,7 @@ function OspitiInseriti(props){
                     </div>
 
                     <div className="col-12 col-md-3">
-                        <button type="button" className="btn btn-danger btn-block mt-3" onClick={() => props.eliminaOspite(props.indiceElemento)}>Elimina</button>
+                        <button id ="button" type="button" className="btn btn-danger btn-block mt-3"  disabled={((props.idOspite !== undefined) ? true : false)} onClick={() => props.eliminaOspite(props.indiceElemento)}>Elimina</button>
                     </div>
                 </div>
 

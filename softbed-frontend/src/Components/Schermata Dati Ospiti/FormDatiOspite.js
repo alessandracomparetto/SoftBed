@@ -9,44 +9,51 @@ function FormDatiOspite(props){
     const [mostraContenuto, setMostraContenuto] = useState(false );
     const toggleContenuto = () => setMostraContenuto(true);
     const [flag, setFlag] = useState(0 );
+    const [documenti, setDocumenti] = useState([]);
 
     // Gestione delle date
     const oggi = new Date(convertiData(new Date()));
     const minDataA = convertiData(oggi, -1);
     const maxDataA = convertiData(oggi);
 
-    const[ospite, setOspite] = useState({
-        nome: "",
-        cognome: "",
-        codiceFiscale: "",
-        dataNascita: "",
-        refComuneNascita: "",
-        comuneNascita:"",
-        provinciaNascita: "",
-        refIndirizzo: "",
-        via: "",
-        numero: "",
-        cap: "",
-        refComuneResidenza:"",
-        comuneResidenza:"",
-        provinciaResidenza:"",
-        tassa:"",
-        dataArrivo:"",
-        permanenza:"",
-        idOspite:"",
-        refPrenotazione:""
-    });
 
 
     //onSubmit
-    function onSubmit(e) {
+    function aggiungiOspite(e) {
         e.preventDefault();
         var form = document.getElementById("form");
         form.classList.add('was-validated');
 
 
         if(form.checkValidity()){
-            props.aggiungiOspite(ospite);
+            let nome = document.getElementById("nome").value;
+            let cognome =document.getElementById("cognome").value;
+            let codiceFiscale =document.getElementById("cf").value;
+            let dataNascita = document.getElementById("dataNascita").value;
+            let regioneNascita = document.getElementById("regioneNascita").value;
+            let provinciaNascita = document.getElementById("provinciaNascita");
+            let comuneNascita = document.getElementById("comuneNascita");
+            let regioneResidenza = document.getElementById("regioneResidenza").value;
+            let provinciaResidenza = document.getElementById("provinciaResidenza");
+            let comuneResidenza = document.getElementById("comuneResidenza");
+            let via = document.getElementById("via").value;
+            let numero = document.getElementById("numero").value;
+            let cap = document.getElementById("cap").value;
+            let dataArrivo = document.getElementById("dataArrivo").value;
+            let permanenza = document.getElementById("permanenza").value;
+            let tassa = document.getElementById("tassa");
+
+            let dato ={nome:nome, cognome:cognome, codiceFiscale:codiceFiscale, dataNascita:dataNascita, regioneNascita:regioneNascita,
+            provinciaNascita:provinciaNascita.options[provinciaNascita.selectedIndex].text, comuneNascita:comuneNascita.options[comuneNascita.selectedIndex].text,
+            regioneResidenza: regioneResidenza, provinciaResidenza:provinciaResidenza.options[provinciaResidenza.selectedIndex].text,
+            comuneResidenza: comuneResidenza.options[comuneResidenza.selectedIndex].text, via:via, numero:numero, cap:cap, dataArrivo:dataArrivo,
+            permanenza:permanenza, tassa:tassa.options[tassa.selectedIndex].text, refComuneResidenza: comuneResidenza.value,
+            refComuneNascita: comuneNascita.value, documenti: documenti};
+
+            let tmp = [...props.listaOspiti];
+            tmp.push(dato);
+            console.log(tmp);
+            props.setOspiti(tmp);
 
             form.classList.remove('was-validated');
             document.getElementById("nome").value="";
@@ -62,9 +69,9 @@ function FormDatiOspite(props){
             document.getElementById("via").value="";
             document.getElementById("numero").value="";
             document.getElementById("cap").value="";
-            document.getElementById("arrivo").value="";
+            document.getElementById("dataArrivo").value="";
             document.getElementById("permanenza").value="";
-
+            document.getElementById("tassa").value="";
             if(flag===0){
                 setFlag(1);
             }else{
@@ -75,38 +82,11 @@ function FormDatiOspite(props){
         }
     }
 
-    function handleChange(event){
-        const{name,value}=event.target;
-        let tmp=ospite;
-        tmp[name]=value;
-        setOspite(tmp);
-    }
-
-    function handleComuneNascita(event){
-        const{name,value}=event.target;
-        let tmp=ospite;
-        tmp[name]=value;
-        tmp["comuneNascita"] = event.target.options[event.target.selectedIndex].text;
-        setOspite(tmp);
-    }
-
-    function handleComuneResidenza(event){
-        const{name,value}=event.target;
-        let tmp=ospite;
-        tmp[name]=value;
-        tmp["comuneResidenza"] = event.target.options[event.target.selectedIndex].text;
-        setOspite(tmp);
-    }
 
     function handleFoto(fileName) {
-        let tmp = ospite;
-        if(!tmp["documenti"]){
-            tmp["documenti"]=[];
-        }
-        let temp = tmp["documenti"];
+        let temp = documenti;
         temp.push(fileName);
-        tmp["documenti"]=temp;
-        setOspite(tmp);
+        setDocumenti(temp);
     }
 
 
@@ -121,9 +101,7 @@ function FormDatiOspite(props){
                 cap.removeClass("border-danger");
                 cap.removeClass("is-invalid");
             }
-            let tmp=ospite;
-            tmp.cap=e.target.value;
-            setOspite(tmp);
+
             return true;
         }
 
@@ -173,22 +151,16 @@ function FormDatiOspite(props){
         // rimozione dei precedenti elementi del menu Comune
         // rimozione dei precedenti elementi del menu provinca e comune
         if(event.target.id=== "provinciaNascita"){
-            let tmp = ospite;
-            tmp.provinciaNascita=event.target.options[event.target.selectedIndex].text;;
-            setOspite(tmp);
             document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
         }
         else{
-            let tmp = ospite;
-            tmp.provinciaResidenza=event.target.options[event.target.selectedIndex].text;;
-            setOspite(tmp);
             document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
         }
 
 
-        if (event.target.value != '') {
+        if (event.target.value !== '') {
             for (let provincia of province) {
-                if (provincia.code == event.target.value) {
+                if (provincia.code === event.target.value) {
                     for (let comune of provincia.comuni) {
                         let opt=document.createElement('option');
                         opt.value=comune.code;
@@ -206,7 +178,7 @@ function FormDatiOspite(props){
         }
     }
     function addressEventHandler(event) {
-        if (event.target.value != '') {
+        if (event.target.value !== '') {
             $('.form-row input').not('#via').removeAttr('disabled');
             $('.form-row input').not('#via').attr('required', 'required');
         } else {
@@ -236,18 +208,18 @@ function FormDatiOspite(props){
             <div className="form-row">
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="nome">Nome</label>
-                    <input id="nome" name="nome" type="text" className="form-control" onChange={handleChange} required/>
+                    <input id="nome" name="nome" type="text" className="form-control" required/>
                 </div>
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="cognome">Cognome</label>
-                    <input id="cognome" name="cognome" type="text" className="form-control" onChange={handleChange} required/>
+                    <input id="cognome" name="cognome" type="text" className="form-control" required/>
                 </div>
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="cf">Codice fiscale</label>
                     <input name="codiceFiscale" id="cf" type="text" className="form-control"
-                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" onChange={handleChange} required/>
+                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$"required/>
                     <div className="invalid-feedback">
                         Codice fiscale errato
                     </div>
@@ -255,7 +227,7 @@ function FormDatiOspite(props){
 
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="dataNascita">Data di Nascita</label>
-                    <input name="dataNascita" id="dataNascita" type="date" className="form-control" onChange={handleChange} required/>
+                    <input name="dataNascita" id="dataNascita" type="date" className="form-control" required/>
                 </div>
 
                 <div className="col-12 mb-2">Nato a</div>
@@ -302,7 +274,7 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneNascita" name="refComuneNascita" className="custom-select" onChange={handleComuneNascita} required>
+                    <select id="comuneNascita" name="refComuneNascita" className="custom-select" required>
                         <option value="" selected></option>
                     </select>
                 </div>
@@ -351,19 +323,19 @@ function FormDatiOspite(props){
                     <div className="input-group-prepend">
                         <span className="input-group-text">Comune&nbsp;&nbsp;</span>
                     </div>
-                    <select id="comuneResidenza" name="refComuneResidenza" className="custom-select" onChange={handleComuneResidenza} required>
+                    <select id="comuneResidenza" name="comuneResidenza" className="custom-select" required>
                         <option value="" selected></option>
                     </select>
                 </div>
 
                 <div className="form-group col-12 col-md-5">
                     <label htmlFor="via">Via/Piazza</label>
-                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={handleChange} required/>
+                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control" onBlur={addressEventHandler} onKeyDown={tabEventHandler} required/>
                 </div>
 
                 <div className="form-group col-4 col-md-3">
                     <label htmlFor="numero">N.</label>
-                    <input name="numero" id="numero" type="number" className="form-control" min="1" max="9999" disabled onChange={handleChange} required/>
+                    <input name="numero" id="numero" type="number" className="form-control" min="1" max="9999" disabled required/>
                     <div className="invalid-feedback r">
                         1 - 9999
                     </div>
@@ -378,17 +350,17 @@ function FormDatiOspite(props){
 
                 <div className="form-group col-6 col-md-5 col-lg-3">
                     <label htmlFor="arrivo">Data di arrivo</label>
-                    <input name="dataArrivo" id="arrivo" type="date" className="form-control" min={minDataA} max={maxDataA} onChange={handleChange} required/>
+                    <input name="dataArrivo" id="dataArrivo" type="date" className="form-control" min={minDataA} max={maxDataA} required/>
                 </div>
 
                 <div className="form-group col-6 col-md-3 col-lg-2">
                     <label htmlFor="permanenza">Permanenza</label>
-                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" onChange={handleChange} required/>
+                    <input name="permanenza" id="permanenza" type="number" className="form-control" min="1" max="28" maxLength="2" required/>
                 </div>
 
                 <div className="form-group col-12 col-md-4 col-lg-3">
                     <label htmlFor="tassa">Tassa di soggiorno</label>
-                    <select id="tassa" name="tassa" className="custom-select" onChange={handleChange} required>
+                    <select id="tassa" name="tassa" className="custom-select" required>
                         <option value="" disabled selected></option>
                         <option value="bambino">Bambino</option>
                         <option value="adulto">Adulto</option>
@@ -398,13 +370,13 @@ function FormDatiOspite(props){
 
             </div>
 
-            <button name="ok" id="ok" type="submit" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" } onClick={onSubmit}>Aggiungi ospite</button>
+            <button name="ok" id="ok" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" } onClick={aggiungiOspite}>Aggiungi ospite</button>
 
                 <button name="ok" id="ok" type="button" className="btn btn-warning mt-3 float-left" onClick={toggleContenuto}>Aggiungi documento</button>
                 <br/><br/>
 
                 <div className={(mostraContenuto) ? "" : "collapse"}>
-                    <FormDocumenti handleFoto={handleFoto} flag={flag}/>
+                    <FormDocumenti flag={flag} handleFoto={handleFoto}/>
                 </div>
 
         </form>
