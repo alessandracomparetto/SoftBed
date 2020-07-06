@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
+import jsPDF from 'jspdf';
 import axios from "axios";
 import {useParams, useHistory, useLocation} from "react-router-dom";
 import reindirizza from "../../Actions/reindirizzamento";
@@ -11,12 +12,14 @@ import mostraDialogErrore from "../../Actions/errore";
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
     const [struttura, setStruttura] = useState([]);
+
     const history = useHistory();
     const location = useLocation();
     const {indice, refPrenotazione} = useParams();
 
     useEffect(() => {
-        let utente = window.sessionStorage.getItem("utente");
+        console.log("Sono qui");
+        let utente = JSON.parse(window.sessionStorage.getItem("utente"));
         if(!utente || utente.length === 0){
             window.location.href="/accedi";
         }
@@ -38,50 +41,36 @@ function SchermataDatiOspiti(props){
 
 
 
-
-    const aggiungiOspite = (dato) => {
-        dato.refPrenotazione = refPrenotazione;
-        dato.refStruttura = struttura.idStruttura;
-        let tmp = [...listaOspiti];
-        tmp.push(dato);
-        console.log(tmp);
-        setOspiti(tmp);
-    }
-
-   const eliminaOspite = (indice) => {
+/*   const eliminaOspite = (indice) => {
         let tmp = [...listaOspiti];
         tmp.splice(indice, 1);
         setOspiti(tmp);
-    }
+    }*/
 
-
-    const verificaDatiAggiuntivi = (event)=>{
+    const verificaDatiAggiuntivi = (event)=> {
         event.preventDefault();
 
-       axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
+        axios.post(`/ospite/aggiungi`, listaOspiti).then(res => {
         }).catch(err => console.log(err));
 
-        /*
+
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
-            if (JSON.parse(sessionStorage.getItem("utente")).refIndirizzo === null || JSON.parse(sessionStorage.getItem("utente")).refComuneNascita === null ) {
+            if (JSON.parse(sessionStorage.getItem("utente")).refIndirizzo === null || JSON.parse(sessionStorage.getItem("utente")).refComuneNascita === null) {
                 reindirizza(history, {
-                    pathname:`/utente/modificaAccount`,
+                    pathname: `/utente/modificaAccount`,
                     state: {
                         provenienza: 'Schermata dati Ospiti',
                         urlProvenienza: location.pathname
                     }
                 }, 3000, "Devi inserire i tuoi dati personali per poter completare la dichiarazione degli ospiti.");
 
-            }else {
-                const informazioni = {
-                    emailGestore: JSON.parse(sessionStorage.getItem("utente")).email,
-                    allegato: RiepilogoDatiQuestura(listaOspiti, struttura.idStruttura, refPrenotazione)
-                }
-                axios.post('/mail/dichiarazione', informazioni)
-                    .catch();
-
-            }*/
+            } else {
+                console.log(listaOspiti, refPrenotazione);
+                return <RiepilogoDatiQuestura id="dichiarazione" listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
+            }
         }
+    }
+
 
     return(
         <div  className="container my-3" >
@@ -98,14 +87,14 @@ function SchermataDatiOspiti(props){
                                                       via={ospiti.via} numero={ospiti.numeroCivico} cap={ospiti.cap}
                                                        comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
                                                        regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
-                                                       permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
+                                                       permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione}/>
                             })
 
                         }
                     </ul>
                 </div>
 
-                <FormDatiOspite aggiungiOspite={aggiungiOspite}/>
+                <FormDatiOspite listaOspiti={listaOspiti} setOspiti={setOspiti}/>
                 <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
             </div>
         </div>
