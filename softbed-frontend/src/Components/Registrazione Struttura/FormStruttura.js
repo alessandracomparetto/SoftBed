@@ -18,7 +18,9 @@ function FormStruttura (props) {
         if (event.target.value !== '') {
             inputs.not('#via').removeAttr('disabled').attr('required', 'required');
         } else {
-            inputs.not('#via').attr('disabled', 'disabled').removeAttr('required');
+            inputs.not("#via").attr('disabled', 'disabled');
+            $("#cap").val("");
+            $("#numeroCivico").val("");
         }
     }
 
@@ -209,13 +211,13 @@ function FormStruttura (props) {
                 <div className="col-5 col-md-4 col-lg-3">
                     <label htmlFor="numeroCivico">N.</label>
                     <input name="numeroCivico" id="numeroCivico" type="number" className="form-control " min="1" max="9999" size="4"
-                           maxLength="4" defaultValue={props.dati.numeroCivico} required/>
+                           maxLength="4" defaultValue={props.dati.numeroCivico} required disabled/>
                     <div className="invalid-feedback">1 - 9999</div>
                 </div>
                 <div className="col-4 col-md-4 col-lg-3">
                     <label htmlFor="cap">CAP.</label>
                     <input name="cap" id="cap" type="tel" className="form-control form-check" pattern="^\d{5}$" placeholder="#####"
-                           title="Inserire 5 cifre da 00010 a 98168" size="5" maxLength="5"  defaultValue={props.dati.cap}
+                           title="Inserire 5 cifre da 00010 a 98168" size="5" maxLength="5"  disabled defaultValue={props.dati.cap}
                            onChange={controlloCAP} required/>
                     <div className="invalid-feedback">00010 - 98168</div>
                 </div>
