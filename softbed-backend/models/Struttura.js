@@ -75,7 +75,7 @@ module.exports= {
                     console.log("Inserita CV");
                 } //chiusura query cv
 
-                results = await db.query(('SELECT * FROM struttura JOIN indirizzo WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo '), [datiStruttura.idUtente])
+                results = await db.query(('SELECT struttura.*, indirizzo.*, autenticazione.email as emailGestore FROM struttura JOIN indirizzo JOIN autenticazione WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo AND autenticazione.refUtente=struttura.refGestore'), [datiStruttura.idUtente])
                     .catch((err) => {throw createError(500)});
                 return callback(results);
             });

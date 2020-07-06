@@ -30,9 +30,6 @@ module.exports = {
                     let gestore = await db.query('SELECT autenticazione.email as emailGestore , struttura.nomeStruttura FROM struttura JOIN autenticazione WHERE struttura.refGestore=autenticazione.refUtente AND  \
                        struttura.idStruttura=?', datiPrenotazione.idStruttura);
 
-                    console.log(richiedente);
-                    console.log(gestore);
-                    console.log(risultato);
                     let ritorno = {"emailOspite": richiedente[0].emailOspite, "emailGestore":gestore[0].emailGestore, "nomeStruttura":gestore[0].nomeStruttura,
                     "idPrenotazione":risultato.insertId, "checkIn":datiPrenotazione.dataCheckIn, "checkout":datiPrenotazione.dataCheckOut}
                     return callback(ritorno);

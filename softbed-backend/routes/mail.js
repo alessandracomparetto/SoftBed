@@ -7,7 +7,7 @@ router.use(bodyParser.json());
 const softbed = {
     email: 'softengineers44@gmail.com',
     pass: 'softAdmin',
-    site: 'http://localhost:3000/'
+    site: 'https://localhost:3000/'
 }
 
 const transporter = nodemailer.createTransport({
@@ -18,14 +18,13 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
 router.post('/', (req, res) => {
 
     let mailOptions = {
         from: req.body.email,
-        to: "c.sofy1998@libero.it",
+        to: "c.sofy1998@libero.it",  //SIMULAZIONE EMAIL DELL'UFFICIO DELLA QUESTURA
         subject: "Dichiarazione ospiti questura",
-        text: "Si inoltra in allegato quando indicato in oggetto.",
+        text: "Si inoltra in allegato quanto indicato in oggetto.",
         attachments: [
             {
                 filename: 'dichiarazioneOspiti.pdf',
@@ -50,9 +49,9 @@ router.post('/invioRendiconto', (req, res) => {
 
     let mailOptions = {
         from: softbed.email,
-        to: "c.sofy1998@libero.it", //email ufficio del turismo
+        to: "c.sofy1998@libero.it", ////SIMULAZIONE EMAIL DELL'UFFICIO DEL TURISMO
         subject: "Dichiarazione rendiconto trimestrale",
-        text: "Si inoltra in allegato quando indicato in oggetto.",
+        text: "Si inoltra in allegato quanto indicato in oggetto.",
         attachments: [
             {
                 filename: 'rendicontoTrimestrale.pdf',
@@ -67,9 +66,11 @@ router.post('/invioRendiconto', (req, res) => {
     });
 
     res.send();
-})
+});
 
 router.post('/richiesta-prenotazione', (req, res) => {
+    console.log("ospite", req.body.emailOspite);
+    console.log("gestore", req.body.emailGestore);
     const mailOspite = {
         from: softbed.email,
         to: req.body.emailOspite,
@@ -93,7 +94,7 @@ router.post('/richiesta-prenotazione', (req, res) => {
             encoding: 'base64'
             }
         ]
-    }
+    };
 
     const mailGestore = {
         from: softbed.email,
@@ -111,20 +112,18 @@ router.post('/richiesta-prenotazione', (req, res) => {
             </p>`
     };
 
-    transporter.sendMail(mailGestore, (err, res) => {
+    transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            console.log(err);
         }
     });
 
-    transporter.sendMail(mailOspite, (err, res) => {
-        if (err) {
-            res.status(err.status).send(err);
-        }
+    transporter.sendMail(mailGestore, (err, res) => {
+        if (err) {console.log(err);}
     });
 
     res.send();
-})
+});
 
 router.post('/annullamento-prenotazione', (req, res) => {
     const mailOspite = {
