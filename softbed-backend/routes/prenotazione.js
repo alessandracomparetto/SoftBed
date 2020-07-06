@@ -56,7 +56,7 @@ router.post('/richiesta', function (req, res) {
         res.send(dati);
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(err.status);
         });
     });
 
@@ -64,10 +64,10 @@ router.post('/annullamento', function (req, res) {
     prenotazioneModel.delete(req.body.idPrenotazione)
         .then(()=>{
         // timer.distruggiTimeout(req.body.idPrenotazione);
-        res.send();
+            res.send();
         })
         .catch((err) => {
-        res.status(err.status).send(err.message);
+            res.status(err.status).send(err.message);
         });
 });
 

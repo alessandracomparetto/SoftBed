@@ -96,7 +96,7 @@ function PrenotazioneOspite(props) {
                         {/* TODO: sistemare foto */}
                         <div className="d-none d-lg-block col-3">
                             <figure className="figure overflow-hidden rounded maxh-200px">
-                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.nomeStruttura} src={`/uploads/foto/${props.prenotazione.idPrenotazione}/${props.prenotazione.foto}`} />
+                                <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.nomeStruttura} src={`/uploads/foto/${props.prenotazione.foto}`} />
                             </figure>
                         </div>
 

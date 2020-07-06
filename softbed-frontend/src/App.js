@@ -33,7 +33,7 @@ function App() {
         <Router>
             <Switch>
                 {/* Immagini da backend */}
-                <Route path="/uploads/foto/:id/:immagine">
+                <Route path="/uploads/foto/:immagine">
                     <Immagine />
                 </Route>
 

@@ -7,7 +7,7 @@ function RisultatoRicerca(props) {
     return (
         <div className="card shadow px-0 p-3 mx-0 my-2 my-sm-3 mx-lg-3 d-flex flex-md-row maxw-xl">
             <figure className="figure m-0 d-flex justify-content-center">
-                <img className="annuncio-img" src={`/uploads/foto/${props.idStruttura}/${props.foto}`} alt={props.nomeStruttura}/>
+                <img className="annuncio-img" src={`/uploads/foto/${props.foto}`} alt={props.nomeStruttura}/>
             </figure>
             <div className="px-3">
                 <h5 className="card-title mt-3 mt-md-0 mb-1">{props.nomeStruttura}</h5>

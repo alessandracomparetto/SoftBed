@@ -1,7 +1,6 @@
-import React, {Fragment, useCallback, useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {useHistory, useLocation} from "react-router-dom"
 import Breadcrumb from "../Breadcrumb";
-import $ from "jquery"
 import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
 import axios from "axios";
 import RiepilogoPrenotazionePDF from "./RiepilogoPrenotazionePDF";
@@ -20,7 +19,7 @@ function SchermataPagamento() {
     const [online, setStatoOnline] = useState(false);
 
 
-    useEffect( /* async */ () => {
+    useEffect( () => {
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             if (!location.state || !location.state.provenienza || !(location.state.provenienza === "Schermata struttura")) {
                 reindirizza(history, '/', 3000, "Puoi accedere alla pagina di pagamento solamente dalla pagina della struttura!")
@@ -33,11 +32,10 @@ function SchermataPagamento() {
 
                 if(tmp.struttura.condizioniPrenotazione.pagamentoOnline) {
                     let idUtente = JSON.parse(sessionStorage.getItem("utente")).idUtente;
-                    /* await */ axios.post("/utente/listaPagamenti", {idUtente: idUtente})
+                    axios.post("/utente/listaPagamenti", {idUtente: idUtente})
                         .then((res) => {
                             setDatiPagamento(res.data);
-                            console.log(res.data);
-                        }).catch();
+                        }).catch(() => mostraDialogErrore());
                 }
 
                 setDatiRichiesta(tmp);
@@ -75,11 +73,8 @@ function SchermataPagamento() {
                     state: { provenienza: "Schermata pagamento" }
                 });
             })
-            .catch((err) => {
-                let messaggio = null;
-                if (err.status === "403")
-                    messaggio = "Hai già una prenotazione per la struttura e la data di check-in selezionate!"
-                mostraDialogErrore(messaggio);
+            .catch(() => {
+                mostraDialogErrore("Hai già effettuato una prenotazione con questi dati!");
             });
     };
 
@@ -168,7 +163,6 @@ function SchermataPagamento() {
                                     { online && (
                                         <div className="ml-3">
                                             { listaDatiPagamento && listaDatiPagamento.map((metodo, indice) => {
-                                                console.log(metodo);
                                                 return (
                                                     <div key={indice} className="radio">
                                                         <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>

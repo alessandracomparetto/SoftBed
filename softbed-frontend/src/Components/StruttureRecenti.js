@@ -16,7 +16,7 @@ function StruttureRecenti() {
                                         return (
                                             <div key={indice} className="col-12 col-md-4 my-3 my-md-0">
                                                 <div className="card shadow">
-                                                    <img className="card-img-top" src={`uploads/foto/${struttura.id}/${struttura.img}`}
+                                                    <img className="card-img-top" src={`uploads/foto/${struttura.img}`}
                                                          alt={struttura.nome}/>
                                                     <div className="card-body">
                                                         <h5 className="card-title text-center">{struttura.nome}</h5>

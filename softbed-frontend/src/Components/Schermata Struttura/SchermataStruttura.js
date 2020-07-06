@@ -178,9 +178,6 @@ function SchermataStruttura() {
             });
         }
 
-
-        const stringaParametri = $.param(parametri);
-
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             history.push({
                 pathname:'/pagamento',
@@ -296,7 +293,6 @@ function SchermataStruttura() {
         }
 
         if (CO.getTime() <= CI.getTime()) {
-            console.log(CO.getTime(), CI.getTime());
             dateAiuto.removeClass("d-none");
             dataCO.addClass("border border-danger");
             risultato = false;
