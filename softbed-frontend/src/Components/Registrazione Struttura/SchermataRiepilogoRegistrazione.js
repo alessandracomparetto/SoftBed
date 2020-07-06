@@ -1,7 +1,6 @@
 import React, {Fragment} from "react";
 
 import InformazioniStruttura from "./InformazioniStruttura";
-/*TODO: trasformare i numeri in nome provincia e nome comune*/
 
 function SchermataRiepilogoRegistrazione(props) {
 

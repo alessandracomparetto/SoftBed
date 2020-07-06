@@ -4,7 +4,7 @@ const createError = require('http-errors');
 
 module.exports = {
 
-    create: async function (datiPrenotazione, res) {
+    create: async function (datiPrenotazione, callback) {
         const db = await makeDb(config);
 
         let query = ('INSERT INTO `prenotazione` (checkIn, checkOut, costo, nAdulti, nBambini, nEsentiAdulti, nEsentiBambini, refMetodoPagamento, refUtente, refStruttura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -24,13 +24,23 @@ module.exports = {
 
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(query, datiQuery).catch((err) => {console.log(err)});
-                if (risultato && risultato.insertId) return res(risultato.insertId);
-                else throw createError(400);
+                let risultato = await db.query(query, datiQuery).catch((err) => {throw err});
+                if (risultato && risultato.insertId) {
+                    let richiedente = await db.query('SELECT email as emailOspite FROM autenticazione WHERE refUtente=?', datiPrenotazione.idUtente).catch((err) => {throw err});
+                    let gestore = await db.query('SELECT autenticazione.email as emailGestore , struttura.nomeStruttura FROM struttura JOIN autenticazione WHERE struttura.refGestore=autenticazione.refUtente AND  \
+                       struttura.idStruttura=?', datiPrenotazione.idStruttura);
+
+                    console.log(richiedente);
+                    console.log(gestore);
+                    console.log(risultato);
+                    let ritorno = {"emailOspite": richiedente[0].emailOspite, "emailGestore":gestore[0].emailGestore, "nomeStruttura":gestore[0].nomeStruttura,
+                    "idPrenotazione":risultato.insertId, "checkIn":datiPrenotazione.dataCheckIn, "checkout":datiPrenotazione.dataCheckOut}
+                    return callback(ritorno);
+                }
             })
         } catch(err) {
-            console.log(err);
-            throw createError(500);
+            throw ((err.code && err.code === "ER_DUP_ENTRY") ?
+                createError(403, "È gia presente una prenotazione con questi dati.") : createError(500));
         }
     },
 
@@ -95,7 +105,7 @@ module.exports = {
         }
     },
 
-    confermaPrenotazione: async function(data){
+    confermaPrenotazione: async function(data, callback){
         const db = await makeDb(config);
         let dataConferma=new Date();
         console.log("sto per confermare");

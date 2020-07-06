@@ -13,7 +13,6 @@ class StrutturaEntity {
         await this.getNomeTipologia();
         await this.getDescrizione();
         await this.getFoto();
-        // await this.getCondizioniPrenotazione();
         await this.getCondizioniSoggiorno();
         await this.getCamere();
         await this.getLocalita();
@@ -73,17 +72,6 @@ class StrutturaEntity {
         }
     }
 
-    async getCondizioniPrenotazione() {
-        const db = await makeDb(config);
-
-        this.condizioniPrenotazione = {
-            anticipo: {
-                min: null,
-                max: null
-            }
-        }
-    }
-
     async getCondizioniSoggiorno() {
         const db = await makeDb(config);
         this.condizioniSoggiorno = {
@@ -101,6 +89,15 @@ class StrutturaEntity {
             }
         }
 
+        this.condizioniPrenotazione = {
+            anticipo: {
+                min: null,
+                max: null
+            },
+            pagamentoInLoco: null,
+            pagamentoOnline: null
+        }
+
         try {
             await withTransaction(db, async () => {
                 const risultato = await db.query(Query.queryCondizioni(), [this.id]).catch((err) => {throw err});
@@ -111,6 +108,10 @@ class StrutturaEntity {
                 this.condizioniSoggiorno.checkIn.fine = risultato[0].oraFineCheckIn;
                 this.condizioniSoggiorno.checkOut.inizio = risultato[0].oraInizioCheckOut;
                 this.condizioniSoggiorno.checkOut.fine = risultato[0].oraFineCheckOut;
+                this.condizioniPrenotazione.anticipo.min = risultato[0].anticipoPrenotazioneMin;
+                this.condizioniPrenotazione.anticipo.max = risultato[0].anticipoPrenotazioneMax;
+                this.condizioniPrenotazione.pagamentoInLoco = risultato[0].pagamentoLoco != 0;
+                this.condizioniPrenotazione.pagamentoOnline = risultato[0].pagamentoOnline != 0;
             })
         } catch (err) {
             console.log(err);

@@ -2,8 +2,10 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
+
 const StrutturaEntity = require('./StrutturaEntity');
 const ListaStrutture = require('./ListaStruttureEntity');
+
 
 module.exports= {
     inserisciStruttura: async function (datiStruttura, callback) {
@@ -22,7 +24,7 @@ module.exports= {
                 refIndirizzo = results.insertId;
                 let giorno = new Date().toISOString().slice(0, 10);
                 sql = ('INSERT INTO struttura (nomeStruttura, tipologiaStruttura, refGestore, refIndirizzo, rendicontoEffettuato) VALUES ?');
-                //TODO: REF GESTORE
+
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, datiStruttura.idUtente, refIndirizzo, giorno];
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw err});
 

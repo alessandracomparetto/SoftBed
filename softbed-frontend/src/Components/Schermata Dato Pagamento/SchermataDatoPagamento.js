@@ -14,21 +14,21 @@ TODO:
 */
 
 function SchermataDatoPagamento(props){
-    const[listaDatiPagamento, setDatiPagamento] = useState([]);
+    const[listaDatiPagamento, setDatiPagamento] = useState([{nomeIntestatario:"", cognomeIntestatario:"", numeroCarta:"", cvv:"", dataScadenza:""}]);
     const history = useHistory();
     const location = useLocation();
 
-  useEffect(() => {
-      let utente = JSON.parse(window.sessionStorage.getItem("utente"));
-      if(!utente || utente.length==0){
-          reindirizza(history, {
-              pathname: '/accedi',
-              state: {
-                  provenienza: 'Schermata Dato Pagamento',
-                  urlProvenienza: location.pathname
-              }
-          }, 3000, "Qualcosa è andato storto. Effettua nuovamente l'accesso");
-      }
+    useEffect(() => {
+        let utente = JSON.parse(window.sessionStorage.getItem("utente"));
+        if(!utente || utente.length==0){
+            reindirizza(history, {
+                pathname: '/accedi',
+                state: {
+                    provenienza: 'Schermata Dato Pagamento',
+                    urlProvenienza: location.pathname
+                }
+            }, 3000, "Qualcosa è andato storto. Effettua nuovamente l'accesso");
+        }
         axios.post(`/utente/listaPagamenti`, {"idUtente":utente.idUtente}).then(res => {
             console.log("DATI PAGAMENTO RECUPERATI=======");
             console.log(res.data);
@@ -48,28 +48,6 @@ function SchermataDatoPagamento(props){
             }
         });
     }, []);
-
-
-  const aggiungiDatoPagamento = (dato) => {
-      console.log("dato", dato);
-      let idUtente = (JSON.parse(window.sessionStorage.getItem("utente"))).idUtente;
-      console.log(idUtente);
-      dato["idUtente"]=idUtente;
-      try {
-          axios.post("/utente/aggiungiDatoPagamento", dato)
-              .then(res => { // then print response status
-                  console.log("DATO AGGIUNTO ======= ");
-                  console.log(res.data);
-                  console.log("Dati aggiunti");
-                  let tmp = [...listaDatiPagamento];
-                  tmp.push(dato);
-                  console.log(tmp);
-                  setDatiPagamento(tmp);
-              });
-          }catch(err){
-              mostraDialogErrore();
-          }
-    };
 
     const eliminaDatoPagamento = (numeroCarta, indice) => {
         let data = {"numeroCarta":numeroCarta};
@@ -97,14 +75,14 @@ function SchermataDatoPagamento(props){
                         <h4 className="mt-3 d-inline">Le tue carte di credito e di debito</h4>
                         <img className="img-responsive  ml-3 mb-2" src="http://i76.imgup.net/accepted_c22e0.png"/>
                         <ul className="list-group list-group-flush ">
-                            {
+                            {listaDatiPagamento &&
                                 listaDatiPagamento.map((pagamenti, indice) => {
                                     return <DatiPagamento key={indice} indiceElemento={indice} nomeIntestatario={pagamenti.nomeIntestatario} cognomeIntestatario={pagamenti.cognomeIntestatario} numeroCarta={pagamenti.numeroCarta} cvv = {pagamenti.cvv} dataScadenza={pagamenti.dataScadenza} eliminaDatoPagamento={eliminaDatoPagamento}/>
                                 })
                             }
                         </ul>
                     </div>
-                    <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
+                    <FormMetodoPagamento listaDatiPagamento={listaDatiPagamento} setDatiPagamento={setDatiPagamento}/>
                 </div>
             </div>
         </div>

@@ -38,6 +38,7 @@ function App() {
                 </Route>
 
                 <Route path="*">
+                    <div className="corpo">
                     <Navbar />
 
                     <Switch>
@@ -117,7 +118,7 @@ function App() {
                             <SchermataPaginaNonTrovata />
                         </Route>
                     </Switch>
-
+                    </div>
                     <Footer />
                 </Route>
             </Switch>

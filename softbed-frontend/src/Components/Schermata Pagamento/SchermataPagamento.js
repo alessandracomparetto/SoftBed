@@ -1,5 +1,5 @@
-import React, {useState, Fragment, useEffect} from "react";
-import {useLocation, useHistory} from "react-router-dom"
+import React, {Fragment, useCallback, useEffect, useState} from "react";
+import {useHistory, useLocation} from "react-router-dom"
 import Breadcrumb from "../Breadcrumb";
 import $ from "jquery"
 import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
@@ -13,32 +13,41 @@ function SchermataPagamento() {
     const location = useLocation();
     const history = useHistory();
 
+    const [datiRichiesta, setDatiRichiesta] = useState({});
     const [pagamentoOnline, setPagamentoOnline] = useState(false);
     const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
     const [online, setStatoOnline] = useState(false);
-    const [datiRichiesta, setDatiRichiesta] = useState({});
 
-    useEffect(() => {
-
+    // TODO: Non funziona il caricamento dei dati di pagamento
+    useEffect( /* async */ () => {
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             if (!location.state || !location.state.provenienza || !(location.state.provenienza === "Schermata struttura")) {
                 reindirizza(history, '/', 3000, "Puoi accedere alla pagina di pagamento solamente dalla pagina della struttura!")
             } else {
-                setDatiRichiesta(location.state);
-                console.log(datiRichiesta);
+                // SESSIONE VALIDA
+                let tmp = location.state.data
+                tmp.idUtente = JSON.parse(sessionStorage.getItem("utente")).idUtente;
+                setPagamentoOnline(tmp.struttura.condizioniPrenotazione.pagamentoOnline);
+                setPagamentoInLoco(tmp.struttura.condizioniPrenotazione.pagamentoInLoco);
+                setDatiPagamento([{nomeIntestatario: "Pippo"}]);
+
+                if(tmp.struttura.condizioniPrenotazione.pagamentoOnline) {
+                    /* await */ axios.post("/utente/listaPagamenti", {idUtente: 1})
+                        .then((res) => {
+                            setDatiPagamento(res.data);
+                            console.log(res.data);
+                        }).catch();
+                }
+
+                setDatiRichiesta(tmp);
             }
         } else {
-            reindirizza(history, {
-                pathname: '/accedi/',
-                state: {
-                    provenienza: 'Schermata pagamento',
-                    urlProvenienza: location.pathname,
-                }
-            })
+            reindirizza(history, "/accedi", 3000, "Sembra che tu non abbia il permesso per stare qui!")
         }
+    }, []);
 
-
+    useEffect(() => {
         // Gestione della selezione sulla tipologia di pagamento (in loco o online)
         const modPagamentoOnline = $("#online");
         $("input[name='modPagamento']").on('change', () => {
@@ -46,23 +55,17 @@ function SchermataPagamento() {
                 setStatoOnline(modPagamentoOnline[0].checked);
             }
         });
-    }, []);
+    }, [])
 
 
     const aggiungiDatoPagamento = (dato) => {
         let tmp = [...listaDatiPagamento];
         tmp.push(dato);
         setDatiPagamento(tmp);
-    }
+    };
 
     const onSubmit = (event) => {
         event.preventDefault();
-
-        // TODO: Ottenere ID Utente e il metodo di pagamento selezionato
-        let tmp = datiRichiesta;
-        tmp["idUtente"] = 5;
-        tmp["metodoPagamento"] = null; // null per pagamenti in loco
-        setDatiRichiesta(tmp);
 
         axios.post('/prenotazione/richiesta', datiRichiesta)
             .then(res => {
@@ -74,26 +77,33 @@ function SchermataPagamento() {
                 }
 
                 axios.post('/mail/richiesta-prenotazione', informazioni)
-                    .catch();
+                    .catch((err) => {
+                        mostraDialogErrore(err.message);
+                    });
 
                 history.push({
                     pathname: "/operazione-completata",
                     state: { provenienza: "Schermata pagamento" }
                 });
             })
-            .catch(() => {
-                mostraDialogErrore();
+            .catch((err) => {
+                let messaggio = null;
+                if (err.status === "403")
+                    messaggio = "Hai già una prenotazione per la struttura e la data di check-in selezionate!"
+                mostraDialogErrore(messaggio);
             });
     }
 
     return (
         <div className="container my-3">
             <div className="py-2">
-                <Breadcrumb gerarchia={[
-                    {url: `/struttura/${datiRichiesta.idStruttura}`, testo: "Struttura"},
-                    {testo: "Richiesta di prenotazione", stato: "active"},
-                    {testo: "Pagamento", stato: "active"}
-                ]} icona="bed"/>
+                { location.state &&
+                    <Breadcrumb gerarchia={[
+                        {url: location.state.urlProvenienza, testo: "Struttura"},
+                        {testo: "Richiesta di prenotazione", stato: "active"},
+                        {testo: "Pagamento", stato: "active"}
+                    ]} icona="bed"/>
+                }
             </div>
 
             <div className="d-lg-flex flex-row-reverse">
@@ -104,7 +114,7 @@ function SchermataPagamento() {
 
                         <div className="mb-3">
                             <h5 className="mb-0">Struttura</h5>
-                            <span className="text-90">{datiRichiesta.struttura}</span>
+                            <span className="text-90">{datiRichiesta.struttura && datiRichiesta.struttura.nome}</span>
                         </div>
 
                         <div className="mb-3">
@@ -168,7 +178,8 @@ function SchermataPagamento() {
 
                                     { online && (
                                         <div className="ml-3">
-                                            { listaDatiPagamento.map((metodo, indice) => {
+                                            { listaDatiPagamento && listaDatiPagamento.map((metodo, indice) => {
+                                                console.log(metodo);
                                                 return (
                                                     <div key={indice} className="radio">
                                                         <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>

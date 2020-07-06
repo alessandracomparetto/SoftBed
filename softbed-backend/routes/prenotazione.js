@@ -1,12 +1,11 @@
 let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-let Timer= require('../models/Timer');
+let Timer = require('../models/TimerPrenotazione');
 let prenotazioneModel = require('../models/Prenotazione');
 const ModuloUtente = require('../routes/utente');
 const token = ModuloUtente.token;
-
-/*timer=new Timer();*/
+timer = new Timer();
 
 /* La rotta / è vietata */
 router.get('/', function(req, res, next) {
@@ -29,7 +28,7 @@ router.post('/listaPrenotazioni', function (req, res) {
 router.post('/rifiutaPrenotazione', function (req, res) {
     prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
-            // timer.distruggiTimeout(req.body.idPrenotazione);
+            timer.distruggiTimeout(req.body.idPrenotazione);
              res.send();
         })
         .catch((err) => {
@@ -42,16 +41,15 @@ router.post('/confermaPrenotazione', function (req, res) {
         .then(()=>{
             timer.distruggiTimeout(req.body.idPrenotazione);
             res.send();
-        })
-        .catch((err) => {
-            res.status(err.status).send(err.message);
+        }).catch((err) => {
+                console.log(err);
         });
     });
 
 router.post('/richiesta', function (req, res) {
-    prenotazioneModel.create(req.body, function (idPrenotazione) {
-        timer.aggiungiTimeout(idPrenotazione);
-        res.send(`${idPrenotazione}`);
+    prenotazioneModel.create(req.body, function (dati) {
+        timer.aggiungiTimeout(dati);
+        res.send(`${dati.idPrenotazione}`);
         })
         .catch((err) => {
             res.status(err.status).send(err);
@@ -61,7 +59,7 @@ router.post('/richiesta', function (req, res) {
 router.post('/annullamento', function (req, res) {
     prenotazioneModel.delete(req.body.idPrenotazione)
         .then(()=>{
-        // Timer.distruggiTimeout(req.body.idPrenotazione);
+        // timer.distruggiTimeout(req.body.idPrenotazione);
         res.send();
         })
         .catch((err) => {

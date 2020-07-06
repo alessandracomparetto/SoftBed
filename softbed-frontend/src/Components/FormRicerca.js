@@ -5,14 +5,8 @@ import { useLocation } from "react-router-dom";
 
 function FormRicerca(props) {
 
-    /* TODO: BACKEND - OPZIONALE
-     * Lista delle località (regioni, province e comuni) con almeno una struttura per suggerire
-     * le opzioni disponibili mentre si digita la destinazione
-     */
-
     // Gestione delle date
     const oggi = new Date(convertiData(new Date())); // Restituisce la data odierna con orario 00:00:00
-
     const minDataA = convertiData(oggi, 2);
     const maxData = convertiData(oggi, 0, 0, 1);
 
