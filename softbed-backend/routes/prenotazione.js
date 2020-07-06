@@ -1,11 +1,11 @@
 let createError = require('http-errors');
 let express = require('express');
 let router = express.Router();
-let Timer = require('../models/TimerPrenotazione');
 let prenotazioneModel = require('../models/Prenotazione');
+const Timers = require('../models/Timers');
 const ModuloUtente = require('../routes/utente');
 const token = ModuloUtente.token;
-timer = new Timer();
+timer = new Timers();
 
 /* La rotta / è vietata */
 router.get('/', function(req, res, next) {
@@ -28,7 +28,8 @@ router.post('/listaPrenotazioni', function (req, res) {
 router.post('/rifiutaPrenotazione', function (req, res) {
     prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
-            timer.distruggiTimeout(req.body.idPrenotazione);
+            console.log("chiamo il timer prenotazione1");
+            timer.distruggiTimeoutPrenotazione(req.body.idPrenotazione);
              res.send();
         })
         .catch((err) => {
@@ -39,7 +40,8 @@ router.post('/rifiutaPrenotazione', function (req, res) {
 router.post('/confermaPrenotazione', function (req, res) {
     prenotazioneModel.confermaPrenotazione(req.body)
         .then(()=>{
-            timer.distruggiTimeout(req.body.idPrenotazione);
+            console.log("chiamo il timer prenotazione2")
+            timer.distruggiTimeoutPrenotazione(req.body.idPrenotazione);
             res.send();
         }).catch((err) => {
                 console.log(err);
@@ -48,11 +50,13 @@ router.post('/confermaPrenotazione', function (req, res) {
 
 router.post('/richiesta', function (req, res) {
     prenotazioneModel.create(req.body, function (dati) {
-        timer.aggiungiTimeout(dati);
-        res.send(`${dati.idPrenotazione}`);
+        console.log("chiamo il timer prenotazione3");
+        console.log(timer);
+        timer.aggiungiTimeoutPrenotazione(dati);
+        res.send(dati);
         })
         .catch((err) => {
-            res.status(err.status).send(err);
+            console.log(err);
         });
     });
 
@@ -65,7 +69,7 @@ router.post('/annullamento', function (req, res) {
         .catch((err) => {
         res.status(err.status).send(err.message);
         });
-})
+});
 
 router.post('/listaPrenotazioniUtente', function (req, res) {
     prenotazioneModel.getPrenotazioniUtente(req.body.idUtente, function (data) {
@@ -75,6 +79,7 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
     });
 });
 
+
 router.post('/rendiconto', function (req, res) {
     prenotazioneModel.rendiconto(req.body, function (data) {
         res.send(data);
@@ -83,6 +88,7 @@ router.post('/rendiconto', function (req, res) {
             res.status(err.status).send(err);
         });
 });
+
 
 
 module.exports = router;

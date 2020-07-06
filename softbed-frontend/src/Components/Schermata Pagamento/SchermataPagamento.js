@@ -13,7 +13,7 @@ function SchermataPagamento() {
     const location = useLocation();
     const history = useHistory();
 
-    const [datiRichiesta, setDatiRichiesta] = useState({});
+    const [datiRichiesta, setDatiRichiesta] = useState({});  // lo stato che ha i dati della richiesta di prenotazione
     const [pagamentoOnline, setPagamentoOnline] = useState(false);
     const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
@@ -26,14 +26,14 @@ function SchermataPagamento() {
                 reindirizza(history, '/', 3000, "Puoi accedere alla pagina di pagamento solamente dalla pagina della struttura!")
             } else {
                 // SESSIONE VALIDA
-                let tmp = location.state.data
+                let tmp = location.state.data;
                 tmp.idUtente = JSON.parse(sessionStorage.getItem("utente")).idUtente;
                 setPagamentoOnline(tmp.struttura.condizioniPrenotazione.pagamentoOnline);
                 setPagamentoInLoco(tmp.struttura.condizioniPrenotazione.pagamentoInLoco);
-                setDatiPagamento([{nomeIntestatario: "Pippo"}]);
 
                 if(tmp.struttura.condizioniPrenotazione.pagamentoOnline) {
-                    /* await */ axios.post("/utente/listaPagamenti", {idUtente: 1})
+                    let idUtente = JSON.parse(sessionStorage.getItem("utente")).idUtente;
+                    /* await */ axios.post("/utente/listaPagamenti", {idUtente: idUtente})
                         .then((res) => {
                             setDatiPagamento(res.data);
                             console.log(res.data);
@@ -46,16 +46,6 @@ function SchermataPagamento() {
             reindirizza(history, "/accedi", 3000, "Sembra che tu non abbia il permesso per stare qui!")
         }
     }, []);
-
-    useEffect(() => {
-        // Gestione della selezione sulla tipologia di pagamento (in loco o online)
-        const modPagamentoOnline = $("#online");
-        $("input[name='modPagamento']").on('change', () => {
-            if (modPagamentoOnline[0]) {
-                setStatoOnline(modPagamentoOnline[0].checked);
-            }
-        });
-    }, [])
 
 
     const aggiungiDatoPagamento = (dato) => {
@@ -70,12 +60,11 @@ function SchermataPagamento() {
         axios.post('/prenotazione/richiesta', datiRichiesta)
             .then(res => {
                 const informazioni = {
-                    id: res.data,
-                    emailGestore: 'slcxx98@gmail.com',
-                    emailOspite: 'slcxx98@gmail.com',
-                    allegato: RiepilogoPrenotazionePDF(datiRichiesta, res.data)
-                }
-
+                    id: res.data.idPrenotazione,
+                    emailGestore: res.data.emailGestore,
+                    emailOspite: JSON.parse(window.sessionStorage.getItem("utente")).email,
+                    allegato: RiepilogoPrenotazionePDF(datiRichiesta, res.data.idPrenotazione)
+                };
                 axios.post('/mail/richiesta-prenotazione', informazioni)
                     .catch((err) => {
                         mostraDialogErrore(err.message);
@@ -92,7 +81,7 @@ function SchermataPagamento() {
                     messaggio = "Hai già una prenotazione per la struttura e la data di check-in selezionate!"
                 mostraDialogErrore(messaggio);
             });
-    }
+    };
 
     return (
         <div className="container my-3">
@@ -174,7 +163,7 @@ function SchermataPagamento() {
                         <form onSubmit={onSubmit}>
                             { pagamentoOnline && (
                                 <div className="radio">
-                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required/>Pagamento online</label>
+                                    <label><input id="online" className="mr-2" type="radio" name="modPagamento" value="online" required onClick={()=>(setStatoOnline(true)) }/>Pagamento online</label>
 
                                     { online && (
                                         <div className="ml-3">
@@ -193,7 +182,7 @@ function SchermataPagamento() {
 
                             { pagamentoInLoco && (
                                 <div className="radio">
-                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco"/>Pagamento in loco</label>
+                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco" onClick={()=>(setStatoOnline(false))}/>Pagamento in loco</label>
                                 </div>
                             )}
 

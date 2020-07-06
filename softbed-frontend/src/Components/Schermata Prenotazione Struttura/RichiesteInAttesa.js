@@ -6,9 +6,6 @@ import {confirmAlert} from "react-confirm-alert";
 function RichiesteInAttesa(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
-    let data;
-    let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
-
 
     useEffect(()=>{
         let listaStrutture = JSON.parse(window.sessionStorage.getItem("strutture"));
