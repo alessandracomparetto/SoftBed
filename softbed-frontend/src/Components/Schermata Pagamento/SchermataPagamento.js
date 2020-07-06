@@ -19,7 +19,7 @@ function SchermataPagamento() {
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
     const [online, setStatoOnline] = useState(false);
 
-    // TODO: Non funziona il caricamento dei dati di pagamento
+
     useEffect( /* async */ () => {
         if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             if (!location.state || !location.state.provenienza || !(location.state.provenienza === "Schermata struttura")) {
