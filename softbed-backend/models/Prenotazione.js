@@ -24,9 +24,9 @@ module.exports = {
 
         try {
             await withTransaction(db, async () => {
-                let risultato = await db.query(query, datiQuery).catch((err) => {console.log(err)});
+                let risultato = await db.query(query, datiQuery).catch((err) => {throw err});
                 if (risultato && risultato.insertId) {
-                    let richiedente = await db.query('SELECT email as emailOspite FROM autenticazione WHERE refUtente=?', datiPrenotazione.idUtente).catch((err) => {console.log(err)});
+                    let richiedente = await db.query('SELECT email as emailOspite FROM autenticazione WHERE refUtente=?', datiPrenotazione.idUtente).catch((err) => {throw err});
                     let gestore = await db.query('SELECT autenticazione.email as emailGestore , struttura.nomeStruttura FROM struttura JOIN autenticazione WHERE struttura.refGestore=autenticazione.refUtente AND  \
                        struttura.idStruttura=?', datiPrenotazione.idStruttura);
 
@@ -37,11 +37,10 @@ module.exports = {
                     "idPrenotazione":risultato.insertId, "checkIn":datiPrenotazione.dataCheckIn, "checkout":datiPrenotazione.dataCheckOut}
                     return callback(ritorno);
                 }
-                else throw createError(400);
             })
         } catch(err) {
-            console.log(err);
-            throw createError(500);
+            throw ((err.code && err.code === "ER_DUP_ENTRY") ?
+                createError(403, "È gia presente una prenotazione con questi dati.") : createError(500));
         }
     },
 

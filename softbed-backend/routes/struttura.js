@@ -68,14 +68,14 @@ router.get('/:idStruttura', function(req, res) {
     cacheStrutture.get(id, function(err, result) {
         // Se la ricerca è salvata in cache viene inviato il risultato memorizzato
         if (result) {
-            console.log("Cache hit!");
+            console.log("Cache HIT!");
             res.send(result);
         }
 
         // Altrimenti viene effettuata la query al db
         else {
             strutturaModel.carica(id, function(data) {
-                console.log("Cache miss!");
+                console.log("Cache MISS!");
 
                 res.send(data);
 

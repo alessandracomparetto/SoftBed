@@ -14,7 +14,10 @@ import {GIORNO, convertiData} from "../../Actions/gestioneDate";
 
 
 function SchermataStruttura() {
-    let { id } = useParams();
+    const history = useHistory();
+    const location = useLocation();
+
+    const { id } = useParams();
 
     const [prezzo, setPrezzo] = useState(0);
     const [struttura, setStruttura] = useState({
@@ -26,6 +29,16 @@ function SchermataStruttura() {
         prezzo: 0,
         tasse: {}
     });
+
+    // GESTIONE DELLE DATE
+    const oggi = new Date(convertiData(new Date()));
+    const minDataA = convertiData(oggi, struttura.prenotazione.anticipo.min || 2);
+    const maxData = convertiData(oggi, 0, 0, 1);
+
+    const [numeroAdulti, setNumeroAdulti] = useState( 2);
+    const [maxOspiti, setMaxOspiti] = useState(100);
+    const [numeroBambini, setNumeroBambini] = useState(0);
+    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 2));
 
     // CARICAMENTO DELLA STRUTTURA
     useEffect(() => {
@@ -39,6 +52,7 @@ function SchermataStruttura() {
                 tmp.foto = res.data.foto;
                 tmp.localita = res.data.localita;
                 tmp.condizioniSoggiorno = res.data.condizioniSoggiorno;
+                tmp.condizioniPrenotazione = res.data.condizioniPrenotazione;
                 tmp.tasse = res.data.tasse;
                 tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });
 
@@ -55,22 +69,63 @@ function SchermataStruttura() {
                     tmp.altro = res.data.altro;
 
                 setStruttura(tmp);
-            }).then(() => {
-                // Aggiunta della struttura alla lista annunciRecenti della local storage
-                let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
 
-                let nuovaStruttura = {id: id, nome: tmp.nome}
-                if (tmp.foto) {
-                    nuovaStruttura.img = tmp.foto[0];
+                // Caricamento di dati precedentemente impostati
+                if (location.state && location.state.data) {
+                    const d = location.state.data;
+
+                    if (d.adulti)
+                        $("#adulti").val(d.adulti);
+
+                    if (d.adultiEsenti)
+                        $("#adultiEsenti").val(d.adultiEsenti);
+
+                    if (d.bambini)
+                        $("#bambini").val(d.bambini);
+
+                    if (d.bambiniEsenti)
+                        $("#bambiniEsenti").val(d.bambiniEsenti);
+
+                    if (d.dataCheckIn)
+                        $("#dataCheckIn").val(d.dataCheckIn);
+
+                    if (d.dataCheckOut)
+                        $("#dataCheckOut").val(d.dataCheckOut);
+
+                    if (d.orarioCheckIn)
+                        $("#orarioCheckIn").val(d.orarioCheckIn);
+
+                    if (d.orarioCheckOut)
+                        $("#orarioCheckOut").val(d.orarioCheckOut);
+
+                    if (d.camere) {
+                        Object.keys(d.camere).map((tipologiaCamera) => {
+                            let elemento = $(`#${tipologiaCamera}`);
+
+                            if (elemento)
+                                elemento.val(d.camere[tipologiaCamera]);
+                        })
+                    }
                 }
-                const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
+            })
+            .then(() => {
+                // Aggiunta della struttura alla lista annunciRecenti della local storage
+                if (localStorage) {
+                    let LS = JSON.parse(localStorage.getItem("annunciRecenti")) || [];
 
-                if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente
+                    let nuovaStruttura = {id: id, nome: tmp.nome}
+                    if (tmp.foto) {
+                        nuovaStruttura.img = tmp.foto[0];
+                    }
+                    const pos = LS.map((e) => { return e.id; }).indexOf(nuovaStruttura.id);
 
-                // Aggiunta della struttura
-                let nuovoLS = [...LS, nuovaStruttura];
-                nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
-                localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
+                    if (pos !== -1) { LS.splice(pos, 1); } // Rimozione della struttura se già presente
+
+                    // Aggiunta della struttura
+                    let nuovoLS = [...LS, nuovaStruttura];
+                    nuovoLS = nuovoLS.slice(Math.max(nuovoLS.length - 3, 0), nuovoLS.length);
+                    localStorage.setItem("annunciRecenti", JSON.stringify(nuovoLS));
+                }
             })
             .catch(() => reindirizza(history, "/", 4000, "Si è verificato un problema col caricamento della struttura."));
     }, []);
@@ -89,50 +144,55 @@ function SchermataStruttura() {
         })
     }, []);
 
-    // GESTIONE DELLE DATE
-    const oggi = new Date();
-    const minDataA = convertiData(oggi, 2);
-    const maxData = convertiData(oggi, 0, 0, 1);
-
-    const [numeroAdulti, setNumeroAdulti] = useState( 2);
-    const [maxOspiti, setMaxOspiti] = useState(100);
-    const [numeroBambini, setNumeroBambini] = useState(0);
-    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
-
     // Aggiorna il valore minimo per la data di partenza in base alla data di arrivo inserita
     const aggiornaMinDataPartenza = (event) => {
         const dataInserita = new Date(event.target.value);
-        const nuovaDataConvertita = convertiData(dataInserita, 1);
+        const nuovaDataConvertita = convertiData(new Date(dataInserita), struttura.condizioniSoggiorno.soggiorno.min);
         setMinDataP(nuovaDataConvertita);
-        controlloDate();
+        controlloDate(event);
     }
 
-    const history = useHistory();
-    const location = useLocation();
     const controlloAccesso = (event) => {
         event.preventDefault();
 
-        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
-            // Mi genero un URL personalizzato interpretabile dalla pagina di pagamento
-            const parametri = {
-                idStruttura: id,
-                dataCheckIn: $("#dataCheckIn").val(),
-                orarioCheckIn: $("#orarioCheckIn").val(),
-                dataCheckOut: $("#dataCheckOut").val(),
-                orarioCheckOut: $("#orarioCheckOut").val(),
-                adulti: $("#adulti").val(),
-                bambini: $("#bambini").val(),
-                adultiEsenti: $("#adultiEsenti").val(),
-                bambiniEsenti: $("#bambiniEsenti").val(),
-                struttura: struttura
-            }
+        // Mi genero un URL personalizzato interpretabile dalla pagina di pagamento
+        let parametri = {
+            idStruttura: id,
+            dataCheckIn: $("#dataCheckIn").val(),
+            orarioCheckIn: $("#orarioCheckIn").val(),
+            dataCheckOut: $("#dataCheckOut").val(),
+            orarioCheckOut: $("#orarioCheckOut").val(),
+            adulti: $("#adulti").val(),
+            bambini: $("#bambini").val(),
+            adultiEsenti: $("#adultiEsenti").val(),
+            bambiniEsenti: $("#bambiniEsenti").val(),
+            struttura: struttura,
+            prezzo: prezzo
+        }
 
-            const stringaParametri = $.param(parametri);
+        if (struttura.camere) {
+            parametri.camere = [];
+
+            struttura.camere.map((camera) => {
+                parametri.camere[camera.tipologiaCamera] = $(`#${camera.tipologiaCamera}`).val();
+            });
+        }
+
+
+        const stringaParametri = $.param(parametri);
+
+        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
             history.push({
                 pathname:'/pagamento',
                 state: {
                     provenienza: 'Schermata struttura',
-                    urlProvenienza: location.pathname,
+                    urlProvenienza: {
+                        pathname: location.pathname,
+                        // Passo dei parametri nel caso in cui l'utente voglia tornare alla schermata struttura
+                        state: {
+                            data: parametri
+                        }
+                    },
                     data: parametri
                 }
             })
@@ -144,14 +204,20 @@ function SchermataStruttura() {
                 pathname: '/accedi',
                 state: {
                     provenienza: 'Schermata struttura',
-                    urlProvenienza: location.pathname
+                    urlProvenienza: {
+                        pathname: location.pathname,
+                        // Passaggio dei parametri affinché vengano caricati automaticamente dopo il login
+                        state: {
+                            data: parametri
+                        }
+                    }
                 }
             }, 3000, "Devi effettuare l'accesso per poter effettuare una richiesta di prenotazione.");
         }
     }
 
     const controlloForm = (event) => {
-        if ((struttura.tipologia === "B&B" && !controlloCamere()) || !controlloOspiti()) {
+        if ((struttura.tipologia === "B&B" && !controlloCamere()) || !controlloOspiti() || !controlloDate()) {
             event.preventDefault();
         }
 
@@ -193,6 +259,7 @@ function SchermataStruttura() {
     }
 
     const controlloDate = () => {
+        let risultato = true;
         const dataCI = $("#dataCheckIn");
         const dataCO = $("#dataCheckOut");
         const dateAiuto = $("#dateAiuto");
@@ -207,8 +274,9 @@ function SchermataStruttura() {
 
         if (struttura.condizioniSoggiorno) {
             if ((differenzaGiorni < struttura.condizioniSoggiorno.soggiorno.min) ||
-                (differenzaGiorni > struttura.condizioniSoggiorno.soggiorno.max)) {
+                (differenzaGiorni > Math.min(struttura.condizioniSoggiorno.soggiorno.max, 28))) {
                 intervalloDateAiuto.removeClass("d-none");
+                risultato = false;
             }
 
             else {
@@ -216,9 +284,10 @@ function SchermataStruttura() {
             }
         }
 
-        if (CI.getTime() <= oggi.getTime()) {
+        if (CI.getTime() < oggi.getTime()) {
             passatoAiuto.removeClass("d-none");
             dataCI.addClass("border border-danger");
+            risultato = false;
         }
 
         else {
@@ -227,8 +296,10 @@ function SchermataStruttura() {
         }
 
         if (CO.getTime() <= CI.getTime()) {
+            console.log(CO.getTime(), CI.getTime());
             dateAiuto.removeClass("d-none");
             dataCO.addClass("border border-danger");
+            risultato = false;
         }
 
         else {
@@ -237,6 +308,7 @@ function SchermataStruttura() {
         }
 
         aggiornaPrezzo();
+        return risultato;
     }
 
     const controlloOrari = () => {
@@ -361,7 +433,7 @@ function SchermataStruttura() {
             tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.bambini;
         }
 
-        setPrezzo(Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100);
+        setPrezzo(Math.max((Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100), 0));
     }
 
     useEffect(() => {
@@ -458,7 +530,7 @@ function SchermataStruttura() {
                             </small>
 
                             <small id="intervalloDateAiuto" className="form-text text-warning d-none">
-                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.min} e {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.max}
+                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.min} e {Math.min(struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.max, 28)}
                             </small>
 
                             <small id="orarioCheckInAiuto" className="form-text text-warning d-none">
@@ -596,7 +668,7 @@ function SchermataStruttura() {
                                 <h6>Camere e letti</h6>
                                 <div className="row mx-auto">
                                     { struttura.altro && Object.keys(struttura.altro)[0] && Object.keys(struttura.altro).map((elemento) => {
-                                        return (
+                                        if (struttura.altro[elemento] !== 0) return (
                                             <Caratteristica key={elemento}
                                                             caratteristica={
                                                                 `${struttura.altro[elemento]}x ${generali[elemento].nome}`
@@ -604,6 +676,8 @@ function SchermataStruttura() {
                                                             icona={generali[elemento].icona}
                                                             esteso={true}/>
                                         )
+
+                                        else return null;
                                     })}
                                 </div>
                             </div>

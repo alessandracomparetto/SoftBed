@@ -14,7 +14,7 @@ function SchermataOperazioneCompletata() {
                     La tua richiesta è stata inoltrata.
                     <br/>
                     Puoi trovare le tue richieste e le tue prenotazioni nella&nbsp;
-                    <Link to={`/profilo/prenotazioni-effettuate`}>schermata delle prenotazioni</Link>.
+                    <Link to={`/utente/prenotazioni`}>schermata delle prenotazioni</Link>.
                 </h4>
             </div>
         )

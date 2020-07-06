@@ -43,7 +43,11 @@ class QueryStruttura {
                    C.oraInizioCheckIn,
                    C.oraFineCheckIn,
                    C.oraInizioCheckOut,
-                   C.oraFineCheckOut
+                   C.oraFineCheckOut,
+                   C.anticipoPrenotazioneMin,
+                   C.anticipoPrenotazioneMax,
+                   C.pagamentoLoco,
+                   C.pagamentoOnline
             FROM condizioni as C
             WHERE C.refStruttura = ?`
     }

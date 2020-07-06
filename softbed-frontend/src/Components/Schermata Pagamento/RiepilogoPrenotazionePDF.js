@@ -20,7 +20,7 @@ function RiepilogoPrenotazionePDF(dati, id) {
     doc.text(25, 10 * y, 'Struttura: ');
 
     doc.setFontType("normal");
-    doc.text(80, 10 * y++, dati.struttura);
+    doc.text(80, 10 * y++, dati.struttura.nome);
 
     doc.setFontType("bold");
     doc.text(25, 10 * y, 'Periodo: ');
@@ -54,7 +54,7 @@ function RiepilogoPrenotazionePDF(dati, id) {
     doc.line(20, 10 * y - 5, 190, 10 * y - 5);
 
     doc.setFontType("bold");
-    doc.text(170, 10 * y + 3, `${dati.prezzo} €`);
+    doc.text(160, 10 * y + 3, `${dati.prezzo} €`);
 
     return doc.output('datauristring');
 }

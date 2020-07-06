@@ -71,22 +71,20 @@ function UtenteAutenticato(props) {
                         }
                         <div className="dropdown-divider d-sm-none"/>
                         <li className="nav-item">
-                            <Link className="nav-link" onClick={logout}>Esci</Link>
+                            <button className="nav-link" onClick={logout}>Esci</button>
                         </li>
                     </div>
 
                     {/* Dropdown menu | d-sm-flex (>=576px) */}
-                    {
-                        (props.utente.gestore == 1) ? (
-                            <li className="nav-item d-none d-sm-flex">
-                                <Link className="nav-link text-warning border border-warning rounded text-90" to="/registrazioneStruttura">Registra la tua struttura</Link>
-                            </li>
-                        ):(
-                            <li className="nav-item d-none d-sm-flex">
-                                <Link className="nav-link text-warning border border-warning rounded text-90" to="/utente/modificaAccount">Diventa un gestore</Link>
-                            </li>
-                        )
-                    }
+
+                    <li className="nav-item d-none d-sm-flex mr-3">
+                        { (props.utente.gestore == 1) ? (
+                            <Link className="nav-link text-warning border border-warning rounded text-90" to="/registrazioneStruttura">Registra la tua struttura</Link>
+                            ):(
+                            <Link className="nav-link text-warning border border-warning rounded text-90" to="/utente/modificaAccount">Diventa un gestore</Link>
+                        )}
+                    </li>
+
                     <li className="nav-item dropdown d-none d-sm-flex">
                         <Link className="nav-link dropdown-toggle" to="#" data-toggle="dropdown">
                             <span className="mr-2">{props.utente.nome}</span><i className="fas fa-user"/>

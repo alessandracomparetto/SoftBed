@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 function Breadcrumb(props) {
     return (
@@ -12,7 +13,7 @@ function Breadcrumb(props) {
                                 { elemento.stato === "active" ? (
                                     <span>{elemento.testo}</span>
                                     ) : (
-                                        <a href={elemento.url}>{elemento.testo}</a>
+                                        <Link to={elemento.url}>{elemento.testo}</Link>
                                     )
                                 }
                             </li>
