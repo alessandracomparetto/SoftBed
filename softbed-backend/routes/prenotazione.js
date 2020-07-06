@@ -81,6 +81,7 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
 
 
 router.post('/rendiconto', function (req, res) {
+    console.log("sono qui");
     prenotazioneModel.rendiconto(req.body, function (data) {
         res.send(data);
     })

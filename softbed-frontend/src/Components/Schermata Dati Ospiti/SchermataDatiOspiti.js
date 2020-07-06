@@ -62,11 +62,7 @@ function SchermataDatiOspiti(props){
         axios.post(`/ospite/aggiungi`, info).then(res => {
         }).catch(err => console.log(err));
 
-
-        if (sessionStorage.getItem("utente") && JSON.parse(sessionStorage.getItem("utente")).idUtente) {
-                console.log(listaOspiti, refPrenotazione);
-                return <RiepilogoDatiQuestura id="dichiarazione" listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
-            }
+        return <RiepilogoDatiQuestura listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
     }
 
 
