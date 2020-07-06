@@ -41,15 +41,23 @@ function SchermataDatiOspiti(props){
 
 
 
-/*   const eliminaOspite = (indice) => {
+  const eliminaOspite = (indice) => {
         let tmp = [...listaOspiti];
         tmp.splice(indice, 1);
         setOspiti(tmp);
-    }*/
+        console.log(tmp);
+    }
 
     const verificaDatiAggiuntivi = (event)=> {
         event.preventDefault();
-        let info = {listaOspiti:listaOspiti, refPrenotazione:refPrenotazione};
+        let tmp=[];
+        for(let i = 0; i <listaOspiti.length; i++){
+            if(listaOspiti[i].idOspite== undefined){
+                tmp.push(listaOspiti[i]);
+            }
+        }
+        console.log(tmp);
+        let info = {listaOspiti:tmp, refPrenotazione:refPrenotazione};
 
         axios.post(`/ospite/aggiungi`, info).then(res => {
         }).catch(err => console.log(err));
@@ -77,7 +85,7 @@ function SchermataDatiOspiti(props){
                                                       via={ospiti.via} numero={ospiti.numeroCivico} cap={ospiti.cap}
                                                        comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
                                                        regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
-                                                       permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione}/>
+                                                       permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>
                             })
 
                         }
