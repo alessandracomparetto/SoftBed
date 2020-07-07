@@ -41,10 +41,10 @@ module.exports= {
 
                 sql = ('INSERT INTO `condizioni` (refStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
                             oraFineCheckOut,pagamentoLoco,pagamentoOnline, prezzoBambini, prezzoAdulti, anticipoPrenotazioneMin, anticipoPrenotazioneMax, \
-                            politicaCancellazione, penaleCancellazione, preavvisoDisdetta) VALUES ?');
+                            politicaCancellazione, penaleCancellazione, preavvisoDisdetta, refNumeroCarta) VALUES ?');
                 datiQuery = [refStruttura, datiStruttura.minSoggiorno, datiStruttura.maxSoggiorno, datiStruttura.oraInizioCheckIn, datiStruttura.oraInizioCheckOut,
                     datiStruttura.oraFineCheckIn, datiStruttura.oraFineCheckOut, datiStruttura.pagamentoLoco, datiStruttura.pagamentoOnline, datiStruttura.prezzoBambini, datiStruttura.prezzoAdulti,
-                    datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta];
+                    datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta, datiStruttura.refNumeroCarta];
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
                 console.log("inserite condizioni");

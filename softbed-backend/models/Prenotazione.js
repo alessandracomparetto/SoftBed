@@ -126,9 +126,7 @@ module.exports = {
         try {
             await withTransaction(db, async () => {
                 let camere = await db.query(`DELETE FROM prenotazionecamera WHERE refPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
-                console.log(camere);
                 let result = await db.query(`DELETE FROM prenotazione WHERE idPrenotazione = ?`, data.idPrenotazione).catch((err) => {console.log(err)});
-                console.log(result);
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
             })
         } catch(err) {
@@ -139,12 +137,16 @@ module.exports = {
     confermaPrenotazione: async function(data, callback){
         const db = await makeDb(config);
         let dataConferma=new Date();
-        console.log("sto per confermare");
         try {
             await withTransaction(db, async () => {
                 let result = await db.query('UPDATE prenotazione SET prenotazione.confermata=1 , prenotazione.dataScadenza=null , prenotazione.dataConferma=? WHERE idPrenotazione = ?', [dataConferma,data.idPrenotazione]).catch((err) => {throw err});
                 if (result.affectedRows === 0) throw createError(404, "Prenotazione non trovata");
+
+                let prenotazione=await db.query('SELECT prenotazione.*, autenticazione.email as emailGestore , struttura.nomeStruttura as nomeStruttura FROM prenotazione JOIN struttura JOIN autenticazione\
+                                                     WHERE prenotazione.refStruttura=struttura.idStruttura AND struttura.refGestore=autenticazione.refUtente AND prenotazione.idPrenotazione=?',[data.idPrenotazione]).catch((err) => {throw err});
+                return callback(prenotazione[0]);
             })
+
         } catch(err) {
             throw err;
         }

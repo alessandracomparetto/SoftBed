@@ -18,7 +18,6 @@ function SchermataDatiOspiti(props){
     const {indice, refPrenotazione} = useParams();
 
     useEffect(() => {
-        console.log("Sono qui");
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
         if(!utente || utente.length === 0){
             window.location.href="/accedi";

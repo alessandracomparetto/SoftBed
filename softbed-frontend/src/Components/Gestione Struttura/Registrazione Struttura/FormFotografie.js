@@ -94,11 +94,11 @@ function FormFotografie(props){
         }
     }
 
-    function  vaiIndietro() {
-        props.goBack();
+    function vaiIndietro() {
+         props.goBack();
     }
 
-    if(props.currentStep !== 6){
+    if(props.currentStep !== 7){
         return null;
     }else return (
         <Fragment>

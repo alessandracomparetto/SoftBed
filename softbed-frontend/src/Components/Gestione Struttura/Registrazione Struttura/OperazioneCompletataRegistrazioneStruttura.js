@@ -5,7 +5,7 @@ function OperazioneCompletataRegistrazioneStruttura(props) {
     const history = useHistory();
     const [contatore, setContatore] = useState(5);
 
-    if (props.currentStep !== 8){
+    if (props.currentStep !== 9){
         return null;
     }
     else{

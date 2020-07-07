@@ -20,7 +20,6 @@ config = {
 // creare oggetti già istanziati con tutte le loro proprietà
 // makeDb creerà un database che svolge tutte le transazioni
 // in modo asincrono
-console.log("CREO IL DB");
 exports.makeDb = async function(config) {
     // creiamo il pool di connessione
     // per gestire efficientemente le richieste concorrenti
@@ -31,6 +30,7 @@ exports.makeDb = async function(config) {
     let getConnection = () => {
         return new Promise((resolve, reject) => {
             pool.getConnection(function(err, connection) {
+                console.log("connessione creata");
                 if (err) {
                     return reject(err);
                 }
