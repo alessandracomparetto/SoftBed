@@ -5,14 +5,13 @@ import mostraDialogErrore from "../../../Actions/errore";
 import jsPDF from "jspdf";
 import reindirizza from "../../../Actions/reindirizzamento";
 import {useHistory, useLocation} from "react-router-dom";
+import {convertiData} from "../../Actions/gestioneDate";
 function Rendiconto(props){
     const [ospiti,setOspiti]= useState([]);
     const [gestore, setGestore]=useState([]);
     const [datiStruttura, setDatiStruttura]=useState([]);
     const history = useHistory();
     const location = useLocation();
-
-
 
     useEffect(() => {
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
@@ -42,7 +41,7 @@ function Rendiconto(props){
         let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
         console.log(info);
 
-        axios.post(`/prenotazione/rendiconto`, info)
+        axios.post(`/struttura/rendiconto`, info)
             .then(res => {
                 console.log(res.data);
                 if(res.data===[]) {
@@ -108,10 +107,6 @@ function Rendiconto(props){
 
             ospiti.map((ospitiPrenotazione, indice) => {
                 for(let i = 0; i < ospitiPrenotazione.ospiti.length; i++) {
-                    console.log(ospitiPrenotazione.ospiti.length);
-                    console.log(ospitiPrenotazione.ospiti);
-                    console.log(ospitiPrenotazione.ospiti[i]);
-                    console.log(ospitiPrenotazione.ospiti[i].tassa);
                     if (ospitiPrenotazione.ospiti[i].tassa === "Adulto") {
                         countAdulti++;
                         countOspite++;
@@ -325,11 +320,13 @@ function Rendiconto(props){
             })
 
 
-        let data ={
+        let data = {
             allegato: doc.output('datauristring')
         }
-
-        axios.post("/mail/invioRendiconto", data).catch();
+        doc.save();
+        axios.post("/mail/invioRendiconto", data).catch((err) => {
+            mostraDialogErrore(err.message);
+        });
 
         history.push({
             pathname: "/rendiconto-completato",
@@ -337,13 +334,13 @@ function Rendiconto(props){
         });
 
         let info={"idStruttura": props.struttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
-        console.log(info);
+
         axios.post("/struttura/setDataRendiconto", info).catch(err => console.log(err));
 
     }
 
 
-        return <button type="button" className="btn btn-block btn-primary mt-2 mr-2 " onClick={inviaRendiconto}>Rendiconto</button>
+        return <button id="button" type="button" className="btn btn-block btn-primary mt-2 mr-2 " onClick={inviaRendiconto}>Rendiconto</button>
 
 }
 

@@ -147,6 +147,15 @@ router.post('/setDataRendiconto', function (req, res) {
     })
 });
 
+router.post('/rendiconto', function (req, res) {;
+    strutturaModel.rendiconto(req.body, function (data) {
+        res.send(data);
+    })
+        .catch((err) => {
+            res.status(err.status).send(err);
+        });
+});
+
 module.exports = router;
 
 

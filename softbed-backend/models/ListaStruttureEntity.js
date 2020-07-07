@@ -53,16 +53,18 @@ class ListaStruttureEntity {
         }
     }
 
-    filtra(servizi, ambienti, prezzo) {
+    filtra(servizi, ambienti, prezzo, pagamento) {
         let listaFiltrata;
-
+        console.log("Pagamento:", pagamento);
+        console.log("Lista:", this.lista);
 
         listaFiltrata = this.lista.reduce(function(res, struttura) {
 
             if (
                 (!servizi[0] || struttura.soddisfaServizi(servizi)) &&
                 (!ambienti[0] || struttura.soddisfaAmbienti(ambienti)) &&
-                (!(prezzo.min || prezzo.max) || struttura.soddisfaPrezzo(prezzo))
+                (!(prezzo.min || prezzo.max) || struttura.soddisfaPrezzo(prezzo)) &&
+                (!(pagamento.inLoco ^ pagamento.online) || struttura.utilizzaMetodi(pagamento))
             ) {
                 res.push(struttura);
             }

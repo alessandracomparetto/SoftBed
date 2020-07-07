@@ -48,27 +48,8 @@ function SchermataDatiOspiti(props){
         console.log(tmp);
     }
 
-    const verificaDatiAggiuntivi = (event)=> {
-        event.preventDefault();
-        let tmp=[];
-        for(let i = 0; i <listaOspiti.length; i++){
-            if(listaOspiti[i].idOspite== undefined){
-                tmp.push(listaOspiti[i]);
-            }
-        }
-        console.log(tmp);
-        let info = {listaOspiti:tmp, refPrenotazione:refPrenotazione};
-
-        axios.post(`/ospite/aggiungi`, info).then(res => {
-        }).catch(err => console.log(err));
-
-        return <RiepilogoDatiQuestura listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>
-    }
-
-
     return(
-        <div  className="container my-3" >
-
+        <div className="container my-3" >
             <div id ="ospiti" >
                 <div  className="my-3">
                     <h4 className="mt-3 d-inline">I tuoi ospiti</h4>
@@ -89,7 +70,7 @@ function SchermataDatiOspiti(props){
                 </div>
 
                 <FormDatiOspite listaOspiti={listaOspiti} setOspiti={setOspiti}/>
-                <button name="ok" id="ok" type="button" className="btn btn-danger mt-4 mb-4 float-right" onClick={verificaDatiAggiuntivi}>Procedi alla dichiarazione</button>
+                <RiepilogoDatiQuestura listaOspiti={listaOspiti} refPrenotazione={refPrenotazione} indice={indice}/>
             </div>
         </div>
 

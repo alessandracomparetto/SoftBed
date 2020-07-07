@@ -50,6 +50,9 @@ function SchermataStrutture(){
         } else{
             setLista(JSON.parse(window.sessionStorage.getItem("strutture")));
         }
+
+
+
     }, []);
 
 

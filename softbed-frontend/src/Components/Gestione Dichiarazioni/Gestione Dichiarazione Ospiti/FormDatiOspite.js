@@ -200,7 +200,6 @@ function FormDatiOspite(props){
     }
 
 
-
     return(
         <form id="form" className="container p-3 w-75" noValidate >
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>
@@ -370,7 +369,7 @@ function FormDatiOspite(props){
 
             </div>
 
-            <button name="ok" id="ok" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right btn-lg w-200px" } onClick={aggiungiOspite}>Aggiungi ospite</button>
+            <button name="ok" id="ok" className={(mostraContenuto) ? "btn btn-warning mt-3 float-right" : "collapse btn btn-warning mt-3 float-right" } onClick={aggiungiOspite}>Aggiungi ospite</button>
 
                 <button name="ok" id="ok" type="button" className="btn btn-warning mt-3 float-left" onClick={toggleContenuto}>Aggiungi documento</button>
                 <br/><br/>

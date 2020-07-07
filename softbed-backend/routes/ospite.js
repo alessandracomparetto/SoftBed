@@ -17,7 +17,6 @@ router.post('/aggiungi', function (req, res) {
         res.sendStatus(500);})
 });
 
-
 //recupero ospiti
 router.post('/fetch', function (req, res) {
     ospiteModel.fetch(req.body,function (data){
@@ -25,16 +24,6 @@ router.post('/fetch', function (req, res) {
     }).catch((err) => {
         res.sendStatus(500);})
 });
-
-
-//recupero documenti
-router.post('/fetchDocumenti', function (req, res) {
-    ospiteModel.fetchDocumenti(req.body,function (data){
-        res.send(data);
-    }).catch((err) => {
-        res.sendStatus(500);})
-});
-
 
 module.exports = router;
 
