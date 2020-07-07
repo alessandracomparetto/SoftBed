@@ -79,17 +79,13 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
     });
 });
 
-
-router.post('/rendiconto', function (req, res) {
-    console.log("sono qui");
-    prenotazioneModel.rendiconto(req.body, function (data) {
+router.post('/setDichiarazione', function (req, res) {
+    prenotazioneModel.setDichiarazione(req.body, function (data) {
         res.send(data);
-    })
-        .catch((err) => {
-            res.status(err.status).send(err);
-        });
+    }).catch((err) => {
+        res.status(err.status).send(err.message);
+    });
 });
-
 
 
 module.exports = router;

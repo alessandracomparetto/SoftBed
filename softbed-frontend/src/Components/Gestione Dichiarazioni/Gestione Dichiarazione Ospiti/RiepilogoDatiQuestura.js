@@ -1,66 +1,91 @@
 import React, {useEffect, useState} from 'react';
-import jsPDF from 'jspdf';
+
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import jsPDF from "jspdf";
+import mostraDialogErrore from "../../Actions/errore";
+import {useHistory} from "react-router-dom";
+import $ from "jquery";
 
 function RiepilogoDatiQuestura(props) {
-    //recupero i dati del gestore
-    let sessionUtente = JSON.parse(window.sessionStorage.getItem("utente"));
-    const [gestore, setGestore]=useState([]);
-    const [struttura, setStruttura]=useState([]);
+
+    const history = useHistory();
+    const [gestore, setGestore] = useState([]);
+    const [percorsi, setPercorsi] = useState([]);
+    const [datiStruttura, setStruttura] = useState([]);
+    var Base64 = require('js-base64').Base64;
+
     useEffect(() => {
+        let struttura = (JSON.parse(sessionStorage.getItem("strutture")));
+        console.log(props.listaOspiti);
         axios
-            .post("/utente/fetch", sessionUtente[0])
+            .post("/utente/fetch", JSON.parse(sessionStorage.getItem("utente")))
             .then(res => {
                 res.data.dataNascita = res.data.dataNascita.split("T")[0];
                 setGestore(res.data);
             })
             .catch(err => console.log(err));
 
-
         axios
-            .post("/ospite/fetchStruttura", {"idStruttura" : props.idStruttura})
+
+            .post("/struttura/fetchStruttura", {"idStruttura": struttura[0].idStruttura})
             .then(res => {
+                console.log(res.data);
                 setStruttura(res.data[0]);
             })
             .catch(err => console.log(err));
 
-
-    }, []);
-
-    let doc = new jsPDF();
-    let y = 2;
+    },[props.listaOspiti]);
 
 
-    doc.setFontSize(18);
-    doc.setFontType("bold");
-    doc.text(20, 10 * y++ - 2, 'OGGETTO: dichiarazione dati ospiti');
 
-    doc.setFontSize(14);
-    doc.setFontType("normal");
-    doc.text(25, 10 * y, `Il/La sottoscritto/a ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
-    doc.text(80, 10 * y++, '');
-    doc.text(25, 10 * y, `nato a ${gestore.comuneNascita} (${gestore.provinciaNascita}) il ${gestore.dataNascita},`);
-    doc.text(80, 10 * y++, '');
-    doc.text(25, 10 * y, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza}), via ${gestore.via}, n. ${gestore.numeroCivico}, CAP ${gestore.cap}`);
-    doc.text(80, 10 * y++, '');
+    function invia() {
+        let tmp = [];
+        for (let i = 0; i < props.listaOspiti.length; i++) {
+            if (props.listaOspiti[i].idOspite === undefined) {
+                tmp.push(props.listaOspiti[i]);
+            }
+        }
+
+        let info = {listaOspiti: tmp, refPrenotazione: props.refPrenotazione};
+        axios.post(`/ospite/aggiungi`, info).then(res => {
+        }).catch(err => console.log(err));
+
+        let doc = new jsPDF();
+        let y = 2;
+        let countOspiti = 0;
+
+        doc.setFontSize(18);
+        doc.setFontType("bold");
+        doc.text(20, 10 * y++ - 2, 'OGGETTO: dichiarazione dati ospiti');
+
+        doc.setFontSize(14);
+        doc.setFontType("normal");
+        doc.text(25, 10 * y, `Il/La sottoscritto/a ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
+        doc.text(80, 10 * y++, '');
+        doc.text(25, 10 * y, `nato a ${gestore.comuneNascita} (${gestore.provinciaNascita}) il ${gestore.dataNascita},`);
+        doc.text(80, 10 * y++, '');
+        doc.text(25, 10 * y, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza}), via ${gestore.via}, n. ${gestore.numeroCivico}, CAP ${gestore.cap}`);
+        doc.text(80, 10 * y++, '');
+
+        doc.setFontType("bold");
+        doc.text(25, 10 * y, ' in qualità di proprietario/amministratore della seguente struttura: ');
+        doc.text(80, 10 * y++, '');
 
 
-    doc.setFontType("bold");
-    doc.text(25, 10 * y, ' in qualità di proprietario/amministratore della seguente struttura: ');
-    doc.text(80, 10 * y++, '');
+        doc.setFontType("normal")
+        doc.text(25, 10 * y, `"${datiStruttura.nomeStruttura}", sita a ${datiStruttura.comune} (${datiStruttura.provincia}), via ${datiStruttura.via}, n. ${datiStruttura.numeroCivico}, CAP ${datiStruttura.cap}`);
 
-    doc.setFontType("normal")
-    doc.text(25, 10 * y, `"${struttura.nomeStruttura}", sita a ${struttura.comune} (${struttura.provincia}), via ${struttura.via}, n. ${struttura.numeroCivico}, CAP ${struttura.cap}`);
+        doc.text(80, 10 * y++, '');
 
-    doc.text(80, 10 * y++, '');
 
-    doc.setFontType("bold");
-    doc.text(25, 10 * y, 'dichiara la presenza dei seguenti ospiti: ');
-    doc.text(80, 10 * y++, '');
 
-    {
-        props.dati.map((ospiti, indice) => {
+        doc.setFontType("bold");
+        doc.text(25, 10 * y, 'dichiara la presenza dei seguenti ospiti:');
+        doc.text(80, 10 * y++, '');
+
+
+        props.listaOspiti.map((ospiti, indice) => {
+            countOspiti++;
             doc.setFontType("bold");
             doc.setFontSize(14);
             doc.text(25, 10 * y, 'Nome: ');
@@ -110,56 +135,55 @@ function RiepilogoDatiQuestura(props) {
             doc.setFontType("normal");
             doc.text(80, 10 * y++, `${ospiti.permanenza} giorni`);
 
-            doc.setFontType("bold");
-            doc.text(25, 10 * y, 'Documento di riconoscimento: ');
-
             doc.setFontType("normal");
-          /*  doc.text(80, 10 * y++, <img className="annuncio-img" src={`/uploads/foto/${ospiti.documenti}`}/>);
+            doc.text(80, 10 * y++, '');
 
-            doc.addPage();*/
+            if (countOspiti % 2 === 0) {
+                y = 2;
+                doc.addPage();
+            }
 
         })
 
+        doc.setFontType("bold");
+        doc.text(25, 10 * y, 'Documenti di riconoscimento: ');
+
+        percorsi.map((percorsi, indice) => {
+            console.log(percorsi.percorso);
+
+            fetch(`/uploads/documenti/${percorsi.percorso}`).then(r => r.blob())
+                .then(img => {
+                    let imgData = 'data:image/jpeg;base64,' + Base64.encode(`${img}`)
+                    doc.addImage(imgData, 'JPEG', 15, 60, 170, 170);
+                })
+        })
+
+
+        const informazioni = {
+            allegato: doc.output('datauristring')
+        }
+        axios.post('/mail/invioDichiarazione', informazioni).then(()=>{  axios.post("/prenotazione/setDichiarazione", {"refPrenotazione": props.refPrenotazione}).catch(err => console.log(err));
+        }).catch((err) => {
+            mostraDialogErrore(err.message);
+        });
+
+        doc.save();
+
+
+        history.push({
+            pathname: `/dichiarazione-completata/${props.indice}`,
+            state: { provenienza: "Riepilogo dati questura" }
+        });
     }
 
 
-    const handleInvia = (e) => {
-        e.preventDefault();
-       let data ={
-            email:"softengineers44@gmail.com",
-            allegato:doc.output('datauristring')
-        }
-
-        try{
-            axios.post("/mail", data)
-                .then(res => console.log(res.status));
-        }
-        catch(err){
-            if (err.response.status === 400) {
-                console.log('There was a problem with the server');
-            } else {
-                console.log(err.response.data.msg);
-            }
-        }
-    }
-
-    const handleScarica = (e) => {
-        e.preventDefault();
-        doc.save("documentoQuestura.pdf");
-    }
     return(
-        <div className="container mh-100 p-3 w-80" style={{height: 500 + 'px'}}  >
-            <div className="row">
-                    <button name="ok" id="ok" type="button" className=" col-12 col-md-5 btn btn-warning mt-3 float-left " style={{width: 250 + 'px'}} onClick={handleScarica}>Visualizza dichiarazione</button>
-            </div>
-
-            <div className="row">
-                <button name="ok" id="ok" type="button" className=" col-12 col-md-5 btn btn-success mt-3 float-right" style={{width: 250 + 'px'}} onClick={handleInvia}>Invia dichiarazione</button>
-            </div>
+        <div className="d-flex justify-content-end" >
+            <button id="button" type="button" className="btn btn-danger" onClick={invia}>Procedi alla dichiarazione</button>
         </div>
-
-
     )
 }
+
+
 export default RiepilogoDatiQuestura;
 

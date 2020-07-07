@@ -55,18 +55,20 @@ function App() {
                             <SchermataGestioneStruttura />
                         </Route>
 
-
-                        <Route exact path="/struttura/rendiconto/:indice">
-                            <Rendiconto />
-                        </Route>
-
-
                         <Route path="/gestioneStrutture/">
                             <SchermataStrutture />
                         </Route>
 
                         <Route exact path="/operazione-completata">
                             <SchermataOperazioneCompletata />
+                        </Route>
+
+                        <Route exact path="/rendiconto-completato">
+                            <RendicontoCompletato />
+                        </Route>
+
+                        <Route exact path="/dichiarazione-completata/:indice">
+                            <DichiarazioneCompletata/>
                         </Route>
 
                         <Route exact path="/pagamento">

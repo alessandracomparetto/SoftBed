@@ -31,6 +31,13 @@ function FormFiltri(props) {
                 $(`#${ambiente}`)[0].checked = true;
             }
         })
+
+        if (query.get("pagamentoOnline"))
+            $("#pagamentoOnline")[0].checked = true;
+
+        if (query.get("pagamentoInLoco"))
+            $("#pagamentoInLoco")[0].checked = true;
+
     }, [])
 
     const onSubmit = (event) => {
@@ -47,6 +54,12 @@ function FormFiltri(props) {
 
         parametri.prezzoMinimo = $("#prezzoMinimo").val();
         parametri.prezzoMassimo = $("#prezzoMassimo").val();
+
+        if ($("#pagamentoInLoco")[0].checked)
+            parametri.pagamentoInLoco = true;
+
+        if ($("#pagamentoOnline")[0].checked)
+            parametri.pagamentoOnline = true;
 
         Object.keys(servizi).map((servizio) => {
             if ($(`#${servizio}`)[0].checked)
@@ -78,6 +91,21 @@ function FormFiltri(props) {
                     <SliderPrezzo minimo={0} massimo={500}/>
                 </div>
             </div>
+
+            <div className="col-12 mt-3">
+                <h4>Modalità di pagamento</h4>
+
+                <div className="form-check mx-2">
+                    <input className="form-check-input" id="pagamentoOnline" name="pagamentoOnline" type="checkbox"/>
+                    <label className="form-check-label" htmlFor="">Pagamento online</label>
+                </div>
+
+                <div className="form-check mx-2">
+                    <input className="form-check-input" id="pagamentoInLoco" name="pagamentoInLoco" type="checkbox"/>
+                    <label className="form-check-label" htmlFor="pagamentoInLoco">Pagamento in loco</label>
+                </div>
+            </div>
+
             <div className="col-12 mt-3">
                 <h4>Servizi</h4>
 
@@ -90,6 +118,7 @@ function FormFiltri(props) {
                     );
                 })}
             </div>
+
             <div className="col-12 mt-3">
                 <h4>Ambienti</h4>
 
@@ -102,6 +131,7 @@ function FormFiltri(props) {
                     );
                 })}
             </div>
+
             <button className="btn btn-secondary btn-block mt-3" type="submit">Applica filtri</button>
         </form>
     );

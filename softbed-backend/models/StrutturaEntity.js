@@ -302,6 +302,15 @@ class StrutturaEntity {
         else return false;
     }
 
+    utilizzaMetodi(pagamento) {
+
+        if (pagamento.online)
+            return this.condizioniPrenotazione.pagamentoOnline;
+        else if (pagamento.inLoco)
+            return this.condizioniPrenotazione.pagamentoInLoco;
+        else return true;
+    }
+
 }
 
 module.exports = StrutturaEntity;

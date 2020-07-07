@@ -51,7 +51,6 @@ module.exports={
         }
     },
 
-
     fetch: async function (refPrenotazione, callback) {
         const db = await makeDb(config);
         let infoOspite;
@@ -76,21 +75,5 @@ module.exports={
         } catch (err) {
             throw err;
         }
-    },
-
-    fetchDocumenti: async function(data, callback) {
-        const db = await makeDb(config);
-        try {
-            await withTransaction(db, async () => {
-                let risultato = await db.query(('SELECT D.percorso FROM documenti as D\
-                    WHERE D.refPrenotazione = ?'), [data.refPrenotazione]).catch((err) => {throw err});
-                return callback(risultato);
-            })
-        }
-        catch (err) {
-            throw err;
-        }
-
     }
-
 };

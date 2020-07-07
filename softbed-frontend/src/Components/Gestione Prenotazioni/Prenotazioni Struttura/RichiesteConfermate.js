@@ -22,7 +22,7 @@ function RichiesteConfermate(props){
                     <strong>confermata: </strong>{new Date(props.prenotazione.dataConferma).toLocaleString()}
                 </div>
                 <div  className="d-flex justify-content-around">
-                    <Link className="text-light" to={`/ospiti/dichiarazioneOspiti/${props.indice}/${props.prenotazione.idPrenotazione}`}><button id="dichiaraOspiti" type="button" className="btn btn-primary mt-2 mr-2" style={{width: 170 + 'px'}}>Dichiarazione ospiti</button></Link>
+                    <Link className="text-light" to={`/ospiti/dichiarazioneOspiti/${props.indice}/${props.prenotazione.idPrenotazione}`}><button id="dichiaraOspiti" type="button" className="btn btn-primary mt-2 mr-2"style={{width: 170 + 'px'}} disabled={(props.prenotazione.dichiarazioneOspiti === 1)}>Dichiarazione ospiti</button></Link>
                     <button type="button" className="btn btn-primary mt-2 mr-2 " style={{width: 170 + 'px'}} onClick={toggleContenuto}>{mostraContenuto ? "Mostra meno" : "Visualizza"}</button>
                 </div>
             </div>
@@ -32,6 +32,5 @@ function RichiesteConfermate(props){
         </div>
     )
 }
-
 
 export default RichiesteConfermate;
