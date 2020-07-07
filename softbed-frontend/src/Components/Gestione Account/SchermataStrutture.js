@@ -72,7 +72,7 @@ function SchermataStrutture(){
                                     </div>
                                     <div className="col-4 col-lg-2 my-auto text-center">
                                         Via: <br></br>
-                                        <strong>{struttura.via} {struttura.numeroCivico} </strong>
+                                        <strong>{struttura.via},{struttura.numeroCivico} </strong>
                                     </div>
                                     <div className="col-4 col-lg-2 my-auto text-center">
                                         Tipologia: <br></br>
