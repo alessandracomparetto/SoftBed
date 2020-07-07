@@ -41,7 +41,7 @@ function Rendiconto(props){
         let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
         console.log(info);
 
-        axios.post(`/prenotazione/rendiconto`, info)
+        axios.post(`/struttura/rendiconto`, info)
             .then(res => {
                 console.log(res.data);
                 if(res.data===[]) {
@@ -334,7 +334,7 @@ function Rendiconto(props){
         });
 
         let info={"idStruttura": props.struttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
-        console.log(info);
+
         axios.post("/struttura/setDataRendiconto", info).catch(err => console.log(err));
 
     }

@@ -40,21 +40,7 @@ function SchermataDatiOspiti(props){
             .catch(err => console.log(err));
     }, []);
 
-    const aggiungiOspiti =() => {
-        let tmp=[];
-        for(let i = 0; i <listaOspiti.length; i++){
-            if(listaOspiti[i].idOspite === undefined){
-                tmp.push(listaOspiti[i]);
-            }
-        }
 
-        let info = {listaOspiti:tmp, refPrenotazione:refPrenotazione};
-        axios.post(`/ospite/aggiungi`, info).then(res => {
-        }).catch(err => console.log(err));
-
-
-
-    }
 
   const eliminaOspite = (indice) => {
         let tmp = [...listaOspiti];
@@ -87,8 +73,7 @@ function SchermataDatiOspiti(props){
                 </div>
 
                 <FormDatiOspite listaOspiti={listaOspiti} setOspiti={setOspiti}/>
-{/*                <RiepilogoDatiQuestura struttura={struttura} listaOspiti={listaOspiti} refPrenotazione={refPrenotazione}/>*/}
-                <button type="button" className="btn btn-danger mb-5 float-right" onClick={aggiungiOspiti}>Procedi alla dichiarazione</button>
+                <RiepilogoDatiQuestura listaOspiti={listaOspiti} refPrenotazione={refPrenotazione} indice={indice}/>
             </div>
         </div>
 

@@ -27,15 +27,6 @@ router.post('/fetch', function (req, res) {
 });
 
 
-//recupero documenti
-router.post('/fetchDocumenti', function (req, res) {
-    ospiteModel.fetchDocumenti(req.body,function (data){
-        res.send(data);
-    }).catch((err) => {
-        res.status(err.status).send(err.message)})
-});
-
-
 module.exports = router;
 
 
