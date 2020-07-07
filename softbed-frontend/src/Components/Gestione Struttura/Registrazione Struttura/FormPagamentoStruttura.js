@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import FormMetodoPagamento from "../Schermata Dato Pagamento/FormMetodoPagamento";
 import $ from 'jquery';
+import FormMetodoPagamento from "../../Gestione Account/Modifica Account/Schermata Dato Pagamento/FormMetodoPagamento";
 
-function SchermataPagamentoStruttura(props) {
+function FormPagamentoStruttura(props) {
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
 
     useEffect(() => {
@@ -74,4 +74,4 @@ function SchermataPagamentoStruttura(props) {
         )
     }
 }
-export default SchermataPagamentoStruttura;
+export default FormPagamentoStruttura;
