@@ -11,6 +11,7 @@ import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
 import OperazioneCompletataRegistrazioneStruttura from "./OperazioneCompletataRegistrazioneStruttura";
 import axios from 'axios';
 import mostraDialogErrore from "../../../Actions/errore";
+import FormPagamentoStruttura from "./FormPagamentoStruttura";
 
 function RegistrazioneStruttura () {
     const [step, setStep]= useState(1);
@@ -70,8 +71,7 @@ function RegistrazioneStruttura () {
     const handleSubmit=()=>{
         try {
            let dati = info;
-           let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
-           dati["idUtente"]=idUtente;
+           dati["idUtente"]=JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
            axios.post('/struttura', dati)
                .then(res => { // then print response status
                    console.log("hai finito");
@@ -125,7 +125,7 @@ function RegistrazioneStruttura () {
                     <InserimentoCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             }
             <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} correzione={correzione} />
-            <SchermataPagamentoStruttura currentStep={step} dati={info} go={_next} e goBack={_prev} handleChange={handleChange} />
+            <FormPagamentoStruttura currentStep={step} dati={info} go={_next} e goBack={_prev} handleChange={handleChange} />
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             <SchermataRiepilogoRegistrazione currentStep={step} struttura={info} handleSubmit={handleSubmit}  goBack={_prev}/>
             <OperazioneCompletataRegistrazioneStruttura currentStep={step}/>

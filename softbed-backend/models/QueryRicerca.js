@@ -2,6 +2,17 @@ class QueryRicerca {
 
     // *************************************************************************************** QUERY
     // *************************************************************************************** RICERCA
+    static queryDurataSoggiorno(arrivo, partenza) {
+        const GIORNO = 86400000;
+        const giorni = Math.ceil((new Date(partenza).getTime() - new Date(arrivo).getTime()) / GIORNO);
+
+        return `
+            SELECT struttura.idStruttura
+            FROM struttura, condizioni
+            WHERE struttura.idStruttura = condizioni.refStruttura
+              AND minSoggiorno <= "${giorni}"
+              AND maxSoggiorno >= "${giorni}"`
+    }
 
     static queryDestinazione(destinazione) {
         return `
@@ -61,7 +72,8 @@ class QueryRicerca {
             SELECT struttura.idStruttura as id
             FROM struttura
             WHERE struttura.idStruttura IN (${this.queryDestinazione(destinazione)}) AND  
-                struttura.idStruttura IN (${this.queryPrenotazioniBB(arrivo, partenza, ospiti)})`
+                struttura.idStruttura IN (${this.queryPrenotazioniBB(arrivo, partenza, ospiti)}) AND
+                struttura.idStruttura IN (${this.queryDurataSoggiorno(arrivo, partenza)})`
     }
 
     static queryID_CV(destinazione, arrivo, partenza, ospiti) {
@@ -69,14 +81,16 @@ class QueryRicerca {
             SELECT struttura.idStruttura as id
             FROM struttura
             WHERE struttura.idStruttura IN (${this.queryDestinazione(destinazione)}) AND 
-                struttura.idStruttura IN (${this.queryPrenotazioniCV(arrivo, partenza, ospiti)})`
+                struttura.idStruttura IN (${this.queryPrenotazioniCV(arrivo, partenza, ospiti)}) AND
+                struttura.idStruttura IN (${this.queryDurataSoggiorno(arrivo, partenza)})`
     }
 
     static queryID_BB_CV(destinazione, arrivo, partenza, ospiti) {
         return `
             SELECT struttura.idStruttura as id
             FROM struttura
-            WHERE struttura.idStruttura IN (${this.queryDestinazione(destinazione)}) AND (
+            WHERE struttura.idStruttura IN (${this.queryDestinazione(destinazione)}) AND
+                struttura.idStruttura IN (${this.queryDurataSoggiorno(arrivo, partenza)}) AND (
                     (struttura.idStruttura IN (${this.queryPrenotazioniBB(arrivo, partenza, ospiti)})) OR 
                     (struttura.idStruttura IN (${this.queryPrenotazioniCV(arrivo, partenza, ospiti)}))
                 )`

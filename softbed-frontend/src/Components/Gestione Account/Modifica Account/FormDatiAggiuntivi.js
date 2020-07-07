@@ -90,7 +90,6 @@ function FormDatiAggiuntivi(){
             try {
                 axios.post('/utente/modificaDatiAggiuntivi', tmp)
                     .then(res => { // then print response status
-                        console.log("cosa è tornato!!" , res.data);
                         window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                         setUtente(res.data);
                         if (res.data.gestore===1){
@@ -212,7 +211,6 @@ function FormDatiAggiuntivi(){
 
     function addressEventHandler(event) {
         if (event.target.value != '') {
-            console.log("CIAO");
             document.getElementById("addressnum").removeAttribute('disabled');
             document.getElementById("cap").removeAttribute('disabled');
         } else {
@@ -226,7 +224,6 @@ function FormDatiAggiuntivi(){
     function tabEventHandler(event){
         if (event.keyCode == 9) { // pressione TAB
             if ($(this).val() != '') {
-                console.log("CIAO");
                 document.getElementById("addressnum").removeAttribute('disabled');
                 document.getElementById("cap").removeAttribute('disabled');
             } else {
