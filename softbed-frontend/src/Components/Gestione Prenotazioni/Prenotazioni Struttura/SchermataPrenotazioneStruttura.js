@@ -29,7 +29,7 @@ function SchermataPrenotazioneStruttura(){
          let data = listaStrutture[indice];
          console.log(data);
          setStruttura(data);
-        axios.post(`/prenotazione/listaPrenotazioni`, data).then(res => {
+         axios.post(`/prenotazione/listaPrenotazioniStruttura`, data).then(res => {
             aggiornaPrenotazioni(res.data);
         })
             .catch(err =>{

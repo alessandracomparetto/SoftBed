@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
     next(createError(403));
 });
 
-router.post('/listaPrenotazioni', function (req, res) {
+router.post('/listaPrenotazioniStruttura', function (req, res) {
     let c=(req.headers.cookie).split("=")[1];
     if(token.verificaToken(req.body.refGestore, c)) {
         prenotazioneModel.getPrenotazioni(req.body, function (data) {
