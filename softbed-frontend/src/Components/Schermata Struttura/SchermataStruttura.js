@@ -660,7 +660,8 @@ function SchermataStruttura() {
                                     })}
                                 </div>
                             </div>
-                            <div>
+
+                            <div className="mb-4">
                                 <h6>Camere e letti</h6>
                                 <div className="row mx-auto">
                                     { struttura.altro && Object.keys(struttura.altro)[0] && Object.keys(struttura.altro).map((elemento) => {
@@ -679,6 +680,21 @@ function SchermataStruttura() {
                             </div>
                         </Fragment>
                     )}
+
+                    <div className="mb-4">
+                        <h6>Modalità di pagamento</h6>
+                        <div className="row mx-auto">
+                            {struttura.condizioniPrenotazione && struttura.condizioniPrenotazione.pagamentoOnline &&
+                            <Caratteristica key="pagamentoOnline" caratteristica="Pagamento online" icona="money-check"
+                                            esteso={true}/>
+                            }
+                            {struttura.condizioniPrenotazione && struttura.condizioniPrenotazione.pagamentoInLoco &&
+                            <Caratteristica key="pagamentoInLoco" caratteristica="Pagamento in loco"
+                                            icona="money-bill-alt" esteso={true}/>
+                            }
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

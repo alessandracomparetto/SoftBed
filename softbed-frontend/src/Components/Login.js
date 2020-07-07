@@ -63,7 +63,7 @@ function Login(){
                 <div className="col-12 col-md-6 pb-3 mr-0 rounded shadow border border-secondary bg-light mx-auto" style={{minHeight:60+'vh'}}>
                     <div className="d-flex justify-content-center">
                          <div className="container rounded-cicle" style={{position: "absolute", top: -58+'px'}}>
-                            <i className="fa fa-user-circle fa-6x text-warning bg-white rounded-circle" aria-hidden="true"></i>
+                            <i className="fa fa-user-circle fa-6x text-warning bg-white rounded-circle" aria-hidden="true"/>
                         </div>
                     </div>
                     <div className="text-center mt-5 pt-3"><h3>Accedi</h3></div>
@@ -80,7 +80,7 @@ function Login(){
                             <div id="errore-email" className="collapse text-danger small">Email errata!</div>
                         </div>
                         <div className="form-group">
-                            <label className="sr-only" htmlFor="password"></label>
+                            <label className="sr-only" htmlFor="password"/>
                             <div className="input-group  mt-4 show-hide-password">
                                 <div className="input-group-prepend">
                                     <span className="input-group-text"><i className="fas fa-key"/></span>

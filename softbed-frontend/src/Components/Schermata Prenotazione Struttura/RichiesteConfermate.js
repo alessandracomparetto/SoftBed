@@ -27,7 +27,7 @@ function RichiesteConfermate(props){
                 </div>
             </div>
             <div id="prenotazioneConfermata" className={"col-12 my-3 py-3 border-top border-dark" + ((mostraContenuto) ? "" : " collapse")}>
-                   <Prenotazione  dati={props.prenotazione}></Prenotazione>
+                   <Prenotazione dati={props.prenotazione}/>
             </div>
         </div>
     )

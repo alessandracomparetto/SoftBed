@@ -121,6 +121,12 @@ body {
     width: 200px
 }
 
+@media screen and (max-width: 991px) {
+    .icon-sm {
+        font-size: 5rem !important;
+    }
+}
+
 @media screen and (min-width: 768px) {
     .annuncio-box-descrizione {
         min-height: 90px;

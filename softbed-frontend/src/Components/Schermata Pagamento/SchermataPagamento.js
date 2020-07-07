@@ -45,13 +45,6 @@ function SchermataPagamento() {
         }
     }, []);
 
-
-    const aggiungiDatoPagamento = (dato) => {
-        let tmp = [...listaDatiPagamento];
-        tmp.push(dato);
-        setDatiPagamento(tmp);
-    };
-
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -74,7 +67,7 @@ function SchermataPagamento() {
                 });
             })
             .catch(() => {
-                mostraDialogErrore("Hai già effettuato una prenotazione con questi dati!");
+                mostraDialogErrore("Assicurati di non aver già effettuato questa prenotazione e di non superare il limite annuo di 28 giorni di alloggio per la struttura selezionata.");
             });
     };
 
@@ -163,6 +156,7 @@ function SchermataPagamento() {
                                     { online && (
                                         <div className="ml-3">
                                             { listaDatiPagamento && listaDatiPagamento.map((metodo, indice) => {
+                                                console.log(metodo);
                                                 return (
                                                     <div key={indice} className="radio">
                                                         <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>
@@ -194,7 +188,7 @@ function SchermataPagamento() {
                                 </button>
                             </h5>
                             <div id="formNuovoMetodo" className="collapse">
-                                <FormMetodoPagamento aggiungiDatoPagamento={aggiungiDatoPagamento}/>
+                                <FormMetodoPagamento setDatiPagamento={setDatiPagamento} listaDatiPagamento={listaDatiPagamento}/>
                             </div>
                         </div>
                     )}

@@ -13,12 +13,13 @@ function SchermataRisultati() {
     const [pagina, setPagina] = useState(1);
     const [destinazione, setDestinazione] = useState("");
     const [listaStrutture, setListaStrutture] = useState([]);
+    const [parametri, setParametri] = useState({});
 
     useEffect(() => {
 
         // Genero manualmente la GET a partire dai campi del form di ricerca
         // (sempre validi al caricamento del componente)
-        let parametri = {
+        let parametriTMP = {
             destinazione: $("#destinazione").val().trim(),
             arrivo: $("#arrivo").val(),
             partenza: $("#partenza").val(),
@@ -27,12 +28,18 @@ function SchermataRisultati() {
             casaVacanze: $("#casaVacanze")[0].checked
         }
 
+        setParametri({
+            dataCheckIn: parametriTMP.arrivo,
+            dataCheckOut: parametriTMP.partenza,
+            adulti: parametriTMP.ospiti
+        });
+
         Object.keys(servizi).map((servizio) => {
             if ($(`#${servizio}`)[0].checked)
-                parametri[servizio] = true;
+                parametriTMP[servizio] = true;
         })
 
-        const valoriRicerca = $.param(parametri);
+        const valoriRicerca = $.param(parametriTMP);
 
         axios
             .get("search?" + valoriRicerca)
@@ -52,7 +59,7 @@ function SchermataRisultati() {
                         { listaStrutture && listaStrutture[0] ? (
                             <Fragment>
                                 { listaStrutture instanceof Array && listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
-                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi} foto={struttura.foto[0]}/>
+                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi} foto={struttura.foto[0]} parametri={parametri}/>
                                 })}
                                 <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
                             </Fragment>

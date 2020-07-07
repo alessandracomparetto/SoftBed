@@ -219,7 +219,7 @@ function FormDatiOspite(props){
                 <div className="form-group col-12 col-md-6 col-lg-3">
                     <label htmlFor="cf">Codice fiscale</label>
                     <input name="codiceFiscale" id="cf" type="text" className="form-control"
-                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$"required/>
+                           pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" required/>
                     <div className="invalid-feedback">
                         Codice fiscale errato
                     </div>

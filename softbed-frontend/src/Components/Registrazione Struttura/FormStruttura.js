@@ -41,8 +41,8 @@ function FormStruttura (props) {
         const provinceInput = document.getElementById("nomeProvincia");
 
         // rimozione dei precedenti elementi del menu provinca e comune
-        provinceInput.innerHTML = '<option value="" selected/>';
-        document.getElementById("nomeComune").innerHTML='<option value="" selected/>';
+        provinceInput.innerHTML = '<option value="" selected></option>';
+        document.getElementById("nomeComune").innerHTML='<option value="" selected></option>';
 
         if (regioneInput.value !== '') {
             for (let regione of data.regioni) {
@@ -70,7 +70,7 @@ function FormStruttura (props) {
         const comuniInput = document.getElementById("nomeComune");
 
         // rimozione dei precedenti elementi del menu Comune
-        comuniInput.innerHTML='<option value="" selected/>';
+        comuniInput.innerHTML='<option value="" selected></option>';
         if (provinceInput.value !== '') {
             for (let provincia of province) {
                 if (provincia.code === provinceInput.value) {
