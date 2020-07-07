@@ -1,7 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
-let cacheRicerche = []; // [ chiave: stringa, valore: ListaStrutture ]
+let cacheRicerche = {}; // { stringa: valore }
+
 let StrutturaModel = require('../models/Struttura');
 
 function getParametri(req) {
@@ -72,17 +73,24 @@ function getParametri(req) {
     return risultato;
 }
 
+function inserisciCache(chiave, valore) {
+    cacheRicerche[chiave] = valore;
+
+    setTimeout(() => {
+        delete cacheRicerche[chiave];
+    }, 180000); // 3 minuti
+}
+
 router.get('/', function(req, res) {
 
     const parametro = getParametri(req);
-    const pos = cacheRicerche.map((ricerca) => { return ricerca.chiave; }).indexOf(JSON.stringify(parametro.chiave));
+    const strChiave = JSON.stringify(parametro.chiave);
     let risultato;
 
     // Se trovo la ricerca nella cache
-    if (pos !== -1) {
+    if (cacheRicerche[strChiave]) {
+        risultato = cacheRicerche[strChiave]
         console.log("Cache HIT!");
-        risultato = cacheRicerche[pos].valore;
-        cacheRicerche.splice(pos, 1);
 
         // Filtro i risultati
         if (parametro.servizi[0] || parametro.ambienti[0] ||
@@ -94,12 +102,6 @@ router.get('/', function(req, res) {
         } else {
             res.send(risultato.lista);
         }
-
-        // Aggiunta in cache e controllo che ci siano meno di 100 ricerche in cache
-        const numero = cacheRicerche.unshift({chiave: JSON.stringify(parametro.chiave), valore: risultato});
-
-        if (numero > 100)
-            cacheRicerche.slice(Math.max(0, numero - 100), numero);
     }
 
     // Altrimenti
@@ -119,14 +121,11 @@ router.get('/', function(req, res) {
                 res.send(risultato.lista);
             }
 
-            // Aggiunta in cache e controllo che ci siano meno di 100 ricerche in cache
-            const numero = cacheRicerche.unshift({chiave: JSON.stringify(parametro.chiave), valore: risultato});
+            // Aggiunta in cache
+            inserisciCache(strChiave, risultato);
 
-            if (numero > 100)
-                cacheRicerche.slice(Math.max(0, numero - 100), numero);
-
-        }).catch((err) => res.sendStatus(500))
+        }).catch((err) => res.sendStatus(err.status));
     }
-});
+})
 
 module.exports = router;
