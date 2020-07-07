@@ -49,10 +49,8 @@ function SchermataDatiOspiti(props){
         console.log(tmp);
     }
 
-
     return(
         <div className="container my-3" >
-
             <div id ="ospiti" >
                 <div  className="my-3">
                     <h4 className="mt-3 d-inline">I tuoi ospiti</h4>

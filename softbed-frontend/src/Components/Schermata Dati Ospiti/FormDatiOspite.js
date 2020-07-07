@@ -200,7 +200,6 @@ function FormDatiOspite(props){
     }
 
 
-
     return(
         <form id="form" className="container p-3 w-75" noValidate >
             <h6 className="lead mt-3 text-uppercase ">Aggiungi un nuovo ospite</h6>

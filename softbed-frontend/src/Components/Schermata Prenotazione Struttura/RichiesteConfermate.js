@@ -33,5 +33,4 @@ function RichiesteConfermate(props){
     )
 }
 
-
 export default RichiesteConfermate;

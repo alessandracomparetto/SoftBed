@@ -51,7 +51,6 @@ module.exports={
         }
     },
 
-
     fetch: async function (refPrenotazione, callback) {
         const db = await makeDb(config);
         let infoOspite;

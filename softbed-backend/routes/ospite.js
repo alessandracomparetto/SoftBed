@@ -17,7 +17,6 @@ router.post('/aggiungi', function (req, res) {
         res.status(err.status).send(err.message)})
 });
 
-
 //recupero ospiti
 router.post('/fetch', function (req, res) {
     ospiteModel.fetch(req.body,function (data){

@@ -25,7 +25,6 @@ function DichiarazioneCompletata(){
             </div>
         )
     }
-
     else return <PaginaNonTrovata />
 }
 

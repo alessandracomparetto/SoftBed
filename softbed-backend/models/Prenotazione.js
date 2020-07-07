@@ -214,7 +214,6 @@ module.exports = {
     },
 
     setDichiarazione: async function(data, callback){
-        console.log(data);
         const db = await makeDb(config);
         try {
             await withTransaction(db, async () => {
