@@ -16,7 +16,8 @@ router.post('/', function (req, res) {
         timer.aggiungiTimeoutRendiconto(data);
        res.send(data);
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);
+    })
 });
 
 router.post('/gestioneStruttura/', function(req, res) {
@@ -48,18 +49,19 @@ router.post('/listaStruttureGestore', function (req, res) {
 });
 
 router.post('/calcoloGuadagno/', function(req, res, next) {
-    strutturaModel.calcoloGuadagno(req.body, function(data){
+    strutturaModel.calcoloGuadagno(req.body, function (data) {
         let guadagno = 0;
         let x; //prende il prezzo associato alla prenotazione e da questo tolgo le tasse
-        for(let i=0; i<data.length; i++){
-            x=data[i].costo;
-            x-= ((data[i].nAdulti-data[i].nEsentiBambini) * data[i].prezzoAdulti); //levo tasse adulti
-            x-= ((data[i].nBambini-data[i].nEsentiBambini) * data[i].prezzoBambini); //levo tasse bambini
-            guadagno+=x;
+        for (let i = 0; i < data.length; i++) {
+            x = data[i].costo;
+            x -= ((data[i].nAdulti - data[i].nEsentiBambini) * data[i].prezzoAdulti); //levo tasse adulti
+            x -= ((data[i].nBambini - data[i].nEsentiBambini) * data[i].prezzoBambini); //levo tasse bambini
+            guadagno += x;
         }
-        res.send(guadagno+"");
-    }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.send(guadagno + "");
+    }).catch((err) => {
+        res.sendStatus(500);
+    });
 });
 
 router.get('/:idStruttura', function(req, res) {
@@ -85,7 +87,7 @@ router.get('/:idStruttura', function(req, res) {
                 })
             })
                 .catch(() =>{
-                    throw createError(500);
+                    res.sendStatus(500);
                 })
         }
 
@@ -98,7 +100,7 @@ router.post('/modificaCondizioni', function (req, res) {
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus(status);
     }).catch( (err) =>{
-        res.status(err.status).send(err.message);
+        res.sendStatus(500);
     })
 });
 
@@ -107,7 +109,7 @@ router.post('/modificaCaratteristicheCasaVacanze', function (req, res) {
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus( status);
     }).catch( (err) =>{
-        res.status(err.status).send(err.message);
+        res.sendStatus(500);
     })
 });
 
@@ -116,16 +118,17 @@ router.post('/modificaCaratteristicheB&B', function (req, res) {
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus( status);
     }).catch( (err) =>{
-        res.status(err.status).send(err.message);
+        res.sendStatus(500);
     })
 });
 
 //recupero struttura per dichiarazione ospiti e rendiconto
 router.post('/fetchStruttura', function (req, res) {
-    strutturaModel.fetchStruttura(req.body,function (data){
+    strutturaModel.fetchStruttura(req.body, function (data) {
         res.send(data);
     }).catch((err) => {
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);
+    });
 });
 
 router.post('/setDataRendiconto', function (req, res) {
@@ -140,7 +143,7 @@ router.post('/setDataRendiconto', function (req, res) {
         }
         res.sendStatus( status);
     }).catch( (err) =>{
-        res.status(err.status).send(err.message);
+        res.sendStatus(500);
     })
 });
 
