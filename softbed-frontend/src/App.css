@@ -75,6 +75,10 @@ body {
     max-height: 200px;
 }
 
+.maxh-240px {
+    max-height: 240px;
+}
+
 .maxw-xl {
     max-width: 1140px;
 }
