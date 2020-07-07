@@ -1,5 +1,6 @@
 import React from "react";
 
+
 function FormTipologiaStruttura(props) {
 
     function vaiAvanti(event){
@@ -31,13 +32,13 @@ function FormTipologiaStruttura(props) {
             <div className="form-row ">
                 <div className="col-6 text-center">
                     <div className="custom-control custom-radio custom-control-inline mt-2">
-                        <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologiaStruttura" value="B&B" defaultChecked={props.dati.tipologia === "B&B"} required/>
+                        <input type="radio" className="custom-control-input pr-3" id="B&B" name="tipologiaStruttura" value="B&B"  defaultChecked={props.dati.tipologiaStruttur=== "B&B"} required/>
                         <label className="custom-control-label" htmlFor="B&B">B&B</label>
                     </div>
                 </div>
                 <div className="col-6 text-center">
                     <div className="custom-control custom-radio custom-control-inline mt-2">
-                        <input type="radio" className="custom-control-input" id="cv" name="tipologiaStruttura" value="cv" defaultChecked={props.dati.tipologia === "cv"} required/>
+                        <input type="radio" className="custom-control-input" id="cv" name="tipologiaStruttura" value="cv" defaultChecked={props.dati.tipologiaStruttura=== "cv"} required/>
                         <label className="custom-control-label" htmlFor="cv">Casa vacanze</label>
                     </div>
                 </div>

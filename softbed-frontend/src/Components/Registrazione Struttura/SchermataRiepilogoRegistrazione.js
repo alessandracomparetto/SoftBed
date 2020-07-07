@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 
 import InformazioniStruttura from "./InformazioniStruttura";
 
@@ -12,7 +12,7 @@ function SchermataRiepilogoRegistrazione(props) {
         props.goBack();
     }
 
-    if (props.currentStep !== 7){
+    if (props.currentStep !== 8){
         return null;
     }
     else return (

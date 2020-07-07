@@ -11,6 +11,7 @@ import SchermataRiepilogoRegistrazione from "./SchermataRiepilogoRegistrazione";
 import OperazioneCompletataRegistrazioneStruttura from "./OperazioneCompletataRegistrazioneStruttura";
 import axios from 'axios';
 import mostraDialogErrore from "../../Actions/errore";
+import SchermataPagamentoStruttura from "./SchermataPagamentoStruttura";
 
 function RegistrazioneStruttura () {
     const [step, setStep]= useState(1);
@@ -37,6 +38,7 @@ function RegistrazioneStruttura () {
             tmp[name]=value;
         }
         setInfo(tmp);
+        console.log(tmp);
     }
 
     function handleCamere(camera) {
@@ -92,14 +94,20 @@ function RegistrazioneStruttura () {
     }
 
     function _prev(){
-        let currentStep=step-1;
+        let currentStep;
+        if(step===7 && (info.pagamentoOnline==0 || info.pagamentoOnline==undefined)){
+            currentStep=step-2;
+        }
+        else{
+            currentStep=step-1;
+        }
         setStep(currentStep);
     }
 
     return(
         <div className="container col-sm-8 py-3">
             <div className="progress">
-                <div className="progress-bar" style={{width: (Math.round(step * 100 / 6)) + '%'}}>{Math.min(Math.round(step * 100 / 6), 100)}%</div>
+                <div className="progress-bar" style={{width: (Math.round(step * 100 / 7)) + '%'}}>{Math.min(Math.round(step * 100 / 7), 100)}%</div>
             </div>
 
             <FormTipologiaStruttura currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
@@ -119,6 +127,7 @@ function RegistrazioneStruttura () {
                     <InserimentoCaratteristicheB currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev}/>
             }
             <InserimentoCondizioni currentStep={step} handleChange={handleChange} dati={info} go={_next} goBack={_prev} correzione={correzione} />
+            <SchermataPagamentoStruttura currentStep={step} dati={info} go={_next} e goBack={_prev} handleChange={handleChange} />
             <FormFotografie currentStep={step} handleFoto={handleFoto} dati={info} go={_next} goBack={_prev} />
             <SchermataRiepilogoRegistrazione currentStep={step} struttura={info} handleSubmit={handleSubmit}  goBack={_prev}/>
             <OperazioneCompletataRegistrazioneStruttura currentStep={step}/>

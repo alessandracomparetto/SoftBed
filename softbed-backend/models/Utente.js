@@ -111,7 +111,6 @@ module.exports= {
                 }
 
                 else{
-                    console.log("sono qui")
                     infoUtente = await db.query('SELECT U.idUtente, U.nome, U.cognome, U.codiceFiscale, U.dataNascita, U.refComuneNascita, U.telefono, U.gestore, A.email, C.nomeComune as comuneNascita, P.nomeProvincia AS provinciaNascita, R.nomeRegione AS regioneNascita \
                         FROM `utente` AS U JOIN `autenticazione` AS A JOIN `comuni` AS C JOIN `province` AS P JOIN `regioni` AS R \
                         WHERE  U.idUtente= ? AND A.refUtente=U.idUtente AND U.refComuneNascita=C.idComune AND C.refProvincia = P.idProvincia AND P.refRegione = R.idRegione' , [datiUtente.idUtente])
