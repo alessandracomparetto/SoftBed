@@ -6,6 +6,7 @@ import axios from "axios";
 import RiepilogoPrenotazionePDF from "./RiepilogoPrenotazionePDF";
 import mostraDialogErrore from "../../../Actions/errore";
 import reindirizza from "../../../Actions/reindirizzamento";
+import $ from "jquery";
 
 function SchermataPagamento() {
 
@@ -48,14 +49,29 @@ function SchermataPagamento() {
     const onSubmit = (event) => {
         event.preventDefault();
 
+
+        // Nel caso in cui sia stato scelto pagamento online, ma non sia stato selezionato un metodo non proseguo
+        if (pagamentoOnline && $('input[name="pagOnline"]:checked').length === 0) {
+            alert("Devi selezionare un metodo di pagamento per la tipologia online.\nSe non hai ancora inserito un metodo di pagamento puoi farlo cliccando sul pulsante \"Aggiungi un nuovo metodo di pagamento\".");
+            return;
+        }
+
         axios.post('/prenotazione/richiesta', datiRichiesta)
             .then(res => {
+
+                let dati = datiRichiesta;
+
+                if (pagamentoOnline) {
+                    dati.metodoPagamento = $('input[name="pagOnline"]:checked')[0].value
+                }
+
                 const informazioni = {
                     id: res.data.idPrenotazione,
                     emailGestore: res.data.emailGestore,
                     emailOspite: JSON.parse(window.sessionStorage.getItem("utente")).email,
-                    allegato: RiepilogoPrenotazionePDF(datiRichiesta, res.data.idPrenotazione)
+                    allegato: RiepilogoPrenotazionePDF(dati, res.data.idPrenotazione)
                 };
+
                 axios.post('/mail/richiesta-prenotazione', informazioni)
                     .catch((err) => {
                         mostraDialogErrore(err.message);
@@ -155,11 +171,11 @@ function SchermataPagamento() {
 
                                     { online && (
                                         <div className="ml-3">
-                                            { listaDatiPagamento && listaDatiPagamento.map((metodo, indice) => {
+                                            { listaDatiPagamento && listaDatiPagamento.map((metodo) => {
                                                 console.log(metodo);
                                                 return (
-                                                    <div key={indice} className="radio">
-                                                        <label><input className="mr-2" type="radio" name="pagOnline" value={indice} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>
+                                                    <div key={metodo.numeroCarta} className="radio">
+                                                        <label><input className="mr-2" type="radio" name="pagOnline" value={metodo.numeroCarta} required/>{metodo.nomeIntestatario} {metodo.cognomeIntestatario} (termina con {metodo.numeroCarta.substr(metodo.numeroCarta.length - 4, 4)})</label>
                                                     </div>
                                                 )
                                             })}
