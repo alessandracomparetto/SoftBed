@@ -45,7 +45,7 @@ router.post('/utenteRegistrato', function (req, res) {
             res.send(data);
         }
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 /* Login Utente */
@@ -62,7 +62,7 @@ router.post('/login', function (req, res) {
             res.send(data);
         }
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 //recupero delle informazioni dell'utente
@@ -72,7 +72,7 @@ router.post('/fetch', function(req, res) {
         utenteModel.fetch(req.body, function (data) {
             res.send(data);
         }).catch((err) => {
-            res.status(err.status).send(err.message)
+            res.sendStatus(500);
         })
     }else{
         res.sendStatus(401);
@@ -95,7 +95,7 @@ router.post('/listaPagamenti', function (req, res) {
         utenteModel.getDatiPagamento(req.body, function (data) {
             res.send(data);
         }).catch((err) => {
-            res.status(err.status).send(err.message);
+            res.sendStatus(500);
         });
     }else{
         res.sendStatus(401);
@@ -107,7 +107,7 @@ router.post('/aggiungiDatoPagamento', function (req, res) {
     utenteModel.aggiungiDatoPagamento(req.body,function(data){
         res.send(data);
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 //elimina dato pagamento
@@ -115,7 +115,7 @@ router.post('/eliminaDatoPagamento', function (req, res) {
     utenteModel.eliminaDatoPagamento(req.body,function(data){
         res.send(data);
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 router.post('/logout', (req,res) => {

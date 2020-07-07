@@ -302,6 +302,6 @@ router.post('/scadenza-prenotazione', (req, res) => {
     });
 
     res.send();
-})
+});
 
 module.exports = router;

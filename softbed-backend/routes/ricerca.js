@@ -15,7 +15,7 @@ function getParametri(req) {
         ospiti: req.query.ospiti,
         bedAndBreakfast: req.query.bedAndBreakfast,
         casaVacanze: req.query.casaVacanze
-    }
+    };
 
     const listaServizi = [
         "animaliAmmessi",
@@ -114,8 +114,8 @@ router.get('/', function(req, res) {
             if (numero > 100)
                 cacheRicerche.slice(Math.max(0, numero - 100), numero);
 
-        }).catch((err) => res.status(err).send());
+        }).catch((err) => res.sendStatus(500))
     }
-})
+});
 
 module.exports = router;

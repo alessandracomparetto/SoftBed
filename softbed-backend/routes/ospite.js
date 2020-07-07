@@ -14,7 +14,7 @@ router.post('/aggiungi', function (req, res) {
     ospiteModel.aggiungi(req.body,function(data){
         res.send(data);
     }).catch((err)=>{
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 
@@ -23,7 +23,7 @@ router.post('/fetch', function (req, res) {
     ospiteModel.fetch(req.body,function (data){
         res.send(data);
     }).catch((err) => {
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 
@@ -32,7 +32,7 @@ router.post('/fetchDocumenti', function (req, res) {
     ospiteModel.fetchDocumenti(req.body,function (data){
         res.send(data);
     }).catch((err) => {
-        res.status(err.status).send(err.message)})
+        res.sendStatus(500);})
 });
 
 
