@@ -15,7 +15,6 @@ class Token{
         if(!flag){
             this.array.push({"id":id, "cookie":cookie});
         }
-        this.stampaToken();
     }
 
     verificaToken(id, cookie){
@@ -37,9 +36,6 @@ class Token{
         return false;
     }
 
-    stampaToken(){
-        console.log(this.array);
-    }
 }
 
 module.exports = Token;

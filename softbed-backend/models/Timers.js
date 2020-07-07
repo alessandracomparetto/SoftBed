@@ -96,20 +96,20 @@ class Timers{
     }
 
     aggiornaTimeoutRendiconto(idStruttura){
-        for(let i = 0; i<this.array.length; i++){
-            if(this.array[i].struttura===idStruttura){
+        for(let i = 0; i<this.rendiconto.length; i++){
+            if(this.rendiconto[i].struttura===idStruttura){
                 clearTimeout(this.array[i].timeout); //stop al timer
-                this.array.splice(i,1); //rimuove l'elemento di posto i
-                this.aggiungiTimeout(idStruttura); //avvio il timeout
+                this.rendiconto.splice(i,1); //rimuove l'elemento di posto i
+                this.aggiungiTimeoutRendiconto(idStruttura); //avvio il timeout
             }
         }
     }
 
     distruggiTimeoutPrenotazione(prenotazione){
-        for(let i = 0; i<this.array.length; i++){
-            if(this.array[i].prenotazione===prenotazione){
-                clearTimeout(this.array[i].timeout); //stop al timer
-                this.array.splice(i,1); //rimuove l'elemento di posto i
+        for(let i = 0; i<this.prenotazione.length; i++){
+            if(this.prenotazione[i].prenotazione===prenotazione){
+                clearTimeout(this.prenotazione[i].timeout); //stop al timer
+                this.prenotazione.splice(i,1); //rimuove l'elemento di posto i
             }
         }
     }
