@@ -57,7 +57,7 @@ function FormCondizioni(props) {
         }
     }
 
-    function abilita(){
+    function abilita(){ //alla selezione del radio button permette di abilitare i campi penaleCancellazione e preavviso disdetta
         if(abilitazione() === 0){
             props.correzione("penaleCancellazione", null);
             props.correzione("preavvisoDisdetta", null);

@@ -66,14 +66,21 @@ function SchermataStrutture(){
                         return(
                             <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key={indice}>
                                 <div className="row d-flex justify-content-center">
-                                    <div className="col-4 col-lg-2 my-auto text-center">
+                                    <div  className="col-4 col-lg-2 my-auto text-center">
+                                        Nome: <br></br>
                                         <strong>{struttura.nomeStruttura}</strong>
                                     </div>
                                     <div className="col-4 col-lg-2 my-auto text-center">
+                                        Via: <br></br>
                                         <strong>{struttura.via} {struttura.numeroCivico} </strong>
                                     </div>
                                     <div className="col-4 col-lg-2 my-auto text-center">
-                                        <strong>{struttura.tipologiaStruttura}</strong>
+                                        Tipologia: <br></br>
+                                        {struttura.tipologiaStruttura === "B&B" ?
+                                            <strong>B&B</strong>
+                                            :
+                                            <strong>Casa Vacanze</strong>
+                                        }
                                     </div>
                                     <div  className=" col-6 col-lg-2">
                                         <Link className="text-light" to={`/struttura/gestioneStruttura/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
