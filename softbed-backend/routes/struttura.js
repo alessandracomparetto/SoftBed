@@ -21,9 +21,7 @@ router.post('/', function (req, res) {
 });
 
 router.post('/gestioneStruttura/', function(req, res) {
-    console.log(req.body);
     let c=(req.headers.cookie).split("=")[1];
-    console.log(c);
      if(token.verificaToken(req.body.refGestore, c)) {
         strutturaModel.fetch(req.body, function (data) {
             res.send(data);

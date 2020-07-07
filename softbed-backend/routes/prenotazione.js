@@ -28,7 +28,6 @@ router.post('/listaPrenotazioni', function (req, res) {
 router.post('/rifiutaPrenotazione', function (req, res) {
     prenotazioneModel.rifiutaPrenotazione(req.body)
         .then(()=>{
-            console.log("chiamo il timer prenotazione1");
             timer.distruggiTimeoutPrenotazione(req.body.idPrenotazione);
              res.send();
         })
@@ -38,20 +37,17 @@ router.post('/rifiutaPrenotazione', function (req, res) {
     });
 
 router.post('/confermaPrenotazione', function (req, res) {
-    prenotazioneModel.confermaPrenotazione(req.body)
-        .then(()=>{
-            console.log("chiamo il timer prenotazione2")
-            timer.distruggiTimeoutPrenotazione(req.body.idPrenotazione);
-            res.send();
-        }).catch((err) => {
+    prenotazioneModel.confermaPrenotazione(req.body, function(data){
+        timer.distruggiTimeoutPrenotazione(req.body.idPrenotazione);
+        timer.aggiungiTimeoutDichiarazione(data);
+        res.send()
+    }).catch((err) => {
         res.sendStatus(500);
         });
     });
 
 router.post('/richiesta', function (req, res) {
     prenotazioneModel.create(req.body, function (dati) {
-        console.log("chiamo il timer prenotazione3");
-        console.log(timer);
         timer.aggiungiTimeoutPrenotazione(dati);
         res.send(dati);
         })
@@ -81,6 +77,8 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
 
 router.post('/setDichiarazione', function (req, res) {
     prenotazioneModel.setDichiarazione(req.body, function (data) {
+        console.log("distruggi",req.body.idPrenotazione);
+        timer.distruggiTimeoutDichiarazione(req.body.idPrenotazione);
         res.send(data);
     })
         .catch((err) => {

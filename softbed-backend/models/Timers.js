@@ -14,23 +14,24 @@ const transporter = nodemailer.createTransport({
         pass: softbed.pass
     }
 });
+const GIORNO = 86400000;
 
 class Timers{
 
     constructor() {
         this.rendiconto = [];
         this.prenotazione = [];
+        this.dichiarazione=[];
     }
 
     aggiungiTimeoutRendiconto(dati){
-        console.log("avvio il timer RENDICONTO")
         const mailGestore = {
             from: softbed.email,
             to: dati.emailGestore,
             subject: "Scadenza del rendiconto trimestrale",
             html:
                 `<p>
-                Ti ricordiamo che tra 15 giorni scadrà il termine ultimo per effettuare il rendiconto trimestrale alla Questura per la tua struttura ${dati.nomeStruttura}.
+                Ti ricordiamo che tra 15 giorni scadrà il termine ultimo per effettuare il rendiconto trimestrale all'ufficio del turismo per la tua struttura ${dati.nomeStruttura}.
                 Non dimenticarlo!
                 <br />
                 <br />
@@ -39,7 +40,6 @@ class Timers{
         };
 
         let idTimeout = this.setDaysTimeout(function() {
-            console.log("E' scaduto il timer RENDICONTO");
             transporter.sendMail(mailGestore, (err, res) => {
                 if (err) {console.log(err);}
             });
@@ -49,7 +49,6 @@ class Timers{
     }
 
     aggiungiTimeoutPrenotazione(dati){
-        console.log("avvio il timer PRENOTAZIONE")
         const mailOspite = {
             from: softbed.email,
             to: dati.emailOspite,
@@ -80,7 +79,6 @@ class Timers{
         };
 
         let idTimeout = this.setDaysTimeout(function() {
-            console.log("E' scaduto il timer PRENOTAZIONE");
             prenotazioneModel.rifiutaPrenotazione({"idPrenotazione" : dati.idPrenotazione}); //cancello la prenotazione
             //mando le email
             transporter.sendMail(mailOspite, (err, res) => {
@@ -93,6 +91,34 @@ class Timers{
         }, 2);
 
         this.prenotazione.push({"prenotazione":dati.idPrenotazione, "timeout":idTimeout});
+    }
+
+    aggiungiTimeoutDichiarazione(dati){
+        console.log("dati",dati);
+        const mailGestore = {
+            from: softbed.email,
+            to: dati.emailGestore,
+            subject: "Ricordati della dichiarazione ospiti",
+            html:
+                `<p>
+                Ti ricordiamo che tra 24h scadrà il termine ultimo per effettuare la dichiarazione degli ospiti alla Questura per la prenotazione ${dati.idPrenotazione} della tua struttura ${dati.nomeStruttura}.
+                Non dimenticarlo!
+                <br />
+                <br />
+                <em>Il Team di SoftBed</em>
+            </p>`
+        };
+        const giorni = Math.ceil((new Date(dati.checkIn).getTime() - new Date().getTime()) / GIORNO);
+        let scadenzaTimer=giorni+1;
+        console.log(giorni);
+        let idTimeout = this.setDaysTimeout(function() {
+            transporter.sendMail(mailGestore, (err, res) => {
+                if (err) {console.log(err);}
+            });
+        }, scadenzaTimer);
+        //ricordiamo al gestore 24 prima della scadenza che deve effettuare la dichiarazione degli ospiti alla Questura
+        this.dichiarazione.push({"prenotazione":dati.idStruttura, "timeout":idTimeout});
+
     }
 
     aggiornaTimeoutRendiconto(idStruttura){
@@ -113,6 +139,17 @@ class Timers{
             }
         }
     }
+
+    distruggiTimeoutDichiarazione(prenotazione){
+        for(let i = 0; i<this.dichiarazione.length; i++){
+            if(this.dichiarazione[i].prenotazione===prenotazione){
+                clearTimeout(this.dichiarazione[i].timeout); //stop al timer
+                this.dichiarazione.splice(i,1); //rimuove l'elemento di posto i
+            }
+        }
+    }
+
+
 
     setDaysTimeout(callback,days) {
         // 86400 secondi in un giorno
