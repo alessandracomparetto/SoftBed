@@ -24,7 +24,9 @@ import SchermataPersonaleUtente from "./Components/Gestione Account/SchermataPer
 import SchermataPrenotazioneStruttura from "./Components/Gestione Prenotazioni/Prenotazioni Struttura/SchermataPrenotazioneStruttura";
 import SchermataPagamento from "./Components/Gestione Prenotazioni/Schermata Pagamento/SchermataPagamento";
 import SchermataDatiOspiti from "./Components/Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/SchermataDatiOspiti";
-import Rendiconto from "./Components/Gestione Dichiarazioni/Gestione Rendiconto/Rendiconto";
+import RendicontoCompletato from "./Components/Gestione Dichiarazioni/Gestione Rendiconto/RendicontoCompletato";
+import DichiarazioneCompletata
+    from "./Components/Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/DichiarazioneCompletata";
 
 
 function App() {

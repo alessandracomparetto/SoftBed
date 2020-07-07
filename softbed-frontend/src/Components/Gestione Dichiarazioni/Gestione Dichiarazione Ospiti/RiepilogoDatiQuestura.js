@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import axios from "axios";
 import jsPDF from "jspdf";
-import mostraDialogErrore from "../../Actions/errore";
+import mostraDialogErrore from "../../../Actions/errore";
 import {useHistory} from "react-router-dom";
 import $ from "jquery";
 

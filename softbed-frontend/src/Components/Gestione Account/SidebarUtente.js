@@ -49,7 +49,7 @@ function SidebarUtente(){
                             </Link>
                         </button>
 
-                        { utente.gestore &&
+                        { utente.gestore === 1 &&
                             <Fragment>
                                 <div className="dropdown-divider"/>
 

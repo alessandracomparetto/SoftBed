@@ -185,7 +185,7 @@ module.exports= {
     },
 
     cerca: async function(datiRicerca, callback) {
-        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casavacanze);
+        let listaStrutture = new ListaStrutture(datiRicerca.destinazione, datiRicerca.arrivo, datiRicerca.partenza, datiRicerca.ospiti, datiRicerca.bedAndBreakfast, datiRicerca.casaVacanze);
         await listaStrutture.init();
         return callback(listaStrutture);
     },

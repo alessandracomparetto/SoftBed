@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "jquery": "^3.5.1",
+    "js-base64": "^2.6.2",
     "jspdf": "^1.5.3",
     "leaflet": "^1.6.0",
     "leaflet-geosearch": "^3.0.6",

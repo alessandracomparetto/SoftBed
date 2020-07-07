@@ -1,11 +1,10 @@
-
 import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import mostraDialogErrore from "../../../Actions/errore";
 import jsPDF from "jspdf";
 import reindirizza from "../../../Actions/reindirizzamento";
 import {useHistory, useLocation} from "react-router-dom";
-import {convertiData} from "../../Actions/gestioneDate";
+
 function Rendiconto(props){
     const [ospiti,setOspiti]= useState([]);
     const [gestore, setGestore]=useState([]);

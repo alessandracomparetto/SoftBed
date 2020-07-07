@@ -1,5 +1,5 @@
 import React from "react";
-import PaginaNonTrovata from "../Pagina Non Trovata/PaginaNonTrovata";
+import PaginaNonTrovata from "../../Componenti Parziali/Pagina Non Trovata/SchermataPaginaNonTrovata";
 import { useLocation, useHistory, useParams} from "react-router-dom";
 
 function DichiarazioneCompletata(){
