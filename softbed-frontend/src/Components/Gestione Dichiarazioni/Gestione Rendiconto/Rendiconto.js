@@ -2,21 +2,18 @@ import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import mostraDialogErrore from "../../../Actions/errore";
 import jsPDF from "jspdf";
-import {useHistory, useLocation} from "react-router-dom";
-import {convertiData} from "../../Actions/gestioneDate";
+import {useHistory} from "react-router-dom";
+
 function Rendiconto(props){
     const [ospiti,setOspiti]= useState([]);
     const [gestore, setGestore]=useState([]);
     const [datiStruttura, setDatiStruttura]=useState([]);
     const history = useHistory();
-    const location = useLocation();
 
     function calcDate(data1,data2) {
-        console.log(data1, data2);
         var diff = Math.floor(data1.getTime() - data2.getTime());
         var giorno = 1000 * 60 * 60 * 24;
         var giorni = Math.floor(diff/giorno);
-        console.log(giorni);
         return giorni;
     }
 
@@ -45,13 +42,13 @@ function Rendiconto(props){
         let tmp1= props.struttura.rendicontoEffettuato.split("T");
         let dataRendiconto = tmp1[0] + " " + tmp1[1].slice(0,8);
         let giorniTrascorsi = calcDate(new Date(), new Date(props.struttura.rendicontoEffettuato));
-        if(giorniTrascorsi < 88 || giorniTrascorsi>93)  {
+        if(giorniTrascorsi < 85 || giorniTrascorsi>95)  {
             document.getElementById("button").setAttribute("disabled", "disabled");
         }
 
 
         let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
-        console.log(info);
+    
 
         axios.post(`/struttura/rendiconto`, info)
             .then(res => {
