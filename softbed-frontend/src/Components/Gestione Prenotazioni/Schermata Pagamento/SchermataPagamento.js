@@ -186,7 +186,7 @@ function SchermataPagamento() {
 
                             { pagamentoInLoco && (
                                 <div className="radio">
-                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco" onClick={()=>(setStatoOnline(false))}/>Pagamento in loco</label>
+                                    <label><input className="mr-2" type="radio" name="modPagamento" value="inLoco" required onClick={()=>(setStatoOnline(false))}/>Pagamento in loco</label>
                                 </div>
                             )}
 

@@ -17,13 +17,14 @@ import SchermataPrenotazioniOspite from "./Components/Gestione Prenotazioni/Pren
 import SchermataPrincipale from "./Components/Homepage/SchermataPrincipale";
 import SchermataRisultati from "./Components/Ricerca/Schermata Risultati/SchermataRisultati";
 import SchermataStruttura from "./Components/Ricerca/Schermata Struttura/SchermataStruttura";
-import SchermataStrutture from "./Components/Gestione Account/SchermataStrutture";
+import SchermataStrutture from "./Components/Gestione Struttura/SchermataStrutture";
 import SchermataDatoPagamento from "./Components/Gestione Account/Modifica Account/Schermata Dato Pagamento/SchermataDatoPagamento";
 import FormDatiAggiuntivi from "./Components/Gestione Account/Modifica Account/FormDatiAggiuntivi";
 import SchermataPersonaleUtente from "./Components/Gestione Account/SchermataPersonaleUtente";
 import SchermataPrenotazioneStruttura from "./Components/Gestione Prenotazioni/Prenotazioni Struttura/SchermataPrenotazioneStruttura";
 import SchermataPagamento from "./Components/Gestione Prenotazioni/Schermata Pagamento/SchermataPagamento";
 import SchermataDatiOspiti from "./Components/Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/SchermataDatiOspiti";
+import Rendiconto from "./Components/Gestione Dichiarazioni/Gestione Rendiconto/Rendiconto";
 import RendicontoCompletato from "./Components/Gestione Dichiarazioni/Gestione Rendiconto/RendicontoCompletato";
 import DichiarazioneCompletata
     from "./Components/Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/DichiarazioneCompletata";

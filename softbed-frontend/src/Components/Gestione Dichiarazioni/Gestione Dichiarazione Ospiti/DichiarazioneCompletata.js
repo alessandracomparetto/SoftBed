@@ -1,12 +1,11 @@
 import React from "react";
-import PaginaNonTrovata from "../../Componenti Parziali/Pagina Non Trovata/SchermataPaginaNonTrovata";
+import PaginaNonTrovata from "../../Componenti Parziali/Pagina Non Trovata/PaginaNonTrovata";
 import { useLocation, useHistory, useParams} from "react-router-dom";
 
 function DichiarazioneCompletata(){
     const location = useLocation();
     const history = useHistory();
     const {indice} = useParams();
-    console.log(indice);
     if (location.state && location.state.provenienza) {
         setTimeout(function(){
             history.push(`/struttura/gestioneStruttura/${indice}/prenotazioni`);

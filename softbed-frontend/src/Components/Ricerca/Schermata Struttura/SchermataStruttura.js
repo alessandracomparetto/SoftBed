@@ -226,16 +226,31 @@ function SchermataStruttura() {
         const camereAiuto = $("#camereAiuto");
 
         // Controllo che il numero di camere sia positivo per ciascuna tipologia e ne calcolo la somma
+        // Controllo > 0
         struttura.camere.map((camera) => {
-            const elemento = $(`#${camera.tipologiaCamera}`)
+            const elemento = $(`#${camera.tipologiaCamera}`);
+            const elementoAiuto = $(`#${camera.tipologiaCamera}Aiuto`);
 
             if (elemento.val() < 0) {
                 elemento.val(0);
+                elemento.removeClass("border-border-danger");
+                elementoAiuto.addClass("d-none");
+            }
+
+            else if (elemento.val() > camera.numero) {
+                elemento.addClass("border border-danger");
+                elementoAiuto.removeClass("d-none");
+            }
+
+            else {
+                elemento.removeClass("border border-danger");
+                elementoAiuto.addClass("d-none");
             }
 
             somma += elemento.val();
         })
 
+        // Controllo somma
         if (somma < 1) {
             camereAiuto.removeClass("d-none");
             struttura.camere.map((camera) => {
@@ -429,7 +444,7 @@ function SchermataStruttura() {
             tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.bambini;
         }
 
-        setPrezzo(Math.max((Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100), 0));
+        setPrezzo(Math.max((Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100), 0) || 0);
     }
 
     useEffect(() => {
@@ -544,16 +559,22 @@ function SchermataStruttura() {
 
                                 { struttura.camere.map((camera) => {
                                     return (
-                                        <div key={camera.tipologiaCamera} className="form-group row">
-                                            <label className="col-sm-4 col-form-label" htmlFor={camera.tipologiaCamera}>
-                                                {camera.tipologiaCamera.charAt(0).toUpperCase() + camera.tipologiaCamera.slice(1)}
-                                            </label>
-                                            <div className="col-sm-3">
-                                                <input name={camera.tipologiaCamera} type="number" className="form-control" id={camera.tipologiaCamera}
-                                                       aria-describedby={`Numero camere di tipo ${camera.tipologiaCamera}`} min={0} max={camera.numero}
-                                                       defaultValue={0} onChange={controlloCamere}/>
+                                        <Fragment>
+                                            <div key={camera.tipologiaCamera} className="form-group row">
+                                                <label className="col-sm-4 col-form-label" htmlFor={camera.tipologiaCamera}>
+                                                    {camera.tipologiaCamera.charAt(0).toUpperCase() + camera.tipologiaCamera.slice(1)}
+                                                </label>
+                                                <div className="col-sm-3">
+                                                    <input name={camera.tipologiaCamera} type="number" className="form-control" id={camera.tipologiaCamera}
+                                                           aria-describedby={`Numero camere di tipo ${camera.tipologiaCamera}`} min={0} max={camera.numero}
+                                                           defaultValue={0} onChange={controlloCamere}/>
+                                                </div>
                                             </div>
-                                        </div>
+
+                                            <small id={`${camera.tipologiaCamera}Aiuto`} className="form-text text-warning d-none">
+                                                Il numero massimo di camere {camera.tipologiaCamera.toLowerCase().slice(0, camera.tipologiaCamera.length - 1)}e è {camera.numero}
+                                            </small>
+                                        </Fragment>
                                     )
                                 })}
 

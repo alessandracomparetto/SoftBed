@@ -1,44 +1,16 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useEffect, useState, Fragment} from 'react';
 import axios from "axios";
 import jsPDF from "jspdf";
 import mostraDialogErrore from "../../../Actions/errore";
 import {useHistory} from "react-router-dom";
-import $ from "jquery";
-
 function RiepilogoDatiQuestura(props) {
 
     const history = useHistory();
     const [gestore, setGestore] = useState([]);
-    const [percorsi, setPercorsi] = useState([]);
     const [datiStruttura, setStruttura] = useState([]);
-    var Base64 = require('js-base64').Base64;
+
 
     useEffect(() => {
-        let struttura = (JSON.parse(sessionStorage.getItem("strutture")));
-        console.log(props.listaOspiti);
-        axios
-            .post("/utente/fetch", JSON.parse(sessionStorage.getItem("utente")))
-            .then(res => {
-                res.data.dataNascita = res.data.dataNascita.split("T")[0];
-                setGestore(res.data);
-            })
-            .catch(err => console.log(err));
-
-        axios
-
-            .post("/struttura/fetchStruttura", {"idStruttura": struttura[0].idStruttura})
-            .then(res => {
-                console.log(res.data);
-                setStruttura(res.data[0]);
-            })
-            .catch(err => console.log(err));
-
-    },[props.listaOspiti]);
-
-
-
-    function invia() {
         let tmp = [];
         for (let i = 0; i < props.listaOspiti.length; i++) {
             if (props.listaOspiti[i].idOspite === undefined) {
@@ -50,9 +22,28 @@ function RiepilogoDatiQuestura(props) {
         axios.post(`/ospite/aggiungi`, info).then(res => {
         }).catch(err => console.log(err));
 
+
+        let struttura = (JSON.parse(sessionStorage.getItem("strutture")));
+        axios
+            .post("/utente/fetch", JSON.parse(sessionStorage.getItem("utente")))
+            .then(res => {
+                res.data.dataNascita = res.data.dataNascita.split("T")[0];
+                setGestore(res.data);
+            })
+            .catch(err => console.log(err));
+
+        axios
+            .post("/struttura/fetchStruttura", {"idStruttura": struttura[0].idStruttura})
+            .then(res => {
+                setStruttura(res.data[0]);
+            })
+            .catch(err => console.log(err));
+    },[props.listaOspiti]);
+
+    function invia() {
         let doc = new jsPDF();
         let y = 2;
-        let countOspiti = 0;
+        let countOspiti = 1;
 
         doc.setFontSize(18);
         doc.setFontType("bold");
@@ -138,7 +129,7 @@ function RiepilogoDatiQuestura(props) {
             doc.setFontType("normal");
             doc.text(80, 10 * y++, '');
 
-            if (countOspiti % 2 === 0) {
+            if (countOspiti % 3 === 0) {
                 y = 2;
                 doc.addPage();
             }
@@ -146,29 +137,20 @@ function RiepilogoDatiQuestura(props) {
         })
 
         doc.setFontType("bold");
-        doc.text(25, 10 * y, 'Documenti di riconoscimento: ');
-
-        percorsi.map((percorsi, indice) => {
-            console.log(percorsi.percorso);
-
-            fetch(`/uploads/documenti/${percorsi.percorso}`).then(r => r.blob())
-                .then(img => {
-                    let imgData = 'data:image/jpeg;base64,' + Base64.encode(`${img}`)
-                    doc.addImage(imgData, 'JPEG', 15, 60, 170, 170);
-                })
-        })
-
+        doc.text(25, 10 * y++, 'Si trasmettono in allegato i documenti di riconoscimento.');
 
         const informazioni = {
-            allegato: doc.output('datauristring')
+            allegato: doc.output('datauristring'),
+            refPrenotazione: props.refPrenotazione
         }
-        axios.post('/mail/invioDichiarazione', informazioni).then(()=>{  axios.post("/prenotazione/setDichiarazione", {"refPrenotazione": props.refPrenotazione}).catch(err => console.log(err));
+
+       axios.post('/mail/invioDichiarazione', informazioni).then(()=>{
+            axios.post("/prenotazione/setDichiarazione", {"refPrenotazione": props.refPrenotazione}).catch(err => console.log(err));
         }).catch((err) => {
             mostraDialogErrore(err.message);
         });
 
         doc.save();
-
 
         history.push({
             pathname: `/dichiarazione-completata/${props.indice}`,
@@ -176,11 +158,12 @@ function RiepilogoDatiQuestura(props) {
         });
     }
 
-
     return(
-        <div className="d-flex justify-content-end" >
-            <button id="button" type="button" className="btn btn-danger" onClick={invia}>Procedi alla dichiarazione</button>
-        </div>
+        <Fragment>
+            <div className="d-flex justify-content-end" >
+                <button id="button" type="button" className="btn btn-danger" onClick={invia}>Procedi alla dichiarazione</button>
+            </div>
+        </Fragment>
     )
 }
 

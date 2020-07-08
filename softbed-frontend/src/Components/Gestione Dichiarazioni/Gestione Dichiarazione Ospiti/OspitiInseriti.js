@@ -49,7 +49,7 @@ function OspitiInseriti(props){
 
                     <div className="col-5 col-md-3 mt-2"><strong>Via:</strong>
                         <br/>
-                        <span>{props.via}, N. {props.numero}</span>
+                        <span>{props.via}, N. {props.numeroCivico}</span>
                     </div>
 
 

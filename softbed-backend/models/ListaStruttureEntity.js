@@ -55,8 +55,6 @@ class ListaStruttureEntity {
 
     filtra(servizi, ambienti, prezzo, pagamento) {
         let listaFiltrata;
-        console.log("Pagamento:", pagamento);
-        console.log("Lista:", this.lista);
 
         listaFiltrata = this.lista.reduce(function(res, struttura) {
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import CalcoloGuadagno from "../Gestione Struttura/CalcoloGuadagno"
+import CalcoloGuadagno from "./CalcoloGuadagno"
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
 import {useHistory, useLocation} from "react-router-dom";
@@ -88,9 +88,6 @@ function SchermataStrutture(){
                                     <div  className=" col-6 col-lg-2">
                                         <Rendiconto struttura={struttura}/>
                                     </div>
-                                </div>
-                                <div className="collapse">
-                                    <CalcoloGuadagno/>
                                 </div>
                             </li>
                         )

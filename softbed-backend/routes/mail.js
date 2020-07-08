@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const path = require('path');
 const router = express.Router();
 router.use(bodyParser.json());
-
+let ospiteModel = require('../models/Ospite');
 const softbed = {
     email: 'softengineers44@gmail.com',
     pass: 'softAdmin',
@@ -18,33 +19,50 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
-router.post('/invioDichiarazione', (req, res) => {
-
-    let mailOptions = {
-        from: req.body.email,
-        to: "c.sofy1998@libero.it", //SIMULAZIONE EMAIL DELL'UFFICIO DELLA QUESTURA
-        subject: "Dichiarazione ospiti questura",
-        text: "Si inoltra in allegato quanto indicato in oggetto.",
-        attachments: [
-            {
-                filename: 'dichiarazioneOspiti.pdf',
-                path: req.body.allegato,
-                contentType: 'application/pdf',
-                encoding: 'base64'
-            }
-        ]
-    };
-
-    transporter.sendMail(mailOptions, (error, response) => {
-        if (error) {
-            res.send(error);
-
-        }else{
-            res.send('Success');
+router.post('/invioDichiarazione', function (req, res) {
+    ospiteModel.invioDichiarazione(req.body, function (data) {
+        console.log("DOCUMENTI:")
+        console.log(data);
+        let documenti=[];
+        for(let i = 0; i <data.length; i++){
+            documenti.push({
+                filename: `${data[i].percorso}`,
+                    path: path.join(`${__dirname}`, `../public/uploads/documenti/${data[i].percorso}`),
+                cid: `${data[i].idDocumento}`
+            });
         }
+        documenti.push({
+            filename: 'DichiarazioneQuestura.pdf',
+            path: req.body.allegato,
+            contentType: 'application/pdf',
+            encoding: 'base64'
+        });
+
+
+        let mailOptions = {
+            from: softbed.email,
+            to: "c.sofy1998@libero.it", //SIMULAZIONE EMAIL DELLA QUESTURA
+            subject: "Dichiarazione ospiti Questura",
+            text: "Si inoltra in allegato quanto indicato in oggetto.",
+            attachments: documenti
+        };
+
+
+        transporter.sendMail(mailOptions, (error, response) => {
+            if (error) {
+                res.send(error);
+
+            }else{
+                res.send('Success');
+            }
+        });
+
+
+    }).catch((err) => {
+        res.sendStatus(500);
     });
 });
+
 
 router.post('/invioRendiconto', (req, res) => {
 
