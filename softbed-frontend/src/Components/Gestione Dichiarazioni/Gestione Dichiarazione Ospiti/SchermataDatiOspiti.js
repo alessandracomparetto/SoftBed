@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from "react";
 import FormDatiOspite from "./FormDatiOspite";
 import OspitiInseriti from "./OspitiInseriti";
-import jsPDF from 'jspdf';
 import axios from "axios";
 import {useParams, useHistory, useLocation} from "react-router-dom";
-import reindirizza from "../../../Actions/reindirizzamento";
-import $ from "jquery";
 import RiepilogoDatiQuestura from "./RiepilogoDatiQuestura";
-import RiepilogoPrenotazionePDF from "../../Gestione Prenotazioni/Schermata Pagamento/RiepilogoPrenotazionePDF";
-import mostraDialogErrore from "../../../Actions/errore";
+
 function SchermataDatiOspiti(props){
     const[listaOspiti, setOspiti] = useState([]);
     const [struttura, setStruttura] = useState([]);
@@ -27,12 +23,9 @@ function SchermataDatiOspiti(props){
             window.location.href="/gestioneStrutture/";
         }
         let data = listaStrutture[indice];
-        console.log(data);
         setStruttura(data);
 
         axios.post(`/ospite/fetch`,[refPrenotazione]).then(res => {
-            console.log("DATI OSPITI RECUPERATI=======");
-            console.log(res.data);
             setOspiti(res.data);
         })
             .catch(err => console.log(err));
@@ -44,7 +37,6 @@ function SchermataDatiOspiti(props){
         let tmp = [...listaOspiti];
         tmp.splice(indice, 1);
         setOspiti(tmp);
-        console.log(tmp);
     }
 
     return(
@@ -58,7 +50,7 @@ function SchermataDatiOspiti(props){
                                 return <OspitiInseriti key={indice} indiceElemento={indice} idOspite={ospiti.idOspite} nome={ospiti.nome} cognome={ospiti.cognome}
                                                       codiceFiscale={ospiti.codiceFiscale} dataNascita={ospiti.dataNascita.split("T")[0]}
                                                       comune={ospiti.comuneNascita} provincia={ospiti.provinciaNascita} regione={ospiti.regione}
-                                                      via={ospiti.via} numero={ospiti.numeroCivico} cap={ospiti.cap}
+                                                      via={ospiti.via} numero={ospiti.numeroCivico} cap={ospiti.cap} numeroCivico = {ospiti.numeroCivico}
                                                        comuneResidenza={ospiti.comuneResidenza} provinciaResidenza={ospiti.provinciaResidenza}
                                                        regioneResidenza={ospiti.nomeRegioneResidenza} tassa={ospiti.tassa} dataArrivo={ospiti.dataArrivo.split("T")[0]}
                                                        permanenza={ospiti.permanenza} refPrenotazione={ospiti.refPrenotazione} eliminaOspite={eliminaOspite}/>

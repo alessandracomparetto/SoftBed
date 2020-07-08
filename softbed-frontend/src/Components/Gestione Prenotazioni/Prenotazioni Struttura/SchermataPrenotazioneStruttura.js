@@ -48,12 +48,11 @@ function SchermataPrenotazioneStruttura(){
             });
     }, [flag]);
 
-
     return(
         <div className="d-flex justify-content-center">
             <div className="row mx-auto mt-3 maxw-xl">
                 <div className="col-12 col-md-3">
-                    <button type="button" className="btn btn-warning" onClick={()=> window.history.back()}>
+                    <button type="button" className="btn btn-warning" onClick={()=>{history.push(`/struttura/gestioneStruttura/${indice}`)}}>
                         <i className="fa fa-arrow-left" aria-hidden="true"></i>
                         Torna indietro</button>
                 </div>
