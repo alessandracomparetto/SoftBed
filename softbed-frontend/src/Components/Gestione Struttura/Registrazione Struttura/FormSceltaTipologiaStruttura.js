@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 function FormSceltaTipologiaStruttura(props) {
 
@@ -47,7 +48,6 @@ function FormSceltaTipologiaStruttura(props) {
             </div>
             <div className="d-flex flex-row-reverse justify-content-around">
                 <button id="ok" type="submit" className="btn btn-primary mt-3 w-200px" onClick={vaiAvanti}>Continua</button>
-                <button id="indietro" className="btn btn-secondary mt-3 w-200px disabled">Indietro</button>
             </div>
     </form>
     )
