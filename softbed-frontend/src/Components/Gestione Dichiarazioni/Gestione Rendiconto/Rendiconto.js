@@ -335,7 +335,7 @@ function Rendiconto(props){
         let struttura=[{"idStruttura": props.struttura.idStruttura,"nomeStruttura": props.struttura.nomeStruttura,"tipologiaStruttura":props.struttura.tipologiaStruttura,
             "refGestore":gestore.idUtente,"refIndirizzo": props.struttura.refIndirizzo,"rendicontoEffettuato": new Date().toISOString(),"idIndirizzo":props.struttura.refIndirizzo,
             "via":props.struttura.via,"numeroCivico":props.struttura.numeroCivico,"cap":props.struttura.cap,"refComune":props.struttura.refComune}]
-        axios.post("/struttura/setDataRendiconto", info).then(()=>{ window.sessionStorage.setItem("strutture", JSON.stringify(struttura));}).catch(err => console.log(err));
+        axios.post("/struttura/setDataRendiconto", info).catch(err => console.log(err));
 
         history.push({
             pathname: "/rendiconto-completato",
