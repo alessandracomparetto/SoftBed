@@ -82,9 +82,6 @@ function SchermataStrutture(){
                                         <Rendiconto struttura={struttura}/>
                                     </div>
                                 </div>
-                                <div className="collapse">
-                                    <CalcoloGuadagno/>
-                                </div>
                             </li>
                         )
                     })
