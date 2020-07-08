@@ -2,15 +2,20 @@ import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import mostraDialogErrore from "../../../Actions/errore";
 import jsPDF from "jspdf";
-import reindirizza from "../../../Actions/reindirizzamento";
-import {useHistory, useLocation} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 function Rendiconto(props){
     const [ospiti,setOspiti]= useState([]);
     const [gestore, setGestore]=useState([]);
     const [datiStruttura, setDatiStruttura]=useState([]);
     const history = useHistory();
-    const location = useLocation();
+
+    function calcDate(data1,data2) {
+        var diff = Math.floor(data1.getTime() - data2.getTime());
+        var giorno = 1000 * 60 * 60 * 24;
+        var giorni = Math.floor(diff/giorno);
+        return giorni;
+    }
 
     useEffect(() => {
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
@@ -36,25 +41,18 @@ function Rendiconto(props){
 
         let tmp1= props.struttura.rendicontoEffettuato.split("T");
         let dataRendiconto = tmp1[0] + " " + tmp1[1].slice(0,8);
+        let giorniTrascorsi = calcDate(new Date(), new Date(props.struttura.rendicontoEffettuato));
+        if(giorniTrascorsi < 85 || giorniTrascorsi>95)  {
+            document.getElementById("button").setAttribute("disabled", "disabled");
+        }
+
 
         let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
-        console.log(info);
+    
 
         axios.post(`/struttura/rendiconto`, info)
             .then(res => {
-                console.log(res.data);
-                if(res.data===[]) {
-                    reindirizza(history, {
-                        pathname: '/gestioneStruttura',
-                        state: {
-                            provenienza: 'Rendiconto',
-                            urlProvenienza: location.pathname
-                        }
-                    }, 3000, "Sembra che non ci siano prenotazioni per questo trimestre");
-                }
-                else{
                     setOspiti(res.data);
-                }
             }).catch((err)=>console.log(err));
 
     }, []);
@@ -64,12 +62,13 @@ function Rendiconto(props){
     }
 
     const inviaRendiconto = () => {
-        console.log(ospiti);
+
         let doc = new jsPDF();
-            let countOspite = 0; // ogni due ospiti cambio pagina
+            let countOspite = 0; // ogni tre ospiti cambio pagina
             let countAdulti = 0;
             let countBambini = 0;
             let countPage = 2; //tiene il conto delle pagine
+            let count = 0; // controlla se per ogni categoria ci sono ospiti
 
             let y = 2;
 
@@ -101,12 +100,14 @@ function Rendiconto(props){
             doc.text(80, 10 * y++, '');
 
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA ADULTI`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA ADULTI:`);
+
 
             ospiti.map((ospitiPrenotazione, indice) => {
                 for(let i = 0; i < ospitiPrenotazione.ospiti.length; i++) {
                     if (ospitiPrenotazione.ospiti[i].tassa === "Adulto") {
+                        doc.text(80, 10 * y++, '');
+                        count++;
                         countAdulti++;
                         countOspite++;
                         doc.setFontType("bold");
@@ -157,7 +158,6 @@ function Rendiconto(props){
 
                         doc.setFontType("normal");
                         doc.text(80, 10 * y++, `${ospitiPrenotazione.ospiti[i].permanenza} giorni`);
-                        doc.text(80, 10 * y++, '');
 
                         if (countOspite % 2 === 0) {
                             y = 2;
@@ -166,23 +166,26 @@ function Rendiconto(props){
                         }
                     }
                 }
+                if(count===0){
+                    doc.text(125, 10 * y++, '0');
+                }
             })
-
+            count =0;
             doc.setFontType("bold");
             doc.text(25, 10 * y, `Totale tasse di soggiorno adulti: ${calcolaTassa(countAdulti, datiStruttura.prezzoAdulti)} €`);
             doc.text(80, 10 * y++, '');
 
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA BAMBINI`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA BAMBINI:`);
 
 
         ospiti.map((ospitiPrenotazione, indice) => {
             for(let i = 0; i < ospitiPrenotazione.ospiti.length; i++) {
                 if (ospitiPrenotazione.ospiti[i].tassa === "Bambino") {
+                    doc.text(80, 10 * y++, '');
                         countBambini++;
                         countOspite++;
-
+                        count++;
                         doc.setFontType("bold");
                         doc.setFontSize(14);
                         doc.text(25, 10 * y, 'Nome: ');
@@ -231,7 +234,6 @@ function Rendiconto(props){
 
                         doc.setFontType("normal");
                         doc.text(80, 10 * y++, `${ospitiPrenotazione.ospiti[i].permanenza} giorni`);
-                        doc.text(80, 10 * y++, '');
 
                         if (countOspite % 2 === 0) {
                             y = 2;
@@ -240,26 +242,28 @@ function Rendiconto(props){
                     }
 
                 }
+
+                if(count===0){
+                    doc.text(130, 10 * y++, '0');
+                }
             })
 
+            count = 0;
             doc.setFontType("bold");
             doc.text(25, 10 * y, `Totale tasse di soggiorno bambini: ${calcolaTassa(countBambini, datiStruttura.prezzoBambini)} €`);
             doc.text(80, 10 * y++, '');
 
-            doc.text(80, 10 * y++, '');
 
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `SOGGETTI NON PAGANTI L'IMPOSTA`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y, `SOGGETTI NON PAGANTI L'IMPOSTA:`);
 
 
         ospiti.map((ospitiPrenotazione, indice) => {
             for(let i = 0; i < ospitiPrenotazione.ospiti.length; i++) {
-                console.log(ospitiPrenotazione.ospiti[i].tassa)
                 if (ospitiPrenotazione.ospiti[i].tassa === "Esente") {
+                    doc.text(80, 10 * y++, '');
+                        count++;
                         countOspite++;
-                        console.log("SOGGETTI NON PAGANTI L'IMPOSTA")
-                        console.log(ospitiPrenotazione.ospiti[i]);
                         doc.setFontType("bold");
                         doc.setFontSize(14);
                         doc.text(25, 10 * y, 'Nome: ');
@@ -315,6 +319,9 @@ function Rendiconto(props){
                         }
 
                     }
+                }
+                if(count===0){
+                    doc.text(125, 10 * y++, '0');
                 }
             })
 

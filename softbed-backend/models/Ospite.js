@@ -14,10 +14,10 @@ module.exports={
             await withTransaction(db, async () => {
                 for (let i = 0; i < datiOspite.length; i++) {
                     let sql = ('INSERT INTO `indirizzo` (via, numeroCivico, cap, refComune) VALUES ?');
-                    let datiQuery = [datiOspite[i].via, datiOspite[i].numero, datiOspite[i].cap, datiOspite[i].refComuneResidenza];
+                    let datiQuery = [datiOspite[i].via, datiOspite[i].numeroCivico, datiOspite[i].cap, datiOspite[i].refComuneResidenza];
 
                     results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN INDIRIZZO
-                        throw createError(500);
+                        throw (err);
                         });
 
                     refIndirizzo = results.insertId;
@@ -39,7 +39,7 @@ module.exports={
                                 throw err;
                             });
                         }
-                        console.log("Inseriti documenti");
+
                     }//end for
                 }
                 return callback(results);
@@ -53,13 +53,12 @@ module.exports={
 
     fetch: async function (refPrenotazione, callback) {
         const db = await makeDb(config);
-        let infoOspite;
-        console.log(refPrenotazione);
+        let listaOspiti;
 
         try {
             await withTransaction(db, async () => {
                 //recupero le informazioni
-                infoOspite = await db.query('SELECT O.idOspite, O.nome, O.cognome, O.codiceFiscale, O.dataNascita,\
+                listaOspiti = await db.query('SELECT O.idOspite, O.nome, O.cognome, O.codiceFiscale, O.dataNascita,\
                 O.refComuneNascita, O.tassa, O.dataArrivo, O.permanenza, O.refPrenotazione, I.via, I.numeroCivico, I.cap, CN.nomeComune as comuneNascita, PN.nomeProvincia AS provinciaNascita,\
                 RN.nomeRegione AS regioneNascita, CR.nomeComune as comuneResidenza, CR.idComune AS refComuneResidenza, PR.nomeProvincia AS provinciaResidenza, RR.nomeRegione AS regioneResidenza\
                  FROM `ospite` AS O JOIN `indirizzo` AS I ,`comuni` as CR , `province` as PR, `regioni` as RR, `comuni` AS CN , `province` AS PN, `regioni` AS RN\
@@ -67,10 +66,22 @@ module.exports={
                     AND `CR`.refProvincia = `PR`.idProvincia AND `PR`.refRegione = `RR`.idRegione AND O.refComuneNascita = `CN`.idComune\
                     AND `CN`.refProvincia = `PN`.idProvincia AND `PN`.refRegione = `RN`.idRegione' ,[refPrenotazione])
                     .catch(err => {
-                        throw createError(500);
+                        throw err;
                     });
-                    console.log(infoOspite);
-                    return callback(infoOspite);
+
+                return callback(listaOspiti);
+            });
+        } catch (err) {
+            throw err;
+        }
+    },
+
+    invioDichiarazione: async function (dati, callback) {
+        const db = await makeDb(config);
+        try {
+            await withTransaction(db, async () => {
+                let documenti = await db.query('SELECT documenti.percorso, documenti.idDocumento FROM documenti WHERE  documenti.refPrenotazione= ?' ,[[dati.refPrenotazione]]).catch(err=>{throw err});
+                return callback(documenti);
             });
         } catch (err) {
             throw err;

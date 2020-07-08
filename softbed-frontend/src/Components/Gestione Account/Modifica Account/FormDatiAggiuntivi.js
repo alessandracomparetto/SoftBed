@@ -60,26 +60,7 @@ function FormDatiAggiuntivi(){
     useEffect(()=>{
         document.getElementById("regioneResidenza").value=utente.regioneResidenza;
         document.getElementById("regioneNascita").value=utente.regioneNascita;
-        /*recuperaProvinciaComune("R");
-        recuperaProvinciaComune("N");*/
     },[utente]);
-
-    function recuperaProcinciaComune(x) {
-        let r = ((x === "N") ? utente.regioneNascita : utente.regioneResidenza);
-        let p = ((x === "N") ? utente.provinciaNascita : utente.provinciaResidenza);
-
-        for (let regione of data.regioni) {
-            if (regione.nome == r) {
-                province = regione.province;
-                break;
-            }
-        }
-        for (let provincia of province) {
-            let opt = document.createElement('option');
-            opt.value = provincia.code;
-            opt.innerText = provincia.nome;
-        }
-    }
 
     function handleGestore(event){ //Affinchè un utente sia un gestore tutti i campi del form devono essere compilati
         if(event.target.checked) {
@@ -121,52 +102,6 @@ function FormDatiAggiuntivi(){
         }
     }
     let province = null;
-   /* function regioniHandler(parameter){
-        // rimozione dei precedenti elementi del menu provinca e comune
-        if(parameter="N"){
-            document.getElementById("provinciaNascita").innerHTML='<option value="" selected></option>';
-            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
-            if(!($('#regioneNascita').val()) ){
-                for (let regione of data.regioni) {
-                    if (regione.nome == utente.regioneNascita) {
-                        province = regione.province;
-                        break;
-                    }
-                }
-                for (let provincia of province) {
-                    if(provincia.nome === utente.provinciaNascita){
-                        $('#provinciaNascita').val = utente.provinciaNascita;
-                        break;
-                    }
-
-                }
-            }
-        }
-        else{
-            document.getElementById("provinciaResidenza").innerHTML='<option value="" selected></option>';
-            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>'
-            if($('#regioneResidenza').val() != '') {
-                for (let regione of data.regioni) {
-                    if (regione.nome == utente.regioneResidenza) {
-                        province = regione.province;
-                        break;
-                    }
-                }
-                for (let provincia of province) {
-                    let opt = document.createElement('option');
-                    opt.value = provincia.code;
-                    opt.innerText = provincia.nome;
-                    if (utente.provinciaResidenza) {
-                        $('#provinciaResidenza').val = utente.provinciaResidenza;
-                    }
-
-                    document.getElementById("provinciaResidenza").appendChild(opt);
-
-                }
-            }
-        }
-
-    }*/
 
     function provinceEventHandler(event){
         // rimozione dei precedenti elementi del menu Comune

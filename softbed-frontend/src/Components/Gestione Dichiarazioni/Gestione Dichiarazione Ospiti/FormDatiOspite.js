@@ -37,7 +37,7 @@ function FormDatiOspite(props){
             let provinciaResidenza = document.getElementById("provinciaResidenza");
             let comuneResidenza = document.getElementById("comuneResidenza");
             let via = document.getElementById("via").value;
-            let numero = document.getElementById("numero").value;
+            let numeroCivico = document.getElementById("numero").value;
             let cap = document.getElementById("cap").value;
             let dataArrivo = document.getElementById("dataArrivo").value;
             let permanenza = document.getElementById("permanenza").value;
@@ -46,7 +46,7 @@ function FormDatiOspite(props){
             let dato ={nome:nome, cognome:cognome, codiceFiscale:codiceFiscale, dataNascita:dataNascita, regioneNascita:regioneNascita,
             provinciaNascita:provinciaNascita.options[provinciaNascita.selectedIndex].text, comuneNascita:comuneNascita.options[comuneNascita.selectedIndex].text,
             regioneResidenza: regioneResidenza, provinciaResidenza:provinciaResidenza.options[provinciaResidenza.selectedIndex].text,
-            comuneResidenza: comuneResidenza.options[comuneResidenza.selectedIndex].text, via:via, numero:numero, cap:cap, dataArrivo:dataArrivo,
+            comuneResidenza: comuneResidenza.options[comuneResidenza.selectedIndex].text, via:via, numeroCivico:numeroCivico, cap:cap, dataArrivo:dataArrivo,
             permanenza:permanenza, tassa:tassa.options[tassa.selectedIndex].text, refComuneResidenza: comuneResidenza.value,
             refComuneNascita: comuneNascita.value, documenti: documenti};
 
@@ -81,6 +81,7 @@ function FormDatiOspite(props){
             setMostraContenuto(false);
         }
     }
+
 
 
     function handleFoto(fileName) {
