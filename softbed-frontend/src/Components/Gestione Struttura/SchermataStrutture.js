@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
-import CalcoloGuadagno from "./CalcoloGuadagno"
 import {Link, Route} from "react-router-dom";
 import axios from "axios";
 import {useHistory, useLocation} from "react-router-dom";
 import reindirizza from "../../Actions/reindirizzamento";
 import mostraDialogErrore from "../../Actions/errore";
-import RiepilogoDatiQuestura from "../Gestione Dichiarazioni/Gestione Dichiarazione Ospiti/RiepilogoDatiQuestura";
 import Rendiconto from "../Gestione Dichiarazioni/Gestione Rendiconto/Rendiconto";
 
 function SchermataStrutture(){
