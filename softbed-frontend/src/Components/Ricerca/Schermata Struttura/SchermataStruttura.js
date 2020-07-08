@@ -444,7 +444,7 @@ function SchermataStruttura() {
             tasseBambini = (bambini - bambiniEsenti) * struttura.tasse.bambini;
         }
 
-        setPrezzo(Math.max((Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100), 0));
+        setPrezzo(Math.max((Math.round((prezzoBase + tasseAdulti + tasseBambini) * 100) / 100), 0) || 0);
     }
 
     useEffect(() => {

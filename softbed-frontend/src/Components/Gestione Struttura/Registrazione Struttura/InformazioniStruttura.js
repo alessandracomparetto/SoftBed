@@ -94,7 +94,7 @@ function InformazioniStruttura (props){
                         {/* Per Casa Vacanze */}
                         { props.struttura.tipologiaStruttura==="cv" && (
                             <Fragment>
-                                <InformazioneLineare nome="Numero diletti matrimoniali" valore={`${props.struttura.nLettiMatrimoniali}`}/>
+                                <InformazioneLineare nome="Numero di letti matrimoniali" valore={`${props.struttura.nLettiMatrimoniali}`}/>
                                 <InformazioneLineare nome="Numero di letti singoli" valore={`${props.struttura.nLettiSingoli}`}/>
                                 <InformazioneLineare nome="Numero di bagni" valore={`${props.struttura.nBagni}`}/>
                                 <InformazioneLineare nome="Prezzo a notte" valore={`${props.struttura.prezzoNotte} €`} />
