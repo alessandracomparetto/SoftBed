@@ -14,10 +14,10 @@ function SchermataPagamento() {
     const history = useHistory();
 
     const [datiRichiesta, setDatiRichiesta] = useState({});  // lo stato che ha i dati della richiesta di prenotazione
-    const [pagamentoOnline, setPagamentoOnline] = useState(false);
-    const [pagamentoInLoco, setPagamentoInLoco] = useState(false);
+    const [pagamentoOnline, setPagamentoOnline] = useState(false); // disponibile metodo di pagamento online
+    const [pagamentoInLoco, setPagamentoInLoco] = useState(false); // disponibile metodo di pagamento in loco
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
-    const [online, setStatoOnline] = useState(false);
+    const [online, setStatoOnline] = useState(false); // selezionato metodo di pagamento online
 
 
     useEffect( () => {
@@ -51,7 +51,7 @@ function SchermataPagamento() {
 
 
         // Nel caso in cui sia stato scelto pagamento online, ma non sia stato selezionato un metodo non proseguo
-        if (pagamentoOnline && $('input[name="pagOnline"]:checked').length === 0) {
+        if (online && $('input[name="pagOnline"]:checked').length === 0) {
             alert("Devi selezionare un metodo di pagamento per la tipologia online.\nSe non hai ancora inserito un metodo di pagamento puoi farlo cliccando sul pulsante \"Aggiungi un nuovo metodo di pagamento\".");
             return;
         }
@@ -61,7 +61,7 @@ function SchermataPagamento() {
 
                 let dati = datiRichiesta;
 
-                if (pagamentoOnline) {
+                if (online) {
                     dati.metodoPagamento = $('input[name="pagOnline"]:checked')[0].value
                 }
 
