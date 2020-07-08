@@ -93,7 +93,6 @@ function PrenotazioneOspite(props) {
 
                 <div className={"col-12 my-3 py-3 border-top border-dark" + ((mostraContenuto) ? "" : " collapse")}>
                     <div className="row">
-                        {/* TODO: sistemare foto */}
                         <div className="d-none d-lg-block col-3">
                             <figure className="figure overflow-hidden rounded maxh-200px">
                                 <img className="w-100 h-100 img-cover img-fluid" alt={props.prenotazione.nomeStruttura} src={`/uploads/foto/${props.prenotazione.foto}`} />

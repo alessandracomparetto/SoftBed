@@ -202,7 +202,7 @@ function FormRegistrazionePreliminare (props) {
             <div className="form-row mb-3">
                 <div className="col-12 col-lg-6">
                     <label htmlFor="via">Via/Piazza</label>
-                    <input name="via" id="via" type="text" pattern="^(\s*\w+\.*\s*)+" className="form-control"
+                    <input name="via" id="via" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèìòù]?)*$" className="form-control"
                            maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={props.dati.via} required/>
                     <div className="invalid-feedback">
                         Selezionare la via
@@ -217,11 +217,10 @@ function FormRegistrazionePreliminare (props) {
                 <div className="col-4 col-md-4 col-lg-3">
                     <label htmlFor="cap">CAP.</label>
                     <input name="cap" id="cap" type="tel" className="form-control form-check" pattern="^\d{5}$" placeholder="#####"
-                           title="Inserire 5 cifre da 00010 a 98168" size="5" maxLength="5"  disabled={!props.dati.cap} defaultValue={props.dati.cap}
+                           title="Inserire 5 cifre da 00010 a 98168" size="5" minLength="5" maxLength="5"  disabled={!props.dati.cap} defaultValue={props.dati.cap}
                            onChange={controlloCAP} required/>
                     <div className="invalid-feedback">00010 - 98168</div>
                 </div>
-                <p id="feedbackCap" className=" text-danger collapse" >00010 - 98168</p>
             </div>
 
             <div className="d-flex flex-row-reverse justify-content-around">

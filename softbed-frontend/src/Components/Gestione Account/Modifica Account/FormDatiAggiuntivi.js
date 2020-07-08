@@ -88,8 +88,8 @@ function FormDatiAggiuntivi(){
                     .then(res => { // then print response status
                         window.sessionStorage.setItem("utente", JSON.stringify(res.data));
                         setUtente(res.data);
-                        if (res.data.gestore===1){
-                            window.location.reload();
+                        if ($("#gestore")[0].checked){
+                            window.location.href = "/registrazioneStruttura";
                         }}
                     ).catch(err=> console.log(err));
             } catch (e) {
@@ -98,39 +98,6 @@ function FormDatiAggiuntivi(){
         }
     }
     let province = null;
-
-    function provinceEventHandler(event){
-        // rimozione dei precedenti elementi del menu Comune
-        // rimozione dei precedenti elementi del menu provinca e comune
-        if(event.target.id === "provinciaNascita"){
-            document.getElementById("comuneNascita").innerHTML='<option value="" selected></option>';
-        }
-        else{
-            document.getElementById("comuneResidenza").innerHTML='<option value="" selected></option>';
-        }
-
-
-        if (event.target.value != '') {
-            for (let provincia of province) {
-                if (provincia.code == event.target.value) {
-                    for (let comune of provincia.comuni) {
-                        let opt=document.createElement('option');
-                        opt.value=comune.code;
-                        opt.innerText = comune.nome;
-                        if(event.target.id === "provinciaNascita"){
-                            document.getElementById("comuneNascita").appendChild(opt);
-                        }
-                        else{
-                            document.getElementById("comuneResidenza").appendChild(opt);
-                        }
-
-                    }
-                    break; // non dobbiamo cercare oltre
-                }
-            }
-
-        }
-    }
 
     function regioniEventHandler(event){
         if(event.target.value != '' && event.target.id=== "regioneResidenza"){
@@ -399,7 +366,7 @@ function FormDatiAggiuntivi(){
 
                 <div className="form-group col-12 col-md-4">
                     <label htmlFor="address">Via/Piazza</label>
-                    <input id="address" disabled name="via" className=" form-control necessarioResidenza" type="text" pattern="^(\s*\w+\.*\s*)+" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={addressEventHandler}  defaultValue={utente.via}/>
+                    <input id="address" disabled name="via" className=" form-control necessarioResidenza" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèìòù]?)*$" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={addressEventHandler}  defaultValue={utente.via}/>
                 </div>
 
                 <div className="form-group col-4 col-md-2">
