@@ -52,7 +52,6 @@ function FormDatiOspite(props){
 
             let tmp = [...props.listaOspiti];
             tmp.push(dato);
-            console.log(tmp);
             props.setOspiti(tmp);
 
             form.classList.remove('was-validated');

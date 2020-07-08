@@ -12,7 +12,6 @@ let cacheStrutture = cacheManager.caching({store: 'memory', max: 200, ttl: 300})
 
 router.post('/', function (req, res) {
     strutturaModel.inserisciStruttura(req.body, function(data){
-        console.log("Chiamo il timer rendiconto");
         timer.aggiungiTimeoutRendiconto(data);
        res.send(data);
     }).catch((err)=>{
@@ -26,7 +25,7 @@ router.post('/gestioneStruttura/', function(req, res) {
         strutturaModel.fetch(req.body, function (data) {
             res.send(data);
         }).catch((err) => {
-            res.status(err.status).send(err.message)
+            res.send(500);
         })
    }else{
         res.sendStatus(401);
@@ -39,7 +38,7 @@ router.post('/listaStruttureGestore', function (req, res) {
         strutturaModel.listaStrutture(req.body.idUtente, function (data) {
             res.send(data);
         }).catch((err) => {
-            res.status(err.status).send(err.message)
+            res.send(500);
         })
     }else{
         res.sendStatus(401);
@@ -68,14 +67,12 @@ router.get('/:idStruttura', function(req, res) {
     cacheStrutture.get(id, function(err, result) {
         // Se la ricerca è salvata in cache viene inviato il risultato memorizzato
         if (result) {
-            console.log("Cache HIT!");
             res.send(result);
         }
 
         // Altrimenti viene effettuata la query al db
         else {
             strutturaModel.carica(id, function(data) {
-                console.log("Cache MISS!");
 
                 res.send(data);
 
@@ -94,7 +91,6 @@ router.get('/:idStruttura', function(req, res) {
 
 router.post('/modificaCondizioni', function (req, res) {
     strutturaModel.modificaCondizioni(req.body,function(data){
-        console.log(data.message);
         let status = (data.changedRows === 0) ? 304: 200;
         res.sendStatus(status);
     }).catch( (err) =>{
@@ -135,7 +131,6 @@ router.post('/setDataRendiconto', function (req, res) {
         if(data.changedRows === 0){
             status = 304;
         }else{
-            console.log("Chiamo il timer rendiconto");
             timer.aggiornaTimeoutRendiconto(req.body.idStruttura);
             status = 200;
         }
@@ -150,7 +145,7 @@ router.post('/rendiconto', function (req, res) {;
         res.send(data);
     })
         .catch((err) => {
-            res.status(err.status).send(err);
+            res.send(500);
         });
 });
 

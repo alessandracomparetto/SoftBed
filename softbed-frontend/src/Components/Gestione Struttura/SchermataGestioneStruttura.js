@@ -29,7 +29,6 @@ function SchermataGestioneStruttura(){
             window.location.href="/gestioneStrutture/"
         }
         let dati = lista[indice];
-        console.log("la fetch");
         axios.post(`/struttura/gestioneStruttura`, dati)
             .then(res => {
                 setStruttura(res.data);

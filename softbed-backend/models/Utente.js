@@ -3,10 +3,8 @@ const { config } = require('../db/config');
 const { makeDb, withTransaction } = require('../db/dbmiddleware');
 const createError = require('http-errors');
 
-
 module.exports= {
     inserisci:async function(datiUtente, callback) {
-        console.log("la mia rotta")
         const db = await makeDb(config);
         let results = {};
         let refUtente;
@@ -76,8 +74,6 @@ module.exports= {
     fetch: async function (datiUtente, callback) {
         const db = await makeDb(config);
         let infoUtente;
-        console.log("DATI UTENTEE");
-        console.log(datiUtente.idUtente);
         try {
             await withTransaction(db, async () => {
                 if(datiUtente.refIndirizzo !== null && datiUtente.refComuneNascita!==null){
@@ -91,9 +87,6 @@ module.exports= {
                         .catch(err => {
                             throw err;
                         });
-                    console.log("INFO UTENTE");
-                    console.log(infoUtente);
-                    console.log(infoUtente[0]);
                     return callback(infoUtente[0]);
                 }
 
@@ -189,7 +182,7 @@ module.exports= {
                 results = await db.query(sql, [[datiQuery]]).catch(err => { //INSERIMENTO IN DATO PAGAMENTO
                     throw createError(500);
                 });
-                return (callback("ok"));
+                return (callback(results));
             });
         } //chiusura try
         catch (err) {
@@ -218,14 +211,12 @@ module.exports= {
 
     getDatiPagamento: async function(data, callback){
         let idUtente=data.idUtente;
-        console.log(idUtente);
         const db=await makeDb(config);
         try{
             await withTransaction(db,async()=> {
                 let listaDatiPagamento = await db.query('SELECT * FROM datopagamento WHERE datopagamento.refUtente=?', [idUtente]).catch(err => {
-                    console.log(err);
+                    throw err;
                 });
-                console.log(listaDatiPagamento);
                 return callback(listaDatiPagamento);
             });
         }

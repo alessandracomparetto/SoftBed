@@ -20,7 +20,6 @@ module.exports= {
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
                 //se tutto va bene, trovo id indirizzo e inserisco nella struttura
-                console.log("Inserito in indirizzo");
                 refIndirizzo = results.insertId;
                 let giorno = new Date().toISOString().slice(0, 10);
                 sql = ('INSERT INTO struttura (nomeStruttura, tipologiaStruttura, refGestore, refIndirizzo, rendicontoEffettuato) VALUES ?');
@@ -28,7 +27,6 @@ module.exports= {
                 datiQuery = [datiStruttura.nomeStruttura, datiStruttura.tipologiaStruttura, datiStruttura.idUtente, refIndirizzo, giorno];
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw err});
 
-                console.log('Inserito nella tabella struttura');
                 refStruttura = results.insertId;
                 sql = ('INSERT INTO `fotografie` (refStruttura, percorso) VALUES ?');
                 if (datiStruttura.foto) {
@@ -36,7 +34,7 @@ module.exports= {
                         datiQuery = [refStruttura, foto];
                         results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
                     }
-                    console.log("Inserite foto");
+
                 }//end for
 
                 sql = ('INSERT INTO `condizioni` (refStruttura, minSoggiorno, maxSoggiorno, oraInizioCheckIn, oraInizioCheckOut, oraFineCheckIn, \
@@ -47,7 +45,6 @@ module.exports= {
                     datiStruttura.anticipoPrenotazioneMin, datiStruttura.anticipoPrenotazioneMax, datiStruttura.politicaCancellazione, datiStruttura.prezzoCancellazione, datiStruttura.preavvisoDisdetta, datiStruttura.refNumeroCarta];
                 results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
-                console.log("inserite condizioni");
                 if (datiStruttura.tipologiaStruttura === "B&B") { //query per b&b
                     sql = ('INSERT INTO `b&b` (refstruttura, bambini, ariacondizionata, wifi, riscaldamento, parcheggio, strutturadisabili, animaliammessi, permessofumare, tv, \
                             cucinaceliaci, navettaAeroportuale, servizioincamera, descrizione) VALUES ?');
@@ -56,14 +53,14 @@ module.exports= {
                         datiStruttura.navettaAeroportuale, datiStruttura.servizioInCamera, datiStruttura.descrizione];
                     results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
-                    console.log("Inserito b&b");
+
                     for (camera of datiStruttura.camere) {
                         sql = 'INSERT INTO `camerab&b` (refStruttura, tipologiaCamera, nlettiSingoli, \
                                 nlettiMatrimoniali, prezzoBaseANotte) VALUES ?';
                         datiQuery = [refStruttura, camera.tipologiaCamera, camera.nLettiSingoli, camera.nLettiMatrimoniali, camera.prezzoBaseANotte];
                         results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
                     }
-                    console.log("Inserite camere");
+
                 } else if (datiStruttura.tipologiaStruttura === "cv") {
                     sql = ('INSERT INTO `casavacanze` (refstruttura, bambini, riscaldamento, ariacondizionata, wifi, parcheggio, strutturadisabili, animaliammessi, permessofumare, \
                             festeammesse, tv, salotto, giardino, terrazza, piscina, nbagni, ncamere, nlettisingoli, nlettimatrimoniali, prezzonotte, descrizione) VALUES ?');
@@ -72,7 +69,7 @@ module.exports= {
                         datiStruttura.giardino, datiStruttura.terrazza, datiStruttura.piscina, datiStruttura.nBagni, datiStruttura.nCamere, datiStruttura.nLettiSingoli, datiStruttura.nLettiMatrimoniali, datiStruttura.prezzoNotte, datiStruttura.descrizione];
                     results = await db.query(sql, [[datiQuery]]).catch((err) => {throw createError(500)});
 
-                    console.log("Inserita CV");
+
                 } //chiusura query cv
 
                 results = await db.query(('SELECT struttura.*, indirizzo.*, autenticazione.email as emailGestore FROM struttura JOIN indirizzo JOIN autenticazione WHERE struttura.refGestore = ? AND struttura.refIndirizzo=indirizzo.idIndirizzo AND autenticazione.refUtente=struttura.refGestore'), [datiStruttura.idUtente])

@@ -74,14 +74,12 @@ function RegistrazioneStruttura () {
            dati["idUtente"]=JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
            axios.post('/struttura', dati)
                .then(res => { // then print response status
-                   console.log("hai finito");
                     let ok = res.data;
                    window.sessionStorage.setItem("strutture", JSON.stringify(ok));
                     _next()
 
                }).catch(()=>{mostraDialogErrore()});
        } catch (e) {
-            console.log(e)
             mostraDialogErrore();
        }
     };

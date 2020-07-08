@@ -18,7 +18,7 @@ router.post('/listaPrenotazioniStruttura', function (req, res) {
         prenotazioneModel.getPrenotazioni(req.body, function (data) {
             res.send(data);
         }).catch((err) => {
-            res.status(err.status).send(err.message);
+            res.send(500);
         });
     }else{
         res.sendStatus(401);
@@ -77,7 +77,6 @@ router.post('/listaPrenotazioniUtente', function (req, res) {
 
 router.post('/setDichiarazione', function (req, res) {
     prenotazioneModel.setDichiarazione(req.body, function (data) {
-        console.log("distruggi",req.body.idPrenotazione);
         timer.distruggiTimeoutDichiarazione(req.body.idPrenotazione);
         res.send(data);
     })

@@ -4,11 +4,7 @@ import {Link} from "react-router-dom";
 function RichiesteConfermate(props){
     const [mostraContenuto, setMostraContenuto] = useState(false);
     const toggleContenuto = () => setMostraContenuto(!mostraContenuto);
-    /*useEffect(() => {
-        console.log("Richieste confermate");
-        console.log(props.prenotazione);
 
-    }, []);*/
     return(
         <div>
             <div className="row d-flex justify-content-center">

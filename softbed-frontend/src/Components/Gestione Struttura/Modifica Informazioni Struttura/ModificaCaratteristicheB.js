@@ -9,11 +9,9 @@ function ModificaCaratteristicheB(props){
         event.preventDefault()
         try {
            let dato = props.props;
-            console.log("Inizio la richiesta");
             axios.post('/struttura/modificaCaratteristicheB&B', dato)
                 .then(res => { // then print response status
                     if (res.status === 200) {
-                        console.log("OK");
                         let contatore=props.flag+1;
                         //aggiorno lo stato flag presente nella Schermata Gestione Struttura
                         props.setFlag(contatore);

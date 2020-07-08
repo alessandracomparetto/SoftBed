@@ -7,11 +7,8 @@ function FormPagamentoStruttura(props) {
     const [listaDatiPagamento, setDatiPagamento] = useState([]);
 
     useEffect(() => {
-        console.log("sono qui");
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
         axios.post(`/utente/listaPagamenti`, {"idUtente":utente.idUtente}).then(res => {
-            console.log("DATI PAGAMENTO RECUPERATI=======");
-            console.log(res.data);
             setDatiPagamento(res.data);
         }).catch(err =>{
             console.log(err);

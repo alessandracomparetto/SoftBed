@@ -23,11 +23,9 @@ function SchermataStrutture(){
             }, 3000, "Devi effettuare l'accesso per visualizzare le tue strutture");
         }
         if(!window.sessionStorage.getItem("strutture")){
-            console.log("il momento della fetch");
             let idUtente = JSON.parse(window.sessionStorage.getItem("utente")).idUtente;
             axios.post('/struttura/listaStruttureGestore', {"idUtente":idUtente}) //prendo la lista delle strutture se non è presente il session storage
                 .then(res => {
-                    console.log(res.data);
                     setLista(res.data);
                     window.sessionStorage.setItem("strutture", JSON.stringify(res.data));
                 }).catch(err => {
@@ -60,7 +58,6 @@ function SchermataStrutture(){
             <ul className="list-group list-group-flush ">
                 {
                     listaStrutture.map((struttura, indice) => {
-                        {console.log(struttura)}
                         return(
                             <li className={"list-group-item border border-dark border-top-"+ ((indice === 0)? "" : 0)} key={indice}>
                                 <div className="row d-flex justify-content-center">

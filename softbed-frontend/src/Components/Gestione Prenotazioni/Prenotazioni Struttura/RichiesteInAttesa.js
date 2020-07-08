@@ -36,7 +36,6 @@ function RichiesteInAttesa(props){
 
     function rifiutaPrenotazione(){
         axios.post(`/prenotazione/rifiutaPrenotazione`,{idPrenotazione: props.prenotazione.idPrenotazione}).then(res => {
-            console.log(res.data);
             let emailGestore= JSON.parse(window.sessionStorage.getItem("utente")).email;
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
@@ -54,9 +53,7 @@ function RichiesteInAttesa(props){
             .catch(err => console.log(err));
     }
     function confermaPrenotazione () {
-        console.log("sto per inviare la conferma di prenotazione");
         axios.post(`/prenotazione/confermaPrenotazione`, {idPrenotazione:props.prenotazione.idPrenotazione}).then(res => {
-            console.log(res.data);
             let emailGestore= JSON.parse(window.sessionStorage.getItem("utente")).email;
             const informazioni={
                 "id":props.prenotazione.idPrenotazione,
@@ -67,7 +64,6 @@ function RichiesteInAttesa(props){
             };
             axios.post('/mail/conferma-prenotazione',informazioni).then(console.log("OK"))
                 .catch(err=> console.log(err));
-            console.log("aggiorno lo stato");
             let contatore=props.flag+1;
             props.aggiornaFlag(contatore);
         })

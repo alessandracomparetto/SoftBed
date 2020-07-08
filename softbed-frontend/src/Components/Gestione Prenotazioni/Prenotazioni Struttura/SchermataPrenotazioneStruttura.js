@@ -27,7 +27,6 @@ function SchermataPrenotazioneStruttura(){
              window.location.href="/gestioneStrutture/";
          }
          let data = listaStrutture[indice];
-         console.log(data);
          setStruttura(data);
          axios.post(`/prenotazione/listaPrenotazioniStruttura`, data).then(res => {
             aggiornaPrenotazioni(res.data);

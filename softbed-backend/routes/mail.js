@@ -21,8 +21,6 @@ const transporter = nodemailer.createTransport({
 
 router.post('/invioDichiarazione', function (req, res) {
     ospiteModel.invioDichiarazione(req.body, function (data) {
-        console.log("DOCUMENTI:")
-        console.log(data);
         let documenti=[];
         for(let i = 0; i <data.length; i++){
             documenti.push({
@@ -131,13 +129,13 @@ router.post('/richiesta-prenotazione', (req, res) => {
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
@@ -177,13 +175,13 @@ router.post('/annullamento-prenotazione', (req, res) => {
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
@@ -220,13 +218,13 @@ router.post('/rifiuta-prenotazione', (req, res) => {
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
@@ -234,7 +232,6 @@ router.post('/rifiuta-prenotazione', (req, res) => {
 })
 
 router.post('/conferma-prenotazione', (req, res) => {
-    console.log("body===================", req.body);
     const mailOspite = {
         from: softbed.email,
         to: req.body.emailOspite,
@@ -264,13 +261,13 @@ router.post('/conferma-prenotazione', (req, res) => {
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
@@ -309,13 +306,13 @@ router.post('/scadenza-prenotazione', (req, res) => {
 
     transporter.sendMail(mailOspite, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 
     transporter.sendMail(mailGestore, (err, res) => {
         if (err) {
-            res.status(err.status).send(err);
+            res.send(500);
         }
     });
 

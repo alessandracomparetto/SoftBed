@@ -94,7 +94,6 @@ class Timers{
     }
 
     aggiungiTimeoutDichiarazione(dati){
-        console.log("dati",dati);
         const mailGestore = {
             from: softbed.email,
             to: dati.emailGestore,
@@ -110,7 +109,6 @@ class Timers{
         };
         const giorni = Math.ceil((new Date(dati.checkIn).getTime() - new Date().getTime()) / GIORNO);
         let scadenzaTimer=giorni+1;
-        console.log(giorni);
         let idTimeout = this.setDaysTimeout(function() {
             transporter.sendMail(mailGestore, (err, res) => {
                 if (err) {console.log(err);}

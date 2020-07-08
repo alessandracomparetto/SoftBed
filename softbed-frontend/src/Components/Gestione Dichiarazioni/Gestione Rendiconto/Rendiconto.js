@@ -38,7 +38,6 @@ function Rendiconto(props){
 
         const tmp = new Date().toISOString().split("T");
         const oggi=tmp[0] + " " + tmp[1].slice(0,8);
-
         let tmp1= props.struttura.rendicontoEffettuato.split("T");
         let dataRendiconto = tmp1[0] + " " + tmp1[1].slice(0,8);
         let giorniTrascorsi = calcDate(new Date(), new Date(props.struttura.rendicontoEffettuato));
@@ -48,7 +47,7 @@ function Rendiconto(props){
 
 
         let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
-    
+
 
         axios.post(`/struttura/rendiconto`, info)
             .then(res => {
@@ -62,7 +61,6 @@ function Rendiconto(props){
     }
 
     const inviaRendiconto = () => {
-
         let doc = new jsPDF();
             let countOspite = 0; // ogni tre ospiti cambio pagina
             let countAdulti = 0;
@@ -76,28 +74,27 @@ function Rendiconto(props){
 
             doc.setFontSize(14);
             doc.setFontType("normal");
-            doc.text(25, 10 * y, `Il/La sottoscritto/a ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
-            doc.text(80, 10 * y++, '');
-            doc.text(25, 10 * y, `nato/a a ${gestore.comuneNascita} (${gestore.provinciaNascita}) il ${gestore.dataNascita},`);
-            doc.text(80, 10 * y++, '');
-            doc.text(25, 10 * y, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza}), via ${gestore.via}, n. ${gestore.numeroCivico}, CAP ${gestore.cap}`);
-            doc.text(80, 10 * y++, '');
-            doc.text(25, 10 * y, `e-mail: ${gestore.email}, telefono: ${gestore.telefono},`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y++, `Il/La sottoscritto/a ${gestore.nome} ${gestore.cognome} (codice fiscale: ${gestore.codiceFiscale})`);
+
+            doc.text(25, 10 * y++, `nato/a a ${gestore.comuneNascita} (${gestore.provinciaNascita}) il ${gestore.dataNascita},`);
+
+            doc.text(25, 10 * y++, `residente a ${gestore.comuneResidenza} (${gestore.provinciaResidenza}), via ${gestore.via}, n. ${gestore.numeroCivico}, CAP ${gestore.cap}`);
+
+            doc.text(25, 10 * y++, `e-mail: ${gestore.email}, telefono: ${gestore.telefono},`);
+
 
             doc.setFontType("bold");
-            doc.text(25, 10 * y, ' in qualità di proprietario/amministratore della seguente struttura: ');
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y++, ' in qualità di proprietario/amministratore della seguente struttura: ');
+
 
             doc.setFontType("normal")
-            doc.text(25, 10 * y, `"${props.struttura.nomeStruttura}", sita a ${datiStruttura.comune} (${datiStruttura.provincia}), via ${props.struttura.via}, n. ${props.struttura.numeroCivico}, CAP ${props.struttura.cap}`);
+            doc.text(25, 10 * y++, `"${props.struttura.nomeStruttura}", sita a ${datiStruttura.comune} (${datiStruttura.provincia}), via ${props.struttura.via}, n. ${props.struttura.numeroCivico}, CAP ${props.struttura.cap}`);
 
-            doc.text(80, 10 * y++, '');
 
 
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `dichiara la presenza dei seguenti ospiti:`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y++, `dichiara la presenza dei seguenti ospiti:`);
+
 
             doc.setFontType("bold");
             doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA ADULTI:`);
@@ -159,23 +156,25 @@ function Rendiconto(props){
                         doc.setFontType("normal");
                         doc.text(80, 10 * y++, `${ospitiPrenotazione.ospiti[i].permanenza} giorni`);
 
-                        if (countOspite % 2 === 0) {
+                        if (countOspite % 2 === 0 && count !== 0) {
                             y = 2;
                             countPage++;
                             doc.addPage();
                         }
                     }
                 }
-                if(count===0){
-                    doc.text(125, 10 * y++, '0');
-                }
+
             })
+
+            if(count===0){
+                doc.text(125, 10 * y++, '0');
+            }
             count =0;
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `Totale tasse di soggiorno adulti: ${calcolaTassa(countAdulti, datiStruttura.prezzoAdulti)} €`);
-            doc.text(80, 10 * y++, '');
 
-            doc.setFontType("bold");
+            doc.text(25, 10 * y++, `Totale tasse di soggiorno adulti: ${calcolaTassa(countAdulti, datiStruttura.prezzoAdulti)} €`);
+
+           doc.setFontType("bold");
             doc.text(25, 10 * y, `SOGGETTI PAGANTI L'IMPOSTA BAMBINI:`);
 
 
@@ -235,23 +234,22 @@ function Rendiconto(props){
                         doc.setFontType("normal");
                         doc.text(80, 10 * y++, `${ospitiPrenotazione.ospiti[i].permanenza} giorni`);
 
-                        if (countOspite % 2 === 0) {
+                        if (countOspite % 2 === 0 && count!== 0) {
                             y = 2;
                             doc.addPage();
                         }
                     }
 
                 }
-
-                if(count===0){
-                    doc.text(130, 10 * y++, '0');
-                }
             })
+
+            if(count===0){
+                doc.text(130, 10 * y++, '0');
+            }
 
             count = 0;
             doc.setFontType("bold");
-            doc.text(25, 10 * y, `Totale tasse di soggiorno bambini: ${calcolaTassa(countBambini, datiStruttura.prezzoBambini)} €`);
-            doc.text(80, 10 * y++, '');
+            doc.text(25, 10 * y++, `Totale tasse di soggiorno bambini: ${calcolaTassa(countBambini, datiStruttura.prezzoBambini)} €`);
 
 
             doc.setFontType("bold");
@@ -313,18 +311,17 @@ function Rendiconto(props){
                         doc.setFontType("normal");
                         doc.text(80, 10 * y++, `${ospitiPrenotazione.ospiti[i].permanenza} giorni`);
 
-                        if (countOspite % 2 === 0) {
+                        if (countOspite % 2 === 0 && count !== 0) {
                             y = 2;
                             doc.addPage();
                         }
 
                     }
                 }
-                if(count===0){
-                    doc.text(125, 10 * y++, '0');
-                }
             })
-
+        if(count===0){
+            doc.text(120, 10 * y++, '0');
+        }
 
         let data = {
             allegato: doc.output('datauristring')
@@ -334,14 +331,16 @@ function Rendiconto(props){
             mostraDialogErrore(err.message);
         });
 
+        let info={"idStruttura": props.struttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
+        let struttura=[{"idStruttura": props.struttura.idStruttura,"nomeStruttura": props.struttura.nomeStruttura,"tipologiaStruttura":props.struttura.tipologiaStruttura,
+            "refGestore":gestore.idUtente,"refIndirizzo": props.struttura.refIndirizzo,"rendicontoEffettuato": new Date().toISOString(),"idIndirizzo":props.struttura.refIndirizzo,
+            "via":props.struttura.via,"numeroCivico":props.struttura.numeroCivico,"cap":props.struttura.cap,"refComune":props.struttura.refComune}]
+        axios.post("/struttura/setDataRendiconto", info).then(()=>{ window.sessionStorage.setItem("strutture", JSON.stringify(struttura));}).catch(err => console.log(err));
+
         history.push({
             pathname: "/rendiconto-completato",
             state: { provenienza: "Rendiconto" }
         });
-
-        let info={"idStruttura": props.struttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
-
-        axios.post("/struttura/setDataRendiconto", info).catch(err => console.log(err));
 
     }
 

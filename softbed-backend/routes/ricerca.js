@@ -90,7 +90,6 @@ router.get('/', function(req, res) {
     // Se trovo la ricerca nella cache
     if (cacheRicerche[strChiave]) {
         risultato = cacheRicerche[strChiave]
-        console.log("Cache HIT!");
 
         // Filtro i risultati
         if (parametro.servizi[0] || parametro.ambienti[0] ||
@@ -106,7 +105,6 @@ router.get('/', function(req, res) {
 
     // Altrimenti
     else {
-        console.log("Cache MISS!");
         StrutturaModel.cerca(parametro.chiave, function(data) {
             risultato = data;
 

@@ -14,7 +14,6 @@ function ModificaCondizioni(props) {
                 document.getElementById("feedbackPagamento").classList.add("collapse");
                 if (document.getElementById("formCondizioni").checkValidity()) {
                     let dato = props.dati;
-                    console.log("Inizio della richiesta");
                     axios.post('/struttura/modificaCondizioni', dato)
                         .then(res => { // then print response status
                             if (res.status === 200) {

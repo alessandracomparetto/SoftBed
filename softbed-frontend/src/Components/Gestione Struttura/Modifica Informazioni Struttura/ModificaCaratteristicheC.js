@@ -9,7 +9,6 @@ function ModificaCaratteristicheC(props){
         event.preventDefault()
         try {
             let dato = props.props;
-            console.log("Inizio la richiesta");
             axios.post('/struttura/modificaCaratteristicheCasaVacanze', dato)
                 .then(res => { // then print response status
                     if(res.status===200){

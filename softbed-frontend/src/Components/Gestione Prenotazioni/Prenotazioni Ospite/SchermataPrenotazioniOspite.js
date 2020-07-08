@@ -22,7 +22,6 @@ function SchermataPrenotazioniOspite() {
             let idUtente = JSON.parse(sessionStorage.getItem("utente")).idUtente;
 
             axios.post(`/prenotazione/listaPrenotazioniUtente`, {idUtente: idUtente}).then(res => {
-                console.log(res.data);
 
                 let rich = [];
                 let conf = [];

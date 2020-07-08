@@ -37,8 +37,6 @@ function FormDatiAggiuntivi(){
                 .post("/utente/fetch", sessionUtente)
                 .then(res => {
                     res.data.dataNascita = res.data.dataNascita.split("T")[0];
-                    console.log("DATI RECUPERATI=======");
-                    console.log(res.data);
                     setUtente(res.data);
                 }).catch(err =>{
                     if(err.response.status === 401){
@@ -83,10 +81,8 @@ function FormDatiAggiuntivi(){
             $("#address").attr('disabled', true);
         }
         if(form.checkValidity()) {
-            console.log("utente =============", utente);
             let tmp = utente;
             tmp["dataNascita"]=new Date(utente.dataNascita).toISOString().slice(0,10);
-            console.log(tmp);
             try {
                 axios.post('/utente/modificaDatiAggiuntivi', tmp)
                     .then(res => { // then print response status

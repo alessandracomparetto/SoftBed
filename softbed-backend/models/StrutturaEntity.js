@@ -283,7 +283,7 @@ class StrutturaEntity {
     }
 
     soddisfaPrezzo(prezzo) {
-        console.log(prezzo);
+
 
         if (this.tipologia === "cv") {
             return ((!prezzo.min || this.prezzo >= prezzo.min) && (!prezzo.max || this.prezzo <= prezzo.max))
@@ -291,11 +291,10 @@ class StrutturaEntity {
 
         else if (this.tipologia === "B&B") {
             for (let camera of this.camere) {
-                console.log(camera);
+
                 if ((!prezzo.min || camera.prezzo >= prezzo.min) && (!prezzo.max || camera.prezzo <= prezzo.max))
                     return true;
             }
-            console.log("nope");
             return false;
         }
 
