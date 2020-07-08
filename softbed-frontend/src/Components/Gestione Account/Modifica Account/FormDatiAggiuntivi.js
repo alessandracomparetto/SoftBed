@@ -366,7 +366,7 @@ function FormDatiAggiuntivi(){
 
                 <div className="form-group col-12 col-md-4">
                     <label htmlFor="address">Via/Piazza</label>
-                    <input id="address" disabled name="via" className=" form-control necessarioResidenza" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèìòù]?)*$" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={addressEventHandler}  defaultValue={utente.via}/>
+                    <input id="address" disabled name="via" className=" form-control necessarioResidenza" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèéìòù]?)*$" onBlur={addressEventHandler} onKeyDown={tabEventHandler} onChange={addressEventHandler}  defaultValue={utente.via}/>
                 </div>
 
                 <div className="form-group col-4 col-md-2">

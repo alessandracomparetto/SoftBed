@@ -202,7 +202,7 @@ function FormRegistrazionePreliminare (props) {
             <div className="form-row mb-3">
                 <div className="col-12 col-lg-6">
                     <label htmlFor="via">Via/Piazza</label>
-                    <input name="via" id="via" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèìòù]?)*$" className="form-control"
+                    <input name="via" id="via" type="text" pattern="^[a-zA-Z]+((\s)?[a-zA-Z]?['àèéìòù]?)*$" className="form-control"
                            maxLength="40" onBlur={addressEventHandler} onKeyDown={tabEventHandler} defaultValue={props.dati.via} required/>
                     <div className="invalid-feedback">
                         Selezionare la via
