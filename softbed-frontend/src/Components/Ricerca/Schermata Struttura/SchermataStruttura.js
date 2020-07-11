@@ -541,7 +541,7 @@ function SchermataStruttura() {
                             </small>
 
                             <small id="intervalloDateAiuto" className="form-text text-warning d-none">
-                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.min} e {Math.min(struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.max, 28)}
+                                Per questa struttura la durata del soggiorno deve essere compresa fra {struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.min} e {Math.min(struttura.condizioniSoggiorno && struttura.condizioniSoggiorno.soggiorno.max, 28)} giorni
                             </small>
 
                             <small id="orarioCheckInAiuto" className="form-text text-warning d-none">

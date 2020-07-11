@@ -60,7 +60,7 @@ function UtenteAutenticato(props) {
                                         <Link className="nav-link" to="/gestioneStrutture/">Gestione strutture</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="dropdown-item" to="/registrazioneStruttura/">Registra la tua struttura</Link>
+                                        <Link className="nav-link" to="/registrazioneStruttura/">Registra la tua struttura</Link>
                                     </li>
                                 </Fragment>
                             ) : (
@@ -71,7 +71,7 @@ function UtenteAutenticato(props) {
                         }
                         <div className="dropdown-divider d-sm-none"/>
                         <li className="nav-item">
-                            <button className="nav-link" onClick={logout}>Esci</button>
+                            <button className="btn btn-block text-right nav-link" onClick={logout}>Esci</button>
                         </li>
                     </div>
 
