@@ -104,16 +104,16 @@ function InformazioniStruttura (props){
                                         <div className="col-12">
                                             <h6><strong>Ambienti: </strong></h6>
                                             <ul>
-                                                {props.struttura.salotto != 0 &&(
+                                                {props.struttura.salotto && props.struttura.salotto != 0 && (
                                                     <li>Salotto </li>
                                                 )}
-                                                {props.struttura.giardino != 0 &&(
+                                                {props.struttura.giardino && props.struttura.giardino != 0 && (
                                                     <li>Giardino </li>
                                                 )}
-                                                {props.struttura.terrazza != 0 &&(
+                                                {props.struttura.terrazza && props.struttura.terrazza != 0 && (
                                                     <li>Terrazza </li>
                                                 )}
-                                                {props.struttura.piscina !=0 &&(
+                                                {props.struttura.piscina && props.struttura.piscina != 0 && (
                                                     <li>Piscina </li>
                                                 )}
                                             </ul>
@@ -138,57 +138,57 @@ function InformazioniStruttura (props){
                         )}
                         {/* Servizi */}
                         <div className="my-1">
-                            {(props.struttura.wifi !=0 || props.struttura.riscaldamento !=0|| props.struttura.strutturaDisabili  !=0|| props.struttura.ariaCondizionata !=0
-                                || props.struttura.TV  !=0|| props.struttura.parcheggio !=0 || props.struttura.servizioInCamera !=0 || props.struttura.navettaAeroportuale !=0) &&
+                            {(props.struttura.wifi && props.struttura.wifi != 0 || props.struttura.riscaldamento && props.struttura.riscaldamento != 0 || props.struttura.strutturaDisabili && props.struttura.strutturaDisabili != 0 || props.struttura.ariaCondizionata && props.struttura.ariaCondizionata != 0
+                                || props.struttura.TV && props.struttura.TV != 0 || props.struttura.parcheggio && props.struttura.parcheggio != 0 || props.struttura.servizioInCamera && props.struttura.servizioInCamera != 0 || props.struttura.navettaAeroportuale && props.struttura.navettaAeroportuale != 0) &&
                             (
                                 <div className="col-12">
                                     <h6><strong>Servizi</strong></h6>
 
                                     <strong>Servizi disponibili: </strong>
                                     <ul>
-                                        {props.struttura.wifi !=0 &&(
+                                        {props.struttura.wifi && props.struttura.wifi != 0 && (
                                             <li>Wifi</li>
                                         )}
-                                        {props.struttura.riscaldamento !=0 &&(
+                                        {props.struttura.riscaldamento && props.struttura.riscaldamento != 0 && (
                                             <li>Riscaldamento </li>
                                         )}
-                                        { props.struttura.strutturaDisabili !=0 &&(
+                                        {props.struttura.strutturaDisabili && props.struttura.strutturaDisabili != 0 && (
                                             <li>Strutture per disabili </li>
                                         )}
-                                        {props.struttura.ariaCondizionata !=0 &&(
+                                        {props.struttura.ariaCondizionata && props.struttura.ariaCondizionata != 0 && (
                                             <li>Aria condizionata </li>
                                         )}
-                                        {props.struttura.TV !=0 &&(
+                                        {props.struttura.TV && props.struttura.TV != 0 && (
                                             <li>TV </li>
                                         )}
-                                        {props.struttura.parcheggio !=0 &&(
+                                        {props.struttura.parcheggio && props.struttura.parcheggio != 0 && (
                                             <li>Parcheggio </li>
                                         )}
-                                        {props.struttura.servizioInCamera !=0 &&(
+                                        {props.struttura.servizioInCamera && props.struttura.servizioInCamera != 0 && (
                                             <li>Servizio in camera </li>
                                         )}
-                                        {props.struttura.navettaAeroportuale !=0 &&(
+                                        {props.struttura.navettaAeroportuale && props.struttura.navettaAeroportuale != 0 && (
                                             <li>Navetta Aereoportuale</li>
                                         )}
                                     </ul>
                                 </div>)}
                         </div>
 
-                        { (props.struttura.permessoFumare !=0 || props.struttura.animaliAmmessi !=0 || props.struttura.festeAmmesse !=0 || props.struttura.bambini !=0 ) &&
+                        {(props.struttura.permessoFumare && props.struttura.permessoFumare != 0 || props.struttura.animaliAmmessi && props.struttura.animaliAmmessi != 0 || props.struttura.festeAmmesse && props.struttura.festeAmmesse != 0 || props.struttura.bambini && props.struttura.bambini != 0) &&
                         (
                             <div className="col-12">
                                 <strong>Sugli ospiti: </strong>
                                 <ul>
-                                    {props.struttura.permessoFumare !=0 &&(
+                                    {props.struttura.permessoFumare && props.struttura.permessoFumare != 0 && (
                                         <li>Permesso di fumare</li>
                                     )}
-                                    {props.struttura.animaliAmmessi !=0 &&(
+                                    {props.struttura.animaliAmmessi && props.struttura.animaliAmmessi != 0 && (
                                         <li>Animali ammessi </li>
                                     )}
-                                    { props.struttura.festeAmmesse !=0 &&(
+                                    {props.struttura.festeAmmesse && props.struttura.festeAmmesse != 0 && (
                                         <li>Permesso per feste ed eventi </li>
                                     )}
-                                    {props.struttura.bambini !=0 &&(
+                                    {props.struttura.bambini && props.struttura.bambini != 0 && (
                                         <li>Disponibilità ad ospitare bambini </li>
                                     )}
                                 </ul>
