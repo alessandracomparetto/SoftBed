@@ -38,7 +38,7 @@ function SchermataStruttura() {
     const [numeroAdulti, setNumeroAdulti] = useState( 2);
     const [maxOspiti, setMaxOspiti] = useState(100);
     const [numeroBambini, setNumeroBambini] = useState(0);
-    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 2));
+    const [minDataP, setMinDataP] = useState(convertiData(new Date(minDataA), 1));
 
     // CARICAMENTO DELLA STRUTTURA
     useEffect(() => {
@@ -52,6 +52,10 @@ function SchermataStruttura() {
                 tmp.foto = res.data.foto;
                 tmp.localita = res.data.localita;
                 tmp.condizioniSoggiorno = res.data.condizioniSoggiorno;
+                const nuovaMinDataP = (convertiData(new Date(minDataA), tmp.condizioniSoggiorno.soggiorno.min));
+                setMinDataP(nuovaMinDataP);
+                $("#dataCheckOut").val(nuovaMinDataP);
+
                 tmp.condizioniPrenotazione = res.data.condizioniPrenotazione;
                 tmp.tasse = res.data.tasse;
                 tmp.servizi = res.data.servizi.map((servizio) => { return servizi[servizio] });

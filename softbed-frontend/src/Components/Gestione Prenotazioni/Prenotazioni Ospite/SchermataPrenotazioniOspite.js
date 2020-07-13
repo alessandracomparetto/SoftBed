@@ -14,6 +14,7 @@ function SchermataPrenotazioniOspite() {
     // Prenotazioni
     const [richieste, setRichieste] = useState([]);
     const [confermate, setConfermate] = useState ([]);
+    const [prenotazioniCaricate, setPrenotazioniCaricate] = useState(false);
 
     useEffect(() => {
 
@@ -33,7 +34,8 @@ function SchermataPrenotazioniOspite() {
                 setRichieste(rich);
                 setConfermate(conf);
             })
-                .catch(() => mostraDialogErrore());
+                .catch(() => mostraDialogErrore())
+                .finally(() => setPrenotazioniCaricate(true));
         }
 
         else {
@@ -93,7 +95,7 @@ function SchermataPrenotazioniOspite() {
                         </div>
                     )}
 
-                    { !richieste[0] && !confermate[0] && (
+                    { prenotazioniCaricate && !richieste[0] && !confermate[0] && (
                         <div className="card shadow p-3 m-2 m-sm-3 maxw-xl text-center">
                             <h4>Pare che tu non abbia ancora alcuna prenotazione.</h4>
                             <h4>Sarà forse il momento di fare la prima?</h4>

@@ -14,6 +14,7 @@ function SchermataRisultati() {
     const [destinazione, setDestinazione] = useState("");
     const [listaStrutture, setListaStrutture] = useState([]);
     const [parametri, setParametri] = useState({});
+    const [risultatiCaricati, setRisultati] = useState(false);
 
     useEffect(() => {
 
@@ -44,7 +45,8 @@ function SchermataRisultati() {
         axios
             .get("search?" + valoriRicerca)
             .then(res => setListaStrutture(res.data))
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
+            .finally(() => setRisultati(true));
     }, []);
 
     return (
@@ -56,19 +58,22 @@ function SchermataRisultati() {
             <div className="container">
                 <div className="d-lg-flex flex-row-reverse">
                     <div className="col-12 col-lg-8 px-0 px-lg-2">
-                        { listaStrutture && listaStrutture[0] ? (
+                        { risultatiCaricati &&
                             <Fragment>
-                                { listaStrutture instanceof Array && listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
-                                    return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi} foto={struttura.foto[0]} parametri={parametri}/>
-                                })}
-                                <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
+                                { listaStrutture && listaStrutture[0] ? (
+                                    <Fragment>
+                                        { listaStrutture instanceof Array && listaStrutture.slice((pagina - 1) * 10, pagina * 10).map((struttura, indice) => {
+                                            return <RisultatoRicerca key={(pagina - 1) * 10 + indice} idStruttura={struttura.id} nomeStruttura={struttura.nome} descrizioneStruttura={struttura.descrizione} servizi={struttura.servizi} foto={struttura.foto[0]} parametri={parametri}/>
+                                        })}
+                                        <Paginazione paginaAttuale={pagina} numPagine={Math.ceil(listaStrutture.length / 10)} setPagina={setPagina} />
+                                    </Fragment>
+                                ) : (
+                                    <div className="card shadow p-3 m-2 m-sm-3 d-flex flex-md-row maxw-xl text-center">
+                                        <h4>Siamo spiacenti, non è stato trovato alcun alloggio per i criteri di ricerca inseriti.</h4>
+                                    </div>
+                                )}
                             </Fragment>
-                        ) : (
-                            <div className="card shadow p-3 m-2 m-sm-3 d-flex flex-md-row maxw-xl text-center">
-                                <h4>Siamo spiacenti, non è stato trovato alcun alloggio per i criteri di ricerca inseriti.</h4>
-                            </div>
-                        )}
-
+                        }
                     </div>
 
                     <div id="filtri" className="shadow d-lg-block col-12 col-lg-4 h-100 p-3 card mt-3">
