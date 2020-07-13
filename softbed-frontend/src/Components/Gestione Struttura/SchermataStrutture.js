@@ -81,7 +81,7 @@ function SchermataStrutture(){
                                         <Link className="text-light" to={`/struttura/gestioneStruttura/${indice}`} ><button type="button" className="btn btn-block btn-primary mt-2 mr-2 ">Visualizza</button></Link>
                                     </div>
                                     <div  className=" col-6 col-lg-2">
-                                        <Rendiconto struttura={struttura}/>
+                                        <Rendiconto indice={indice}/>
                                     </div>
                                 </div>
                             </li>
