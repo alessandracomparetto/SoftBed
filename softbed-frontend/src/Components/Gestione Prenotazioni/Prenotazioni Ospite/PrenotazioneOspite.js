@@ -139,20 +139,20 @@ function PrenotazioneOspite(props) {
                                 </div>
 
                                 <div className="row mx-auto">
-                                    { props.prenotazione.tipologiaStruttura && props.prenotazione.tipologiaStruttura=== "B&B" && (
-                                        <div className="col-12 col-md-4">
-                                            <h5 style={{marginLeft: -15 + "px"}}>Camere</h5>
-                                            <div  className="mb-3">
-                                                {props.prenotazione.camere && props.prenotazione.camere.map((camera, indice) => {
-                                                    return (
-                                                        <div key={indice} className="mb-2 mb-md-0">
-                                                            Camera {camera.idCamera}: {camera.tipologiaCamera}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    )}
+                                    {/*{ props.prenotazione.tipologiaStruttura && props.prenotazione.tipologiaStruttura=== "B&B" && (*/}
+                                    {/*    <div className="col-12 col-md-4">*/}
+                                    {/*        <h5 style={{marginLeft: -15 + "px"}}>Camere</h5>*/}
+                                    {/*        <div  className="mb-3">*/}
+                                    {/*            {props.prenotazione.camere && props.prenotazione.camere.map((camera, indice) => {*/}
+                                    {/*                return (*/}
+                                    {/*                    <div key={indice} className="mb-2 mb-md-0">*/}
+                                    {/*                        Camera {camera.idCamera}: {camera.tipologiaCamera}*/}
+                                    {/*                    </div>*/}
+                                    {/*                );*/}
+                                    {/*            })}*/}
+                                    {/*        </div>*/}
+                                    {/*    </div>*/}
+                                    {/*)}*/}
 
                                     <div className="col-12 col-md-8">
                                         <h5 style={{marginLeft: -15 + "px"}}>Altre informazioni</h5>
