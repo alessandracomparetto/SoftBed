@@ -21,7 +21,7 @@ function FormFotografie(props){
     //controlla che tuti i file siano immagini
     const checkMimeType=(fileList)=>{
         let files = fileList;
-        const types = ['image/png', 'image/jpeg', 'image/jpg'];
+        const types = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
 
         for (let x = 0; x < files.length; x++) {
             if (types.every(type => files[x].type !== type)) {

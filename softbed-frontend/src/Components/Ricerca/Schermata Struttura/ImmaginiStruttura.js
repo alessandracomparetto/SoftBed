@@ -32,7 +32,7 @@ function ImmaginiStruttura(props) {
             { props.struttura.foto && props.struttura.foto[1] && (
                 <div className="col-12 col-md-5 mt-3 mt-md-0">
                     {props.struttura.foto.slice(1, Math.min(5, props.struttura.foto.length)).map((immagine, indice) => {
-                        return <ImmagineSecondaria key={indice} id={props.idStruttura} nomeStruttura={props.struttura.nome} nomeImmagine={props.struttura.foto[indice]}/>
+                        return <ImmagineSecondaria key={indice + 1} id={props.idStruttura} nomeStruttura={props.struttura.nome} nomeImmagine={props.struttura.foto[indice + 1]}/>
                     })}
                 </div>
             )}
