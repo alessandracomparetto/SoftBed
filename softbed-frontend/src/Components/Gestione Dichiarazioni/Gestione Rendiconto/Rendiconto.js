@@ -4,7 +4,10 @@ import mostraDialogErrore from "../../../Actions/errore";
 import jsPDF from "jspdf";
 import {useHistory} from "react-router-dom";
 
+
+
 function Rendiconto(props){
+
     const [ospiti,setOspiti]= useState([]);
     const [gestore, setGestore]=useState([]);
     const [datiStruttura, setDatiStruttura]=useState([]);
@@ -18,6 +21,8 @@ function Rendiconto(props){
     }
 
     useEffect(() => {
+        let indice = props.indice;
+        console.log(indice);
         let utente = JSON.parse(window.sessionStorage.getItem("utente"));
 
         axios
@@ -29,8 +34,11 @@ function Rendiconto(props){
             })
             .catch(err => console.log(err));
 
+        let lista = JSON.parse(window.sessionStorage.getItem("strutture"));
+        let dati = lista[indice];
+
         axios
-            .post("/struttura/fetchStruttura", {"idStruttura": props.struttura.idStruttura})
+            .post("/struttura/fetchStruttura", {"idStruttura": dati.idStruttura})
             .then(res => {
                 setDatiStruttura(res.data[0]);
             })
@@ -38,15 +46,17 @@ function Rendiconto(props){
 
         const tmp = new Date().toISOString().split("T");
         const oggi=tmp[0] + " " + tmp[1].slice(0,8);
-        let tmp1= props.struttura.rendicontoEffettuato.split("T");
+        let tmp1= dati.rendicontoEffettuato.split("T");
         let dataRendiconto = tmp1[0] + " " + tmp1[1].slice(0,8);
-        let giorniTrascorsi = calcDate(new Date(), new Date(props.struttura.rendicontoEffettuato));
+        let giorniTrascorsi = calcDate(new Date(), new Date(dati.rendicontoEffettuato));
+
         if(giorniTrascorsi < 85 || giorniTrascorsi>95)  {
-            document.getElementById("button").setAttribute("disabled", "disabled");
+            console.log(document.getElementsByClassName("bottone"));
+            document.getElementsByClassName("bottone")[indice].setAttribute("disabled", "disabled");
         }
 
 
-        let info={idStruttura: props.struttura.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
+        let info={idStruttura: dati.idStruttura, trimestre: oggi, rendiconto:dataRendiconto}
 
 
         axios.post(`/struttura/rendiconto`, info)
@@ -88,7 +98,7 @@ function Rendiconto(props){
 
 
             doc.setFontType("normal")
-            doc.text(25, 10 * y++, `"${props.struttura.nomeStruttura}", sita a ${datiStruttura.comune} (${datiStruttura.provincia}), via ${props.struttura.via}, n. ${props.struttura.numeroCivico}, CAP ${props.struttura.cap}`);
+            doc.text(25, 10 * y++, `"${datiStruttura.nomeStruttura}", sita a ${datiStruttura.comune} (${datiStruttura.provincia}), via ${datiStruttura.via}, n. ${datiStruttura.numeroCivico}, CAP ${datiStruttura.cap}`);
 
 
 
@@ -326,16 +336,24 @@ function Rendiconto(props){
         let data = {
             allegato: doc.output('datauristring')
         }
-        doc.save();
+        doc.save("Rendiconto");
         axios.post("/mail/invioRendiconto", data).catch((err) => {
             mostraDialogErrore(err.message);
         });
 
-        let info={"idStruttura": props.struttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
-        let struttura=[{"idStruttura": props.struttura.idStruttura,"nomeStruttura": props.struttura.nomeStruttura,"tipologiaStruttura":props.struttura.tipologiaStruttura,
-            "refGestore":gestore.idUtente,"refIndirizzo": props.struttura.refIndirizzo,"rendicontoEffettuato": new Date().toISOString(),"idIndirizzo":props.struttura.refIndirizzo,
-            "via":props.struttura.via,"numeroCivico":props.struttura.numeroCivico,"cap":props.struttura.cap,"refComune":props.struttura.refComune}]
+        let info={"idStruttura": datiStruttura.idStruttura, "rendiconto": new Date().toISOString().slice(0, 10)}
         axios.post("/struttura/setDataRendiconto", info).catch(err => console.log(err));
+
+        let tmp = JSON.parse(window.sessionStorage.getItem("strutture"));
+        let struttura={"idStruttura": datiStruttura.idStruttura,"nomeStruttura": datiStruttura.nomeStruttura,"tipologiaStruttura":datiStruttura.tipologiaStruttura,
+            "refGestore":gestore.idUtente,"refIndirizzo": datiStruttura.refIndirizzo,"rendicontoEffettuato": new Date().toISOString(),"idIndirizzo":datiStruttura.refIndirizzo,
+            "via":datiStruttura.via,"numeroCivico":datiStruttura.numeroCivico,"cap":datiStruttura.cap,"refComune":datiStruttura.refComune}
+        for(let i = 0; i <tmp.length; i++){
+            if(tmp[i].idStruttura === datiStruttura.idStruttura){
+                tmp[i] = struttura;
+            }
+        }
+        window.sessionStorage.setItem("strutture", JSON.stringify(tmp));
 
         history.push({
             pathname: "/rendiconto-completato",
@@ -345,7 +363,7 @@ function Rendiconto(props){
     }
 
 
-        return <button id="button" type="button" className="btn btn-block btn-primary mt-2 mr-2 " onClick={inviaRendiconto}>Rendiconto</button>
+        return <button type="button" className=" bottone btn btn-block btn-primary mt-2 mr-2 " onClick={inviaRendiconto}>Rendiconto</button>
 
 }
 
