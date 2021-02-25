@@ -41,8 +41,22 @@ Per la realizzazione di questa applicazione web è stato scelto di utilizzare co
 Per la realizzazione delle interfacce grafiche, si è scelto di utilizzare il framework CSS Bootstrap (v4.5.0). 
 Per gestire le richieste HTTP POST e GET tra client e server, si è utilizzata la libreria “axios” (v0.19.2).
 MySQL, Express, React, NodeJS
+Generazione di un certificato SSL è self-signed. 
 
 ## Più informazioni dai documenti
 - RAD (Requirements Analysis Document) 
 - ODD (Object Design Document)
 - SDD (System Design Document)
+
+## Come avviare SoftBed
+Ecco la lista dei passi da seguire per avviare correttamente SoftBed
+1. Importare il progetto dalla cartella Softbed su un IDE (opzionale).
+2. Posizionarsi tramite terminale nella cartella <tt>/SoftBed/softbed-backend</tt>
+3. Eseguire il comando <tt>npm install</tt>
+4. Attendere il completamento dell’installazione.
+5. Dopo aver aperto un’altra finestra del terminale, spostarsi nella cartella <tt>/SoftBed/softbed-frontend</tt>
+6. Eseguire il comando <tt>npm install</tt>
+7. Attendere il completamento dell’installazione.
+8. Nella prima finestra di terminale, digitare <tt>npm start</tt>
+9. Nella seconda finestra di terminale digitare <tt>HTTPS=true npm start</tt>
+10. Tutto pronto! L'applicazione web sarà raggiungibile di default all’indirizzo <tt>https://localhost:3000</tt>.
