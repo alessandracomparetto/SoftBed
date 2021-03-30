@@ -10,7 +10,7 @@
     "axios": "^0.21.1",
     "jquery": "^3.5.1",
     "js-base64": "^2.6.2",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "leaflet": "^1.6.0",
     "leaflet-geosearch": "^3.0.6",
     "nodemailer": "^6.4.10",
