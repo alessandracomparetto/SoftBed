@@ -1,5 +1,6 @@
 # SoftBed
 Progetto per Programmazione web e mobile e Ingegneria del software (a.a. 2019/2020)
+E' possibile usare il sistema tramite il seguente link https://softbed.herokuapp.com/ inserendo come destinazione Torino
 ## Tema di Progetto 
 Si richiede la progettazione di un sistema per il supporto alle attività di gestione e ricezione nel settore turistico delle case vacanza e B&B. 
 
